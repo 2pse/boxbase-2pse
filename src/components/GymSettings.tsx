@@ -69,7 +69,7 @@ export const GymSettings = () => {
       const { data, error } = await supabase
         .from('gym_settings')
         .select('*')
-        .single()
+        .maybeSingle()
 
       if (error) {
         console.error('Error loading gym settings:', error)
@@ -81,11 +81,52 @@ export const GymSettings = () => {
         return
       }
 
-      setSettings(data)
+      if (data) {
+        setSettings(data)
+      } else {
+        // No settings exist, create default settings
+        await createDefaultSettings()
+      }
     } catch (error) {
       console.error('Error loading gym settings:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const createDefaultSettings = async () => {
+    try {
+      const defaultSettings = {
+        gym_name: "Mein Studio",
+        primary_color: "#52a7b4",
+        theme_mode: "both",
+        show_functional_fitness_workouts: true,
+        show_bodybuilding_workouts: true
+      }
+
+      const { data, error } = await supabase
+        .from('gym_settings')
+        .insert(defaultSettings)
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error creating default settings:', error)
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Erstellen der Standard-Einstellungen",
+          variant: "destructive",
+        })
+        return
+      }
+
+      setSettings(data)
+      toast({
+        title: "Erfolg",
+        description: "Standard-Einstellungen wurden erstellt",
+      })
+    } catch (error) {
+      console.error('Error creating default settings:', error)
     }
   }
 
@@ -308,7 +349,12 @@ export const GymSettings = () => {
     return (
       <Card>
         <CardContent className="p-6">
-          <p className="text-center text-gray-600">Keine Einstellungen gefunden</p>
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground">Standard-Einstellungen werden erstellt...</p>
+            <div className="animate-pulse">
+              <div className="h-4 bg-muted rounded w-1/2 mx-auto"></div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     )
