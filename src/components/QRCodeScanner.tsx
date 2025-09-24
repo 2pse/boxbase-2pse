@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Capacitor } from "@capacitor/core"
 import { BrowserMultiFormatReader, IScannerControls } from "@zxing/browser"
-import { CapacitorBarcodeScanner as BarcodeScanner } from "@capacitor/barcode-scanner";
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Camera, X } from "lucide-react"
