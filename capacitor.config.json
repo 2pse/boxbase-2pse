@@ -1,0 +1,17 @@
+{
+  "appId": "app.lovable.9b3493752c554eccac54fbfa035b12d4",
+  "appName": "rise-workout-buddy",
+  "webDir": "dist",
+  "server": {
+    "url": "https://9b349375-2c55-4ecc-ac54-fbfa035b12d4.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "splashImmersive": true,
+      "splashFullScreen": true,
+      "backgroundColor": "#000000"
+    }
+  }
+}

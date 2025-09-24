@@ -1,0 +1,49 @@
+project_id = "tuktvbawwyffuqeorjix"
+
+[functions.workout-explanation]
+verify_jwt = false
+
+[functions.create-member]
+verify_jwt = false
+
+[functions.delete-member]
+verify_jwt = false
+
+[functions.create-admin]
+verify_jwt = false
+
+[functions.manage-credits]
+verify_jwt = false
+
+[functions.notify-waitlist-promotion]
+verify_jwt = false
+
+[functions.process-waitlists]
+verify_jwt = false
+
+[functions.update-access-code]
+verify_jwt = false
+
+[functions.sync-access-codes]
+verify_jwt = false
+
+[functions.update-member-details]
+verify_jwt = false
+
+[functions.update-admin-profile]
+verify_jwt = false
+
+[functions.load-member-emails]
+verify_jwt = false
+
+[functions.process-reactivation-webhooks]
+verify_jwt = false
+
+[functions.manage-credits-v2]
+verify_jwt = false
+
+[functions.can-user-register-v2]
+verify_jwt = false
+
+[functions.data-export]
+verify_jwt = false

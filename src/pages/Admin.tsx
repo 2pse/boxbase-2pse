@@ -1,0 +1,1619 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useWaitlistNotifications } from "@/hooks/useWaitlistNotifications";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { supabase } from "@/integrations/supabase/client";
+import { User, Session } from "@supabase/supabase-js";
+import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipUtils"
+import { UserPlus, Edit, Trash2, Search, CreditCard, Home, Users, Calendar, FileText, Newspaper, Dumbbell, Trophy, DollarSign, Settings, LogOut, Percent, Download } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import CourseTemplateManager from "@/components/CourseTemplateManager";
+import NewsManager from "@/components/NewsManager";
+
+import { CourseParticipants } from "@/components/CourseParticipants";
+import { MembershipBadge } from "@/components/MembershipBadge";
+import { AdminStats } from "@/components/AdminStats";
+import { RiseHeader } from "@/components/RiseHeader";
+import WorkoutManagement from "./WorkoutManagement";
+import AdminChallengeManager from "@/components/AdminChallengeManager";
+import { MembershipPlanManagerV2 } from "@/components/MembershipPlanManagerV2";
+
+import { FinanceReport } from "@/components/FinanceReport";
+import { GymSettings } from "@/components/GymSettings";
+import { DataExport } from "@/components/DataExport";
+
+
+import { useToast } from "@/hooks/use-toast";
+
+interface Member {
+  id: string;
+  display_name: string;
+  first_name?: string;
+  last_name?: string;
+  access_code: string;
+  user_id: string | null;
+  email?: string;
+  created_at: string;
+  membership_type: 'Basic Member' | 'Premium Member' | 'Trainer' | 'Administrator' | 'Open Gym' | 'Wellpass' | 'Credits';
+  status: string;
+  last_login_at: string | null;
+  authors?: boolean;
+  current_membership_type?: string;
+  user_memberships?: Array<{
+    status: string;
+    membership_plan_id: string;
+    membership_plans: {
+      name: string;
+      booking_type: string;
+    };
+  }>;
+}
+
+export default function Admin() {
+  // Handle waitlist notifications for automatic promotions
+  useWaitlistNotifications();
+  
+  const isMobile = useIsMobile();
+  
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState<Member[]>([]);
+  // V2 Member creation state only 
+  const [newMemberFirstName, setNewMemberFirstName] = useState("");
+  const [newMemberLastName, setNewMemberLastName] = useState("");
+  const [newMemberEmail, setNewMemberEmail] = useState("");
+  const [newMemberCode, setNewMemberCode] = useState("");
+  const [newMemberIsAuthor, setNewMemberIsAuthor] = useState(false);
+  const [selectedMembershipPlan, setSelectedMembershipPlan] = useState("");
+  const [availablePlans, setAvailablePlans] = useState<any[]>([]);
+  
+  // Temporary placeholder for old V1 system to prevent build errors
+  const [editMembershipConfig, setEditMembershipConfig] = useState({
+    type: 'unlimited' as any,
+    price: '',
+    durationMonths: 1,
+    autoRenewal: false,
+    bookingLimit: 8,
+    bookingType: 'monthly' as any,
+    includesOpenGym: true,
+    credits: 10
+  });
+  
+  // Membership configuration state
+  const [membershipConfig, setMembershipConfig] = useState({
+    type: 'unlimited' as 'unlimited' | 'open_gym' | 'limited' | 'credits' | 'trainer',
+    price: '',
+    durationMonths: 1,
+    autoRenewal: false,
+    bookingLimit: 8, // per month for limited
+    bookingType: 'monthly' as 'weekly' | 'monthly',
+    includesOpenGym: true,
+    credits: 10 // for credits type
+  });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<Member | null>(null);
+  const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
+  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export'>('home');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalMembers, setTotalMembers] = useState(0);
+  
+  // Edit member state - V2 system only 
+  const [editSelectedMembershipPlan, setEditSelectedMembershipPlan] = useState("");
+  const [editCurrentMembership, setEditCurrentMembership] = useState<any>(null);
+  const [creditsAmount, setCreditsAmount] = useState<number>(10);
+  const [isSubtracting, setIsSubtracting] = useState<boolean>(false);
+  const membersPerPage = 10;
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Load membership plans on component mount
+  const loadMembershipPlans = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('membership_plans_v2')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
+      
+      if (error) throw error;
+      setAvailablePlans(data || []);
+    } catch (error) {
+      console.error('Error loading membership plans:', error);
+    }
+  };
+  
+
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (!session?.user) {
+          navigate("/auth");
+        } else {
+          setTimeout(() => {
+            checkAdminRole(session.user.id);
+          }, 0);
+        }
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (!session?.user) {
+        navigate("/auth");
+      } else {
+        checkAdminRole(session.user.id);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  useEffect(() => {
+    loadMembershipPlans();
+  }, []);
+
+  useEffect(() => {
+    if (activePage === 'members' && isAdmin) {
+      loadMembers();
+      loadMembershipPlans(); // Refresh membership plans when accessing members page
+    }
+  }, [activePage, isAdmin, currentPage, searchTerm]);
+
+  const checkAdminRole = async (userId: string) => {
+    try {
+      // Spezielle Behandlung für Admin-E-Mail
+      const user = await supabase.auth.getUser();
+      if (user.data.user?.email === 'admin@rise-fitness.com') {
+        setIsAdmin(true);
+        loadMembers();
+        setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking admin role:', error);
+        setIsAdmin(false);
+      } else {
+        setIsAdmin(!!data);
+        if (!!data) {
+          loadMembers();
+        } else {
+          toast({
+            title: "Fehler",
+            description: "Keine Admin-Berechtigung",
+            variant: "destructive",
+          });
+          navigate("/pro");
+        }
+      }
+    } catch (error) {
+      console.error('Error checking admin role:', error);
+      setIsAdmin(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMembers = async () => {
+    try {
+      // First update member status automatically
+      await supabase.rpc('update_member_status');
+      
+      // Calculate offset for pagination
+      const offset = (currentPage - 1) * membersPerPage;
+      
+      // Build query to load all profiles with optional membership data
+      let query = supabase
+        .from('profiles')
+        .select(`
+          id, 
+          display_name,
+          first_name,
+          last_name,
+          access_code, 
+          created_at, 
+          user_id, 
+          membership_type, 
+          status, 
+          last_login_at, 
+          authors
+        `, { count: 'exact' });
+      
+      if (searchTerm) {
+        query = query.or(`display_name.ilike.%${searchTerm}%,first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%,access_code.ilike.%${searchTerm}%`);
+      }
+      
+      const { data: profilesData, error: profilesError, count } = await query
+        .order('created_at', { ascending: false })
+        .range(offset, offset + membersPerPage - 1);
+
+      if (profilesError) {
+        console.error('Error loading profiles:', profilesError);
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Laden der Mitglieder",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Load emails via secure Database Function
+      const userIds = profilesData?.map(p => p.user_id) || [];
+      let emailData: Record<string, string> = {};
+      
+      if (userIds.length > 0) {
+        try {
+          console.log('Loading emails via database function for user IDs:', userIds);
+          const { data: emailResponse, error: emailError } = await supabase.rpc('get_member_emails_for_admin', {
+            user_ids: userIds
+          });
+          
+          if (emailError) {
+            console.error('Database function failed, emails will not be displayed:', emailError);
+            // Don't throw error, just continue without emails
+          } else if (emailResponse) {
+            // Convert array response to object
+            emailResponse.forEach((row: { user_id: string; email: string }) => {
+              emailData[row.user_id] = row.email;
+            });
+            console.log('Successfully loaded emails:', Object.keys(emailData).length, 'emails');
+          }
+        } catch (emailError) {
+          console.warn('Database function not available, emails will not be displayed:', emailError);
+          // Continue without emails - this is expected if user lacks admin privileges
+        }
+      }
+
+      // Separately load V2 membership data for these profiles
+      let membershipsData = [];
+      
+      if (userIds.length > 0) {
+        const { data: memberships } = await supabase
+          .from('user_memberships_v2')
+          .select(`
+            user_id,
+            status,
+            membership_data,
+            membership_plans_v2(
+              name,
+              booking_rules,
+              payment_frequency,
+              price_monthly
+            )
+          `)
+          .in('user_id', userIds)
+          .eq('status', 'active');
+        
+        membershipsData = memberships || [];
+      }
+
+      // Transform data to include membership type
+      const membersWithMembership = profilesData?.map(member => {
+        const userMemberships = membershipsData.filter(m => m.user_id === member.user_id);
+        
+        // Determine membership type using V2 system only (consistent with FinanceReport)
+        let membershipType = 'Kein Abo'; // Default fallback
+        
+        if (userMemberships.length > 0) {
+          // Use shared prioritization logic from membershipUtils
+          const selectedMembership = getPriorizedMembership(userMemberships);
+          membershipType = getMembershipTypeName(selectedMembership, null);
+        }
+        
+        return {
+          ...member,
+          email: emailData[member.user_id] || '',
+          current_membership_type: membershipType
+        };
+      }) || [];
+      
+      setMembers(membersWithMembership as any);
+      setTotalMembers(count || 0);
+    } catch (error) {
+      console.error('Error loading members:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Laden der Mitglieder",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCreateMember = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newMemberFirstName || !newMemberEmail || !newMemberCode || !selectedMembershipPlan) {
+      toast({
+        title: "Fehler",
+        description: "Bitte alle Pflichtfelder ausfüllen (Vorname, E-Mail, Zugangscode, Mitgliedschaftsplan)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Find the selected plan
+    const selectedPlan = availablePlans.find(plan => plan.id === selectedMembershipPlan);
+    if (!selectedPlan) {
+      toast({
+        title: "Fehler",
+        description: "Bitte wählen Sie einen gültigen Mitgliedschaftsplan",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Note: Access codes can now be shared by multiple users
+      // Email uniqueness is enforced by Supabase Auth
+
+      // Get the selected membership plan
+      const selectedPlan = availablePlans.find(p => p.id === selectedMembershipPlan);
+      if (!selectedPlan) {
+        toast({
+          title: "Fehler",
+          description: "Ungültiger Mitgliedschaftsplan ausgewählt",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Determine user role - trainer plans get trainer role, others get member role
+      const isTrainer = selectedPlan.booking_rules?.type === 'unlimited' && selectedPlan.name.toLowerCase().includes('trainer');
+      const userRole = isTrainer ? 'trainer' : 'member';
+      
+      // Create display_name from first_name and last_name
+      const displayName = newMemberLastName ? `${newMemberFirstName} ${newMemberLastName}` : newMemberFirstName;
+      
+      // Create user via Edge Function with proper role assignment
+      const { data: result, error: functionError } = await supabase.functions.invoke('create-member', {
+        body: {
+          email: newMemberEmail,
+          password: newMemberCode,
+          user_metadata: {
+            first_name: newMemberFirstName,
+            last_name: newMemberLastName,
+            display_name: displayName,
+            access_code: newMemberCode,
+            membership_type: userRole,
+            authors: newMemberIsAuthor
+          }
+        }
+      });
+
+      if (functionError || !result?.success) {
+        console.error('Error creating member:', functionError || result?.error);
+        const errorMessage = functionError?.message || result?.error || 'Unbekannter Fehler';
+        toast({
+          title: "Fehler",
+          description: `Fehler beim Erstellen des Mitglieds: ${errorMessage}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create user membership using V2 system
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + selectedPlan.duration_months);
+
+      // Prepare initial membership data based on plan type
+      let initialMembershipData = {};
+      if (selectedPlan.booking_rules?.type === 'credits') {
+        initialMembershipData = {
+          remaining_credits: selectedPlan.booking_rules.credits?.initial_amount || 10
+        };
+      } else if (selectedPlan.booking_rules?.type === 'limited') {
+        // Initialize limited memberships with their limit count as credits
+        initialMembershipData = {
+          remaining_credits: selectedPlan.booking_rules.limit?.count || 12
+        };
+      }
+
+      const { error: membershipError } = await supabase
+        .from('user_memberships_v2')
+        .insert({
+          user_id: result.user.id,
+          membership_plan_id: selectedPlan.id,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endDate.toISOString().split('T')[0],
+          status: 'active',
+          auto_renewal: selectedPlan.auto_renewal || false,
+          membership_data: initialMembershipData
+        });
+
+      if (membershipError) {
+        console.error('Error creating user membership:', membershipError);
+        toast({
+          title: "Warnung",
+          description: "Mitglied erstellt, aber Mitgliedschaft konnte nicht zugewiesen werden",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erfolg",
+          description: "Mitglied erfolgreich erstellt",
+          variant: "default",
+        });
+        
+        // Dispatch event for real-time updates in frontend
+        window.dispatchEvent(new CustomEvent('membershipUpdated', { 
+          detail: { userId: result?.data?.user_id } 
+        }));
+      }
+
+      // Reset form
+      setNewMemberFirstName("");
+      setNewMemberLastName("");
+      setNewMemberEmail("");
+      setNewMemberCode("");
+      setNewMemberIsAuthor(false);
+      setSelectedMembershipPlan("");
+      setDialogOpen(false);
+      
+      // Reload members
+      loadMembers();
+
+    } catch (error) {
+      console.error('Error creating member:', error);
+      toast({
+        title: "Fehler",
+        description: "Unerwarteter Fehler beim Erstellen des Mitglieds",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!editingMember) return;
+
+    try {
+      // Use existing access code or keep it as is (don't auto-generate)
+      const accessCode = editingMember.access_code;
+      
+      // Auto-generate display_name from first and last name
+      const displayName = editingMember.first_name && editingMember.last_name 
+        ? `${editingMember.first_name} ${editingMember.last_name}`
+        : editingMember.first_name || editingMember.display_name || '';
+
+      // Update profile data directly via Supabase RLS
+      const { error: profileUpdateError } = await supabase
+        .from('profiles')
+        .update({
+          display_name: displayName,
+          first_name: editingMember.first_name,
+          last_name: editingMember.last_name,
+          access_code: accessCode,
+          authors: editingMember.authors
+        })
+        .eq('user_id', editingMember.user_id);
+
+      if (profileUpdateError) {
+        console.error('Error updating profile:', profileUpdateError);
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Aktualisieren des Profils",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Handle membership plan change if a new plan was selected
+      if (editSelectedMembershipPlan && editSelectedMembershipPlan !== editCurrentMembership?.membership_plan_id) {
+        // Note: The database trigger will automatically delete old active memberships
+        // when we create a new active membership
+
+        // Get the selected plan details
+        const { data: selectedPlan } = await supabase
+          .from('membership_plans_v2')
+          .select('*')
+          .eq('id', editSelectedMembershipPlan)
+          .single();
+
+        if (!selectedPlan) {
+          toast({
+            title: "Fehler",
+            description: "Ausgewählter Plan nicht gefunden",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        // Calculate dates
+        const startDate = new Date();
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + selectedPlan.duration_months);
+
+        // Prepare membership data
+        const bookingRules = selectedPlan.booking_rules as any;
+        let membershipData = {};
+
+        // Initialize credits for credit-based plans
+        if (bookingRules?.type === 'credits') {
+          const initialCredits = bookingRules.credits?.initial_amount || 10;
+          membershipData = { remaining_credits: initialCredits };
+        }
+
+        if (editCurrentMembership) {
+          // Update existing membership
+          const { error: membershipError } = await supabase
+            .from('user_memberships_v2')
+            .update({
+              membership_plan_id: selectedPlan.id,
+              start_date: startDate.toISOString().split('T')[0],
+              end_date: endDate.toISOString().split('T')[0],
+              auto_renewal: selectedPlan.auto_renewal || false,
+              status: 'active',
+              membership_data: membershipData
+            })
+            .eq('id', editCurrentMembership.id);
+
+          if (membershipError) {
+            console.error('Error updating membership:', membershipError);
+            toast({
+              title: "Fehler",
+              description: "Fehler beim Aktualisieren der Mitgliedschaft",
+              variant: "destructive",
+            });
+            return;
+          }
+        } else {
+          // Create new membership if none exists
+          const { error: membershipError } = await supabase
+            .from('user_memberships_v2')
+            .insert({
+              user_id: editingMember.user_id,
+              membership_plan_id: selectedPlan.id,
+              start_date: startDate.toISOString().split('T')[0],
+              end_date: endDate.toISOString().split('T')[0],
+              auto_renewal: selectedPlan.auto_renewal || false,
+              status: 'active',
+              membership_data: membershipData
+            });
+
+          if (membershipError) {
+            console.error('Error creating new membership:', membershipError);
+            toast({
+              title: "Fehler",
+              description: "Fehler beim Erstellen der neuen Mitgliedschaft",
+              variant: "destructive",
+            });
+            return;
+          }
+        }
+
+        toast({
+          title: "Erfolg",
+          description: `Mitgliedschaft erfolgreich zu "${selectedPlan.name}" geändert`,
+        });
+        
+        // Dispatch event for real-time updates in frontend
+        window.dispatchEvent(new CustomEvent('membershipUpdated', { 
+          detail: { userId: editingMember?.user_id } 
+        }));
+      } else {
+        toast({
+          title: "Erfolg",
+          description: "Profil erfolgreich aktualisiert",
+        });
+      }
+      
+      // Reset state and reload data
+      setEditingMember(null);
+      setEditSelectedMembershipPlan("");
+      setEditCurrentMembership(null);
+      setEditDialogOpen(false);
+      loadMembers();
+    } catch (error) {
+      console.error('Error updating member:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Aktualisieren des Mitglieds",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const loadEditMemberData = async (userId: string) => {
+    if (!userId) return;
+    
+    try {
+      // Load profile data first
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      // Load email via secure Database Function
+      let userEmail = '';
+      try {
+        console.log('Loading email via database function for user ID:', userId);
+        const { data: emailResponse, error: emailError } = await supabase.rpc('get_member_emails_for_admin', {
+          user_ids: [userId]
+        });
+        
+        if (emailError) {
+          console.error('Error loading email via database function:', emailError);
+        } else if (emailResponse && emailResponse.length > 0) {
+          userEmail = emailResponse[0].email;
+          console.log('Successfully loaded email for user:', userEmail);
+        }
+      } catch (emailError) {
+        console.warn('Could not load email for user via database function:', emailError);
+      }
+
+      if (profile) {
+        // Use existing access code as-is (don't auto-generate)
+        const accessCode = profile.access_code;
+        
+        // Update the editing member with complete profile data including email
+        setEditingMember(prev => prev ? {
+          ...prev,
+          first_name: profile.first_name,
+          last_name: profile.last_name,
+          display_name: profile.display_name,
+          access_code: accessCode,
+          authors: profile.authors,
+          email: userEmail
+        } : null);
+      }
+
+      // Load current V2 membership data and set editCurrentMembership
+      const { data: memberships } = await supabase
+        .from('user_memberships_v2')
+        .select(`
+          *,
+          membership_plans_v2(*)
+        `)
+        .eq('user_id', userId)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (memberships && memberships[0]) {
+        const membership = memberships[0];
+        setEditCurrentMembership(membership);
+        
+        const plan = membership.membership_plans_v2;
+        
+        // Set editSelectedMembershipPlan to current plan
+        setEditSelectedMembershipPlan(plan.id);
+        
+        // Calculate actual duration from start and end date
+        let actualDurationMonths = plan.duration_months || 1;
+        if (membership.start_date && membership.end_date) {
+          const startDate = new Date(membership.start_date);
+          const endDate = new Date(membership.end_date);
+          const monthsDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+                           (endDate.getMonth() - startDate.getMonth());
+          if (monthsDiff > 0) {
+            actualDurationMonths = monthsDiff;
+          }
+        }
+        
+        // Set form data based on current V2 membership
+        const bookingRules = (plan.booking_rules as any) || {};
+        const membershipData = (membership.membership_data as any) || {};
+        
+        let membershipType: 'unlimited' | 'open_gym' | 'limited' | 'credits' | 'trainer' = 'unlimited';
+        
+        if (bookingRules.type === 'unlimited') membershipType = 'unlimited';
+        else if (bookingRules.type === 'open_gym_only') membershipType = 'open_gym';
+        else if (bookingRules.type === 'limited') membershipType = 'limited';
+        else if (bookingRules.type === 'credits') membershipType = 'credits';
+        
+        setEditMembershipConfig({
+          type: membershipType,
+          price: plan.price_monthly?.toString() || '',
+          durationMonths: actualDurationMonths,
+          autoRenewal: membership.auto_renewal ?? false,
+          bookingLimit: bookingRules.limit?.count || bookingRules.credits?.initial_amount || 8,
+          bookingType: 'monthly', // Default to monthly
+          includesOpenGym: plan.includes_open_gym || false,
+          credits: membershipData.remaining_credits || bookingRules.credits?.initial_amount || 10
+        });
+      } else {
+        // No active V2 membership, clear editCurrentMembership and set defaults
+        setEditCurrentMembership(null);
+        setEditSelectedMembershipPlan("");
+        setEditMembershipConfig({
+          type: 'unlimited',
+          price: '',
+          durationMonths: 1,
+          autoRenewal: false,
+          bookingLimit: 8,
+          bookingType: 'monthly',
+          includesOpenGym: true,
+          credits: 10
+        });
+      }
+    } catch (error) {
+      console.error('Error loading member data:', error);
+    }
+  };
+
+  const handleManageCredits = async () => {
+    if (!editCurrentMembership) return;
+
+    try {
+      // Check if this is a credits-based membership
+      const membershipData = editCurrentMembership.membership_data || {};
+      const currentCredits = membershipData.remaining_credits || 0;
+      
+      let newCredits;
+      if (isSubtracting) {
+        newCredits = Math.max(0, currentCredits - creditsAmount);
+      } else {
+        newCredits = currentCredits + creditsAmount;
+      }
+
+      const updatedMembershipData = {
+        ...membershipData,
+        remaining_credits: newCredits
+      };
+
+      const { error } = await supabase
+        .from('user_memberships_v2')
+        .update({ 
+          membership_data: updatedMembershipData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', editCurrentMembership.id);
+
+      if (error) {
+        console.error('Error updating credits:', error);
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Aktualisieren der Credits",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Update local state
+      setEditCurrentMembership(prev => ({
+        ...prev,
+        membership_data: updatedMembershipData
+      }));
+
+      toast({
+        title: "Erfolg",
+        description: `Credits ${isSubtracting ? 'abgezogen' : 'aufgeladen'}. Neue Anzahl: ${newCredits}`,
+      });
+
+      // Dispatch event for real-time updates in frontend
+      window.dispatchEvent(new CustomEvent('creditsUpdated', { 
+        detail: { userId: editingMember?.user_id } 
+      }));
+
+      // Reset form
+      setCreditsAmount(10);
+      setIsSubtracting(false);
+      
+    } catch (error) {
+      console.error('Error managing credits:', error);
+      toast({
+        title: "Fehler", 
+        description: "Fehler beim Verwalten der Credits",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteMember = async (member: Member) => {
+    if (!member.user_id) {
+      toast({
+        title: "Fehler",
+        description: "Benutzer-ID nicht gefunden",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.functions.invoke('delete-member', {
+        body: { userId: member.user_id }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Erfolg",
+        description: "Mitglied wurde erfolgreich gelöscht",
+      });
+
+      // Refresh member list
+      loadMembers();
+      setMemberToDelete(null);
+    } catch (error: any) {
+      console.error('Error deleting member:', error);
+      toast({
+        title: "Fehler",
+        description: error.message || "Mitglied konnte nicht gelöscht werden",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'paused': return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      case 'expired': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'active': return 'Aktiv';
+      case 'paused': return 'Pausiert';
+      case 'cancelled': return 'Gekündigt';
+      case 'expired': return 'Abgelaufen';
+      default: return status;
+    }
+  };
+
+
+  const handleDeleteMember = async (memberId: string, memberName: string, userId?: string) => {
+    if (!confirm(`Sind Sie sicher, dass Sie das Mitglied "${memberName}" komplett löschen möchten? Dies entfernt sowohl das Profil als auch den Account unwiderruflich.`)) return;
+
+    try {
+      if (!userId) {
+        // Fallback: only delete from profiles if no user_id
+        const { error } = await supabase
+          .from('profiles')
+          .delete()
+          .eq('id', memberId);
+
+        if (error) {
+          console.error('Error deleting member:', error);
+          toast({
+            title: "Fehler",
+            description: "Fehler beim Löschen des Mitglieds",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Erfolg",
+            description: "Mitglied erfolgreich gelöscht",
+          });
+          setCurrentPage(1);
+          loadMembers();
+        }
+        return;
+      }
+
+      // Use edge function to delete completely
+      const { data: result, error: functionError } = await supabase.functions.invoke('delete-member', {
+        body: { userId }
+      });
+
+      if (functionError || !result?.success) {
+        console.error('Error deleting member:', functionError || result?.error);
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Löschen des Mitglieds",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erfolg",
+          description: "Mitglied und Account erfolgreich gelöscht",
+        });
+        setCurrentPage(1);
+        loadMembers();
+      }
+    } catch (error) {
+      console.error('Error deleting member:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Löschen des Mitglieds",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Abmelden",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erfolg",
+          description: "Erfolgreich abgemeldet",
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Abmelden",
+        variant: "destructive",
+      });
+    }
+  };
+
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Zugriff verweigert</h1>
+          <p className="text-muted-foreground">Sie haben keine Admin-Berechtigung.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handlePageChange = (page: string) => {
+    const validPages = ['home', 'members', 'courses', 'templates', 'news', 'workouts', 'challenges', 'memberships', 'sync', 'finance', 'settings', 'export'] as const;
+    if (validPages.includes(page as any)) {
+      setActivePage(page as typeof activePage);
+      // Refresh membership plans when switching to members page
+      if (page === 'members') {
+        loadMembershipPlans();
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <RiseHeader 
+        showAdminAccess={true}
+        activePage={activePage}
+        onPageChange={handlePageChange}
+        onLogout={handleLogout}
+      />
+      
+      <div className="container mx-auto p-6">
+        {activePage === 'home' && (
+          <AdminStats />
+        )}
+
+        {activePage === 'members' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">Mitglieder</h2>
+                <p className="text-muted-foreground">Verwalte und organisiere deine Studio-Mitglieder</p>
+              </div>
+              <Dialog open={dialogOpen} onOpenChange={(open) => {
+                setDialogOpen(open);
+                if (open) {
+                  loadMembershipPlans(); // Refresh plans when opening create dialog
+                }
+              }}>
+                <DialogTrigger asChild>
+                  <Button className="w-full sm:w-auto">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Neues Mitglied
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Neues Mitglied erstellen</DialogTitle>
+                    <DialogDescription>
+                      Erstellen Sie einen neuen Mitgliederaccount mit individueller Mitgliedschaftskonfiguration
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleCreateMember} className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Vorname *</label>
+                        <Input
+                          placeholder="Max"
+                          value={newMemberFirstName}
+                          onChange={(e) => setNewMemberFirstName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Nachname</label>
+                        <Input
+                          placeholder="Mustermann"
+                          value={newMemberLastName}
+                          onChange={(e) => setNewMemberLastName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">E-Mail *</label>
+                      <Input
+                        type="email"
+                        placeholder="E-Mail des Mitglieds"
+                        value={newMemberEmail}
+                        onChange={(e) => setNewMemberEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Zugangscode *</label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Zugangscode"
+                          value={newMemberCode}
+                          onChange={(e) => setNewMemberCode(e.target.value.replace(/\s/g, ''))}
+                          required
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            const newCode = Math.floor(Math.random() * 900000 + 100000).toString();
+                            setNewMemberCode(newCode);
+                          }}
+                        >
+                          Generieren
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* V2 Simplified Membership Selection */}
+                    <div className="space-y-4 border-t pt-4">
+                      <h3 className="text-lg font-semibold">Mitgliedschaftsauswahl</h3>
+                      
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Mitgliedschaftsplan *</label>
+                        <Select 
+                          value={selectedMembershipPlan} 
+                          onValueChange={setSelectedMembershipPlan}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Mitgliedschaftsplan auswählen" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availablePlans.map((plan) => (
+                              <SelectItem key={plan.id} value={plan.id}>
+                                {plan.name} - €{plan.price_monthly}/{plan.duration_months}M
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="isAuthor"
+                          checked={newMemberIsAuthor}
+                          onChange={(e) => setNewMemberIsAuthor(e.target.checked)}
+                        />
+                        <label htmlFor="isAuthor" className="text-sm font-medium">Kann Workouts erstellen</label>
+                      </div>
+
+                    </div>
+
+                    <div className="flex gap-2 pt-4">
+                      <Button type="submit">Mitglied erstellen</Button>
+                      <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+                        Abbrechen
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* Search and Members Table */}
+            <div className="space-y-4">
+              <div className="flex gap-4 items-center">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Mitglieder suchen..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-8"
+                  />
+                </div>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Mitglieder ({totalMembers})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isMobile ? (
+                    // Mobile card layout
+                    <div className="space-y-3">
+                      {members.map((member) => (
+                        <Card key={member.id} className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <div className="font-medium text-sm mb-1">
+                                {member.first_name && member.last_name 
+                                  ? `${member.first_name} ${member.last_name}`
+                                  : member.display_name || 'Unbekannt'
+                                }
+                              </div>
+                              <div className="text-xs text-muted-foreground mb-2">
+                                {member.access_code}
+                              </div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <MembershipBadge type={member.current_membership_type as any || 'Kein Abo'} noShadow />
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  member.status === 'active' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {member.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                                </span>
+                              </div>
+                              {member.authors && (
+                                <Badge variant="secondary" className="text-xs">Autor</Badge>
+                              )}
+                            </div>
+                            <div className="flex gap-1 ml-4">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setEditingMember(member);
+                                  loadEditMemberData(member.user_id || '');
+                                  setEditDialogOpen(true);
+                                }}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setMemberToDelete(member)}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    // Desktop table layout
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead className="hidden md:table-cell">Zugangscode</TableHead>
+                            <TableHead>Mitgliedschaft</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="hidden sm:table-cell">Letzter Login</TableHead>
+                            <TableHead>Aktionen</TableHead>
+                          </TableRow>
+                      </TableHeader>
+                        <TableBody>
+                          {members.map((member) => (
+                            <TableRow key={member.id}>
+                               <TableCell className="font-medium">
+                                 <div>
+                                   <div className="font-medium">
+                                     {member.first_name && member.last_name 
+                                       ? `${member.first_name} ${member.last_name}`
+                                       : member.display_name || 'Unbekannt'
+                                     }
+                                   </div>
+                                   <div className="md:hidden text-sm">
+                                     <Badge variant="outline" className="font-mono text-xs mr-2">
+                                       {member.access_code}
+                                     </Badge>
+                                   </div>
+                                    {member.authors && (
+                                      <Badge variant="secondary" className="text-xs mt-1">Autor</Badge>
+                                    )}
+                                 </div>
+                               </TableCell>
+                               <TableCell className="font-mono hidden md:table-cell">{member.access_code}</TableCell>
+                               <TableCell>
+                                 <MembershipBadge type={member.current_membership_type as any || 'Kein Abo'} noShadow />
+                               </TableCell>
+                               <TableCell>
+                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                   member.status === 'active' 
+                                     ? 'bg-green-100 text-green-800' 
+                                     : 'bg-gray-100 text-gray-800'
+                                 }`}>
+                                   {member.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                                 </span>
+                               </TableCell>
+                               <TableCell className="hidden sm:table-cell">
+                                 {member.last_login_at 
+                                   ? new Date(member.last_login_at).toLocaleDateString('de-DE')
+                                   : 'Nie'
+                                 }
+                               </TableCell>
+                               <TableCell>
+                                 <div className="flex gap-1">
+                                   <Button
+                                     size="sm"
+                                     variant="outline"
+                                     onClick={() => {
+                                       setEditingMember(member);
+                                       loadEditMemberData(member.user_id || '');
+                                       setEditDialogOpen(true);
+                                     }}
+                                   >
+                                     <Edit className="h-4 w-4" />
+                                   </Button>
+                                   <Button
+                                     size="sm"
+                                     variant="outline"
+                                     onClick={() => setMemberToDelete(member)}
+                                     className="text-destructive hover:text-destructive"
+                                   >
+                                     <Trash2 className="h-4 w-4" />
+                                   </Button>
+                                 </div>
+                               </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                  
+                  {/* Pagination Controls */}
+                  {totalMembers > membersPerPage && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Vorherige
+                      </Button>
+                      
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <span>
+                          Seite {currentPage} von {Math.ceil(totalMembers / membersPerPage)} ({totalMembers} Mitglieder gesamt)
+                        </span>
+                        
+                        {/* Direct page jump */}
+                        <div className="flex items-center gap-2">
+                          <span>Gehe zu Seite:</span>
+                          <Input
+                            type="number"
+                            min="1"
+                            max={Math.ceil(totalMembers / membersPerPage)}
+                            value={currentPage}
+                            onChange={(e) => {
+                              const page = parseInt(e.target.value);
+                              if (page >= 1 && page <= Math.ceil(totalMembers / membersPerPage)) {
+                                setCurrentPage(page);
+                              }
+                            }}
+                            className="w-16 h-8 text-center"
+                          />
+                        </div>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(Math.min(Math.ceil(totalMembers / membersPerPage), currentPage + 1))}
+                        disabled={currentPage >= Math.ceil(totalMembers / membersPerPage)}
+                      >
+                        Nächste
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {activePage === 'courses' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Kurse</h2>
+              <p className="text-muted-foreground">Verwalte Kurse und Teilnehmer</p>
+            </div>
+            <CourseParticipants />
+          </div>
+        )}
+        {activePage === 'templates' && <CourseTemplateManager />}
+        {activePage === 'news' && <NewsManager />}
+        
+        {activePage === 'workouts' && <WorkoutManagement hideHeader={true} />}
+        {activePage === 'challenges' && <AdminChallengeManager />}
+        {activePage === 'memberships' && <MembershipPlanManagerV2 />}
+        
+        {activePage === 'finance' && <FinanceReport />}
+        {activePage === 'settings' && <GymSettings />}
+        {activePage === 'export' && <DataExport />}
+      </div>
+
+      {/* Edit Member Dialog - Unified Form */}
+      {editingMember && (
+        <Dialog open={editDialogOpen} onOpenChange={(open) => {
+          setEditDialogOpen(open);
+          if (open) {
+            loadMembershipPlans(); // Refresh plans when opening edit dialog
+          }
+        }}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Mitglied bearbeiten: {editingMember.display_name}</DialogTitle>
+              <DialogDescription>
+                Bearbeiten Sie Mitgliederdaten und Mitgliedschaftskonfiguration
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleEditSave} className="space-y-6">
+              {/* Basic Profile Fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Vorname *</label>
+                  <Input
+                    placeholder="Max"
+                    value={editingMember.first_name || ''}
+                    onChange={(e) => setEditingMember({
+                      ...editingMember,
+                      first_name: e.target.value
+                    })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Nachname</label>
+                  <Input
+                    placeholder="Mustermann"
+                    value={editingMember.last_name || ''}
+                    onChange={(e) => setEditingMember({
+                      ...editingMember,
+                      last_name: e.target.value
+                    })}
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium">E-Mail</label>
+                <Input
+                  type="email"
+                  placeholder="max@beispiel.de"
+                  value={editingMember.email || ''}
+                  disabled
+                  readOnly
+                  className="bg-muted text-muted-foreground cursor-not-allowed"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Zugangscode *</label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Zugangscode"
+                    value={editingMember.access_code || ''}
+                    onChange={(e) => setEditingMember({
+                      ...editingMember,
+                      access_code: e.target.value.replace(/\s/g, '')
+                    })}
+                    required
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={async () => {
+                      const newCode = Math.floor(Math.random() * 900000 + 100000).toString();
+                      setEditingMember({
+                        ...editingMember,
+                        access_code: newCode
+                      });
+                      
+                      // Update access code in auth system immediately
+                      if (editingMember.user_id) {
+                        try {
+                          await supabase.functions.invoke('update-access-code', {
+                            body: {
+                              newAccessCode: newCode,
+                              targetUserId: editingMember.user_id
+                            }
+                          });
+                          toast({
+                            title: "Erfolg",
+                            description: "Neuer Zugangscode generiert",
+                          });
+                        } catch (error) {
+                          console.error('Error updating access code:', error);
+                          toast({
+                            title: "Warnung",
+                            description: "Code generiert, aber Anmeldecode konnte nicht aktualisiert werden",
+                            variant: "destructive",
+                          });
+                        }
+                      }
+                    }}
+                  >
+                    Neu generieren
+                  </Button>
+                </div>
+              </div>
+
+              {/* Simplified Membership Management */}
+              <div className="space-y-4 border-t pt-4">
+                <h3 className="text-lg font-semibold">Mitgliedschaftsverwaltung</h3>
+                
+                {/* Current Membership Display */}
+                {editCurrentMembership && (
+                  <div className="p-4 bg-muted rounded-lg">
+                    <h4 className="font-medium">Aktuelle Mitgliedschaft:</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {editCurrentMembership.membership_plans_v2?.name} - €{editCurrentMembership.membership_plans_v2?.price_monthly}
+                      {editCurrentMembership.membership_plans_v2?.payment_frequency === 'monthly' ? '/Monat' : ' einmalig'}
+                    </p>
+                    {editCurrentMembership.membership_plans_v2?.booking_rules?.type === 'credits' && (
+                      <p className="text-sm text-muted-foreground">
+                        Verbleibende Credits: {editCurrentMembership.membership_data?.remaining_credits || 0}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                {/* Membership Plan Selection */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Mitgliedschaftsplan ändern</label>
+                  <Select 
+                    value={editSelectedMembershipPlan} 
+                    onValueChange={setEditSelectedMembershipPlan}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Neuen Plan auswählen (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availablePlans.map((plan) => (
+                        <SelectItem key={plan.id} value={plan.id}>
+                          {plan.name} - €{plan.price_monthly}/{plan.duration_months}M
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Credits Management for Credit-based Memberships */}
+                {editCurrentMembership?.membership_plans_v2?.booking_rules?.type === 'credits' && (
+                  <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-medium">Credits verwalten</h4>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Anzahl Credits</label>
+                        <Input
+                          type="number"
+                          max="100"
+                          value={creditsAmount}
+                          onChange={(e) => setCreditsAmount(parseInt(e.target.value) || 0)}
+                          className="w-24"
+                        />
+                      </div>
+                      <div className="space-y-2 flex-1">
+                        <label className="text-sm font-medium">Aktion</label>
+                        <div className="flex gap-2 w-full">
+                          <Button
+                            type="button"
+                            variant={isSubtracting ? "default" : "outline"}
+                            onClick={() => setIsSubtracting(true)}
+                            size="sm"
+                            className="flex-1 sm:flex-none"
+                          >
+                            Abziehen
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={!isSubtracting ? "default" : "outline"}
+                            onClick={() => setIsSubtracting(false)}
+                            size="sm"
+                            className="flex-1 sm:flex-none"
+                          >
+                            Aufladen
+                          </Button>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        onClick={() => handleManageCredits()}
+                        className="w-full sm:w-auto sm:mt-6"
+                      >
+                        Credits {isSubtracting ? 'abziehen' : 'aufladen'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Authors Checkbox */}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="editAuthors"
+                    checked={editingMember.authors || false}
+                    onChange={(e) => setEditingMember({
+                      ...editingMember,
+                      authors: e.target.checked
+                    })}
+                  />
+                  <label htmlFor="editAuthors" className="text-sm font-medium">Kann Workouts erstellen</label>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <Button type="submit">Mitglied speichern</Button>
+                <Button type="button" variant="outline" onClick={() => setEditDialogOpen(false)}>
+                  Abbrechen
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Delete Member Confirmation Dialog */}
+      <AlertDialog open={!!memberToDelete} onOpenChange={() => setMemberToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mitglied löschen</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sind Sie sicher, dass Sie das Mitglied "{memberToDelete?.display_name || memberToDelete?.first_name + ' ' + memberToDelete?.last_name}" 
+              dauerhaft löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => memberToDelete && deleteMember(memberToDelete)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Löschen
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
