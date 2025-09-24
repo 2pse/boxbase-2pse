@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { Capacitor } from "@capacitor/core"
 import { BrowserMultiFormatReader, IScannerControls } from "@zxing/browser"
-import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Camera, X } from "lucide-react"
@@ -27,7 +25,6 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null)
   const controlsRef = useRef<IScannerControls | null>(null)
-  const isNative = Capacitor.isNativePlatform()
 
   useEffect(() => {
     if (open) {
@@ -45,33 +42,7 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
   const startScan = async () => {
     try {
       setError(null)
-
-      // Web/PWA fallback
-      if (!isNative) {
-        await startWebScan()
-        return
-      }
-
-      // Native (Capacitor) scanning
-      setScanning(true)
-      const status = await BarcodeScanner.checkPermission({ force: true })
-      
-      if (status.granted) {
-        BarcodeScanner.hideBackground()
-        
-        const result = await BarcodeScanner.startScan()
-        
-        if (result.hasContent) {
-          handleScanResult(result.content)
-        }
-      } else {
-        setError("Kamera-Berechtigung erforderlich")
-        toast({
-          title: "Berechtigung erforderlich",
-          description: "Bitte erlaube den Zugriff auf die Kamera für QR-Code-Scanning.",
-          variant: "destructive"
-        })
-      }
+      await startWebScan()
     } catch (err) {
       console.error("Error starting scan:", err)
       setError("Scanner konnte nicht gestartet werden")
@@ -80,20 +51,10 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
         description: "QR-Code-Scanner konnte nicht gestartet werden.",
         variant: "destructive"
       })
-    } finally {
-      if (isNative) setScanning(false)
     }
   }
 
 
-  const stopScan = async () => {
-    try {
-      await BarcodeScanner.stopScan()
-      BarcodeScanner.showBackground()
-    } catch (err) {
-      console.error("Error stopping scan:", err)
-    }
-  }
 
   const startWebScan = async () => {
     try {
@@ -155,10 +116,7 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
     }
   }
 
-  const stopAll = async () => {
-    if (isNative) {
-      await stopScan()
-    }
+  const stopAll = () => {
     stopWebScan()
   }
 
@@ -222,17 +180,15 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
             </div>
           )}
 
-          {!isNative && (
-            <div className="rounded-md overflow-hidden bg-muted">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-64 object-cover"
-              />
-            </div>
-          )}
+          <div className="rounded-md overflow-hidden bg-muted">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-64 object-cover"
+            />
+          </div>
           
           <div className="flex gap-2 justify-center">
 
