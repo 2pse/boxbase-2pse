@@ -382,7 +382,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
             <div className="flex flex-col items-center justify-center">
               <Target className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Übungen</h3>
+              <h3 className="font-semibold text-foreground">Exercises</h3>
               <p className="text-sm text-muted-foreground text-center">Edit preferences</p>
             </div>
           </div>

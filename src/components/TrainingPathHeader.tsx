@@ -208,7 +208,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
               className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors"
             >
               <DollarSign className="h-8 w-8 text-foreground mb-2" />
-              <span className="text-sm font-medium text-foreground">Finanzen</span>
+              <span className="text-sm font-medium text-foreground">Finance</span>
             </div>
             
             {/* Fourth row */}

@@ -384,8 +384,8 @@ export const FinanceReport = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Finanzen</h2>
-        <p className="text-muted-foreground">Übersicht über Umsätze und Mitgliedschafts-Statistiken</p>
+        <h2 className="text-2xl font-bold tracking-tight">Finance</h2>
+        <p className="text-muted-foreground">Overview of revenue and membership statistics</p>
       </div>
       
       {/* Key Metrics */}
@@ -395,7 +395,7 @@ export const FinanceReport = () => {
             <div className="flex items-center">
               <DollarSign className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Gesamtumsatz</p>
+                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                 <p className="text-2xl font-bold">€{totalRevenue.toFixed(2)}</p>
               </div>
             </div>
@@ -407,7 +407,7 @@ export const FinanceReport = () => {
             <div className="flex items-center">
               <Users className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Aktive Mitgliedschaften</p>
+                <p className="text-sm font-medium text-gray-600">Active Memberships</p>
                 <p className="text-2xl font-bold">{totalMembers}</p>
               </div>
             </div>
@@ -419,7 +419,7 @@ export const FinanceReport = () => {
             <div className="flex items-center">
               <TrendingUp className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Ø Monatsumsatz</p>
+                <p className="text-sm font-medium text-gray-600">Avg Monthly Revenue</p>
                 <p className="text-2xl font-bold">€{(() => {
                   if (monthlyTotals.length === 0) return '0.00'
                   
@@ -448,7 +448,7 @@ export const FinanceReport = () => {
             <div className="flex items-center">
               <Calendar className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Letzter Monat</p>
+                <p className="text-sm font-medium text-gray-600">Last Month</p>
                 <p className="text-2xl font-bold">€{(() => {
                   if (monthlyTotals.length === 0) return '0.00'
                   
@@ -477,7 +477,7 @@ export const FinanceReport = () => {
       {/* Monthly Revenue Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Monatlicher Umsatzverlauf</CardTitle>
+          <CardTitle>Monthly Revenue Trend</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="w-full overflow-x-auto">
@@ -496,7 +496,7 @@ export const FinanceReport = () => {
                         tickFormatter={(value) => `€${value}`}
                       />
                       <Tooltip 
-                        formatter={(value) => [`€${Number(value).toFixed(2)}`, 'Umsatz']}
+                        formatter={(value) => [`€${Number(value).toFixed(2)}`, 'Revenue']}
                         labelStyle={{ color: '#000' }}
                       />
                       <Line 
@@ -515,7 +515,7 @@ export const FinanceReport = () => {
             {/* Revenue Breakdown by Membership Type */}
             <Card>
               <CardHeader>
-                <CardTitle>Umsatz nach Mitgliedschaftstyp</CardTitle>
+                <CardTitle>Revenue by Membership Type</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="w-full overflow-x-auto">
@@ -583,14 +583,14 @@ export const FinanceReport = () => {
               <div className="flex gap-2">
                 <Input
                   type="month"
-                  placeholder="Von"
+                  placeholder="From"
                   value={exportStartDate}
                   onChange={(e) => setExportStartDate(e.target.value)}
                   className="text-sm"
                 />
                 <Input
                   type="month"
-                  placeholder="Bis"
+                  placeholder="To"
                   value={exportEndDate}
                   onChange={(e) => setExportEndDate(e.target.value)}
                   className="text-sm"

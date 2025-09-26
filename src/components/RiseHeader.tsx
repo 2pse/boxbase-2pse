@@ -240,7 +240,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'finance' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <DollarSign className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Finanzen</span>
+              <span className="text-sm font-medium">Finance</span>
             </div>
             
             {/* Fourth row */}

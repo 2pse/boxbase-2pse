@@ -47,25 +47,25 @@ const BOOKING_TYPES = [
   {
     type: 'unlimited' as const,
     title: 'Unlimited',
-    description: 'Unbegrenzte Kursbuchungen',
+    description: 'Unlimited course bookings',
     icon: Infinity
   },
   {
     type: 'limited' as const,
     title: 'Limited',
-    description: 'Begrenztes Kontingent pro Zeitraum',
+    description: 'Limited quota per time period',
     icon: Calendar
   },
   {
     type: 'credits' as const,
     title: 'Credits',
-    description: 'Credit-basiertes System',
+    description: 'Credit-based system',
     icon: CreditCard
   },
   {
     type: 'open_gym_only' as const,
     title: 'Open Gym Only',
-    description: 'Nur Zugang zum Open Gym',
+    description: 'Open Gym access only',
     icon: Dumbbell
   }
 ];
@@ -246,24 +246,24 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="z.B. Premium Plan"
+                placeholder="e.g. Premium Plan"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="description">Beschreibung</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 value={formData.description || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Beschreibung des Plans..."
+                placeholder="Plan description..."
               />
             </div>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">
-                  {formData.payment_frequency === 'monthly' ? 'Monatlicher Preis (€)' : 'Einmaliger Preis (€)'}
+                  {formData.payment_frequency === 'monthly' ? 'Monthly Price (€)' : 'One-time Price (€)'}
                 </Label>
                 <Input
                   id="price"
@@ -280,7 +280,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="duration">Laufzeit (Monate)</Label>
+                <Label htmlFor="duration">Duration (Months)</Label>
                 <Input
                   id="duration"
                   type="number"
@@ -294,7 +294,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
             </div>
             
             <div className="space-y-2">
-              <Label>Zahlungsfrequenz</Label>
+              <Label>Payment Frequency</Label>
               <RadioGroup
                 value={formData.payment_frequency}
                 onValueChange={(value) => setFormData(prev => ({ 
@@ -324,7 +324,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Buchungstyp auswählen</Label>
+              <Label>Select booking type</Label>
               <RadioGroup 
                 value={formData.booking_rules.type} 
                 onValueChange={handleBookingTypeChange}
@@ -482,14 +482,14 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
       case 4:
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-medium">Allgemeine Einstellungen</h3>
+            <h3 className="text-lg font-medium">General Settings</h3>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Auto-Verlängerung</Label>
+                  <Label>Auto-renewal</Label>
                   <p className="text-sm text-muted-foreground">
-                    Plan wird automatisch verlängert
+                    Plan will be automatically extended
                   </p>
                 </div>
                 <Switch
@@ -513,9 +513,9 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
               
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Plan aktiv</Label>
+                  <Label>Plan active</Label>
                   <p className="text-sm text-muted-foreground">
-                    Plan ist für Buchungen verfügbar
+                    Plan is available for bookings
                   </p>
                 </div>
                 <Switch
@@ -528,8 +528,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
             {/* Plan Preview */}
             <Card>
               <CardHeader>
-                <CardTitle>Vorschau</CardTitle>
-                <CardDescription>So wird Ihr Plan angezeigt</CardDescription>
+                <CardTitle>Preview</CardTitle>
+                <CardDescription>How your plan will be displayed</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
@@ -541,16 +541,16 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   <span>
                     {formData.price_monthly 
                       ? `${formData.price_monthly}€ ${formData.payment_frequency === 'monthly' ? '/month' : 'one-time'}`
-                      : 'Kostenlos'
+                      : 'Free'
                     }
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Zahlungsfrequenz:</span>
-                  <span>{formData.payment_frequency === 'monthly' ? 'Monatlich' : 'Einmalig'}</span>
+                  <span className="font-medium">Payment frequency:</span>
+                  <span>{formData.payment_frequency === 'monthly' ? 'Monthly' : 'One-time'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Buchungstyp:</span>
+                  <span className="font-medium">Booking type:</span>
                   <span>
                     {formData.booking_rules.type === 'unlimited' && 'Unlimited'}
                     {formData.booking_rules.type === 'limited' && 
@@ -617,17 +617,17 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
             disabled={currentStep === 1}
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
 
           {currentStep < 4 ? (
             <Button onClick={handleNext}>
-              Weiter
+              Next
               <ChevronRight className="h-4 w-4 ml-2" />
             </Button>
           ) : (
             <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Speichert...' : editingPlan ? 'Aktualisieren' : 'Erstellen'}
+              {loading ? 'Saving...' : editingPlan ? 'Update' : 'Create'}
             </Button>
           )}
         </div>

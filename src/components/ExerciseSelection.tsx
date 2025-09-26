@@ -216,9 +216,9 @@ export const ExerciseSelection = () => {
 
         <Card className="mb-4">
           <CardHeader>
-            <CardTitle>Bevorzugte Übungen</CardTitle>
+            <CardTitle>Preferred Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Grüne Übungen werden bevorzugt in deinen Workouts verwendet. Klicke auf eine Übung, um sie zu deaktivieren.
+              Green exercises will be preferred in your workouts. Click on an exercise to deactivate it.
             </p>
           </CardHeader>
           <CardContent className="space-y-6">

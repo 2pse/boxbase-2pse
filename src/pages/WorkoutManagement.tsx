@@ -241,20 +241,20 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
       <div className={`container mx-auto px-4 ${hideHeader ? '' : 'py-8'}`}>
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Workout Verwaltung</h1>
-            <p className="text-muted-foreground">Erstelle und verwalte Functional Fitness und Bodybuilding Workouts</p>
+            <h1 className="text-2xl font-bold tracking-tight">Workout Management</h1>
+            <p className="text-muted-foreground">Create and manage Functional Fitness and Bodybuilding workouts</p>
           </div>
           
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button className="w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
-                Neues Workout
+                New Workout
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Neues Workout erstellen</DialogTitle>
+                <DialogTitle>Create New Workout</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -391,7 +391,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                     </div>
 
                     <div>
-                      <Label>Verwendete Übungen</Label>
+                      <Label>Used Exercises</Label>
                       <div className="mt-2 space-y-4">
                         {Object.entries(groupedExercises).map(([category, exercises]) => (
                           <div key={category}>
@@ -420,7 +420,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                     onClick={activeTab === "crossfit" ? createCrossfitWorkout : createBodybuildingWorkout}
                     disabled={!newWorkout.title || !newWorkout.content}
                   >
-                    Workout erstellen
+                    Create Workout
                   </Button>
                   <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
                     Abbrechen

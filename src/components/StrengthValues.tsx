@@ -125,7 +125,7 @@ export const StrengthValues = () => {
         {/* Standard Kraftwerte */}
         <Card className="mb-4">
           <CardHeader>
-            <CardTitle>1RM Grundübungen</CardTitle>
+            <CardTitle>1RM Basic Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
               Gib deine 1 rep max ein für zukünftige Trainingsreferenzen
             </p>
@@ -160,7 +160,7 @@ export const StrengthValues = () => {
         {/* Zusätzliche Übungen */}
         <Card className="mb-4">
           <CardHeader>
-            <CardTitle>Weitere Übungen</CardTitle>
+            <CardTitle>Additional Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
               Füge beliebige weitere Übungen und deren Werte hinzu.
             </p>

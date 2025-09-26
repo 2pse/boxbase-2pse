@@ -1114,17 +1114,17 @@ export default function Admin() {
                             setNewMemberCode(newCode);
                           }}
                         >
-                          Generieren
+                          Generate
                         </Button>
                       </div>
                     </div>
                     
                     {/* V2 Simplified Membership Selection */}
                     <div className="space-y-4 border-t pt-4">
-                      <h3 className="text-lg font-semibold">Mitgliedschaftsauswahl</h3>
+                      <h3 className="text-lg font-semibold">Membership Selection</h3>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Mitgliedschaftsplan *</label>
+                        <label className="text-sm font-medium">Membership Plan *</label>
                         <Select 
                           value={selectedMembershipPlan} 
                           onValueChange={setSelectedMembershipPlan}
@@ -1249,8 +1249,8 @@ export default function Admin() {
                             <TableHead className="hidden md:table-cell">Access Code</TableHead>
                             <TableHead>Membership</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead className="hidden sm:table-cell">Letzter Login</TableHead>
-                            <TableHead>Aktionen</TableHead>
+                            <TableHead className="hidden sm:table-cell">Last Login</TableHead>
+                            <TableHead>Actions</TableHead>
                           </TableRow>
                       </TableHeader>
                         <TableBody>
