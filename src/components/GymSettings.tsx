@@ -363,8 +363,8 @@ export const GymSettings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Einstellungen</h2>
-        <p className="text-muted-foreground">Verwalte Studio-Einstellungen, Branding und Kontaktdaten</p>
+        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+        <p className="text-muted-foreground">Manage studio settings, branding and contact information</p>
       </div>
       
       {/* Branding & Design Section */}
@@ -396,7 +396,7 @@ export const GymSettings = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Light Mode Logo */}
                 <div>
-                  <Label>Logo für helles Design</Label>
+                  <Label>Logo for Light Design</Label>
                   <div className="mt-2 space-y-4">
                     {settings.logo_light_url && (
                       <div className="space-y-2">
@@ -414,7 +414,7 @@ export const GymSettings = () => {
                           className="w-full text-red-600 hover:text-red-700"
                         >
                           <X className="h-4 w-4 mr-2" />
-                          Logo entfernen
+                          Remove Logo
                         </Button>
                       </div>
                     )}
@@ -436,7 +436,7 @@ export const GymSettings = () => {
                         className="w-full"
                       >
                         <Upload className="h-4 w-4 mr-2" />
-                        {uploadingLogo === 'light' ? 'Hochladen...' : 'Logo hochladen'}
+                        {uploadingLogo === 'light' ? 'Uploading...' : 'Upload Logo'}
                       </Button>
                     </div>
                   </div>
@@ -444,7 +444,7 @@ export const GymSettings = () => {
 
                 {/* Dark Mode Logo */}
                 <div>
-                  <Label>Logo für dunkles Design</Label>
+                  <Label>Logo for Dark Design</Label>
                   <div className="mt-2 space-y-4">
                     {settings.logo_dark_url && (
                       <div className="space-y-2">
@@ -462,7 +462,7 @@ export const GymSettings = () => {
                           className="w-full text-red-600 hover:text-red-700"
                         >
                           <X className="h-4 w-4 mr-2" />
-                          Logo entfernen
+                          Remove Logo
                         </Button>
                       </div>
                     )}
@@ -484,7 +484,7 @@ export const GymSettings = () => {
                         className="w-full"
                       >
                         <Upload className="h-4 w-4 mr-2" />
-                        {uploadingLogo === 'dark' ? 'Hochladen...' : 'Logo hochladen'}
+                        {uploadingLogo === 'dark' ? 'Uploading...' : 'Upload Logo'}
                       </Button>
                     </div>
                   </div>
@@ -493,9 +493,9 @@ export const GymSettings = () => {
 
               {/* App Icon */}
               <div>
-                <Label>App-Icon</Label>
+                <Label>App Icon</Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Empfohlene Größe: 512x512 Pixel (quadratisch)
+                  Recommended size: 512x512 pixels (square)
                 </p>
                 <div className="mt-2 space-y-4">
                   {settings.app_icon_url && (
@@ -514,7 +514,7 @@ export const GymSettings = () => {
                         className="w-full text-red-600 hover:text-red-700"
                       >
                         <X className="h-4 w-4 mr-2" />
-                        App-Icon entfernen
+                        Remove App Icon
                       </Button>
                     </div>
                   )}
@@ -536,7 +536,7 @@ export const GymSettings = () => {
                       className="w-full"
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      {uploadingLogo === 'app' ? 'Hochladen...' : 'App-Icon hochladen'}
+                      {uploadingLogo === 'app' ? 'Uploading...' : 'Upload App Icon'}
                     </Button>
                   </div>
                 </div>
@@ -544,9 +544,9 @@ export const GymSettings = () => {
 
               {/* Primary Color */}
               <div>
-                <Label htmlFor="primary_color">Primärfarbe</Label>
+                <Label htmlFor="primary_color">Primary Color</Label>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Wähle die Hauptfarbe deines Studios
+                  Choose the main color of your studio
                 </p>
                 <div className="space-y-3">
                   <div className="flex gap-3 items-center">
@@ -570,7 +570,7 @@ export const GymSettings = () => {
                   </div>
                   <div className="flex items-center gap-2 p-3 rounded-lg border" style={{ backgroundColor: `${settings.primary_color}15` }}>
                     <div className="w-4 h-4 rounded-full" style={{ backgroundColor: settings.primary_color }}></div>
-                    <span className="text-sm text-muted-foreground">Vorschau der gewählten Farbe</span>
+                    <span className="text-sm text-muted-foreground">Preview of selected color</span>
                   </div>
                 </div>
               </div>
@@ -587,7 +587,7 @@ export const GymSettings = () => {
               <CardTitle className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Admin-Profil
+                  Admin Profile
                 </div>
                 <ChevronDown className={`h-4 w-4 transition-transform ${adminProfileOpen ? 'transform rotate-180' : ''}`} />
               </CardTitle>
@@ -597,7 +597,7 @@ export const GymSettings = () => {
             <CardContent>
               <form onSubmit={handleUpdateAdminProfile} className="space-y-6">
                 <div>
-                  <Label htmlFor="admin_email">E-Mail-Adresse</Label>
+                  <Label htmlFor="admin_email">Email Address</Label>
                   <Input
                     id="admin_email"
                     type="email"
@@ -608,13 +608,13 @@ export const GymSettings = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="admin_password">Neues Passwort</Label>
+                  <Label htmlFor="admin_password">New Password</Label>
                   <Input
                     id="admin_password"
                     type="password"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    placeholder="Leer lassen, falls nicht ändern"
+                    placeholder="Leave empty if no change"
                   />
                 </div>
 
@@ -624,7 +624,7 @@ export const GymSettings = () => {
                   className="w-full"
                 >
                   <Lock className="h-4 w-4 mr-2" />
-                  {updatingProfile ? 'Aktualisieren...' : 'Profil aktualisieren'}
+                  {updatingProfile ? 'Updating...' : 'Update Profile'}
                 </Button>
               </form>
             </CardContent>
@@ -640,7 +640,7 @@ export const GymSettings = () => {
               <CardTitle className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Settings className="h-5 w-5" />
-                  Kontaktinformationen
+                  Contact Information
                 </div>
                 <ChevronDown className={`h-4 w-4 transition-transform ${contactOpen ? 'transform rotate-180' : ''}`} />
               </CardTitle>
@@ -649,7 +649,7 @@ export const GymSettings = () => {
           <CollapsibleContent>
             <CardContent className="space-y-6">
               <div>
-                <Label htmlFor="whatsapp_number">WhatsApp Nummer</Label>
+                <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
                 <Input
                   id="whatsapp_number"
                   value={settings.whatsapp_number || ''}
@@ -659,7 +659,7 @@ export const GymSettings = () => {
               </div>
 
               <div>
-                <Label htmlFor="contact_email">Kontakt E-Mail</Label>
+                <Label htmlFor="contact_email">Contact Email</Label>
                 <Input
                   id="contact_email"
                   type="email"
@@ -690,9 +690,9 @@ export const GymSettings = () => {
           <CollapsibleContent>
             <CardContent className="space-y-6">
               <div>
-                <Label htmlFor="webhook_member_url">Mitglieder Webhook URL</Label>
+                <Label htmlFor="webhook_member_url">Member Webhook URL</Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Wird ausgelöst bei Mitglieder-Erstellung
+                  Triggered when members are created
                 </p>
                 <div className="flex gap-2">
                   <Input
@@ -706,7 +706,7 @@ export const GymSettings = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => window.open(settings.webhook_member_url!, '_blank')}
-                      title="Webhook testen"
+                      title="Test webhook"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </Button>
@@ -715,9 +715,9 @@ export const GymSettings = () => {
               </div>
 
               <div>
-                <Label htmlFor="webhook_waitlist_url">Warteliste Webhook URL</Label>
+                <Label htmlFor="webhook_waitlist_url">Waitlist Webhook URL</Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Wird ausgelöst bei Beförderung von der Warteliste
+                  Triggered when promoted from waitlist
                 </p>
                 <div className="flex gap-2">
                   <Input
@@ -731,7 +731,7 @@ export const GymSettings = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => window.open(settings.webhook_waitlist_url!, '_blank')}
-                      title="Webhook testen"
+                      title="Test webhook"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </Button>
@@ -740,9 +740,9 @@ export const GymSettings = () => {
               </div>
 
               <div>
-                <Label htmlFor="webhook_reactivation_url">Reaktivierungs Webhook URL</Label>
+                <Label htmlFor="webhook_reactivation_url">Reactivation Webhook URL</Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Wird ausgelöst wenn Mitglieder 21 Tage inaktiv sind
+                  Triggered when members are inactive for 21 days
                 </p>
                 <div className="flex gap-2">
                   <Input
@@ -756,7 +756,7 @@ export const GymSettings = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => window.open(settings.webhook_reactivation_url!, '_blank')}
-                      title="Webhook testen"
+                      title="Test webhook"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </Button>
@@ -772,7 +772,7 @@ export const GymSettings = () => {
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving} size="lg">
           <Save className="h-4 w-4 mr-2" />
-          {saving ? 'Speichern...' : 'Einstellungen speichern'}
+          {saving ? 'Saving...' : 'Save Settings'}
         </Button>
       </div>
     </div>

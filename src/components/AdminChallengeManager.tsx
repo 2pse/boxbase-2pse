@@ -51,8 +51,8 @@ export default function AdminChallengeManager() {
   // Removed iconOptions as it's now handled by BadgeSelector
 
   const monthNames = [
-    "Januar", "Februar", "März", "April", "Mai", "Juni",
-    "Juli", "August", "September", "Oktober", "November", "Dezember"
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function AdminChallengeManager() {
     try {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) {
-        toast.error('Nicht angemeldet');
+        toast.error('Not logged in');
         return;
       }
 
@@ -136,11 +136,11 @@ export default function AdminChallengeManager() {
 
       if (error) throw error;
 
-      toast.success('Challenge gelöscht');
+      toast.success('Challenge deleted');
       loadChallenges();
     } catch (error) {
       console.error('Error deleting challenge:', error);
-      toast.error('Fehler beim Löschen der Challenge');
+      toast.error('Error deleting challenge');
     }
   };
 
@@ -153,11 +153,11 @@ export default function AdminChallengeManager() {
 
       if (error) throw error;
 
-      toast.success(archived ? 'Challenge archiviert' : 'Challenge reaktiviert');
+      toast.success(archived ? 'Challenge archived' : 'Challenge reactivated');
       loadChallenges();
     } catch (error) {
       console.error('Error archiving challenge:', error);
-      toast.error('Fehler beim Archivieren');
+      toast.error('Error archiving challenge');
     }
   };
 
@@ -198,13 +198,13 @@ export default function AdminChallengeManager() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Challenges</h2>
-        <p className="text-muted-foreground">Erstelle und verwalte monatliche Fitness-Challenges</p>
+        <p className="text-muted-foreground">Create and manage monthly fitness challenges</p>
       </div>
       
       <Tabs defaultValue="challenges" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="challenges">Challenges verwalten</TabsTrigger>
-          <TabsTrigger value="badges">Badges verwalten</TabsTrigger>
+          <TabsTrigger value="challenges">Manage Challenges</TabsTrigger>
+          <TabsTrigger value="badges">Manage Badges</TabsTrigger>
         </TabsList>
         
         <TabsContent value="challenges" className="space-y-6">
@@ -239,13 +239,13 @@ export default function AdminChallengeManager() {
                     </div>
                     <div className="flex gap-1">
                       {challenge.is_primary && (
-                        <Badge variant="default">Primär</Badge>
+                        <Badge variant="default">Primary</Badge>
                       )}
                       {challenge.is_recurring && (
-                        <Badge variant="secondary">Wiederkehrend</Badge>
+                        <Badge variant="secondary">Recurring</Badge>
                       )}
                       {challenge.is_archived && (
-                        <Badge variant="destructive">Archiviert</Badge>
+                        <Badge variant="destructive">Archived</Badge>
                       )}
                     </div>
                   </div>
@@ -284,7 +284,7 @@ export default function AdminChallengeManager() {
                           })()
                         )}
                         <span className="text-xs">
-                          {challenge.icon.startsWith('http') ? 'Eigenes Badge' : challenge.icon}
+                          {challenge.icon.startsWith('http') ? 'Custom Badge' : challenge.icon}
                         </span>
                       </div>
                     </div>
@@ -303,7 +303,7 @@ export default function AdminChallengeManager() {
                       size="sm"
                       onClick={() => handleArchiveChallenge(challenge.id, !challenge.is_archived)}
                     >
-                      {challenge.is_archived ? "Reaktivieren" : "Archivieren"}
+                      {challenge.is_archived ? "Reactivate" : "Archive"}
                     </Button>
                     <Button
                       variant="destructive"
@@ -368,7 +368,7 @@ export default function AdminChallengeManager() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="year">Jahr</Label>
+                <Label htmlFor="year">Year</Label>
                 <Input
                   id="year"
                   type="number"
@@ -377,7 +377,7 @@ export default function AdminChallengeManager() {
                 />
               </div>
               <div>
-                <Label htmlFor="month">Monat</Label>
+                <Label htmlFor="month">Month</Label>
                 <Select value={formData.month.toString()} onValueChange={(value) => 
                   setFormData(prev => ({ ...prev, month: parseInt(value) }))
                 }>

@@ -271,7 +271,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
               </div>
             ) : filteredMembers.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
-                {searchTerm ? 'Keine Mitglieder gefunden' : 'Alle Mitglieder sind bereits angemeldet'}
+                {searchTerm ? 'No members found' : 'All members are already registered'}
               </div>
             ) : (
               <>
@@ -311,11 +311,11 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
                       onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                       disabled={currentPage === 0}
                     >
-                      Vorherige
+                      Previous
                     </Button>
                     <span className="text-sm text-muted-foreground">
-                      Seite {currentPage + 1} von {Math.ceil(filteredMembers.length / membersPerPage)} 
-                      ({filteredMembers.length} Mitglieder)
+                      Page {currentPage + 1} of {Math.ceil(filteredMembers.length / membersPerPage)} 
+                      ({filteredMembers.length} members)
                     </span>
                     <Button
                       variant="outline"
@@ -323,7 +323,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
                       onClick={() => setCurrentPage(Math.min(Math.ceil(filteredMembers.length / membersPerPage) - 1, currentPage + 1))}
                       disabled={currentPage >= Math.ceil(filteredMembers.length / membersPerPage) - 1}
                     >
-                      Nächste
+                      Next
                     </Button>
                   </div>
                 )}

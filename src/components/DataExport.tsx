@@ -39,8 +39,8 @@ const exportOptions: ExportOption[] = [
   },
   {
     id: 'courses',
-    title: 'Kurse & Buchungen',
-    description: 'Kurse, Anmeldungen, Stornierungen, Wartelisten, Kursvorlagen',
+    title: 'Courses & Bookings',
+    description: 'Courses, registrations, cancellations, waitlists, course templates',
     icon: Calendar,
     tables: ['courses', 'course_registrations', 'course_templates', 'waitlist_promotion_events']
   },
@@ -54,28 +54,28 @@ const exportOptions: ExportOption[] = [
   {
     id: 'training',
     title: 'Training & Challenges',
-    description: 'Trainingseinheiten, Challenge-Fortschritte, Badges, Leaderboard',
+    description: 'Training sessions, challenge progress, badges, leaderboard',
     icon: Activity,
     tables: ['training_sessions', 'user_challenge_progress', 'challenge_checkpoints', 'user_badges', 'monthly_challenges', 'leaderboard_entries']
   },
   {
     id: 'content',
-    title: 'Inhalte & Workouts',
-    description: 'News, Crossfit-Workouts, Bodybuilding-Workouts',
+    title: 'Content & Workouts',
+    description: 'News, Crossfit workouts, bodybuilding workouts',
     icon: Newspaper,
     tables: ['news', 'user_read_news', 'crossfit_workouts', 'bodybuilding_workouts']
   },
   {
     id: 'settings',
-    title: 'Einstellungen & Webhooks',
-    description: 'Gym-Einstellungen, Webhook-Events, Reactivation-Events',
+    title: 'Settings & Webhooks',
+    description: 'Gym settings, webhook events, reactivation events',
     icon: Database,
     tables: ['gym_settings', 'reactivation_webhook_events']
   },
   {
     id: 'full',
-    title: 'Vollständiger Export',
-    description: 'Alle Daten aus der gesamten Datenbank (inkl. sensibler Daten)',
+    title: 'Complete Export',
+    description: 'All data from the entire database (including sensitive data)',
     icon: Database,
     tables: ['all']
   }
@@ -141,8 +141,8 @@ export function DataExport() {
       console.error('Export error:', error);
 
       toast({
-        title: "Export fehlgeschlagen",
-        description: error.message || "Fehler beim Exportieren der Daten",
+        title: "Export Failed",
+        description: error.message || "Error exporting data",
         variant: "destructive",
       });
     } finally {
@@ -170,7 +170,7 @@ export function DataExport() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">
-                  {exportOptions.find(o => o.id === exportingType)?.title} wird exportiert...
+                  Exporting {exportOptions.find(o => o.id === exportingType)?.title}...
                 </span>
                 <span className="text-sm text-muted-foreground">{exportProgress}%</span>
               </div>
@@ -197,8 +197,8 @@ export function DataExport() {
                     <CardTitle className="text-base">{option.title}</CardTitle>
                     <Badge variant="secondary" className="text-xs">
                       {option.tables.length === 1 && option.tables[0] === 'all' 
-                        ? 'Alle Tabellen' 
-                        : `${option.tables.length} Tabellen`}
+                        ? 'All Tables' 
+                        : `${option.tables.length} Tables`}
                     </Badge>
                   </div>
                 </div>
@@ -215,7 +215,7 @@ export function DataExport() {
                   ))}
                   {option.tables.length > 3 && (
                     <Badge variant="outline" className="text-xs">
-                      +{option.tables.length - 3} weitere
+                      +{option.tables.length - 3} more
                     </Badge>
                   )}
                 </div>

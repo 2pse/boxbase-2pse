@@ -134,7 +134,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
               className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors"
             >
               <Users className="h-8 w-8 text-foreground mb-2" />
-              <span className="text-sm font-medium text-foreground">Mitglieder</span>
+              <span className="text-sm font-medium text-foreground">Members</span>
             </div>
             <div 
               onClick={() => {
@@ -229,7 +229,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
                 className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-destructive/10 cursor-pointer transition-colors"
               >
                 <LogOut className="h-8 w-8 text-destructive mb-2" />
-                <span className="text-sm font-medium text-destructive">Abmelden</span>
+                <span className="text-sm font-medium text-destructive">Log out</span>
               </div>
             )}
           </div>

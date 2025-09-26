@@ -36,21 +36,21 @@ interface BadgeSelectorProps {
 }
 
 const defaultIcons = [
-  { name: 'target', icon: Target, label: 'Ziel' },
-  { name: 'trophy', icon: Trophy, label: 'Pokal' },
-  { name: 'award', icon: Award, label: 'Auszeichnung' },
-  { name: 'star', icon: Star, label: 'Stern' },
-  { name: 'heart', icon: Heart, label: 'Herz' },
-  { name: 'zap', icon: Zap, label: 'Blitz' },
-  { name: 'crown', icon: Crown, label: 'Krone' },
-  { name: 'shield', icon: Shield, label: 'Schild' },
-  { name: 'flame', icon: Flame, label: 'Flamme' },
-  { name: 'gem', icon: Gem, label: 'Diamant' },
-  { name: 'medal', icon: Medal, label: 'Medaille' },
-  { name: 'gift', icon: Gift, label: 'Geschenk' },
-  { name: 'users', icon: Users, label: 'Gruppe' },
-  { name: 'calendar', icon: Calendar, label: 'Kalender' },
-  { name: 'trending-up', icon: TrendingUp, label: 'Aufwärtstrend' }
+  { name: 'target', icon: Target, label: 'Target' },
+  { name: 'trophy', icon: Trophy, label: 'Trophy' },
+  { name: 'award', icon: Award, label: 'Award' },
+  { name: 'star', icon: Star, label: 'Star' },
+  { name: 'heart', icon: Heart, label: 'Heart' },
+  { name: 'zap', icon: Zap, label: 'Lightning' },
+  { name: 'crown', icon: Crown, label: 'Crown' },
+  { name: 'shield', icon: Shield, label: 'Shield' },
+  { name: 'flame', icon: Flame, label: 'Flame' },
+  { name: 'gem', icon: Gem, label: 'Diamond' },
+  { name: 'medal', icon: Medal, label: 'Medal' },
+  { name: 'gift', icon: Gift, label: 'Gift' },
+  { name: 'users', icon: Users, label: 'Group' },
+  { name: 'calendar', icon: Calendar, label: 'Calendar' },
+  { name: 'trending-up', icon: TrendingUp, label: 'Trending Up' }
 ]
 
 export const BadgeSelector = ({ selectedIcon, onIconSelect, className }: BadgeSelectorProps) => {
@@ -97,7 +97,7 @@ export const BadgeSelector = ({ selectedIcon, onIconSelect, className }: BadgeSe
       <Tabs defaultValue="icons" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="icons">Standard Icons</TabsTrigger>
-          <TabsTrigger value="uploaded">Eigene Badges</TabsTrigger>
+          <TabsTrigger value="uploaded">Custom Badges</TabsTrigger>
         </TabsList>
         
         <TabsContent value="icons" className="space-y-2">
@@ -156,7 +156,7 @@ export const BadgeSelector = ({ selectedIcon, onIconSelect, className }: BadgeSe
       
       {selectedIcon && (
         <div className="mt-2">
-          <Label className="text-sm text-muted-foreground">Ausgewählt:</Label>
+          <Label className="text-sm text-muted-foreground">Selected:</Label>
           <div className="flex items-center gap-2 mt-1">
             {isUploadedBadge ? (
               <div className="w-6 h-6 overflow-hidden rounded">
@@ -173,7 +173,7 @@ export const BadgeSelector = ({ selectedIcon, onIconSelect, className }: BadgeSe
               })()
             )}
             <Badge variant="secondary" className="text-xs">
-              {isUploadedBadge ? 'Eigenes Badge' : selectedIcon}
+              {isUploadedBadge ? 'Custom Badge' : selectedIcon}
             </Badge>
           </div>
         </div>

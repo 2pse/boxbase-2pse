@@ -166,7 +166,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'members' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Users className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Mitglieder</span>
+              <span className="text-sm font-medium">Members</span>
             </div>
             <div 
               onClick={() => {
@@ -176,7 +176,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'memberships' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <CreditCard className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Mitgliedschaften</span>
+              <span className="text-sm font-medium">Memberships</span>
             </div>
             
             {/* Second row */}
@@ -188,7 +188,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'courses' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Calendar className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Kurse</span>
+              <span className="text-sm font-medium">Courses</span>
             </div>
             <div 
               onClick={() => {
@@ -198,7 +198,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'templates' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Dumbbell className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Vorlagen</span>
+              <span className="text-sm font-medium">Templates</span>
             </div>
             <div 
               onClick={() => {
@@ -252,7 +252,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Download className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Datenexport</span>
+              <span className="text-sm font-medium">Data Export</span>
             </div>
             <div 
               onClick={() => {
@@ -262,7 +262,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'settings' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Settings className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Einstellungen</span>
+              <span className="text-sm font-medium">Settings</span>
             </div>
             
             {onLogout && (
@@ -271,7 +271,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
                 className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-destructive/10 cursor-pointer transition-colors"
               >
                 <LogOut className="h-8 w-8 text-destructive mb-2" />
-                <span className="text-sm font-medium text-destructive">Abmelden</span>
+                <span className="text-sm font-medium text-destructive">Log out</span>
               </div>
             )}
           </div>
