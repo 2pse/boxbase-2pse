@@ -324,12 +324,12 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                 </Tabs>
 
                 <div>
-                  <Label htmlFor="title">Titel</Label>
+                  <Label htmlFor="title">Title</Label>
                   <Input
                     id="title"
                     value={newWorkout.title}
                     onChange={(e) => setNewWorkout(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Workout Titel..."
+                    placeholder="Workout Title..."
                   />
                 </div>
 

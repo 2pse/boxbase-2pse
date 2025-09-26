@@ -314,11 +314,11 @@ export const CourseTemplateManager = () => {
               <form onSubmit={handleCreateTemplate} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="title">Titel</Label>
+                    <Label htmlFor="title">Title</Label>
                     <Input
                       value={templateForm.title}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, title: e.target.value }))}
-                      placeholder="Kurs-Titel eingeben"
+                      placeholder="Enter course title"
                       required
                     />
                   </div>
@@ -408,7 +408,7 @@ export const CourseTemplateManager = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Titel</TableHead>
+                        <TableHead>Title</TableHead>
                         <TableHead className="hidden sm:table-cell">Trainer</TableHead>
                         <TableHead className="hidden md:table-cell">Max. Teilnehmer</TableHead>
                         <TableHead className="hidden lg:table-cell">Dauer</TableHead>

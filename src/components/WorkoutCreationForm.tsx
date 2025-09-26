@@ -50,7 +50,7 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
     e.preventDefault()
     
     if (!title.trim() || !workoutContent.trim()) {
-      toast.error("Bitte fülle mindestens Titel und Workout aus.")
+      toast.error("Please fill in at least title and workout content.")
       return
     }
 
@@ -73,11 +73,11 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
 
       if (error) throw error
 
-      toast.success("Workout erfolgreich erstellt!")
+      toast.success("Workout successfully created!")
       onWorkoutCreated()
     } catch (error) {
       console.error('Error creating workout:', error)
-      toast.error("Fehler beim Erstellen des Workouts.")
+      toast.error("Error creating workout.")
     } finally {
       setIsSubmitting(false)
     }
@@ -91,7 +91,7 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
             <Button variant="ghost" size="sm" onClick={onBack}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            Neues WOD erstellen
+            Create New WOD
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -119,18 +119,18 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
 
             {/* Title */}
             <div>
-              <Label htmlFor="title">Titel</Label>
+              <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="z.B. Fran, Grace, Deadlift 5RM..."
+                placeholder="e.g. Fran, Grace, Deadlift 5RM..."
               />
             </div>
 
             {/* Author (readonly) */}
             <div>
-              <Label>Autor</Label>
+              <Label>Author</Label>
               <Input value={userNickname} disabled />
             </div>
 
@@ -141,7 +141,7 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
                 id="workout"
                 value={workoutContent}
                 onChange={(e) => setWorkoutContent(e.target.value)}
-                placeholder="Beschreibe das Workout..."
+                placeholder="Describe the workout..."
                 rows={6}
               />
             </div>
@@ -153,7 +153,7 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Zusätzliche Hinweise..."
+                placeholder="Additional notes..."
                 rows={3}
               />
             </div>
@@ -194,7 +194,7 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
 
             {/* Exercise Selection */}
             <div>
-              <Label>Verwendete Übungen</Label>
+              <Label>Used Exercises</Label>
               <div className="mt-2 space-y-4">
                 {Object.entries(groupedExercises).map(([category, exercises]) => (
                   <div key={category}>
@@ -219,10 +219,10 @@ export const WorkoutCreationForm = ({ userNickname, onBack, onWorkoutCreated }: 
             <div className="flex gap-4">
               <Button type="submit" disabled={isSubmitting}>
                 <Plus className="h-4 w-4 mr-2" />
-                {isSubmitting ? "Erstelle..." : "Workout erstellen"}
+                {isSubmitting ? "Creating..." : "Create Workout"}
               </Button>
               <Button type="button" variant="outline" onClick={onBack}>
-                Abbrechen
+                Cancel
               </Button>
             </div>
           </form>

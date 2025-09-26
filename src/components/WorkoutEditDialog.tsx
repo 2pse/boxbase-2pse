@@ -70,7 +70,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
 
   const handleSave = async () => {
     if (!editedWorkout.title || !editedWorkout.workout_content) {
-      toast.error("Titel und Workout-Inhalt sind erforderlich")
+      toast.error("Title and workout content are required")
       return
     }
 
@@ -132,7 +132,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
         
         <div className="space-y-6">
           <div>
-            <Label htmlFor="title">Titel</Label>
+            <Label htmlFor="title">Title</Label>
             <Input
               id="title"
               value={editedWorkout.title}

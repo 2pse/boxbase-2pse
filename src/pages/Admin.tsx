@@ -1070,7 +1070,7 @@ export default function Admin() {
                   <form onSubmit={handleCreateMember} className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Vorname *</label>
+                        <label className="text-sm font-medium">First Name *</label>
                         <Input
                           placeholder="Max"
                           value={newMemberFirstName}
@@ -1079,7 +1079,7 @@ export default function Admin() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Nachname</label>
+                        <label className="text-sm font-medium">Last Name</label>
                         <Input
                           placeholder="Mustermann"
                           value={newMemberLastName}
@@ -1088,10 +1088,10 @@ export default function Admin() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">E-Mail *</label>
+                      <label className="text-sm font-medium">Email *</label>
                       <Input
                         type="email"
-                        placeholder="E-Mail des Mitglieds"
+                        placeholder="Member's email address"
                         value={newMemberEmail}
                         onChange={(e) => setNewMemberEmail(e.target.value)}
                         required
@@ -1415,7 +1415,7 @@ export default function Admin() {
               {/* Basic Profile Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Vorname *</label>
+                  <label className="text-sm font-medium">First Name *</label>
                   <Input
                     placeholder="Max"
                     value={editingMember.first_name || ''}
@@ -1427,7 +1427,7 @@ export default function Admin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Nachname</label>
+                  <label className="text-sm font-medium">Last Name</label>
                   <Input
                     placeholder="Mustermann"
                     value={editingMember.last_name || ''}
@@ -1440,7 +1440,7 @@ export default function Admin() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium">E-Mail</label>
+                <label className="text-sm font-medium">Email</label>
                 <Input
                   type="email"
                   placeholder="max@beispiel.de"

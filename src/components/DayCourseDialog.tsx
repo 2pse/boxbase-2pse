@@ -229,7 +229,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
       console.error('Error loading courses:', error)
       toast({
         title: "Fehler",
-        description: "Kurse konnten nicht geladen werden.",
+        description: "Courses could not be loaded.",
         variant: "destructive"
       })
     } finally {
@@ -395,8 +395,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
             })
           } else if (userMembershipType === 'Credits') {
             toast({
-              title: "Keine Credits verfügbar",
-              description: "Du hast keine Credits mehr. Bitte lade deine Credits am Empfang auf",
+              title: "No Credits Available",
+              description: "You have no credits left. Please top up your credits at the reception",
               variant: "destructive",
             })
           } else if (userMembershipType === 'open_gym_only') {
@@ -569,8 +569,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         }
 
         toast({
-          title: isWaitlist ? "Auf Warteliste" : "Angemeldet",
-          description: isWaitlist ? "Du wurdest auf die Warteliste gesetzt" : "Du wurdest erfolgreich für den Kurs angemeldet."
+          title: isWaitlist ? "On Waitlist" : "Registered",
+          description: isWaitlist ? "You have been added to the waitlist" : "You have been successfully registered for the course."
         })
       }
 
@@ -896,7 +896,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                     className="flex-1 text-white hover:opacity-80"
                     style={{ backgroundColor: primaryColor }}
                   >
-                    {selectedCourse.registered_count >= selectedCourse.max_participants ? 'Auf Warteliste' : 'Anmelden'}
+                    {selectedCourse.registered_count >= selectedCourse.max_participants ? 'Join Waitlist' : 'Register'}
                   </Button>
                 )}
               </div>

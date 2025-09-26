@@ -144,7 +144,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
 
     } catch (error) {
       console.error('Error loading members:', error)
-      toast.error('Fehler beim Laden der Mitglieder')
+      toast.error('Error loading members')
     } finally {
       setLoading(false)
     }
@@ -348,25 +348,25 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="editFirstName">Vorname</Label>
+                <Label htmlFor="editFirstName">First Name</Label>
                 <Input
                   id="editFirstName"
                   value={editedFirstName}
                   onChange={(e) => setEditedFirstName(e.target.value)}
-                  placeholder="Vorname"
+                  placeholder="First Name"
                 />
               </div>
               <div>
-                <Label htmlFor="editLastName">Nachname</Label>
+                <Label htmlFor="editLastName">Last Name</Label>
                 <Input
                   id="editLastName"
                   value={editedLastName}
                   onChange={(e) => setEditedLastName(e.target.value)}
-                  placeholder="Nachname"
+                  placeholder="Last Name"
                 />
               </div>
               <div>
-                <Label htmlFor="editEmail">E-Mail</Label>
+                <Label htmlFor="editEmail">Email</Label>
                 <Input
                   id="editEmail"
                   type="email"
@@ -374,7 +374,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
                   readOnly
                   disabled
                   className="bg-muted cursor-not-allowed"
-                  placeholder="E-Mail Adresse"
+                  placeholder="Email Address"
                 />
               </div>
               <div className="flex gap-2 pt-4">

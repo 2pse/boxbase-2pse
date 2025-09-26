@@ -291,11 +291,11 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
 
       if (checkError || (!canRegister && !canWaitlist)) {
         if (userMembershipType === 'Basic Member') {
-          toast.error("Du hast dein wöchentliches Limit von 2 Anmeldungen erreicht")
+          toast.error("You have reached your weekly limit of 2 registrations")
         } else if (userMembershipType === 'Credits') {
-          toast.error("Du hast keine Credits mehr. Bitte lade deine Credits am Empfang auf")
+          toast.error("You have no credits left. Please top up your credits at the reception")
         } else if (userMembershipType === 'open_gym_only') {
-          toast.error("Deine Mitgliedschaft beinhaltet nur Open Gym. Für Kurse benötigst du eine erweiterte Mitgliedschaft.")
+          toast.error("Your membership only includes Open Gym. For courses you need an extended membership.")
         } else {
           toast.error("Anmeldung nicht möglich")
         }
@@ -860,8 +860,8 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                     className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
                   >
                     {selectedCourse.registered_count >= selectedCourse.max_participants 
-                      ? 'Auf Warteliste' 
-                      : 'Anmelden'
+                      ? 'Join Waitlist' 
+                      : 'Register'
                     }
                   </Button>
                 )}

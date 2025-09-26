@@ -91,7 +91,7 @@ export default function Auth() {
 
     try {
       if (!email || !accessCode) {
-        toast.error("Bitte E-Mail und Code eingeben");
+        toast.error("Please enter email and access code");
         setLoading(false);
         return;
       }
@@ -103,7 +103,7 @@ export default function Auth() {
 
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
-          toast.error("Ungültige E-Mail oder Code");
+          toast.error("Invalid email or access code");
         } else {
           toast.error(error.message);
         }
@@ -111,7 +111,7 @@ export default function Auth() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Fehler beim Anmelden");
+      toast.error("Login error");
     } finally {
       setLoading(false);
     }
@@ -130,14 +130,14 @@ export default function Auth() {
             <div className="mb-4">
               <Logo className="h-12 mx-auto" />
             </div>
-            <CardTitle className="text-2xl font-bold">Log in</CardTitle>
+            <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Input
                   type="email"
-                  placeholder="E-Mail"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -146,7 +146,7 @@ export default function Auth() {
               <div className="space-y-2">
                 <Input
                   type="text"
-                  placeholder="Zugangscode"
+                  placeholder="Access Code"
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value.replace(/\s/g, ''))}
                   required
@@ -157,7 +157,7 @@ export default function Auth() {
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]" 
                 disabled={loading}
               >
-                {loading ? "Anmelden..." : "Anmelden"}
+                {loading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
           </CardContent>

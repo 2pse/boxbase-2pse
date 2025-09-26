@@ -39,7 +39,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
     return (
       <Card className="w-full">
         <CardContent className="p-4">
-          <div className="text-center text-muted-foreground">Lade Anmeldeinformationen...</div>
+          <div className="text-center text-muted-foreground">Loading registration information...</div>
         </CardContent>
       </Card>
     )
@@ -55,15 +55,15 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
             <Calendar className="h-5 w-5 text-primary" />
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium">Wöchentliche Anmeldungen</span>
+                <span className="font-medium">Weekly Registrations</span>
                 <Badge variant={remaining > 0 ? "default" : "destructive"}>
                   {weeklyCount}/2
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
                 {remaining > 0 
-                  ? `Du kannst dich noch ${remaining}x diese Woche anmelden`
-                  : "Du hast dein wöchentliches Limit erreicht"
+                  ? `You can register ${remaining} more times this week`
+                  : "You have reached your weekly limit"
                 }
               </p>
             </div>
@@ -72,7 +72,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
             <div className="mt-3 p-2 bg-destructive/10 rounded-md flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-destructive" />
               <span className="text-sm text-destructive">
-                Limit erreicht - neue Anmeldungen ab Montag möglich
+                Limit reached - new registrations possible from Monday
               </span>
             </div>
           )}
@@ -89,15 +89,15 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
             <CreditCard className="h-5 w-5 text-primary" />
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium">Verfügbare Credits</span>
+                <span className="font-medium">Available Credits</span>
                 <Badge variant={credits > 0 ? "default" : "destructive"}>
                   {credits} Credits
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
                 {credits > 0 
-                  ? `Du kannst dich noch ${credits}x für Kurse anmelden`
-                  : "Keine Credits verfügbar - bitte wende dich an das Team"
+                  ? `You can register ${credits} more times for courses`
+                  : "No credits available - please contact the team"
                 }
               </p>
             </div>
@@ -106,7 +106,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
             <div className="mt-3 p-2 bg-destructive/10 rounded-md flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-destructive" />
               <span className="text-sm text-destructive">
-                Keine Credits - Aufladen am Empfang möglich
+                No credits - top up at reception possible
               </span>
             </div>
           )}

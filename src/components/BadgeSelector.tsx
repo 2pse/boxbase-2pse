@@ -120,12 +120,12 @@ export const BadgeSelector = ({ selectedIcon, onIconSelect, className }: BadgeSe
         
         <TabsContent value="uploaded" className="space-y-2">
           {loading ? (
-            <p className="text-sm text-muted-foreground">Lade Badges...</p>
+            <p className="text-sm text-muted-foreground">Loading badges...</p>
           ) : uploadedBadges.length === 0 ? (
             <Card>
               <CardContent className="pt-6">
                 <p className="text-sm text-muted-foreground text-center">
-                  Keine eigenen Badges verfügbar. Laden Sie zuerst Badges hoch.
+                  No custom badges available. Please upload badges first.
                 </p>
               </CardContent>
             </Card>

@@ -98,8 +98,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
       }
 
       toast({
-        title: "Badge hochgeladen",
-        description: "Das Badge wurde erfolgreich hochgeladen."
+        title: "Badge uploaded",
+        description: "The badge has been successfully uploaded."
       })
 
       // Reload badges
@@ -112,7 +112,7 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
       console.error('Error uploading badge:', error)
       toast({
         title: "Upload fehlgeschlagen",
-        description: "Es gab einen Fehler beim Hochladen des Badges.",
+        description: "There was an error uploading the badge.",
         variant: "destructive"
       })
     } finally {
@@ -156,7 +156,7 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
           Challenge Badges verwalten
         </CardTitle>
         <CardDescription>
-          Lade eigene Badge-Bilder für Challenges hoch. 
+          Upload custom badge images for challenges. 
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -169,7 +169,7 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
         </Alert>
 
         <div className="space-y-2">
-          <Label htmlFor="badge-upload">Badge hochladen</Label>
+          <Label htmlFor="badge-upload">Upload Badge</Label>
           <Input
             id="badge-upload"
             type="file"
@@ -178,16 +178,16 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
             disabled={uploading}
           />
           {uploading && (
-            <p className="text-sm text-muted-foreground">Lade hoch...</p>
+            <p className="text-sm text-muted-foreground">Uploading...</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label>Hochgeladene Badges</Label>
+          <Label>Uploaded Badges</Label>
           {loading ? (
-            <p className="text-sm text-muted-foreground">Lade Badges...</p>
+            <p className="text-sm text-muted-foreground">Loading badges...</p>
           ) : badges.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Noch keine Badges hochgeladen.</p>
+            <p className="text-sm text-muted-foreground">No badges uploaded yet.</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {badges.map((badge) => (
@@ -211,18 +211,18 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Badge löschen</AlertDialogTitle>
+                        <AlertDialogTitle>Delete Badge</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Möchten Sie dieses Badge wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+                          Do you really want to delete this badge? This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDeleteBadge(badge.name)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Löschen
+                          Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

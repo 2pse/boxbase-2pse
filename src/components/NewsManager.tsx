@@ -171,11 +171,11 @@ export const NewsManager = () => {
             </DialogHeader>
             <form onSubmit={handleCreateNews} className="space-y-4">
               <div>
-                <Label htmlFor="title">Titel</Label>
+                <Label htmlFor="title">Title</Label>
                 <Input
                   value={newsForm.title}
                   onChange={(e) => setNewsForm(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="Nachrichtentitel"
+                  placeholder="News title"
                   required
                 />
               </div>
@@ -218,7 +218,7 @@ export const NewsManager = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Titel</TableHead>
+                  <TableHead>Title</TableHead>
                   <TableHead className="hidden sm:table-cell">Erstellt</TableHead>
                   <TableHead>Aktionen</TableHead>
                 </TableRow>
@@ -272,7 +272,7 @@ export const NewsManager = () => {
           {editingNews && (
             <form onSubmit={handleUpdateNews} className="space-y-4">
               <div>
-                <Label htmlFor="title">Titel</Label>
+                <Label htmlFor="title">Title</Label>
                 <Input name="title" defaultValue={editingNews.title} required />
               </div>
               <div>

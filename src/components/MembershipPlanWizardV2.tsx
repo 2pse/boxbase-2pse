@@ -142,7 +142,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
     if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, 4));
     } else {
-      toast.error('Bitte füllen Sie alle erforderlichen Felder aus');
+      toast.error('Please fill in all required fields');
     }
   };
 
@@ -472,7 +472,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
             {(formData.booking_rules.type === 'unlimited' || formData.booking_rules.type === 'open_gym_only') && (
               <div className="text-center py-8">
                 <p className="text-muted-foreground">
-                  Keine weitere Konfiguration erforderlich für diesen Buchungstyp.
+                  No further configuration required for this booking type.
                 </p>
               </div>
             )}

@@ -88,11 +88,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
   const validateAccessCode = (code: string) => {
     if (!code) {
-      setAccessCodeError("Zugangscode ist erforderlich")
+      setAccessCodeError("Access code is required")
       return false
     }
     if (!/^\d+$/.test(code)) {
-      setAccessCodeError("Zugangscode darf nur Zahlen enthalten")
+      setAccessCodeError("Access code may only contain numbers")
       return false
     }
     if (code.length < 6) {

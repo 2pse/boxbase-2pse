@@ -150,7 +150,7 @@ export default function ChallengeDetail({
       onProgressUpdate();
     } catch (error) {
       console.error('Error adding checkpoint:', error);
-      toast.error('Fehler beim Hinzufügen des Checkpoints');
+      toast.error('Error adding checkpoint');
       // Revert local state on error
       setLocalProgress(progress);
     } finally {
@@ -220,7 +220,7 @@ export default function ChallengeDetail({
           <div className="flex items-center justify-center gap-2 text-sm">
             <Trophy className="w-4 h-4 text-primary" />
             <span className="font-medium text-primary">
-              {challenge.bonus_points} Bonus Punkte für das Leaderboard
+              {challenge.bonus_points} Bonus Points for the Leaderboard
             </span>
           </div>
 

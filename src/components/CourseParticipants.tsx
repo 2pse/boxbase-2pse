@@ -121,7 +121,7 @@ export const CourseParticipants = () => {
       console.error('Error loading courses:', error)
       toast({
         title: "Fehler",
-        description: "Kurse konnten nicht geladen werden",
+        description: "Courses could not be loaded",
         variant: "destructive"
       })
     } finally {
@@ -495,7 +495,7 @@ export const CourseParticipants = () => {
             <div className="flex-1 overflow-y-auto pr-2">
               <form onSubmit={handleUpdateCourse} className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Titel</Label>
+                  <Label htmlFor="title">Title</Label>
                   <Input name="title" defaultValue={editingCourse.title} required />
                 </div>
                 <div>

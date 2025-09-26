@@ -71,7 +71,7 @@ export default function AdminChallengeManager() {
       setChallenges(data || []);
     } catch (error) {
       console.error('Error loading challenges:', error);
-      toast.error('Fehler beim Laden der Challenges');
+      toast.error('Error loading challenges');
     } finally {
       setLoading(false);
     }
@@ -191,7 +191,7 @@ export default function AdminChallengeManager() {
   };
 
   if (loading) {
-    return <div className="p-6">Lädt Challenges...</div>;
+    return <div className="p-6">Loading Challenges...</div>;
   }
 
   return (
@@ -257,7 +257,7 @@ export default function AdminChallengeManager() {
                   
                   <div className="grid grid-cols-2 gap-2 text-sm mb-4">
                     <div>
-                      <span className="font-medium">Monat:</span>
+                      <span className="font-medium">Month:</span>
                       <br />
                       {monthNames[challenge.month - 1]} {challenge.year}
                     </div>
@@ -267,7 +267,7 @@ export default function AdminChallengeManager() {
                       {challenge.checkpoint_count}
                     </div>
                     <div>
-                      <span className="font-medium">Bonus Punkte:</span>
+                      <span className="font-medium">Bonus Points:</span>
                       <br />
                       {challenge.bonus_points}
                     </div>
@@ -347,22 +347,22 @@ export default function AdminChallengeManager() {
 
           <div className="space-y-4 overflow-y-auto flex-1 pr-2">
             <div>
-              <Label htmlFor="title">Titel</Label>
+              <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Challenge Titel"
+                placeholder="Challenge Title"
               />
             </div>
 
             <div>
-              <Label htmlFor="description">Beschreibung</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Challenge Beschreibung"
+                placeholder="Challenge Description"
               />
             </div>
 
@@ -406,7 +406,7 @@ export default function AdminChallengeManager() {
                 />
               </div>
               <div>
-                <Label htmlFor="bonus">Bonus Punkte</Label>
+                <Label htmlFor="bonus">Bonus Points</Label>
                 <Input
                   id="bonus"
                   type="number"
