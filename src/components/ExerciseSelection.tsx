@@ -97,12 +97,12 @@ const EXERCISES = [
 
   // Other
   { category: "Other", name: "Wall Ball" },
-  { category: "Weitere", name: "Sandbag Clean" },
-  { category: "Weitere", name: "Sandbag Carry" },
-  { category: "Weitere", name: "Farmer's Carry" },
-  { category: "Weitere", name: "Sled Push" },
-  { category: "Weitere", name: "Sled Pull" },
-  { category: "Weitere", name: "D-Ball Over Shoulder" }
+  { category: "Other", name: "Sandbag Clean" },
+  { category: "Other", name: "Sandbag Carry" },
+  { category: "Other", name: "Farmer's Carry" },
+  { category: "Other", name: "Sled Push" },
+  { category: "Other", name: "Sled Pull" },
+  { category: "Other", name: "D-Ball Over Shoulder" }
 ]
 
 type Exercise = typeof EXERCISES[number]

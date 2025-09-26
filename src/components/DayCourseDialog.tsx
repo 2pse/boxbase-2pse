@@ -282,8 +282,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
     } catch (error) {
       console.error('Error loading participants:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim Laden der Teilnehmer",
+        title: "Error",
+        description: "Error loading participants",
         variant: "destructive"
       })
       setParticipants([]) // Set empty array on error
@@ -676,7 +676,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
             {loading ? (
               <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                <p className="text-muted-foreground">Lade Kurse...</p>
+                <p className="text-muted-foreground">Loading Courses...</p>
               </div>
             ) : isOpenGym ? (
               <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 text-center">

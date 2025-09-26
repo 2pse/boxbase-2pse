@@ -74,8 +74,8 @@ export const GymSettings = () => {
       if (error) {
         console.error('Error loading gym settings:', error)
         toast({
-          title: "Fehler",
-          description: "Fehler beim Laden der Gym-Einstellungen",
+          title: "Error",
+          description: "Error loading gym settings",
           variant: "destructive",
         })
         return
@@ -147,8 +147,8 @@ export const GymSettings = () => {
       if (uploadError) {
         console.error('Error uploading file:', uploadError)
         toast({
-          title: "Fehler",
-          description: "Fehler beim Hochladen des Logos",
+          title: "Error",
+          description: "Error uploading logo",
           variant: "destructive",
         })
         return
@@ -188,8 +188,8 @@ export const GymSettings = () => {
     } catch (error) {
       console.error('Error uploading logo:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim Hochladen des Logos",
+        title: "Error",
+        description: "Error uploading logo",
         variant: "destructive",
       })
     } finally {
@@ -247,8 +247,8 @@ export const GymSettings = () => {
       if (error) {
         console.error('Error saving settings:', error)
         toast({
-          title: "Fehler",
-          description: "Fehler beim Speichern der Einstellungen",
+          title: "Error",
+          description: "Error saving settings",
           variant: "destructive",
         })
         return
@@ -264,8 +264,8 @@ export const GymSettings = () => {
     } catch (error) {
       console.error('Error saving settings:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim Speichern der Einstellungen",
+        title: "Error",
+        description: "Error saving settings",
         variant: "destructive",
       })
     } finally {

@@ -30,8 +30,8 @@ export const WorkoutChatInterface = ({ workout, workoutType, onClose }: WorkoutC
       setExplanation(data.explanation)
     } catch (error) {
       console.error('Error loading explanation:', error)
-      toast.error("Fehler beim Laden der Workout-Erklärung")
-      setExplanation("Entschuldigung, die Erklärung konnte nicht geladen werden.")
+      toast.error("Error loading workout explanation")
+      setExplanation("Sorry, the explanation could not be loaded.")
     } finally {
       setIsLoading(false)
     }

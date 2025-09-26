@@ -271,17 +271,17 @@ export const Leaderboard: React.FC = () => {
 
   const getHeaderText = () => {
     if (activeTab === 'month') {
-      return `Top 30 im ${new Date().toLocaleDateString('de-DE', { month: 'long' })}`
+      return `Top 30 in ${new Date().toLocaleDateString('en-US', { month: 'long' })}`
     } else {
-      return `Top 30 im Jahr ${new Date().getFullYear()}`
+      return `Top 30 in ${new Date().getFullYear()}`
     }
   }
 
   const getEmptyStateText = () => {
     if (activeTab === 'month') {
-      return "Noch keine Trainings in diesem Monat"
+      return "No trainings in this month yet"
     } else {
-      return "Noch keine Trainings in diesem Jahr"
+      return "No trainings in this year yet"
     }
   }
 
@@ -308,7 +308,7 @@ export const Leaderboard: React.FC = () => {
                 : 'text-muted-foreground border-transparent hover:text-foreground'
             }`}
           >
-            Monat
+            Month
           </button>
           <button
             onClick={() => handleTabChange('year')}
@@ -318,7 +318,7 @@ export const Leaderboard: React.FC = () => {
                 : 'text-muted-foreground border-transparent hover:text-foreground'
             }`}
           >
-            Jahr
+            Year
           </button>
         </div>
 
@@ -359,7 +359,7 @@ export const Leaderboard: React.FC = () => {
                                         <CheckCircle className="h-5 w-5 text-green-500 cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent>
-                                        <p>Monatschallenge abgeschlossen</p>
+                                        <p>Monthly challenge completed</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>

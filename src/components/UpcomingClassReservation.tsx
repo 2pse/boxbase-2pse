@@ -270,7 +270,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
         <CardContent className="p-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" />
-            <span className="text-sm">Keine anstehenden Kursreservierungen</span>
+            <span className="text-sm">No upcoming course reservations</span>
           </div>
         </CardContent>
       </Card>

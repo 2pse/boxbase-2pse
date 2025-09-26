@@ -95,7 +95,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
         booking_rules: plan.booking_rules as unknown as BookingRules
       })));
     } catch (error: any) {
-      toast.error('Fehler beim Laden der Pläne: ' + error.message);
+      toast.error('Error loading plans: ' + error.message);
     } finally {
       setLoading(false);
     }

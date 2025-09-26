@@ -350,7 +350,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
                     <h3 className="text-xl font-bold">Workout-Timer</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Timer für deine Workouts
+                      Timer for your workouts
                     </p>
                   </div>
                 </div>
@@ -365,8 +365,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
                     <h3 className="text-xl font-bold">Prozentrechner</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Berechne deine<br />
-                      Trainingsgewichte
+                      Calculate your<br />
+                      training weights
                     </p>
                   </div>
                 </div>

@@ -56,9 +56,9 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
             <h3 className="text-xl font-bold">Functional Fitness</h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Hochintensive,<br />
-              funktionelle Workouts<br />
-              und Gewichtheben
+              High-intensity,<br />
+              functional workouts<br />
+              and weightlifting
             </p>
           </div>
         </div>
@@ -77,8 +77,8 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
             <h3 className="text-xl font-bold">Bodybuilding</h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Gezielter Muskelaufbau<br />
-              und Kraftsteigerung
+              Targeted muscle building<br />
+              and strength improvement
             </p>
           </div>
         </div>

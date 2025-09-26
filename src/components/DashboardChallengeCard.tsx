@@ -150,7 +150,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   if (loading) {
     return (
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Lade Challenge...</div>
+        <div className="animate-pulse text-muted-foreground">Loading Challenge...</div>
       </div>
     )
   }
@@ -160,7 +160,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
         <div className="text-center text-muted-foreground">
           <Award className="h-8 w-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">Keine Challenge verfügbar</p>
+          <p className="text-sm">No challenge available</p>
         </div>
       </div>
     )
@@ -178,7 +178,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
         
         <div className="flex items-center justify-center h-full">
           <h3 className="text-lg font-semibold text-foreground">
-            Monatschallenge
+            Monthly Challenge
           </h3>
         </div>
       </button>

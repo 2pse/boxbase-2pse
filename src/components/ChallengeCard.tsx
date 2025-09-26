@@ -78,7 +78,7 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
       setChallenges(challengesData || []);
     } catch (error) {
       console.error('Error loading challenges:', error);
-      toast.error('Fehler beim Laden der Challenges');
+      toast.error('Error loading challenges');
     } finally {
       setLoading(false);
     }

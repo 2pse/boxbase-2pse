@@ -132,7 +132,7 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   if (loading) {
     return (
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 flex items-center justify-center h-48">
-        <div className="animate-pulse text-muted-foreground">Lade Monatsübersicht...</div>
+        <div className="animate-pulse text-muted-foreground">Loading Monthly Overview...</div>
       </div>
     )
   }

@@ -49,7 +49,7 @@ export const DashboardNewsCard: React.FC<DashboardNewsCardProps> = ({ user }) =>
   if (loading) {
     return (
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Lade News...</div>
+        <div className="animate-pulse text-muted-foreground">Loading News...</div>
       </div>
     )
   }

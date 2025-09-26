@@ -87,12 +87,12 @@ export const EXERCISES: ExerciseItem[] = [
   { category: "Kettlebell Movements", name: "KB Lunges" },
   { category: "Kettlebell Movements", name: "KB Turkish Get-Up" },
 
-  // Weitere
-  { category: "Weitere", name: "Wall Ball" },
-  { category: "Weitere", name: "Sandbag Clean" },
-  { category: "Weitere", name: "Sandbag Carry" },
-  { category: "Weitere", name: "Farmer's Carry" },
-  { category: "Weitere", name: "Sled Push" },
-  { category: "Weitere", name: "Sled Pull" },
-  { category: "Weitere", name: "D-Ball Over Shoulder" }
+  // Other
+  { category: "Other", name: "Wall Ball" },
+  { category: "Other", name: "Sandbag Clean" },
+  { category: "Other", name: "Sandbag Carry" },
+  { category: "Other", name: "Farmer's Carry" },
+  { category: "Other", name: "Sled Push" },
+  { category: "Other", name: "Sled Pull" },
+  { category: "Other", name: "D-Ball Over Shoulder" }
 ];

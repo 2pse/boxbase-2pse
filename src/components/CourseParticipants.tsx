@@ -230,7 +230,7 @@ export const CourseParticipants = () => {
   const courseDates = courses.map(course => parseISO(course.course_date))
 
   if (loading) {
-    return <div className="flex justify-center p-8">Lade Kurse...</div>
+    return <div className="flex justify-center p-8">Loading Courses...</div>
   }
 
   if (selectedCourse) {

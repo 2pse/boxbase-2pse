@@ -131,7 +131,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
       setParticipants(participantsData)
     } catch (error) {
       console.error('Error loading participants:', error)
-      toast.error('Fehler beim Laden der Teilnehmer')
+      toast.error('Error loading participants')
     } finally {
       setLoading(false)
     }
@@ -196,7 +196,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
     return (
       <div className="p-6 text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-        <p className="text-muted-foreground">Lade Teilnehmer...</p>
+        <p className="text-muted-foreground">Loading Participants...</p>
       </div>
     )
   }

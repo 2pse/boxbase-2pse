@@ -83,14 +83,14 @@ export const StrengthValues = () => {
       if (error) throw error
 
       toast({
-        title: "Kraftwerte gespeichert",
-        description: "Deine Kraftwerte wurden erfolgreich gespeichert."
+        title: "Strength values saved",
+        description: "Your strength values have been successfully saved."
       })
     } catch (error) {
       console.error('Error saving strength values:', error)
       toast({
-        title: "Fehler",
-        description: "Kraftwerte konnten nicht gespeichert werden.",
+        title: "Error",
+        description: "Strength values could not be saved.",
         variant: "destructive"
       })
     }
@@ -118,7 +118,7 @@ export const StrengthValues = () => {
             <Button variant="outline" size="sm" onClick={handleBack}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold">Kraftwerte</h1>
+            <h1 className="text-2xl font-bold">Strength Values</h1>
           </div>
         </div>
 
@@ -127,7 +127,7 @@ export const StrengthValues = () => {
           <CardHeader>
             <CardTitle>1RM Basic Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Gib deine 1 rep max ein für zukünftige Trainingsreferenzen
+              Enter your 1 rep max for future training references
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -162,24 +162,24 @@ export const StrengthValues = () => {
           <CardHeader>
             <CardTitle>Additional Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Füge beliebige weitere Übungen und deren Werte hinzu.
+              Add any additional exercises and their values.
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
             {extraLifts.map((lift, index) => (
               <div key={index} className="flex gap-2 items-end">
                 <div className="flex-1">
-                  <Label>Übungsname</Label>
+                  <Label>Exercise Name</Label>
                   <Input
-                    placeholder="z.B. Overhead Press"
+                    placeholder="e.g. Overhead Press"
                     value={lift.name}
                     onChange={(e) => updateExtraLift(index, 'name', e.target.value)}
                   />
                 </div>
                 <div className="flex-1">
-                  <Label>Gewicht/Reps</Label>
+                  <Label>Weight/Reps</Label>
                   <Input
-                    placeholder="z.B. 60kg oder 15 reps"
+                    placeholder="e.g. 60kg or 15 reps"
                     type="text"
                     value={lift.weight}
                     onChange={(e) => updateExtraLift(index, 'weight', e.target.value)}
@@ -198,14 +198,14 @@ export const StrengthValues = () => {
             
             <Button variant="outline" onClick={addExtraLift} className="w-full">
               <Plus className="h-4 w-4 mr-2" />
-              Übung hinzufügen
+              Add Exercise
             </Button>
           </CardContent>
         </Card>
 
 
         <Button onClick={saveStrengthValues} className="w-full">
-          Kraftwerte speichern
+          Save Strength Values
         </Button>
       </div>
     </div>

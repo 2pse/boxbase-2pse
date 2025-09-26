@@ -466,14 +466,14 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
                       if (error) {
                         console.error('Error saving functional fitness setting:', error)
-                        toast.error("Fehler beim Speichern der Einstellung")
+                        toast.error("Error saving setting")
                       } else {
                         await refreshSettings()
                         toast.success("Einstellung gespeichert!")
                       }
                     } catch (error) {
                       console.error('Error saving setting:', error)
-                      toast.error("Fehler beim Speichern")
+                      toast.error("Error saving")
                     } finally {
                       setSavingSettings(false)
                     }
@@ -498,14 +498,14 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
                       if (error) {
                         console.error('Error saving bodybuilding setting:', error)
-                        toast.error("Fehler beim Speichern der Einstellung")
+                        toast.error("Error saving setting")
                       } else {
                         await refreshSettings()
                         toast.success("Einstellung gespeichert!")
                       }
                     } catch (error) {
                       console.error('Error saving setting:', error)
-                      toast.error("Fehler beim Speichern")
+                      toast.error("Error saving")
                     } finally {
                       setSavingSettings(false)
                     }
