@@ -304,16 +304,16 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="monthly" id="monthly-payment" />
-                  <Label htmlFor="monthly-payment">Monatlich</Label>
+                  <Label htmlFor="monthly-payment">Monthly</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="one_time" id="one-time-payment" />
-                  <Label htmlFor="one-time-payment">Einmalig (z.B. 10er Karte)</Label>
+                  <Label htmlFor="one-time-payment">One-time (e.g. 10-class pass)</Label>
                 </div>
               </RadioGroup>
               {formData.payment_frequency === 'one_time' && (
                 <p className="text-sm text-muted-foreground">
-                  Bei einmaliger Zahlung können Credits über mehrere Monate genutzt werden.
+                  With one-time payment, credits can be used over multiple months.
                 </p>
               )}
             </div>
@@ -554,7 +554,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   <span>
                     {formData.booking_rules.type === 'unlimited' && 'Unlimited'}
                     {formData.booking_rules.type === 'limited' && 
-                      `${formData.booking_rules.limit?.count} pro ${formData.booking_rules.limit?.period === 'week' ? 'Woche' : 'Monat'}`}
+                      `${formData.booking_rules.limit?.count} per ${formData.booking_rules.limit?.period === 'week' ? 'week' : 'month'}`}
                     {formData.booking_rules.type === 'credits' && 
                       `${formData.booking_rules.credits?.initial_amount} Credits`}
                     {formData.booking_rules.type === 'open_gym_only' && 'Open Gym Only'}

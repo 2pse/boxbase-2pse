@@ -8,17 +8,17 @@ import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 
 const EXERCISES = [
-  // Langhantel
-  { category: "Langhantel", name: "Back Squat" },
-  { category: "Langhantel", name: "Front Squat" },
-  { category: "Langhantel", name: "Overhead Squat" },
-  { category: "Langhantel", name: "Deadlift" },
-  { category: "Langhantel", name: "Bench Press" },
-  { category: "Langhantel", name: "Strict Press" },
-  { category: "Langhantel", name: "Push Press" },
-  { category: "Langhantel", name: "Push Jerk" },
-  { category: "Langhantel", name: "Split Jerk" },
-  { category: "Langhantel", name: "Thruster" },
+  // Barbell
+  { category: "Barbell", name: "Back Squat" },
+  { category: "Barbell", name: "Front Squat" },
+  { category: "Barbell", name: "Overhead Squat" },
+  { category: "Barbell", name: "Deadlift" },
+  { category: "Barbell", name: "Bench Press" },
+  { category: "Barbell", name: "Strict Press" },
+  { category: "Barbell", name: "Push Press" },
+  { category: "Barbell", name: "Push Jerk" },
+  { category: "Barbell", name: "Split Jerk" },
+  { category: "Barbell", name: "Thruster" },
 
   // Olympic Lifts
   { category: "Olympic Lifts", name: "Power Snatch" },

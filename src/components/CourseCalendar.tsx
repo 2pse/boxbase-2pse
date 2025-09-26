@@ -206,7 +206,7 @@ export const CourseCalendar = ({
       {/* Instruction text when no date selected */}
       {!selectedDate && (
         <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 text-center">
-          <p className="text-muted-foreground">Wähle einen Tag im Kalender aus, um die Kurse zu sehen</p>
+          <p className="text-muted-foreground">Select a day in the calendar to see the courses</p>
         </div>
       )}
     </div>

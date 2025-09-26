@@ -291,7 +291,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
                 <div className="flex justify-between items-center p-2 bg-muted rounded-md">
                   <span className="text-sm font-medium">Automatische Verlängerung</span>
                   <Badge variant={membershipDetails.autoRenewal ? "default" : "secondary"}>
-                    {membershipDetails.autoRenewal ? 'Aktiv' : 'Inaktiv'}
+                    {membershipDetails.autoRenewal ? 'Active' : 'Inactive'}
                   </Badge>
                 </div>
               )}

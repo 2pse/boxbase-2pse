@@ -107,12 +107,12 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
         if (error) throw error
       }
 
-      toast.success("Workout erfolgreich aktualisiert!")
+      toast.success("Workout successfully updated!")
       setOpen(false)
       onWorkoutUpdated()
     } catch (error) {
       console.error('Error updating workout:', error)
-      toast.error("Fehler beim Aktualisieren des Workouts")
+      toast.error("Error updating workout")
     } finally {
       setIsSaving(false)
     }
@@ -165,9 +165,9 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
           {!isCrossfitWorkout(editedWorkout) && (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Fokusbereich</Label>
+                <Label>Focus Area</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {["Ganzkörper", "Oberkörper", "Unterkörper", "Push", "Pull"].map(focus => (
+                  {["Full Body", "Upper Body", "Lower Body", "Push", "Pull"].map(focus => (
                     <Button
                       key={focus}
                       type="button"
@@ -181,9 +181,9 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
                 </div>
               </div>
               <div>
-                <Label>Schwierigkeit</Label>
+                <Label>Difficulty</Label>
                 <div className="flex flex-col sm:flex-row gap-2 mt-2">
-                  {["Leicht", "Mittel", "Schwer"].map(difficulty => (
+                  {["Easy", "Medium", "Hard"].map(difficulty => (
                     <Button
                       key={difficulty}
                       type="button"
@@ -200,7 +200,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
           )}
 
           <div>
-            <Label htmlFor="content">Workout Inhalt</Label>
+            <Label htmlFor="content">Workout Content</Label>
             <Textarea
               id="content"
               value={editedWorkout.workout_content}
@@ -210,7 +210,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
           </div>
 
           <div>
-            <Label htmlFor="notes">Notizen</Label>
+            <Label htmlFor="notes">Notes</Label>
             <Textarea
               id="notes"
               value={editedWorkout.notes || ""}
@@ -252,7 +252,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
               </div>
 
               <div>
-                <Label>Verwendete Übungen</Label>
+                <Label>Used Exercises</Label>
                 <div className="mt-2 space-y-4">
                   {Object.entries(groupedExercises).map(([category, exercises]) => (
                     <div key={category}>
@@ -279,11 +279,11 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
           <div className="flex gap-2 justify-end">
             <Button variant="outline" onClick={() => setOpen(false)}>
               <X className="h-4 w-4 mr-2" />
-              Abbrechen
+              Cancel
             </Button>
             <Button onClick={handleSave} disabled={isSaving}>
               <Save className="h-4 w-4 mr-2" />
-              {isSaving ? "Speichere..." : "Speichern"}
+              {isSaving ? "Saving..." : "Save"}
             </Button>
           </div>
         </div>

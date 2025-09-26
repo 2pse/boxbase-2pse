@@ -258,7 +258,7 @@ export const CourseParticipants = () => {
               }
             `}
           >
-            Liste
+            List
           </button>
           <button
             onClick={() => setViewMode('calendar')}
@@ -270,7 +270,7 @@ export const CourseParticipants = () => {
               }
             `}
           >
-            Kalender
+            Calendar
           </button>
         </div>
       </div>
@@ -349,7 +349,7 @@ export const CourseParticipants = () => {
           ))}
           {courses.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              Keine kommenden Kurse verfügbar
+              No upcoming courses available
             </div>
           )}
         </div>
@@ -479,7 +479,7 @@ export const CourseParticipants = () => {
           {/* Instruction text when no date selected */}
           {!selectedDate && (
             <div className="text-center py-8 text-muted-foreground">
-              Wähle einen Tag im Kalender aus, um die Kurse zu sehen
+              Select a day in the calendar to see the courses
             </div>
           )}
         </div>

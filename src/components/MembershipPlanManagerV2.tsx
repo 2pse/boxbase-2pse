@@ -166,7 +166,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     variant={plan.is_active ? "default" : "secondary"}
                     className={plan.is_active ? "bg-green-100 text-green-800" : ""}
                   >
-                    {plan.is_active ? 'Aktiv' : 'Inaktiv'}
+                    {plan.is_active ? 'Active' : 'Inactive'}
                   </Badge>
                 </div>
                 {plan.description && (
@@ -181,7 +181,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                   <span className="font-medium">
                     {plan.price_monthly 
                       ? `${plan.price_monthly}€ ${plan.payment_frequency === 'monthly' ? '/month' : 'one-time'}`
-                      : 'Kostenlos'
+                      : 'Free'
                     }
                   </span>
                 </div>

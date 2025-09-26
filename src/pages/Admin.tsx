@@ -1207,7 +1207,7 @@ export default function Admin() {
                                     ? 'bg-green-100 text-green-800' 
                                     : 'bg-gray-100 text-gray-800'
                                 }`}>
-                                  {member.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                                  {member.status === 'active' ? 'Active' : 'Inactive'}
                                 </span>
                               </div>
                               {member.authors && (
@@ -1284,13 +1284,13 @@ export default function Admin() {
                                      ? 'bg-green-100 text-green-800' 
                                      : 'bg-gray-100 text-gray-800'
                                  }`}>
-                                   {member.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                                   {member.status === 'active' ? 'Active' : 'Inactive'}
                                  </span>
                                </TableCell>
                                <TableCell className="hidden sm:table-cell">
                                  {member.last_login_at 
                                    ? new Date(member.last_login_at).toLocaleDateString('de-DE')
-                                   : 'Nie'
+                                   : 'Never'
                                  }
                                </TableCell>
                                <TableCell>
@@ -1516,7 +1516,7 @@ export default function Admin() {
                     </p>
                     {editCurrentMembership.membership_plans_v2?.booking_rules?.type === 'credits' && (
                       <p className="text-sm text-muted-foreground">
-                        Verbleibende Credits: {editCurrentMembership.membership_data?.remaining_credits || 0}
+                        Remaining Credits: {editCurrentMembership.membership_data?.remaining_credits || 0}
                       </p>
                     )}
                   </div>
@@ -1530,7 +1530,7 @@ export default function Admin() {
                     onValueChange={setEditSelectedMembershipPlan}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Neuen Plan auswählen (optional)" />
+                      <SelectValue placeholder="Choose new plan (optional)" />
                     </SelectTrigger>
                     <SelectContent>
                       {availablePlans.map((plan) => (

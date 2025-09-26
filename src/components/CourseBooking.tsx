@@ -626,7 +626,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
               }
             `}
           >
-            Liste
+            List
           </button>
           <button
             onClick={() => setViewMode('calendar')}
@@ -638,7 +638,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
               }
             `}
           >
-            Kalender
+            Calendar
           </button>
         </div>
       </div>
@@ -710,7 +710,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           ))}
           {courses.length === 0 && (
             <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 text-center">
-              <p className="text-muted-foreground">Keine kommenden Kurse verfügbar</p>
+              <p className="text-muted-foreground">No upcoming courses available</p>
             </div>
           )}
         </div>
