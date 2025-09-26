@@ -508,22 +508,20 @@ export default function Admin() {
       const originalMember = members.find(m => m.user_id === editingMember.user_id);
       const accessCodeChanged = originalMember && originalMember.access_code !== accessCode;
 
-      // Use the update-member-details edge function for reliable updates including authors field
-      const { error: updateError } = await supabase.functions.invoke('update-member-details', {
-        body: {
-          userId: editingMember.user_id,
-          profileData: {
-            display_name: displayName,
-            first_name: editingMember.first_name,
-            last_name: editingMember.last_name,
-            access_code: accessCode,
-            authors: editingMember.authors
-          }
-        }
-      });
+      // Update profile data directly via Supabase RLS
+      const { error: profileUpdateError } = await supabase
+        .from('profiles')
+        .update({
+          display_name: displayName,
+          first_name: editingMember.first_name,
+          last_name: editingMember.last_name,
+          access_code: accessCode,
+          authors: editingMember.authors
+        })
+        .eq('user_id', editingMember.user_id);
 
-      if (updateError) {
-        console.error('Error updating member details:', updateError);
+      if (profileUpdateError) {
+        console.error('Error updating profile:', profileUpdateError);
         toast({
           title: "Fehler",
           description: "Fehler beim Aktualisieren des Profils",
@@ -548,7 +546,7 @@ export default function Admin() {
             description: "Profil aktualisiert, aber Zugangscode konnte nicht geändert werden",
             variant: "destructive",
           });
-          return;
+          // Don't return here - profile was updated successfully
         }
       }
 
