@@ -53,7 +53,7 @@ export const NewsManager = () => {
       setNews(data || [])
     } catch (error) {
       console.error('Error loading news:', error)
-      toast.error('Fehler beim Laden der Nachrichten')
+      toast.error('Error loading news')
     } finally {
       setLoading(false)
     }
@@ -78,7 +78,7 @@ export const NewsManager = () => {
 
       if (error) throw error
 
-      toast.success('Nachricht erfolgreich erstellt')
+      toast.success('Message created successfully')
       setNewsForm({
         title: '',
         content: '',
@@ -88,7 +88,7 @@ export const NewsManager = () => {
       await loadNews()
     } catch (error) {
       console.error('Error creating news:', error)
-      toast.error('Fehler beim Erstellen der Nachricht')
+      toast.error('Error creating message')
     }
   }
 
@@ -113,12 +113,12 @@ export const NewsManager = () => {
 
       if (error) throw error
 
-      toast.success('Nachricht erfolgreich aktualisiert')
+      toast.success('Message updated successfully')
       setEditingNews(null)
       await loadNews()
     } catch (error) {
       console.error('Error updating news:', error)
-      toast.error('Fehler beim Aktualisieren der Nachricht')
+      toast.error('Error updating message')
     }
   }
 
@@ -133,11 +133,11 @@ export const NewsManager = () => {
 
       if (error) throw error
 
-      toast.success('Nachricht erfolgreich gelöscht')
+      toast.success('Message deleted successfully')
       await loadNews()
     } catch (error) {
       console.error('Error deleting news:', error)
-      toast.error('Fehler beim Löschen der Nachricht')
+      toast.error('Error deleting message')
     }
   }
 
@@ -146,7 +146,7 @@ export const NewsManager = () => {
     return (
       <div className="text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-        <p className="text-muted-foreground">Lade Nachrichten...</p>
+        <p className="text-muted-foreground">Loading news...</p>
       </div>
     )
   }
@@ -156,18 +156,18 @@ export const NewsManager = () => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">News</h2>
-          <p className="text-muted-foreground">Erstelle und verwalte Studio-Nachrichten</p>
+          <p className="text-muted-foreground">Create and manage studio news</p>
         </div>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto">
               <Plus className="h-4 w-4 mr-2" />
-              Neue Nachricht
+              New Message
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Neue Nachricht erstellen</DialogTitle>
+              <DialogTitle>Create New Message</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleCreateNews} className="space-y-4">
               <div>
@@ -180,11 +180,11 @@ export const NewsManager = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="content">Inhalt</Label>
+                <Label htmlFor="content">Content</Label>
                 <Textarea
                   value={newsForm.content}
                   onChange={(e) => setNewsForm(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder="Nachrichteninhalt..."
+                  placeholder="News content..."
                   rows={6}
                   required
                 />
@@ -199,7 +199,7 @@ export const NewsManager = () => {
                 />
               </div>
               <Button type="submit" className="w-full">
-                Nachricht erstellen
+                Create Message
               </Button>
             </form>
           </DialogContent>
@@ -219,8 +219,8 @@ export const NewsManager = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
-                  <TableHead className="hidden sm:table-cell">Erstellt</TableHead>
-                  <TableHead>Aktionen</TableHead>
+                  <TableHead className="hidden sm:table-cell">Created</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -276,7 +276,7 @@ export const NewsManager = () => {
                 <Input name="title" defaultValue={editingNews.title} required />
               </div>
               <div>
-                <Label htmlFor="content">Inhalt</Label>
+                <Label htmlFor="content">Content</Label>
                 <Textarea name="content" defaultValue={editingNews.content} rows={6} required />
               </div>
               <div>
@@ -289,7 +289,7 @@ export const NewsManager = () => {
                 />
               </div>
               <Button type="submit" className="w-full">
-                Nachricht aktualisieren
+                Update Message
               </Button>
             </form>
           )}

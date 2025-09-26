@@ -52,18 +52,18 @@ export const CourseTemplateManager = () => {
 
   // Color palette - fitness-appropriate colors
   const colorOptions = [
-    { value: '#f3f4f6', label: 'Hellgrau' },
-    { value: '#6b7280', label: 'Grau' },
-    { value: '#374151', label: 'Dunkelgrau' },
-    { value: '#1f2937', label: 'Anthrazit' },
-    { value: '#ef4444', label: 'Rot' },
-    { value: '#dc2626', label: 'Dunkelrot' },
+    { value: '#f3f4f6', label: 'Light Gray' },
+    { value: '#6b7280', label: 'Gray' },
+    { value: '#374151', label: 'Dark Gray' },
+    { value: '#1f2937', label: 'Anthracite' },
+    { value: '#ef4444', label: 'Red' },
+    { value: '#dc2626', label: 'Dark Red' },
     { value: '#f97316', label: 'Orange' },
-    { value: '#eab308', label: 'Gelb' },
-    { value: '#3B82F6', label: 'Blau' },
-    { value: '#1d4ed8', label: 'Dunkelblau' },
-    { value: '#8B5CF6', label: 'Lila' },
-    { value: '#7c3aed', label: 'Dunkellila' }
+    { value: '#eab308', label: 'Yellow' },
+    { value: '#3B82F6', label: 'Blue' },
+    { value: '#1d4ed8', label: 'Dark Blue' },
+    { value: '#8B5CF6', label: 'Purple' },
+    { value: '#7c3aed', label: 'Dark Purple' }
   ]
 
   // Schedule form state
@@ -96,7 +96,7 @@ export const CourseTemplateManager = () => {
       setTemplates(data || [])
     } catch (error) {
       console.error('Error loading templates:', error)
-      toast.error('Fehler beim Laden der Vorlagen')
+      toast.error('Error loading templates')
     }
   }
 
@@ -109,7 +109,7 @@ export const CourseTemplateManager = () => {
 
       if (error) throw error
 
-      toast.success('Vorlage erfolgreich erstellt')
+      toast.success('Template created successfully')
       setTemplateForm({
         title: '',
         trainer: '',
@@ -122,7 +122,7 @@ export const CourseTemplateManager = () => {
       await loadTemplates()
     } catch (error) {
       console.error('Error creating template:', error)
-      toast.error('Fehler beim Erstellen der Vorlage')
+      toast.error('Error creating template')
     }
   }
 
@@ -139,14 +139,14 @@ export const CourseTemplateManager = () => {
 
       if (error) throw error
 
-      toast.success('Kurse erfolgreich generiert!')
+      toast.success('Courses generated successfully!')
       setGenerateDialogOpen(false)
       setSelectedTemplate(null)
       setStartDate(undefined)
       setEndDate(undefined)
     } catch (error) {
       console.error('Error generating courses:', error)
-      toast.error('Fehler beim Generieren der Kurse')
+      toast.error('Error generating courses')
     } finally {
       setLoading(false)
     }
@@ -160,7 +160,7 @@ export const CourseTemplateManager = () => {
   const handleGenerateCourses = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!scheduleForm.templateId || !scheduleForm.startDate || !scheduleForm.endDate || scheduleForm.schedule.length === 0) {
-      toast.error('Bitte füllen Sie alle Felder aus')
+      toast.error('Please fill in all fields')
       return
     }
 
@@ -205,7 +205,7 @@ export const CourseTemplateManager = () => {
       }
 
       if (coursesToCreate.length === 0) {
-        toast.error('Keine Kurse zu erstellen (alle Termine liegen in der Vergangenheit)')
+        toast.error('No courses to create (all dates are in the past)')
         return
       }
 
@@ -215,7 +215,7 @@ export const CourseTemplateManager = () => {
 
       if (error) throw error
 
-      toast.success(`${coursesToCreate.length} Kurse erfolgreich erstellt`)
+      toast.success(`${coursesToCreate.length} courses created successfully`)
       setScheduleForm({
         templateId: '',
         startDate: '',
@@ -224,7 +224,7 @@ export const CourseTemplateManager = () => {
       })
     } catch (error) {
       console.error('Error generating courses:', error)
-      toast.error('Fehler beim Erstellen der Kurse')
+      toast.error('Error creating courses')
     }
   }
 
@@ -239,11 +239,11 @@ export const CourseTemplateManager = () => {
 
       if (error) throw error
 
-      toast.success('Vorlage erfolgreich gelöscht')
+      toast.success('Template deleted successfully')
       await loadTemplates()
     } catch (error) {
       console.error('Error deleting template:', error)
-      toast.error('Fehler beim Löschen der Vorlage')
+      toast.error('Error deleting template')
     }
   }
 
@@ -271,20 +271,20 @@ export const CourseTemplateManager = () => {
   }
 
   const weekDays = [
-    { value: 0, label: 'Montag' },
-    { value: 1, label: 'Dienstag' },
-    { value: 2, label: 'Mittwoch' },
-    { value: 3, label: 'Donnerstag' },
-    { value: 4, label: 'Freitag' },
-    { value: 5, label: 'Samstag' },
-    { value: 6, label: 'Sonntag' }
+    { value: 0, label: 'Monday' },
+    { value: 1, label: 'Tuesday' },
+    { value: 2, label: 'Wednesday' },
+    { value: 3, label: 'Thursday' },
+    { value: 4, label: 'Friday' },
+    { value: 5, label: 'Saturday' },
+    { value: 6, label: 'Sunday' }
   ]
 
   if (loading) {
     return (
       <div className="text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-        <p className="text-muted-foreground">Lade Kursverwaltung...</p>
+        <p className="text-muted-foreground">Loading course management...</p>
       </div>
     )
   }
@@ -292,22 +292,22 @@ export const CourseTemplateManager = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Vorlagen</h2>
-        <p className="text-muted-foreground">Erstelle und verwalte Kursvorlagen und Terminpläne</p>
+        <h2 className="text-2xl font-bold tracking-tight">Templates</h2>
+        <p className="text-muted-foreground">Create and manage course templates and schedules</p>
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="templates">Vorlagen</TabsTrigger>
-          <TabsTrigger value="schedule">Terminplanung</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="schedule">Schedule Planning</TabsTrigger>
         </TabsList>
 
         <TabsContent value="templates" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Neue Kursvorlage erstellen</CardTitle>
+              <CardTitle>Create New Course Template</CardTitle>
               <CardDescription>
-                Erstellen Sie wiederverwendbare Vorlagen für Ihre Kurse
+                Create reusable templates for your courses
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -332,7 +332,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="max_participants">Max. Teilnehmer</Label>
+                    <Label htmlFor="max_participants">Max. Participants</Label>
                     <Input
                       type="number"
                       value={templateForm.max_participants}
@@ -341,7 +341,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="registration_deadline_minutes">Anmeldefrist (Minuten vor Start)</Label>
+                    <Label htmlFor="registration_deadline_minutes">Registration Deadline (Minutes before Start)</Label>
                     <Input
                       type="number"
                       max="120"
@@ -351,7 +351,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="cancellation_deadline_minutes">Abmeldefrist (Minuten vor Start)</Label>
+                    <Label htmlFor="cancellation_deadline_minutes">Cancellation Deadline (Minutes before Start)</Label>
                     <Input
                       type="number"
                       max="480"
@@ -361,7 +361,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="duration_minutes">Kursdauer (Minuten)</Label>
+                    <Label htmlFor="duration_minutes">Course Duration (Minutes)</Label>
                     <Input
                       type="number"
                       max="120"
@@ -371,7 +371,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="color">Kursfarbe</Label>
+                    <Label htmlFor="color">Course Color</Label>
                     <Select value={templateForm.color} onValueChange={(value) => setTemplateForm(prev => ({ ...prev, color: value }))}>
                       <SelectTrigger>
                         <SelectValue />
@@ -393,7 +393,7 @@ export const CourseTemplateManager = () => {
                   </div>
                 </div>
                 <Button type="submit" className="w-full">
-                  Vorlage erstellen
+                  Create Template
                 </Button>
               </form>
             </CardContent>
@@ -401,7 +401,7 @@ export const CourseTemplateManager = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Bestehende Vorlagen</CardTitle>
+              <CardTitle>Existing Templates</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -410,10 +410,10 @@ export const CourseTemplateManager = () => {
                       <TableRow>
                         <TableHead>Title</TableHead>
                         <TableHead className="hidden sm:table-cell">Trainer</TableHead>
-                        <TableHead className="hidden md:table-cell">Max. Teilnehmer</TableHead>
-                        <TableHead className="hidden lg:table-cell">Dauer</TableHead>
-                        <TableHead className="hidden xl:table-cell">Farbe</TableHead>
-                        <TableHead>Aktionen</TableHead>
+                        <TableHead className="hidden md:table-cell">Max. Participants</TableHead>
+                        <TableHead className="hidden lg:table-cell">Duration</TableHead>
+                        <TableHead className="hidden xl:table-cell">Color</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -458,18 +458,18 @@ export const CourseTemplateManager = () => {
         <TabsContent value="schedule" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Terminplanung</CardTitle>
+              <CardTitle>Schedule Planning</CardTitle>
               <CardDescription>
-                Generiere Kurstermine aus bestehenden Vorlagen
+                Generate course dates from existing templates
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleGenerateCourses} className="space-y-4">
                 <div>
-                  <Label htmlFor="templateId">Kursvorlage auswählen</Label>
+                  <Label htmlFor="templateId">Select Course Template</Label>
                   <Select value={scheduleForm.templateId} onValueChange={(value) => setScheduleForm(prev => ({ ...prev, templateId: value }))}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Vorlage wählen" />
+                      <SelectValue placeholder="Choose template" />
                     </SelectTrigger>
                     <SelectContent>
                       {templates.map((template) => (
@@ -483,7 +483,7 @@ export const CourseTemplateManager = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="startDate">Startdatum</Label>
+                    <Label htmlFor="startDate">Start Date</Label>
                     <Input
                       type="date"
                       value={scheduleForm.startDate}
@@ -492,7 +492,7 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="endDate">Enddatum</Label>
+                    <Label htmlFor="endDate">End Date</Label>
                     <Input
                       type="date"
                       value={scheduleForm.endDate}
@@ -504,10 +504,10 @@ export const CourseTemplateManager = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <Label>Wochenplan</Label>
+                    <Label>Weekly Schedule</Label>
                     <Button type="button" variant="outline" size="sm" onClick={addScheduleEntry}>
                       <Plus className="h-4 w-4 mr-1" />
-                      Termin hinzufügen
+                      Add Appointment
                     </Button>
                   </div>
 
@@ -551,13 +551,13 @@ export const CourseTemplateManager = () => {
 
                   {scheduleForm.schedule.length === 0 && (
                     <p className="text-sm text-muted-foreground">
-                      Fügen Sie mindestens einen Wochentermin hinzu
+                      Add at least one weekly appointment
                     </p>
                   )}
                 </div>
 
                 <Button type="submit" className="w-full" disabled={scheduleForm.schedule.length === 0}>
-                  Kurse erstellen
+                  Create Courses
                 </Button>
               </form>
             </CardContent>
@@ -569,14 +569,14 @@ export const CourseTemplateManager = () => {
       <Dialog open={generateDialogOpen} onOpenChange={setGenerateDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Kurse generieren</DialogTitle>
+            <DialogTitle>Generate Courses</DialogTitle>
             <DialogDescription>
-              Erstelle Kurse aus der Vorlage "{selectedTemplate?.title}" für den gewählten Zeitraum.
+              Create courses from template "{selectedTemplate?.title}" for the selected period.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="start-date">Startdatum</Label>
+              <Label htmlFor="start-date">Start Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -587,7 +587,7 @@ export const CourseTemplateManager = () => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP", { locale: de }) : "Datum wählen"}
+                    {startDate ? format(startDate, "PPP", { locale: de }) : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -602,7 +602,7 @@ export const CourseTemplateManager = () => {
               </Popover>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="end-date">Enddatum</Label>
+              <Label htmlFor="end-date">End Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -613,7 +613,7 @@ export const CourseTemplateManager = () => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP", { locale: de }) : "Datum wählen"}
+                    {endDate ? format(endDate, "PPP", { locale: de }) : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -630,13 +630,13 @@ export const CourseTemplateManager = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setGenerateDialogOpen(false)}>
-              Abbrechen
+              Cancel
             </Button>
             <Button 
               onClick={generateCourses} 
               disabled={loading || !startDate || !endDate}
             >
-              {loading ? "Generiere..." : "Kurse erstellen"}
+              {loading ? "Generating..." : "Create Courses"}
             </Button>
           </DialogFooter>
         </DialogContent>

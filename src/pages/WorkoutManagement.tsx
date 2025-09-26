@@ -76,8 +76,8 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
     content: "",
     notes: "",
     type: "WOD" as "WOD" | "Weightlifting",
-    focus: "Ganzkörper" as "Ganzkörper" | "Oberkörper" | "Unterkörper" | "Push" | "Pull",
-    difficulty: "Leicht" as "Leicht" | "Mittel" | "Schwer",
+    focus: "Full Body" as "Full Body" | "Upper Body" | "Lower Body" | "Push" | "Pull",
+    difficulty: "Easy" as "Easy" | "Medium" | "Hard",
     scaling_beginner: "",
     scaling_scaled: "",
     scaling_rx: "",
@@ -108,7 +108,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
       setBodybuildingWorkouts(bodybuildingResult.data || [])
     } catch (error) {
       console.error('Error loading workouts:', error)
-      toast.error("Fehler beim Laden der Workouts")
+      toast.error("Error loading workouts")
     } finally {
       setIsLoading(false)
     }
@@ -132,13 +132,13 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
       if (error) throw error
       
-      toast.success("Functional Fitness Workout erstellt!")
+      toast.success("Functional Fitness Workout created!")
       setShowCreateDialog(false)
       resetForm()
       loadWorkouts()
     } catch (error) {
       console.error('Error creating crossfit workout:', error)
-      toast.error("Fehler beim Erstellen des Functional Fitness Workouts")
+      toast.error("Error creating Functional Fitness Workout")
     }
   }
 
@@ -156,18 +156,18 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
       if (error) throw error
       
-      toast.success("Bodybuilding Workout erstellt!")
+      toast.success("Bodybuilding Workout created!")
       setShowCreateDialog(false)
       resetForm()
       loadWorkouts()
     } catch (error) {
       console.error('Error creating bodybuilding workout:', error)
-      toast.error("Fehler beim Erstellen des Bodybuilding Workouts")
+      toast.error("Error creating Bodybuilding Workout")
     }
   }
 
   const deleteCrossfitWorkout = async (id: string) => {
-    if (!confirm("Workout wirklich löschen?")) return
+    if (!confirm("Really delete workout?")) return
 
     try {
       const { error } = await supabase
@@ -177,16 +177,16 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
       if (error) throw error
       
-      toast.success("Functional Fitness Workout gelöscht!")
+      toast.success("Functional Fitness Workout deleted!")
       loadWorkouts()
     } catch (error) {
       console.error('Error deleting crossfit workout:', error)
-      toast.error("Fehler beim Löschen des Functional Fitness Workouts")
+      toast.error("Error deleting Functional Fitness Workout")
     }
   }
 
   const deleteBodybuildingWorkout = async (id: string) => {
-    if (!confirm("Workout wirklich löschen?")) return
+    if (!confirm("Really delete workout?")) return
 
     try {
       const { error } = await supabase
@@ -196,11 +196,11 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
 
       if (error) throw error
       
-      toast.success("Bodybuilding Workout gelöscht!")
+      toast.success("Bodybuilding Workout deleted!")
       loadWorkouts()
     } catch (error) {
       console.error('Error deleting bodybuilding workout:', error)
-      toast.error("Fehler beim Löschen des Bodybuilding Workouts")
+      toast.error("Error deleting Bodybuilding Workout")
     }
   }
 
@@ -210,8 +210,8 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
       content: "",
       notes: "",
       type: "WOD",
-      focus: "Ganzkörper",
-      difficulty: "Leicht",
+      focus: "Full Body",
+      difficulty: "Easy",
       scaling_beginner: "",
       scaling_scaled: "",
       scaling_rx: "",
@@ -288,9 +288,9 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                   <TabsContent value="bodybuilding" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label>Fokusbereich</Label>
+                        <Label>Focus Area</Label>
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {["Ganzkörper", "Oberkörper", "Unterkörper", "Push", "Pull"].map(focus => (
+                          {["Full Body", "Upper Body", "Lower Body", "Push", "Pull"].map(focus => (
                             <Button
                               key={focus}
                               type="button"
@@ -304,9 +304,9 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                         </div>
                       </div>
                       <div>
-                        <Label>Schwierigkeit</Label>
+                        <Label>Difficulty</Label>
                         <div className="flex flex-col sm:flex-row gap-2 mt-2">
-                          {["Leicht", "Mittel", "Schwer"].map(difficulty => (
+                          {["Easy", "Medium", "Hard"].map(difficulty => (
                             <Button
                               key={difficulty}
                               type="button"
@@ -334,23 +334,23 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                 </div>
 
                 <div>
-                  <Label htmlFor="content">Workout Inhalt</Label>
+                  <Label htmlFor="content">Workout Content</Label>
                   <Textarea
                     id="content"
                     value={newWorkout.content}
                     onChange={(e) => setNewWorkout(prev => ({ ...prev, content: e.target.value }))}
-                    placeholder="Beschreibe das Workout..."
+                    placeholder="Describe the workout..."
                     rows={6}
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">Notizen (optional)</Label>
+                  <Label htmlFor="notes">Notes (optional)</Label>
                   <Textarea
                     id="notes"
                     value={newWorkout.notes}
                     onChange={(e) => setNewWorkout(prev => ({ ...prev, notes: e.target.value }))}
-                    placeholder="Zusätzliche Hinweise..."
+                    placeholder="Additional notes..."
                     rows={3}
                   />
                 </div>
@@ -423,7 +423,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                     Create Workout
                   </Button>
                   <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-                    Abbrechen
+                    Cancel
                   </Button>
                 </div>
               </div>
@@ -435,7 +435,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="Workouts suchen..."
+              placeholder="Search workouts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -447,7 +447,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
         <div className="mb-6 flex flex-wrap gap-4 items-center justify-between p-4 border rounded-lg bg-card">
           <div className="flex items-center gap-2 text-sm font-medium">
             <Eye className="h-4 w-4" />
-            Workout Sichtbarkeit:
+            Workout Visibility:
           </div>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 text-sm">
