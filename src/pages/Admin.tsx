@@ -504,26 +504,52 @@ export default function Admin() {
         ? `${editingMember.first_name} ${editingMember.last_name}`
         : editingMember.first_name || editingMember.display_name || '';
 
-      // Update profile data directly via Supabase RLS
-      const { error: profileUpdateError } = await supabase
-        .from('profiles')
-        .update({
-          display_name: displayName,
-          first_name: editingMember.first_name,
-          last_name: editingMember.last_name,
-          access_code: accessCode,
-          authors: editingMember.authors
-        })
-        .eq('user_id', editingMember.user_id);
+      // Check if access code changed to determine if we need to update Supabase Auth
+      const originalMember = members.find(m => m.user_id === editingMember.user_id);
+      const accessCodeChanged = originalMember && originalMember.access_code !== accessCode;
 
-      if (profileUpdateError) {
-        console.error('Error updating profile:', profileUpdateError);
+      // Use the update-member-details edge function for reliable updates including authors field
+      const { error: updateError } = await supabase.functions.invoke('update-member-details', {
+        body: {
+          userId: editingMember.user_id,
+          profileData: {
+            display_name: displayName,
+            first_name: editingMember.first_name,
+            last_name: editingMember.last_name,
+            access_code: accessCode,
+            authors: editingMember.authors
+          }
+        }
+      });
+
+      if (updateError) {
+        console.error('Error updating member details:', updateError);
         toast({
           title: "Fehler",
           description: "Fehler beim Aktualisieren des Profils",
           variant: "destructive",
         });
         return;
+      }
+
+      // If access code changed, also update the Supabase Auth password
+      if (accessCodeChanged && accessCode) {
+        const { error: accessCodeError } = await supabase.functions.invoke('update-access-code', {
+          body: {
+            newAccessCode: accessCode,
+            targetUserId: editingMember.user_id
+          }
+        });
+
+        if (accessCodeError) {
+          console.error('Error updating access code:', accessCodeError);
+          toast({
+            title: "Warnung",
+            description: "Profil aktualisiert, aber Zugangscode konnte nicht geändert werden",
+            variant: "destructive",
+          });
+          return;
+        }
       }
 
       // Handle membership plan change if a new plan was selected
