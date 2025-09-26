@@ -249,7 +249,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Plan löschen</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Sind Sie sicher, dass Sie den Plan "{plan.name}" löschen möchten? 
+                          Are you sure you want to delete plan "{plan.name}"? 
                           Diese Aktion kann nicht rückgängig gemacht werden.
                         </AlertDialogDescription>
                       </AlertDialogHeader>

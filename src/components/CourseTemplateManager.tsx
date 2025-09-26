@@ -229,7 +229,7 @@ export const CourseTemplateManager = () => {
   }
 
   const handleDeleteTemplate = async (templateId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diese Vorlage löschen möchten?')) return
+    if (!confirm('Are you sure you want to delete this template?')) return
 
     try {
       const { error } = await supabase

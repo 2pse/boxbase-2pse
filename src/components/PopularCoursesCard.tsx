@@ -77,7 +77,7 @@ export const PopularCoursesCard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Star className="h-5 w-5 text-primary" />
-            Beliebteste Kurse
+            Most popular courses
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -99,14 +99,14 @@ export const PopularCoursesCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Star className="h-5 w-5 text-primary" />
-          Beliebteste Kurse
+          Most popular courses
         </CardTitle>
-        <p className="text-xs text-muted-foreground">30 Tage</p>
+        <p className="text-xs text-muted-foreground">30 days</p>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {courses.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Keine Kursdaten verfügbar</p>
+            <p className="text-muted-foreground text-sm">No course data available</p>
           ) : (
             courses.map((course, index) => (
               <div key={course.title} className="flex justify-between items-center">
@@ -118,10 +118,10 @@ export const PopularCoursesCard = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="text-xs">
-                    {course.registrations}x Buchungen
+                    {course.registrations}x Bookings
                   </Badge>
                   <span className="text-xs text-muted-foreground">
-                    {Math.round(course.avgUtilization)}% Auslastung
+                    {Math.round(course.avgUtilization)}% Utilization
                   </span>
                 </div>
               </div>

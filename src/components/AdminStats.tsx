@@ -213,7 +213,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
             <div className="flex items-center">
               <Calendar className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Anmeldungen diesen Monat</p>
+                <p className="text-sm font-medium text-gray-600">Registrations this month</p>
                 <p className="text-2xl font-bold">{stats.currentMonthEntries}</p>
               </div>
             </div>
@@ -224,8 +224,8 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Anmeldungen nach Mitgliedschaftstyp</CardTitle>
-          <p className="text-xs text-muted-foreground">Diesen Monat</p>
+          <CardTitle>Registrations by membership type</CardTitle>
+          <p className="text-xs text-muted-foreground">This month</p>
         </CardHeader>
         <CardContent>
           <div className="w-full overflow-x-auto">
@@ -262,7 +262,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
           <div className="flex items-center mb-4">
             <Users className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-lg font-medium text-foreground">Anzahl Mitgliedschaften je Kategorie</p>
+              <p className="text-lg font-medium text-foreground">Number of memberships by category</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

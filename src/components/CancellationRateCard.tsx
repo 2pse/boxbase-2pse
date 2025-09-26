@@ -85,7 +85,7 @@ export const CancellationRateCard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-primary" />
-            Stornierungsrate
+            Cancellation rate
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -109,9 +109,9 @@ export const CancellationRateCard = () => {
 
   const getTrendText = () => {
     switch (stats.recentTrend) {
-      case 'up': return 'Steigend'
-      case 'down': return 'Fallend'
-      default: return 'Stabil'
+      case 'up': return 'Rising'
+      case 'down': return 'Falling'
+      default: return 'Stable'
     }
   }
 
@@ -120,14 +120,14 @@ export const CancellationRateCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-primary" />
-          Stornierungsrate
+          Cancellation rate
         </CardTitle>
-        <p className="text-xs text-muted-foreground">30 Tage</p>
+        <p className="text-xs text-muted-foreground">30 days</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <div className="flex justify-between text-sm mb-2">
-            <span>Stornierungen</span>
+            <span>Cancellations</span>
             <span className="font-medium">{Math.round(stats.cancellationRate)}%</span>
           </div>
           <Progress 
@@ -138,11 +138,11 @@ export const CancellationRateCard = () => {
         
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-muted-foreground">Gesamt Anmeldungen</p>
+            <p className="text-muted-foreground">Total registrations</p>
             <p className="text-xl font-bold">{stats.totalRegistrations}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Storniert</p>
+            <p className="text-muted-foreground">Cancelled</p>
             <p className="text-xl font-bold">{stats.cancellations}</p>
           </div>
         </div>

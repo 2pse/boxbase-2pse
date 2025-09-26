@@ -73,7 +73,7 @@ export const CourseUtilizationCard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            Kursauslastung
+            Course utilization
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -92,14 +92,14 @@ export const CourseUtilizationCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
-          Kursauslastung
+          Course utilization
         </CardTitle>
-        <p className="text-xs text-muted-foreground">30 Tage</p>
+        <p className="text-xs text-muted-foreground">30 days</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <div className="flex justify-between text-sm mb-2">
-            <span>Auslastung</span>
+            <span>Utilization</span>
             <span className="font-medium">{Math.round(stats.utilizationRate)}%</span>
           </div>
           <Progress value={stats.utilizationRate} className="h-2" />
@@ -107,18 +107,18 @@ export const CourseUtilizationCard = () => {
         
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-muted-foreground">Kurse gesamt</p>
+            <p className="text-muted-foreground">Total courses</p>
             <p className="text-xl font-bold">{stats.totalCourses}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Ø Teilnehmer</p>
+            <p className="text-muted-foreground">Ø Participants</p>
             <p className="text-xl font-bold">{Math.round(stats.avgParticipants)}</p>
           </div>
         </div>
         
         <div className="pt-2 border-t">
           <p className="text-xs text-muted-foreground">
-            {stats.totalRegistrations} von {stats.totalCapacity} Plätzen belegt
+            {stats.totalRegistrations} of {stats.totalCapacity} spots occupied
           </p>
         </div>
       </CardContent>

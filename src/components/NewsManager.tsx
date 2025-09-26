@@ -123,7 +123,7 @@ export const NewsManager = () => {
   }
 
   const handleDeleteNews = async (newsId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diese Nachricht löschen möchten?')) return
+    if (!confirm('Are you sure you want to delete this message?')) return
 
     try {
       const { error } = await supabase

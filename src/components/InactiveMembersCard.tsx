@@ -69,7 +69,7 @@ export const InactiveMembersCard = () => {
 
         // Find membership type
         const userMembership = membershipsData.find(m => m.user_id === profile.user_id)
-        let membershipType = 'Kein Abo'
+        let membershipType = 'No subscription'
         
         if (userMembership?.membership_plans_v2) {
           const plan = userMembership.membership_plans_v2
@@ -89,13 +89,13 @@ export const InactiveMembersCard = () => {
               membershipType = 'Open Gym'
               break
             default:
-              membershipType = plan.name || 'Unbekannt'
+              membershipType = plan.name || 'Unknown'
           }
         }
 
         const displayName = profile.first_name && profile.last_name 
           ? `${profile.first_name} ${profile.last_name}`
-          : profile.display_name || 'Unbekannt'
+          : profile.display_name || 'Unknown'
 
         return {
           display_name: displayName,
@@ -115,12 +115,12 @@ export const InactiveMembersCard = () => {
   }
 
   const formatLastLogin = (lastLogin: string | null, daysSince: number) => {
-    if (!lastLogin) return 'Nie eingeloggt'
-    if (daysSince === 0) return 'Heute'
-    if (daysSince === 1) return 'Gestern'
-    if (daysSince < 7) return `vor ${daysSince} Tagen`
-    if (daysSince < 30) return `vor ${Math.floor(daysSince / 7)} Wo.`
-    return `vor ${Math.floor(daysSince / 30)} Mon.`
+    if (!lastLogin) return 'Never logged in'
+    if (daysSince === 0) return 'Today'
+    if (daysSince === 1) return 'Yesterday'
+    if (daysSince < 7) return `${daysSince} days ago`
+    if (daysSince < 30) return `${Math.floor(daysSince / 7)} weeks ago`
+    return `${Math.floor(daysSince / 30)} months ago`
   }
 
   if (loading) {
@@ -129,7 +129,7 @@ export const InactiveMembersCard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserX className="h-5 w-5 text-primary" />
-            Schläfermitglieder
+            Inactive members
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -151,14 +151,14 @@ export const InactiveMembersCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <UserX className="h-5 w-5 text-primary" />
-          Schläfermitglieder ({totalInactive})
+          Inactive members ({totalInactive})
         </CardTitle>
-        <p className="text-xs text-muted-foreground">Mitglieder ohne Login seit 21+ Tagen</p>
+        <p className="text-xs text-muted-foreground">Members without login for 21+ days</p>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {inactiveMembers.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Alle Mitglieder sind aktiv! 🎉</p>
+            <p className="text-muted-foreground text-sm">All members are active! 🎉</p>
           ) : (
             inactiveMembers.map((member, index) => (
               <div key={`${member.display_name}-${index}`} className="flex justify-between items-center">
@@ -181,7 +181,7 @@ export const InactiveMembersCard = () => {
         {totalInactive > 10 && (
           <div className="pt-3 border-t mt-3">
             <p className="text-xs text-muted-foreground">
-              ... und {totalInactive - 10} weitere inaktive Mitglieder
+              ... and {totalInactive - 10} more inactive members
             </p>
           </div>
         )}

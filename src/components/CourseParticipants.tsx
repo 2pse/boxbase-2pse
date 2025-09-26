@@ -183,7 +183,7 @@ export const CourseParticipants = () => {
   }
 
   const handleDeleteCourse = async (courseId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diesen Kurs löschen möchten?')) return
+    if (!confirm('Are you sure you want to delete this course?')) return
 
     try {
       const { error } = await supabase

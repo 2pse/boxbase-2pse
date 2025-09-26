@@ -1623,8 +1623,8 @@ export default function Admin() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Member</AlertDialogTitle>
             <AlertDialogDescription>
-              Sind Sie sicher, dass Sie das Mitglied "{memberToDelete?.display_name || memberToDelete?.first_name + ' ' + memberToDelete?.last_name}" 
-              permanently delete? This action cannot be undone.
+              Are you sure you want to permanently delete member "{memberToDelete?.display_name || memberToDelete?.first_name + ' ' + memberToDelete?.last_name}"? 
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

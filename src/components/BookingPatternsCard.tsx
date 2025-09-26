@@ -98,7 +98,7 @@ export const BookingPatternsCard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-primary" />
-            Buchungsmuster
+            Booking patterns
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -120,14 +120,14 @@ export const BookingPatternsCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" />
-          Buchungsmuster
+          Booking patterns
         </CardTitle>
-        <p className="text-xs text-muted-foreground">30 Tage</p>
+        <p className="text-xs text-muted-foreground">30 days</p>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           {patterns.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Keine Buchungsdaten verfügbar</p>
+            <p className="text-muted-foreground text-sm">No booking data available</p>
           ) : (
             patterns.map((pattern, index) => (
               <div key={`${pattern.dayOfWeek}-${pattern.hour}`} className="flex justify-between items-center text-sm">
@@ -152,10 +152,10 @@ export const BookingPatternsCard = () => {
         {patterns.length > 0 && mostPopular && (
           <div className="pt-3 border-t mt-3 space-y-1">
             <p className="text-xs text-muted-foreground">
-              Meiste Buchungen: {mostPopular.dayOfWeek} {mostPopular.hour}:00 ({mostPopular.registrations} Buchungen)
+              Most bookings: {mostPopular.dayOfWeek} {mostPopular.hour}:00 ({mostPopular.registrations} bookings)
             </p>
             <p className="text-xs text-muted-foreground">
-              Balken = relative Häufigkeit, Zahl = absolute Buchungen
+              Bar = relative frequency, number = absolute bookings
             </p>
           </div>
         )}
