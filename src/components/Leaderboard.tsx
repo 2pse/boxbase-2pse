@@ -257,7 +257,7 @@ export const Leaderboard: React.FC = () => {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Leaderboard wird geladen...</h2>
+          <h2 className="text-xl font-bold mb-2">Loading Leaderboard...</h2>
         </div>
       </div>
     )

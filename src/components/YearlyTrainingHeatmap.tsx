@@ -124,7 +124,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-1">Training Log</h2>
         <p className="text-sm text-muted-foreground">
-          Monatliche Trainingstage im letzten Jahr
+          Monthly training days in the last year
         </p>
       </div>
       <div className="pl-2 mt-4">

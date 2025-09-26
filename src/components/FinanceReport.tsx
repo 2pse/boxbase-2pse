@@ -347,14 +347,14 @@ export const FinanceReport = () => {
       document.body.removeChild(link)
 
       toast({
-        title: "Erfolg",
-        description: "CSV-Export erfolgreich heruntergeladen",
+        title: "Success",
+        description: "CSV export successfully downloaded",
       })
     } catch (error) {
       console.error('Error exporting CSV:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim CSV-Export",
+        title: "Error",
+        description: "Error in CSV export",
         variant: "destructive",
       })
     } finally {
@@ -604,7 +604,7 @@ export const FinanceReport = () => {
               size="sm"
             >
               <Download className="h-4 w-4 mr-2" />
-              {exporting ? 'Exportiere...' : 'CSV Export'}
+              {exporting ? 'Exporting...' : 'CSV Export'}
             </Button>
           </div>
         </CardContent>

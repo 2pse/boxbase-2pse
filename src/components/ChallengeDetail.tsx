@@ -143,7 +143,7 @@ export default function ChallengeDetail({
 
         toast.success('🏆 Challenge abgeschlossen! Badge erhalten!');
       } else {
-        toast.success('Checkpoint hinzugefügt!');
+        toast.success('Checkpoint added!');
       }
 
       loadCheckpoints();

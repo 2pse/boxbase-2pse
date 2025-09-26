@@ -45,10 +45,10 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
       await startWebScan()
     } catch (err) {
       console.error("Error starting scan:", err)
-      setError("Scanner konnte nicht gestartet werden")
+      setError("Scanner could not be started")
       toast({
-        title: "Scanner-Fehler",
-        description: "QR-Code-Scanner konnte nicht gestartet werden.",
+        title: "Scanner Error",
+        description: "QR code scanner could not be started.",
         variant: "destructive"
       })
     }
@@ -92,10 +92,10 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
       controlsRef.current = controls
     } catch (err) {
       console.error("Error starting web scan:", err)
-      setError("Scanner konnte im Browser nicht gestartet werden")
+      setError("Scanner could not be started in browser")
       toast({
-        title: "Scanner-Fehler",
-        description: "QR-Code-Scanner konnte im Browser nicht gestartet werden.",
+        title: "Scanner Error",
+        description: "QR code scanner could not be started in browser.",
         variant: "destructive"
       })
       setScanning(false)
@@ -121,8 +121,8 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
   }
 
   const handleScanResult = (content: string) => {
-    console.log("QR Code gescannt:", content)
-    console.log("Erwartet:", expectedText)
+    console.log("QR Code scanned:", content)
+    console.log("Expected:", expectedText)
     
     // Clean up both strings for comparison
     const cleanContent = content.trim().toLowerCase()
@@ -134,15 +134,15 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
       onScanSuccess(content)
       onOpenChange(false)
       toast({
-        title: "QR-Code gescannt",
-        description: "Open Gym Check-In erfolgreich!",
+        title: "QR Code Scanned",
+        description: "Open Gym Check-In successful!",
         variant: "default"
       })
     } else {
-      console.log("QR-Code Inhalt stimmt nicht überein")
+      console.log("QR Code content does not match")
       toast({
-        title: "Falscher QR-Code",
-        description: `Gescannt: "${content}" - Erwartet: "${expectedText}"`,
+        title: "Wrong QR Code",
+        description: `Scanned: "${content}" - Expected: "${expectedText}"`,
         variant: "destructive"
       })
     }
@@ -159,13 +159,13 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
         <DialogHeader>
           <DialogTitle className="text-center flex items-center justify-center gap-2">
             <Camera className="h-5 w-5" />
-            QR-Code Scanner
+            QR Code Scanner
           </DialogTitle>
         </DialogHeader>
         
         <div className="text-center space-y-4">
           <p className="text-muted-foreground">
-            Scanne den QR-Code am Empfang für deinen Open Gym Check-In
+            Scan the QR code at reception for your Open Gym Check-In
           </p>
           
           {error && (
@@ -176,7 +176,7 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
           
           {scanning && (
             <div className="text-sm text-muted-foreground">
-              Scanner läuft... Richte die Kamera auf den QR-Code.
+              Scanner running... Point the camera at the QR code.
             </div>
           )}
 
@@ -198,7 +198,7 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
               className="flex items-center gap-2"
             >
               <X className="h-4 w-4" />
-              Abbrechen
+              Cancel
             </Button>
             
             {!scanning && (
@@ -207,7 +207,7 @@ export const QRCodeScanner: React.FC<QRCodeScannerProps> = ({
                 className="flex items-center gap-2"
               >
                 <Camera className="h-4 w-4" />
-                Erneut scannen
+                Scan Again
               </Button>
             )}
           </div>

@@ -129,12 +129,12 @@ export function DataExport() {
         }
 
         toast({
-          title: "CSV Export erfolgreich",
-          description: `${data.tables_exported} separate CSV-Dateien heruntergeladen`,
+          title: "CSV Export Successful",
+          description: `${data.tables_exported} separate CSV files downloaded`,
           variant: "default",
         });
       } else {
-        throw new Error(data?.error ||'Unbekannter Fehler beim Export');
+        throw new Error(data?.error ||'Unknown export error');
       }
 
     } catch (error: any) {
@@ -156,9 +156,9 @@ export function DataExport() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Datenexport</h2>
+          <h2 className="text-2xl font-bold">Data Export</h2>
           <p className="text-muted-foreground">
-            Exportieren Sie alle Daten als separate CSV-Dateien für Backup oder Analyse
+            Export all data as separate CSV files for backup or analysis
           </p>
         </div>
       </div>
@@ -228,7 +228,7 @@ export function DataExport() {
                   {isCurrentlyExporting ? (
                     <>
                       <Clock className="h-4 w-4 mr-2 animate-spin" />
-                      Exportiere...
+                      Exporting...
                     </>
                   ) : (
                     <>
@@ -251,7 +251,7 @@ export function DataExport() {
             <div>
               <h3 className="font-medium text-primary">Backup & Restore</h3>
               <p className="text-sm text-primary/80 mt-1">
-                CSV-Dateien können über Table Editor → Import CSV in Supabase importiert werden
+                CSV files can be imported via Table Editor → Import CSV in Supabase
               </p>
             </div>
           </div>

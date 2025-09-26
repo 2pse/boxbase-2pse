@@ -626,8 +626,8 @@ export default function Admin() {
           if (membershipError) {
             console.error('Error creating new membership:', membershipError);
             toast({
-              title: "Fehler",
-              description: "Fehler beim Erstellen der neuen Mitgliedschaft",
+              title: "Error",
+              description: "Error creating new membership",
               variant: "destructive",
             });
             return;
@@ -635,8 +635,8 @@ export default function Admin() {
         }
 
         toast({
-          title: "Erfolg",
-          description: `Mitgliedschaft erfolgreich zu "${selectedPlan.name}" geändert`,
+          title: "Success",
+          description: `Membership successfully changed to "${selectedPlan.name}"`,
         });
         
         // Dispatch event for real-time updates in frontend
@@ -645,8 +645,8 @@ export default function Admin() {
         }));
       } else {
         toast({
-          title: "Erfolg",
-          description: "Profil erfolgreich aktualisiert",
+          title: "Success",
+          description: "Profile successfully updated",
         });
       }
       
@@ -830,8 +830,8 @@ export default function Admin() {
       }));
 
       toast({
-        title: "Erfolg",
-        description: `Credits ${isSubtracting ? 'abgezogen' : 'aufgeladen'}. Neue Anzahl: ${newCredits}`,
+        title: "Success",
+        description: `Credits ${isSubtracting ? 'deducted' : 'added'}. New amount: ${newCredits}`,
       });
 
       // Dispatch event for real-time updates in frontend
@@ -873,8 +873,8 @@ export default function Admin() {
       }
 
       toast({
-        title: "Erfolg",
-        description: "Mitglied wurde erfolgreich gelöscht",
+        title: "Success",
+        description: "Member was successfully deleted",
       });
 
       // Refresh member list
@@ -883,8 +883,8 @@ export default function Admin() {
     } catch (error: any) {
       console.error('Error deleting member:', error);
       toast({
-        title: "Fehler",
-        description: error.message || "Mitglied konnte nicht gelöscht werden",
+        title: "Error",
+        description: error.message || "Member could not be deleted",
         variant: "destructive",
       });
     }
@@ -925,14 +925,14 @@ export default function Admin() {
         if (error) {
           console.error('Error deleting member:', error);
           toast({
-            title: "Fehler",
-            description: "Fehler beim Löschen des Mitglieds",
+            title: "Error",
+            description: "Error deleting member",
             variant: "destructive",
           });
         } else {
           toast({
-            title: "Erfolg",
-            description: "Mitglied erfolgreich gelöscht",
+            title: "Success",
+            description: "Member successfully deleted",
           });
           setCurrentPage(1);
           loadMembers();
@@ -948,14 +948,14 @@ export default function Admin() {
       if (functionError || !result?.success) {
         console.error('Error deleting member:', functionError || result?.error);
         toast({
-          title: "Fehler",
-          description: "Fehler beim Löschen des Mitglieds",
+          title: "Error",
+          description: "Error deleting member",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Erfolg",
-          description: "Mitglied und Account erfolgreich gelöscht",
+          title: "Success",
+          description: "Member and account successfully deleted",
         });
         setCurrentPage(1);
         loadMembers();
@@ -963,8 +963,8 @@ export default function Admin() {
     } catch (error) {
       console.error('Error deleting member:', error);
       toast({
-        title: "Fehler",
-        description: "Fehler beim Löschen des Mitglieds",
+        title: "Error",
+        description: "Error deleting member",
         variant: "destructive",
       });
     }
@@ -975,22 +975,22 @@ export default function Admin() {
       const { error } = await supabase.auth.signOut();
       if (error) {
         toast({
-          title: "Fehler",
-          description: "Fehler beim Abmelden",
+          title: "Error",
+          description: "Error signing out",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Erfolg",
-          description: "Erfolgreich abgemeldet",
+          title: "Success",
+          description: "Successfully signed out",
         });
         navigate("/");
       }
     } catch (error) {
       console.error('Logout error:', error);
       toast({
-        title: "Fehler",
-        description: "Fehler beim Abmelden",
+        title: "Error",
+        description: "Error signing out",
         variant: "destructive",
       });
     }
@@ -1045,8 +1045,8 @@ export default function Admin() {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight">Mitglieder</h2>
-                <p className="text-muted-foreground">Verwalte und organisiere deine Studio-Mitglieder</p>
+                <h2 className="text-2xl font-bold tracking-tight">Members</h2>
+                <p className="text-muted-foreground">Manage and organize your studio members</p>
               </div>
               <Dialog open={dialogOpen} onOpenChange={(open) => {
                 setDialogOpen(open);
@@ -1171,7 +1171,7 @@ export default function Admin() {
                 <div className="relative flex-1 max-w-md">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Mitglieder suchen..."
+                    placeholder="Search members..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-8"
@@ -1181,7 +1181,7 @@ export default function Admin() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Mitglieder ({totalMembers})</CardTitle>
+                  <CardTitle>Members ({totalMembers})</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {isMobile ? (
@@ -1337,7 +1337,7 @@ export default function Admin() {
                       
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span>
-                          Seite {currentPage} von {Math.ceil(totalMembers / membersPerPage)} ({totalMembers} Mitglieder gesamt)
+                          Page {currentPage} of {Math.ceil(totalMembers / membersPerPage)} ({totalMembers} members total)
                         </span>
                         
                         {/* Direct page jump */}
@@ -1378,8 +1378,8 @@ export default function Admin() {
         {activePage === 'courses' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">Kurse</h2>
-              <p className="text-muted-foreground">Verwalte Kurse und Teilnehmer</p>
+              <h2 className="text-2xl font-bold tracking-tight">Courses</h2>
+              <p className="text-muted-foreground">Manage courses and participants</p>
             </div>
             <CourseParticipants />
           </div>
@@ -1504,15 +1504,15 @@ export default function Admin() {
 
               {/* Simplified Membership Management */}
               <div className="space-y-4 border-t pt-4">
-                <h3 className="text-lg font-semibold">Mitgliedschaftsverwaltung</h3>
+                <h3 className="text-lg font-semibold">Membership Management</h3>
                 
                 {/* Current Membership Display */}
                 {editCurrentMembership && (
                   <div className="p-4 bg-muted rounded-lg">
-                    <h4 className="font-medium">Aktuelle Mitgliedschaft:</h4>
+                    <h4 className="font-medium">Current Membership:</h4>
                     <p className="text-sm text-muted-foreground mt-1">
                       {editCurrentMembership.membership_plans_v2?.name} - €{editCurrentMembership.membership_plans_v2?.price_monthly}
-                      {editCurrentMembership.membership_plans_v2?.payment_frequency === 'monthly' ? '/Monat' : ' einmalig'}
+                      {editCurrentMembership.membership_plans_v2?.payment_frequency === 'monthly' ? '/month' : ' one-time'}
                     </p>
                     {editCurrentMembership.membership_plans_v2?.booking_rules?.type === 'credits' && (
                       <p className="text-sm text-muted-foreground">
