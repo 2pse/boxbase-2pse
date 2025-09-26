@@ -156,7 +156,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
               className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors"
             >
               <Calendar className="h-8 w-8 text-foreground mb-2" />
-              <span className="text-sm font-medium text-foreground">Kurse</span>
+              <span className="text-sm font-medium text-foreground">Courses</span>
             </div>
             <div 
               onClick={() => {

@@ -612,7 +612,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       {/* Header with View Toggle */}
       <div className="space-y-4">
         <div className="text-center">
-          <h2 className="font-semibold text-foreground">Kurse</h2>
+          <h2 className="font-semibold text-foreground">Courses</h2>
         </div>
         
         <div className="flex justify-center gap-8">

@@ -107,15 +107,15 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                   <CardTitle className="text-xl">Prozentrechner</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
                     {useFixedValues 
-                      ? 'Berechne mit gespeicherten Kraftwerten' 
-                      : 'Freie Berechnung mit eigenen Werten'
+                      ? 'Calculate with saved strength values' 
+                      : 'Free calculation with your own values'
                     }
                   </p>
                 </div>
               </div>
               <div className="flex items-center justify-between sm:justify-end space-x-3 bg-muted/30 rounded-lg p-3">
                 <Label htmlFor="calculator-mode" className="text-sm font-medium">
-                  {useFixedValues ? 'Gespeichert' : 'Frei'}
+                  {useFixedValues ? 'Saved' : 'Free'}
                 </Label>
                 <Switch
                   id="calculator-mode"
@@ -187,10 +187,10 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                   <Calculator className="h-12 w-12 text-muted-foreground" />
                 </div>
                 <p className="text-lg font-medium text-muted-foreground mb-2">
-                  Keine Kraftwerte gefunden
+                  No strength values found
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Trage deine 1RM Werte in den Kraftwerten ein, um den Prozentrechner zu nutzen.
+                  Enter your 1RM values in the strength values to use the percentage calculator.
                 </p>
               </div>
             )}
@@ -214,15 +214,15 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                 <CardTitle className="text-xl">Prozentrechner</CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
                   {useFixedValues 
-                    ? 'Berechne mit gespeicherten Kraftwerten' 
-                    : 'Freie Berechnung mit eigenen Werten'
+                    ? 'Calculate with saved strength values' 
+                    : 'Free calculation with your own values'
                   }
                 </p>
               </div>
             </div>
             <div className="flex items-center justify-between sm:justify-end space-x-3 bg-muted/30 rounded-lg p-3">
               <Label htmlFor="calculator-mode" className="text-sm font-medium">
-                {useFixedValues ? 'Gespeichert' : 'Frei'}
+                {useFixedValues ? 'Saved' : 'Free'}
               </Label>
               <Switch
                 id="calculator-mode"

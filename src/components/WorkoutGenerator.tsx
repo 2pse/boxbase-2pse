@@ -274,11 +274,11 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
         <div className="px-4 pt-4 pb-2">
           <Button variant="ghost" onClick={() => setShowPercentageCalculator(false)} size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
         </div>
         <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-foreground">Prozentrechner</h1>
+          <h1 className="text-3xl font-bold text-foreground">Percentage Calculator</h1>
         </div>
         <PercentageCalculator user={user} />
       </div>
@@ -319,7 +319,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
         <div className="px-4 pt-4 pb-2">
           <Button variant="ghost" onClick={goBack} size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
         </div>
       )}
@@ -438,7 +438,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                   className="w-full h-16 text-lg font-semibold rounded-2xl shadow-lg"
                 >
                   <Dumbbell className="h-6 w-6 mr-3" />
-                  {isGenerating ? "Generiere..." : "Workout generieren"}
+                  {isGenerating ? "Generating..." : "Generate Workout"}
                 </Button>
               </div>
             </div>
@@ -460,7 +460,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                   className="w-full h-16 text-lg font-semibold rounded-2xl shadow-lg"
                 >
                   <Dumbbell className="h-6 w-6 mr-3" />
-                  {isGenerating ? "Generiere..." : "Workout generieren"}
+                  {isGenerating ? "Generating..." : "Generate Workout"}
                 </Button>
               </div>
             </div>

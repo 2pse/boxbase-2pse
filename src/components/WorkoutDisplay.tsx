@@ -57,7 +57,7 @@ export const WorkoutDisplay = ({ workout, workoutType, onNewWorkout, onReset, is
         <div className="px-4 pt-4 pb-2">
           <Button variant="ghost" onClick={() => setShowTimer(false)} size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
         </div>
         
@@ -80,7 +80,7 @@ export const WorkoutDisplay = ({ workout, workoutType, onNewWorkout, onReset, is
           size="sm"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Zurück
+          Back
         </Button>
       </div>
       
@@ -172,7 +172,7 @@ export const WorkoutDisplay = ({ workout, workoutType, onNewWorkout, onReset, is
                 className="flex flex-col items-center p-4 h-auto min-w-[80px]"
               >
                 <RotateCcw className="h-6 w-6 mb-1" />
-                <span className="text-xs">Nächstes</span>
+                <span className="text-xs">Next</span>
               </Button>
               
               <Button 
@@ -195,7 +195,7 @@ export const WorkoutDisplay = ({ workout, workoutType, onNewWorkout, onReset, is
                 className="flex flex-col items-center p-4 h-auto min-w-[120px]"
               >
                 <Lightbulb className="h-6 w-6 mb-1" />
-                <span className="text-xs">KI-Coach</span>
+                <span className="text-xs">AI Coach</span>
               </Button>
             </div>
           </div>

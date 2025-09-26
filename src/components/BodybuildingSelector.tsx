@@ -2,8 +2,8 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { Dumbbell, ArrowUp, ArrowDown, User, Zap } from "lucide-react"
 
-export type BodybuildingFocus = "Push" | "Pull" | "Unterkörper" | "Oberkörper" | "Ganzkörper" | null
-export type BodybuildingDifficulty = "Leicht" | "Mittel" | "Schwer" | null
+export type BodybuildingFocus = "Push" | "Pull" | "Lower Body" | "Upper Body" | "Full Body" | null
+export type BodybuildingDifficulty = "Easy" | "Medium" | "Hard" | null
 
 interface BodybuildingSelectorProps {
   selectedFocus: BodybuildingFocus
@@ -19,17 +19,17 @@ export const BodybuildingSelector = ({
   onDifficultySelect 
 }: BodybuildingSelectorProps) => {
   const focusOptions = [
-    { type: "Push" as const, icon: ArrowUp, title: "Push", description: "Brust, Schultern, Trizeps" },
-    { type: "Pull" as const, icon: ArrowDown, title: "Pull", description: "Rücken, Bizeps" },
-    { type: "Unterkörper" as const, icon: Dumbbell, title: "Unterkörper", description: "Quadrizeps, Hamstrings, Glutes" },
-    { type: "Oberkörper" as const, icon: User, title: "Oberkörper", description: "Kompletter Oberkörper" },
-    { type: "Ganzkörper" as const, icon: Zap, title: "Ganzkörper", description: "Komplettes Training" }
+    { type: "Push" as const, icon: ArrowUp, title: "Push", description: "Chest, Shoulders, Triceps" },
+    { type: "Pull" as const, icon: ArrowDown, title: "Pull", description: "Back, Biceps" },
+    { type: "Lower Body" as const, icon: Dumbbell, title: "Lower Body", description: "Quadriceps, Hamstrings, Glutes" },
+    { type: "Upper Body" as const, icon: User, title: "Upper Body", description: "Complete Upper Body" },
+    { type: "Full Body" as const, icon: Zap, title: "Full Body", description: "Complete Training" }
   ]
 
   const difficultyOptions = [
-    { type: "Leicht" as const, title: "Leicht", description: "Anfänger" },
-    { type: "Mittel" as const, title: "Mittel", description: "Fortgeschritten" },
-    { type: "Schwer" as const, title: "Schwer", description: "Profi" }
+    { type: "Easy" as const, title: "Easy", description: "Beginner" },
+    { type: "Medium" as const, title: "Medium", description: "Intermediate" },
+    { type: "Hard" as const, title: "Hard", description: "Advanced" }
   ]
 
   // For focus selection step (step 2)

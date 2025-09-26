@@ -61,7 +61,7 @@ export default function News() {
             className="text-primary"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
           <h1 className="text-xl font-bold">Gym News</h1>
           <div className="w-20" /> {/* Spacer for center alignment */}
@@ -77,9 +77,9 @@ export default function News() {
         ) : news.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
-              <h3 className="text-lg font-semibold mb-2">Keine Nachrichten</h3>
+              <h3 className="text-lg font-semibold mb-2">No News</h3>
               <p className="text-muted-foreground">
-                Aktuell sind keine Nachrichten verfügbar.
+                Currently no news available.
               </p>
             </CardContent>
           </Card>

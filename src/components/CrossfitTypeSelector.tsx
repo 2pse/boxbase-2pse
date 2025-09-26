@@ -14,12 +14,12 @@ export const CrossfitTypeSelector = ({ selectedType, onTypeSelect }: CrossfitTyp
     {
       type: "WOD" as const,
       title: "WOD",
-      description: "Funktionelles\nGanzkörperworkout"
+      description: "Functional\nFull body workout"
     },
     {
       type: "Weightlifting" as const,
       title: "Weightlifting",
-      description: "Olympisches\nGewichtheben"
+      description: "Olympic\nWeightlifting"
     }
   ]
 

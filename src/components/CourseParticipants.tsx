@@ -176,7 +176,7 @@ export const CourseParticipants = () => {
       console.error('Error updating course:', error)
       toast({
         title: "Fehler", 
-        description: "Fehler beim Aktualisieren des Kurses",
+        description: "Error updating course",
         variant: "destructive"
       })
     }
@@ -202,7 +202,7 @@ export const CourseParticipants = () => {
       console.error('Error deleting course:', error)
       toast({
         title: "Fehler",
-        description: "Fehler beim Löschen des Kurses",
+        description: "Error deleting course",
         variant: "destructive"
       })
     }
@@ -396,12 +396,12 @@ export const CourseParticipants = () => {
           {selectedDate && (
             <div className="space-y-4">
               <h3 className="font-semibold text-left px-4">
-                Kurse am {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
+                Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
               </h3>
               
               {coursesForSelectedDate.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  Keine Kurse an diesem Tag
+                  No courses on this day
                 </div>
               ) : (
                 <div className="space-y-3 px-4">

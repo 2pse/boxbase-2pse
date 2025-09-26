@@ -130,12 +130,12 @@ export const CourseCalendar = ({
       {selectedDate && (
         <div className="space-y-4">
           <h3 className="font-semibold text-left px-4">
-            Kurse am {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
+            Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
           </h3>
           
           {coursesForSelectedDate.length === 0 ? (
             <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 text-center">
-              <p className="text-muted-foreground">Keine Kurse an diesem Tag</p>
+              <p className="text-muted-foreground">No courses on this day</p>
             </div>
           ) : (
             <div className="space-y-3 px-4">

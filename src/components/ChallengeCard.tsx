@@ -119,7 +119,7 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center">
-            Aktuell sind keine Challenges für diesen Monat verfügbar.
+            Currently no challenges available for this month.
           </p>
         </CardContent>
       </Card>

@@ -43,19 +43,19 @@ export const WorkoutChatInterface = ({ workout, workoutType, onClose }: WorkoutC
         <div className="px-4 pt-4 pb-2">
           <Button variant="ghost" onClick={onClose} size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            Back
           </Button>
         </div>
         
         <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-foreground">KI-Coach</h1>
+          <h1 className="text-3xl font-bold text-foreground">AI Coach</h1>
         </div>
         
         <div className="flex items-center justify-center px-4">
           <div className="text-center space-y-4">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto"></div>
-            <p className="text-lg text-muted-foreground">KI-Coach überlegt</p>
-            <p className="text-sm text-muted-foreground">geschätzte Ladezeit 14 Sekunden</p>
+            <p className="text-lg text-muted-foreground">AI Coach is thinking</p>
+            <p className="text-sm text-muted-foreground">estimated loading time 14 seconds</p>
           </div>
         </div>
       </div>
@@ -70,13 +70,13 @@ export const WorkoutChatInterface = ({ workout, workoutType, onClose }: WorkoutC
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-primary" />
-                KI-Coach
+                AI Coach
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">{workout.title}</p>
             </div>
             <Button variant="outline" size="sm" onClick={onClose}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Zurück
+              Back
             </Button>
           </div>
         </CardHeader>
@@ -86,7 +86,7 @@ export const WorkoutChatInterface = ({ workout, workoutType, onClose }: WorkoutC
             <div className="flex items-center justify-center py-12">
               <div className="text-center space-y-4">
                 <div className="w-12 h-12 mx-auto border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-muted-foreground">Erklärung wird erstellt...</p>
+                <p className="text-muted-foreground">Creating explanation...</p>
               </div>
             </div>
           ) : (

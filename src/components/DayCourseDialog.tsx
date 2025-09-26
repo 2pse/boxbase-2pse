@@ -668,7 +668,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-center">
-              Kurse am {formatDate(date)}
+              Courses on {formatDate(date)}
             </DialogTitle>
           </DialogHeader>
 
@@ -688,12 +688,12 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                   onClick={() => setShowQRScanner(true)}
                   className="w-full"
                 >
-                  QR-Code scannen
+                  Scan QR Code
                 </Button>
               </div>
             ) : courses.length === 0 ? (
               <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 text-center">
-                <p className="text-muted-foreground">Keine Kurse an diesem Tag</p>
+                <p className="text-muted-foreground">No courses on this day</p>
               </div>
             ) : (
               courses.map((course) => {
