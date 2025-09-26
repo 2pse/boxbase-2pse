@@ -127,7 +127,7 @@ export const WorkoutEditDialog = ({ workout, workoutType, onWorkoutUpdated }: Wo
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Workout bearbeiten</DialogTitle>
+          <DialogTitle>Edit Workout</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6">

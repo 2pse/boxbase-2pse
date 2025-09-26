@@ -32,8 +32,8 @@ interface ExportOption {
 const exportOptions: ExportOption[] = [
   {
     id: 'members',
-    title: 'Alle Mitglieder',
-    description: 'Profile, Kontaktdaten, Mitgliedschaften, Zugangscodes, Passwörter',
+    title: 'All Members',
+    description: 'Profiles, contact data, memberships, access codes, passwords',
     icon: Users,
     tables: ['profiles', 'user_memberships_v2', 'user_roles', 'auth.users']
   },
@@ -46,8 +46,8 @@ const exportOptions: ExportOption[] = [
   },
   {
     id: 'finance',
-    title: 'Finanzdaten',
-    description: 'Mitgliedschaftspläne, Umsatzhistorie, Abrechnungsdaten',
+    title: 'Financial Data',
+    description: 'Membership plans, revenue history, billing data',
     icon: DollarSign,
     tables: ['membership_plans_v2', 'revenue_history']
   },

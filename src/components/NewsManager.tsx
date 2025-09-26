@@ -267,7 +267,7 @@ export const NewsManager = () => {
       <Dialog open={!!editingNews} onOpenChange={() => setEditingNews(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Nachricht bearbeiten</DialogTitle>
+            <DialogTitle>Edit Message</DialogTitle>
           </DialogHeader>
           {editingNews && (
             <form onSubmit={handleUpdateNews} className="space-y-4">

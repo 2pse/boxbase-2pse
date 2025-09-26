@@ -489,7 +489,7 @@ export const CourseParticipants = () => {
       <Dialog open={!!editingCourse} onOpenChange={() => setEditingCourse(null)}>
         <DialogContent className="max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
-            <DialogTitle>Kurs bearbeiten</DialogTitle>
+            <DialogTitle>Edit Course</DialogTitle>
           </DialogHeader>
           {editingCourse && (
             <div className="flex-1 overflow-y-auto pr-2">

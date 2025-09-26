@@ -136,19 +136,19 @@ export const MembershipPlanManagerV2: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="p-6">Lade Mitgliedschaftspläne...</div>;
+    return <div className="p-6">Loading membership plans...</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Mitgliedschaftspläne</h2>
-          <p className="text-muted-foreground">Erstelle und verwalte deine Mitgliedschaften</p>
+          <h2 className="text-2xl font-bold tracking-tight">Membership Plans</h2>
+          <p className="text-muted-foreground">Create and manage your memberships</p>
         </div>
         <Button onClick={handleCreate} className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
-          Neuer Plan
+          New Plan
         </Button>
       </div>
 
@@ -177,10 +177,10 @@ export const MembershipPlanManagerV2: React.FC = () => {
               <CardContent className="space-y-4">
                 {/* Pricing */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Preis:</span>
+                  <span className="text-sm text-muted-foreground">Price:</span>
                   <span className="font-medium">
                     {plan.price_monthly 
-                      ? `${plan.price_monthly}€ ${plan.payment_frequency === 'monthly' ? '/Monat' : 'einmalig'}`
+                      ? `${plan.price_monthly}€ ${plan.payment_frequency === 'monthly' ? '/month' : 'one-time'}`
                       : 'Kostenlos'
                     }
                   </span>
@@ -188,8 +188,8 @@ export const MembershipPlanManagerV2: React.FC = () => {
 
                 {/* Duration */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Laufzeit:</span>
-                  <span className="font-medium">{plan.duration_months} Monate</span>
+                  <span className="text-sm text-muted-foreground">Duration:</span>
+                  <span className="font-medium">{plan.duration_months} months</span>
                 </div>
 
                 {/* Booking Type */}
@@ -232,7 +232,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     className="flex-1"
                   >
                     <Edit className="h-3 w-3 mr-1" />
-                    Bearbeiten
+                    Edit
                   </Button>
                   
                   <AlertDialog>

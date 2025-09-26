@@ -537,10 +537,10 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   <span>{formData.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Preis:</span>
+                  <span className="font-medium">Price:</span>
                   <span>
                     {formData.price_monthly 
-                      ? `${formData.price_monthly}€ ${formData.payment_frequency === 'monthly' ? '/Monat' : 'einmalig'}`
+                      ? `${formData.price_monthly}€ ${formData.payment_frequency === 'monthly' ? '/month' : 'one-time'}`
                       : 'Kostenlos'
                     }
                   </span>
@@ -575,7 +575,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {editingPlan ? 'Plan bearbeiten' : 'Neuen Plan erstellen'}
+            {editingPlan ? 'Edit plan' : 'Create new plan'}
           </DialogTitle>
         </DialogHeader>
 

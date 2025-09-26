@@ -344,7 +344,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
         <Dialog open={!!editingMember} onOpenChange={(open) => !open && setEditingMember(null)}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Mitglied bearbeiten</DialogTitle>
+              <DialogTitle>Edit Member</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>

@@ -96,7 +96,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       return false
     }
     if (code.length < 6) {
-      setAccessCodeError("Zugangscode muss mindestens 6 Zahlen haben")
+      setAccessCodeError("Access code must have at least 6 digits")
       return false
     }
     setAccessCodeError("")
@@ -169,7 +169,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       if (!validateAccessCode(accessCode)) {
         toast({
           title: "Fehler",
-          description: "Bitte überprüfe deinen Zugangscode.",
+          description: "Please check your access code.",
           variant: "destructive"
         })
         return
@@ -190,12 +190,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
       if (accessCodeError) {
         console.error('Access code update error:', accessCodeError)
-        throw new Error(accessCodeError.message || 'Fehler beim Aktualisieren des Zugangscodes')
+        throw new Error(accessCodeError.message || 'Error updating access code')
       }
 
       toast({
-        title: "Profil gespeichert",
-        description: data?.message || "Zugangscode erfolgreich geändert. Verwenden Sie den neuen Code für die nächste Anmeldung.",
+        title: "Profile saved",
+        description: data?.message || "Access code successfully changed. Use the new code for the next login.",
       })
     } catch (error) {
       console.error('Error saving profile:', error)
@@ -320,7 +320,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             </div>
 
             <div>
-              <Label htmlFor="accessCode" className="text-foreground">Zugangscode (mindestens 6 Zahlen) *</Label>
+              <Label htmlFor="accessCode" className="text-foreground">Access Code (at least 6 digits) *</Label>
               <div className="relative">
                 <Input
                   id="accessCode"
@@ -351,7 +351,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                 <p className="text-sm text-destructive mt-1">{accessCodeError}</p>
               )}
               <p className="text-xs text-muted-foreground mt-1">
-                Dein persönlicher Zugangscode für die App
+                Your personal access code for the app
               </p>
             </div>
             
@@ -383,7 +383,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             <div className="flex flex-col items-center justify-center">
               <Target className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-semibold text-foreground">Übungen</h3>
-              <p className="text-sm text-muted-foreground text-center">Präferenzen bearbeiten</p>
+              <p className="text-sm text-muted-foreground text-center">Edit preferences</p>
             </div>
           </div>
         </div>

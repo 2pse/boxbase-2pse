@@ -542,8 +542,8 @@ export default function Admin() {
         if (accessCodeError) {
           console.error('Error updating access code:', accessCodeError);
           toast({
-            title: "Warnung",
-            description: "Profil aktualisiert, aber Zugangscode konnte nicht geändert werden",
+            title: "Warning",
+            description: "Profile updated, but access code could not be changed",
             variant: "destructive",
           });
           // Don't return here - profile was updated successfully
@@ -1057,7 +1057,7 @@ export default function Admin() {
                 <DialogTrigger asChild>
                   <Button className="w-full sm:w-auto">
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Neues Mitglied
+                    New Member
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -1098,10 +1098,10 @@ export default function Admin() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Zugangscode *</label>
+                      <label className="text-sm font-medium">Access Code *</label>
                       <div className="flex gap-2">
                         <Input
-                          placeholder="Zugangscode"
+                          placeholder="Access Code"
                           value={newMemberCode}
                           onChange={(e) => setNewMemberCode(e.target.value.replace(/\s/g, ''))}
                           required
@@ -1246,8 +1246,8 @@ export default function Admin() {
                         <TableHeader>
                           <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead className="hidden md:table-cell">Zugangscode</TableHead>
-                            <TableHead>Mitgliedschaft</TableHead>
+                            <TableHead className="hidden md:table-cell">Access Code</TableHead>
+                            <TableHead>Membership</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="hidden sm:table-cell">Letzter Login</TableHead>
                             <TableHead>Aktionen</TableHead>
@@ -1452,10 +1452,10 @@ export default function Admin() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Zugangscode *</label>
+                <label className="text-sm font-medium">Access Code *</label>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Zugangscode"
+                    placeholder="Access Code"
                     value={editingMember.access_code || ''}
                     onChange={(e) => setEditingMember({
                       ...editingMember,
@@ -1484,7 +1484,7 @@ export default function Admin() {
                           });
                           toast({
                             title: "Erfolg",
-                            description: "Neuer Zugangscode generiert",
+                            description: "New access code generated",
                           });
                         } catch (error) {
                           console.error('Error updating access code:', error);
@@ -1497,7 +1497,7 @@ export default function Admin() {
                       }
                     }}
                   >
-                    Neu generieren
+                    Generate new
                   </Button>
                 </div>
               </div>
@@ -1524,7 +1524,7 @@ export default function Admin() {
                 
                 {/* Membership Plan Selection */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Mitgliedschaftsplan ändern</label>
+                  <label className="text-sm font-medium">Change membership plan</label>
                   <Select 
                     value={editSelectedMembershipPlan} 
                     onValueChange={setEditSelectedMembershipPlan}
