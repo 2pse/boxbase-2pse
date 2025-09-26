@@ -127,16 +127,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       if (error) throw error
 
       toast({
-        title: "Einstellung gespeichert",
-        description: visible ? "Du wirst im Leaderboard angezeigt." : "Du wirst nicht mehr im Leaderboard angezeigt.",
+        title: "Setting saved",
+        description: visible ? "You will be shown in the leaderboard." : "You will no longer be shown in the leaderboard.",
       })
     } catch (error) {
       console.error('Error saving leaderboard visibility:', error)
       // Rollback the state on error
       setLeaderboardVisible(!visible)
       toast({
-        title: "Fehler",
-        description: "Leaderboard-Einstellung konnte nicht gespeichert werden.",
+        title: "Error",
+        description: "Leaderboard setting could not be saved.",
         variant: "destructive"
       })
     }
@@ -168,7 +168,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       // Validate access code before saving
       if (!validateAccessCode(accessCode)) {
         toast({
-          title: "Fehler",
+          title: "Error",
           description: "Please check your access code.",
           variant: "destructive"
         })
@@ -200,8 +200,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     } catch (error) {
       console.error('Error saving profile:', error)
       toast({
-        title: "Fehler",
-        description: (error as any)?.message ?? "Profil konnte nicht gespeichert werden.",
+        title: "Error",
+        description: (error as any)?.message ?? "Profile could not be saved.",
         variant: "destructive"
       })
     }
@@ -214,8 +214,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       
       // Show loading state
       toast({
-        title: "Abmelden...",
-        description: "Du wirst abgemeldet.",
+        title: "Logging out...",
+        description: "You are being logged out.",
       })
 
       // Clear local storage first (immediate UI feedback)
@@ -238,8 +238,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       navigate('/')
       
       toast({
-        title: "Erfolgreich abgemeldet",
-        description: "Du wurdest erfolgreich abgemeldet.",
+        title: "Successfully logged out",
+        description: "You have been successfully logged out.",
       })
     } catch (error) {
       console.error('Error during logout:', error)
@@ -248,8 +248,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
       // Fallback: still navigate away even on error
       navigate('/')
       toast({
-        title: "Abgemeldet",
-        description: "Du wurdest abgemeldet.",
+        title: "Logged out",
+        description: "You have been logged out.",
         variant: "default"
       })
     }
@@ -271,16 +271,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     <div className="fixed inset-0 bg-background z-50 overflow-auto">
       <div className="max-w-2xl mx-auto p-4 pb-24">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Profil</h1>
+          <h1 className="text-2xl font-bold">Profile</h1>
           <Button onClick={onClose} variant="outline">
-            Schließen
+            Close
           </Button>
         </div>
 
-        {/* Basisdaten - immer sichtbar */}
+        {/* Basic Data - always visible */}
         <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-foreground">Basisdaten</h2>
+            <h2 className="text-xl font-semibold text-foreground">Basic Data</h2>
             <Button
               onClick={handleRefresh}
               variant="ghost"
@@ -309,12 +309,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             </div>
 
             <div>
-              <Label htmlFor="nickname" className="text-foreground">Spitzname (für andere sichtbar) *</Label>
+              <Label htmlFor="nickname" className="text-foreground">Nickname (visible to others) *</Label>
               <Input
                 id="nickname"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                placeholder="Dein Spitzname (optional)"
+                placeholder="Your nickname (optional)"
                 className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
               />
             </div>
@@ -356,7 +356,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             </div>
             
             <Button onClick={saveProfile} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]">
-              Profil speichern
+              Save Profile
             </Button>
           </div>
         </div>
@@ -369,13 +369,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           />
         </div>
 
-        {/* Navigation zu Kraftwerten und Übungen */}
+        {/* Navigation to Strength Values and Exercises */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
             <div className="flex flex-col items-center justify-center">
               <Dumbbell className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Kraftwerte</h3>
-              <p className="text-sm text-muted-foreground text-center">1RM Werte verwalten</p>
+              <h3 className="font-semibold text-foreground">Strength Values</h3>
+              <p className="text-sm text-muted-foreground text-center">Manage 1RM values</p>
             </div>
           </div>
           
@@ -388,10 +388,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Kontakt Kachel */}
+        {/* Contact Tile */}
         {(settings?.whatsapp_number || settings?.contact_email) && (
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-            <h2 className="text-xl font-semibold text-foreground mb-4">Kontakt</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Contact</h2>
             <div className="space-y-3">
               {settings?.whatsapp_number && (
                 <a
@@ -442,9 +442,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </div>
         )}
 
-        {/* Einstellungen - moved to end */}
+        {/* Settings - moved to end */}
         <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Einstellungen</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Settings</h2>
           <div className="space-y-4">
             {/* Dark Mode Toggle */}
             <div className="flex items-center justify-between">
@@ -467,7 +467,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Trophy className="h-4 w-4 text-foreground" />
-                <Label htmlFor="leaderboard-visible" className="text-foreground">Im Leaderboard anzeigen</Label>
+                <Label htmlFor="leaderboard-visible" className="text-foreground">Show in Leaderboard</Label>
               </div>
               <Switch
                 id="leaderboard-visible"
@@ -478,7 +478,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Abmelde Button - am Ende der Seite */}
+        {/* Logout Button - at the end of the page */}
         <div className="mt-8 mb-8">
           <Button 
             onClick={handleLogout} 
@@ -486,7 +486,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             size="lg"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            Abmelden
+            Log out
           </Button>
         </div>
       </div>

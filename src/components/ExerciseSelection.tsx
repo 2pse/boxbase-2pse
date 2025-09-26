@@ -95,8 +95,8 @@ const EXERCISES = [
   { category: "Kettlebell Movements", name: "KB Lunges" },
   { category: "Kettlebell Movements", name: "KB Turkish Get-Up" },
 
-  // Weitere
-  { category: "Weitere", name: "Wall Ball" },
+  // Other
+  { category: "Other", name: "Wall Ball" },
   { category: "Weitere", name: "Sandbag Clean" },
   { category: "Weitere", name: "Sandbag Carry" },
   { category: "Weitere", name: "Farmer's Carry" },
@@ -115,7 +115,7 @@ export const ExerciseSelection = () => {
     navigate('/pro?openProfile=true')
   }
   
-  // Standardmäßig alle Übungen ausgewählt (grün)
+  // By default all exercises are selected (green)
   const [selectedExercises, setSelectedExercises] = useState<string[]>(
     EXERCISES.map(ex => ex.name)
   )
@@ -164,14 +164,14 @@ export const ExerciseSelection = () => {
       if (error) throw error
 
       toast({
-        title: "Übungen gespeichert",
-        description: "Deine Übungspräferenzen wurden erfolgreich gespeichert."
+        title: "Exercises saved",
+        description: "Your exercise preferences have been successfully saved."
       })
     } catch (error) {
       console.error('Error saving exercise preferences:', error)
       toast({
-        title: "Fehler",
-        description: "Übungspräferenzen konnten nicht gespeichert werden.",
+        title: "Error",
+        description: "Exercise preferences could not be saved.",
         variant: "destructive"
       })
     }
@@ -210,7 +210,7 @@ export const ExerciseSelection = () => {
             <Button variant="outline" size="sm" onClick={handleBack}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold">Übungspräferenzen</h1>
+            <h1 className="text-2xl font-bold">Exercise Preferences</h1>
           </div>
         </div>
 
@@ -249,7 +249,7 @@ export const ExerciseSelection = () => {
         </Card>
 
         <Button onClick={saveExercisePreferences} className="w-full">
-          Übungspräferenzen speichern
+          Save Exercise Preferences
         </Button>
       </div>
     </div>

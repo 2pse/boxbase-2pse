@@ -214,7 +214,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
 
         if (error) throw error;
         console.log('Plan successfully updated');
-        toast.success('Plan erfolgreich aktualisiert');
+        toast.success('Plan successfully updated');
       } else {
         const { error } = await supabase
           .from('membership_plans_v2')
@@ -222,14 +222,14 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
 
         if (error) throw error;
         console.log('Plan successfully created');
-        toast.success('Plan erfolgreich erstellt');
+        toast.success('Plan successfully created');
       }
 
       onSave();
       onClose();
     } catch (error: any) {
       console.error('Submit error:', error);
-      toast.error('Fehler beim Speichern: ' + error.message);
+      toast.error('Error saving: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -358,11 +358,11 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
           <div className="space-y-4">
             {formData.booking_rules.type === 'limited' && (
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Buchungslimit konfigurieren</h3>
+                <h3 className="text-lg font-medium">Configure Booking Limit</h3>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="limit-count">Anzahl Buchungen</Label>
+                    <Label htmlFor="limit-count">Number of Bookings</Label>
                     <Input
                       id="limit-count"
                       type="number"
@@ -385,7 +385,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="limit-period">Zeitraum</Label>
+                    <Label htmlFor="limit-period">Time Period</Label>
                     <RadioGroup
                       value={formData.booking_rules.limit?.period ?? 'month'}
                       onValueChange={(value) => {
@@ -404,11 +404,11 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="week" id="week" />
-                        <Label htmlFor="week">Pro Woche</Label>
+                        <Label htmlFor="week">Per Week</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="month" id="month" />
-                        <Label htmlFor="month">Pro Monat</Label>
+                        <Label htmlFor="month">Per Month</Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -418,11 +418,11 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
 
             {formData.booking_rules.type === 'credits' && (
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Credits konfigurieren</h3>
+                <h3 className="text-lg font-medium">Configure Credits</h3>
                 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="initial-credits">Initiale Credits</Label>
+                    <Label htmlFor="initial-credits">Initial Credits</Label>
                     <Input
                       id="initial-credits"
                       type="number"
@@ -441,7 +441,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Credit-Aufladung</Label>
+                    <Label>Credit Refill</Label>
                     <RadioGroup
                       value={formData.booking_rules.credits?.refill_schedule ?? 'monthly'}
                       onValueChange={(value) => setFormData(prev => ({
@@ -457,11 +457,11 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="monthly" id="monthly" />
-                        <Label htmlFor="monthly">Monatlich</Label>
+                        <Label htmlFor="monthly">Monthly</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="never" id="never" />
-                        <Label htmlFor="never">Nur einmalig</Label>
+                        <Label htmlFor="never">One-time only</Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -500,9 +500,9 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
               
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Open Gym inklusive</Label>
+                  <Label>Open Gym included</Label>
                   <p className="text-sm text-muted-foreground">
-                    Zugang zum Open Gym enthalten
+                    Access to Open Gym included
                   </p>
                 </div>
                 <Switch
