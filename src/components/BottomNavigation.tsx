@@ -16,10 +16,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   userMembershipType
 }) => {
   const tabs = [
-    { id: 'members' as TabType, icon: Users, label: 'Mitglieder' },
-    { id: 'participants' as TabType, icon: Users, label: 'Kurs-Teilnehmer' },
-    { id: 'courses' as TabType, icon: Calendar, label: 'Kurse anlegen' },
-    { id: 'news' as TabType, icon: Newspaper, label: 'Aktuelles' },
+    { id: 'members' as TabType, icon: Users, label: 'Members' },
+    { id: 'participants' as TabType, icon: Users, label: 'Course Participants' },
+    { id: 'courses' as TabType, icon: Calendar, label: 'Create Courses' },
+    { id: 'news' as TabType, icon: Newspaper, label: 'News' },
     { id: 'workouts' as TabType, icon: Dumbbell, label: 'Workouts' }
   ]
 

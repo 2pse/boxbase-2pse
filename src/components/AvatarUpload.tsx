@@ -129,14 +129,14 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
       setShowCropDialog(false)
       setImageSrc("")
       toast({
-        title: "Profilbild hochgeladen",
-        description: "Ihr Profilbild wurde erfolgreich aktualisiert."
+        title: "Profile Picture Uploaded",
+        description: "Your profile picture has been successfully updated."
       })
     } catch (error) {
       console.error('Error uploading avatar:', error)
       toast({
-        title: "Fehler beim Hochladen",
-        description: "Das Profilbild konnte nicht hochgeladen werden.",
+        title: "Upload Error",
+        description: "The profile picture could not be uploaded.",
         variant: "destructive"
       })
     } finally {
@@ -184,7 +184,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
     <div className="flex flex-col items-center space-y-3">
       <div className="relative">
         <Avatar className={`${avatarSize}`}>
-          <AvatarImage src={currentAvatarUrl || ''} alt="Profilbild" />
+          <AvatarImage src={currentAvatarUrl || ''} alt="Profile Picture" />
           <AvatarFallback className="bg-primary text-primary-foreground">
             <User className="h-6 w-6" />
           </AvatarFallback>
@@ -206,7 +206,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
           className="w-full"
         >
           <Upload className="h-4 w-4 mr-2" />
-          {uploading ? "Hochladen..." : "Profilbild hochladen"}
+          {uploading ? "Uploading..." : "Upload Profile Picture"}
         </Button>
       ) : (
         <div className="flex gap-2">
@@ -243,14 +243,14 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
                   
                   onAvatarUpdate?.(null)
                   toast({
-                    title: "Profilbild gelöscht",
-                    description: "Das Profilbild wurde erfolgreich entfernt."
+                    title: "Profile Picture Deleted",
+                    description: "The profile picture has been successfully removed."
                   })
                 } catch (error) {
                   console.error('Error deleting avatar:', error)
                   toast({
-                    title: "Fehler beim Löschen",
-                    description: "Das Profilbild konnte nicht gelöscht werden.",
+                    title: "Delete Error",
+                    description: "The profile picture could not be deleted.",
                     variant: "destructive"
                   })
                 }
@@ -275,7 +275,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
       <Dialog open={showCropDialog} onOpenChange={setShowCropDialog}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Profilbild zuschneiden</DialogTitle>
+            <DialogTitle>Crop Profile Picture</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {imageSrc && (
@@ -300,14 +300,14 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
                     onClick={uploadCroppedAvatar} 
                     disabled={!completedCrop || uploading}
                   >
-                    {uploading ? "Hochladen..." : "Speichern"}
+                    {uploading ? "Uploading..." : "Save"}
                   </Button>
                   <Button 
                     variant="outline" 
                     onClick={() => setShowCropDialog(false)}
                     disabled={uploading}
                   >
-                    Abbrechen
+                    Cancel
                   </Button>
                 </div>
               </div>

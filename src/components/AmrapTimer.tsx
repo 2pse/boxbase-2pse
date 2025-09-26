@@ -31,7 +31,7 @@ export const AmrapTimer: React.FC = () => {
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Zurück
+          Back
         </Button>
       </div>
       
@@ -62,7 +62,7 @@ export const AmrapTimer: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              <span className="text-2xl font-medium">Minuten</span>
+              <span className="text-2xl font-medium">Minutes</span>
             </div>
 
             <Button

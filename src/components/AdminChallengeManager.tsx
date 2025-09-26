@@ -94,13 +94,13 @@ export default function AdminChallengeManager() {
 
       if (error) throw error;
 
-      toast.success('Challenge erfolgreich erstellt');
+      toast.success('Challenge successfully created');
       setShowCreateDialog(false);
       resetForm();
       loadChallenges();
     } catch (error) {
       console.error('Error creating challenge:', error);
-      toast.error('Fehler beim Erstellen der Challenge');
+      toast.error('Error creating challenge');
     }
   };
 
@@ -115,18 +115,18 @@ export default function AdminChallengeManager() {
 
       if (error) throw error;
 
-      toast.success('Challenge erfolgreich aktualisiert');
+      toast.success('Challenge successfully updated');
       setEditingChallenge(null);
       resetForm();
       loadChallenges();
     } catch (error) {
       console.error('Error updating challenge:', error);
-      toast.error('Fehler beim Aktualisieren der Challenge');
+      toast.error('Error updating challenge');
     }
   };
 
   const handleDeleteChallenge = async (challengeId: string) => {
-    if (!confirm('Challenge wirklich löschen?')) return;
+    if (!confirm('Really delete challenge?')) return;
 
     try {
       const { error } = await supabase
@@ -210,14 +210,14 @@ export default function AdminChallengeManager() {
         <TabsContent value="challenges" className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
-              <h3 className="text-xl font-semibold">Monats-Challenges</h3>
+              <h3 className="text-xl font-semibold">Monthly Challenges</h3>
               <p className="text-muted-foreground">
-                Verwalten Sie monatliche Fitness-Challenges für Ihre Mitglieder
+                Manage monthly fitness challenges for your members
               </p>
             </div>
             <Button onClick={() => setShowCreateDialog(true)} className="w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
-              Challenge erstellen
+              Create Challenge
             </Button>
           </div>
 
@@ -338,10 +338,10 @@ export default function AdminChallengeManager() {
         <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>
-              {editingChallenge ? 'Challenge bearbeiten' : 'Neue Challenge erstellen'}
+              {editingChallenge ? 'Edit Challenge' : 'Create New Challenge'}
             </DialogTitle>
             <DialogDescription>
-              Erstellen Sie eine neue monatliche Challenge für Ihre Mitglieder.
+              Create a new monthly challenge for your members.
             </DialogDescription>
           </DialogHeader>
 
@@ -432,10 +432,10 @@ export default function AdminChallengeManager() {
                 resetForm();
               }}
             >
-              Abbrechen
+              Cancel
             </Button>
             <Button onClick={editingChallenge ? handleUpdateChallenge : handleCreateChallenge}>
-              {editingChallenge ? 'Aktualisieren' : 'Erstellen'}
+              {editingChallenge ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>

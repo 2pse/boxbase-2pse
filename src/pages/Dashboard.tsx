@@ -423,7 +423,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
 
   const userName = user?.user_metadata?.display_name || 
                    user?.email?.split('@')[0] || 
-                   'Nutzer'
+                   'User'
 
   const totalDaysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
 
@@ -470,14 +470,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       setTrainingCount(prev => prev + 1)
       
       toast({
-        title: "Training gespeichert",
-        description: `${type === 'course' ? 'Kurs' : type === 'free_training' ? 'Freies Training' : 'Plan'} wurde erfolgreich eingetragen.`
+        title: "Training Saved",
+        description: `${type === 'course' ? 'Course' : type === 'free_training' ? 'Free Training' : 'Plan'} has been successfully recorded.`
       })
     } catch (error) {
       console.error('Error adding training:', error)
       toast({
-        title: "Fehler",
-        description: "Training konnte nicht gespeichert werden.",
+        title: "Error",
+        description: "Training could not be saved.",
         variant: "destructive"
       })
     }
@@ -496,8 +496,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       if (error) {
         console.error('Error removing training session:', error)
         toast({
-          title: "Fehler",
-          description: "Training konnte nicht entfernt werden.",
+          title: "Error",
+          description: "Training could not be removed.",
           variant: "destructive"
         })
         return
@@ -514,14 +514,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       setTrainingCount(prev => Math.max(0, prev - 1))
       
       toast({
-        title: "Training entfernt",
-        description: "Training wurde erfolgreich entfernt."
+        title: "Training Removed",
+        description: "Training has been successfully removed."
       })
     } catch (error) {
       console.error('Error removing training:', error)
       toast({
-        title: "Fehler",
-        description: "Training konnte nicht entfernt werden.",
+        title: "Error",
+        description: "Training could not be removed.",
         variant: "destructive"
       })
     }
@@ -639,8 +639,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 z-50">
         <div className="flex justify-around max-w-md mx-auto">
           {[
-            { id: 'home', icon: Home, label: 'Übersicht' },
-            ...(isOpenGym ? [] : [{ id: 'courses', icon: Calendar, label: 'Kurse' }]),
+            { id: 'home', icon: Home, label: 'Overview' },
+            ...(isOpenGym ? [] : [{ id: 'courses', icon: Calendar, label: 'Courses' }]),
             { id: 'wod', icon: Weight, label: 'WOD' },
             { id: 'leaderboard', icon: Trophy, label: 'Leaderboard' }
           ].map((tab) => {

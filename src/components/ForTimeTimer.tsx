@@ -31,7 +31,7 @@ export const ForTimeTimer: React.FC = () => {
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Zurück
+          Back
         </Button>
       </div>
       
@@ -39,7 +39,7 @@ export const ForTimeTimer: React.FC = () => {
         <div className="max-w-md w-full">
           <div className="text-center mb-8">
             <h1 className="text-6xl font-bold mb-4">For Time</h1>
-            <p className="text-xl text-muted-foreground">So schnell wie möglich</p>
+            <p className="text-xl text-muted-foreground">As fast as possible</p>
           </div>
 
           <div className="space-y-8">

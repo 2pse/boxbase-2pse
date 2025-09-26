@@ -206,8 +206,8 @@ export default function Admin() {
           loadMembers();
         } else {
           toast({
-            title: "Fehler",
-            description: "Keine Admin-Berechtigung",
+            title: "Error",
+            description: "No admin authorization",
             variant: "destructive",
           });
           navigate("/pro");
@@ -257,8 +257,8 @@ export default function Admin() {
       if (profilesError) {
         console.error('Error loading profiles:', profilesError);
         toast({
-          title: "Fehler",
-          description: "Fehler beim Laden der Mitglieder",
+          title: "Error",
+          description: "Error loading members",
           variant: "destructive",
         });
         return;
@@ -339,8 +339,8 @@ export default function Admin() {
     } catch (error) {
       console.error('Error loading members:', error);
       toast({
-        title: "Fehler",
-        description: "Fehler beim Laden der Mitglieder",
+        title: "Error",
+        description: "Error loading members",
         variant: "destructive",
       });
     }
@@ -351,8 +351,8 @@ export default function Admin() {
     
     if (!newMemberFirstName || !newMemberEmail || !newMemberCode || !selectedMembershipPlan) {
       toast({
-        title: "Fehler",
-        description: "Bitte alle Pflichtfelder ausfüllen (Vorname, E-Mail, Zugangscode, Mitgliedschaftsplan)",
+        title: "Error",
+        description: "Please fill in all required fields (First name, Email, Access code, Membership plan)",
         variant: "destructive",
       });
       return;
@@ -362,8 +362,8 @@ export default function Admin() {
     const selectedPlan = availablePlans.find(plan => plan.id === selectedMembershipPlan);
     if (!selectedPlan) {
       toast({
-        title: "Fehler",
-        description: "Bitte wählen Sie einen gültigen Mitgliedschaftsplan",
+        title: "Error",
+        description: "Please select a valid membership plan",
         variant: "destructive",
       });
       return;
@@ -377,8 +377,8 @@ export default function Admin() {
       const selectedPlan = availablePlans.find(p => p.id === selectedMembershipPlan);
       if (!selectedPlan) {
         toast({
-          title: "Fehler",
-          description: "Ungültiger Mitgliedschaftsplan ausgewählt",
+          title: "Error",
+          description: "Invalid membership plan selected",
           variant: "destructive",
         });
         return;
@@ -409,10 +409,10 @@ export default function Admin() {
 
       if (functionError || !result?.success) {
         console.error('Error creating member:', functionError || result?.error);
-        const errorMessage = functionError?.message || result?.error || 'Unbekannter Fehler';
+        const errorMessage = functionError?.message || result?.error || 'Unknown error';
         toast({
-          title: "Fehler",
-          description: `Fehler beim Erstellen des Mitglieds: ${errorMessage}`,
+          title: "Error",
+          description: `Error creating member: ${errorMessage}`,
           variant: "destructive",
         });
         return;
@@ -451,14 +451,14 @@ export default function Admin() {
       if (membershipError) {
         console.error('Error creating user membership:', membershipError);
         toast({
-          title: "Warnung",
-          description: "Mitglied erstellt, aber Mitgliedschaft konnte nicht zugewiesen werden",
+          title: "Warning",
+          description: "Member created, but membership could not be assigned",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Erfolg",
-          description: "Mitglied erfolgreich erstellt",
+          title: "Success",
+          description: "Member successfully created",
           variant: "default",
         });
         
@@ -483,8 +483,8 @@ export default function Admin() {
     } catch (error) {
       console.error('Error creating member:', error);
       toast({
-        title: "Fehler",
-        description: "Unerwarteter Fehler beim Erstellen des Mitglieds",
+        title: "Error",
+        description: "Unexpected error creating member",
         variant: "destructive",
       });
     }
@@ -1062,9 +1062,9 @@ export default function Admin() {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Neues Mitglied erstellen</DialogTitle>
+                    <DialogTitle>Create New Member</DialogTitle>
                     <DialogDescription>
-                      Erstellen Sie einen neuen Mitgliederaccount mit individueller Mitgliedschaftskonfiguration
+                      Create a new member account with individual membership configuration
                     </DialogDescription>
                   </DialogHeader>
                   <form onSubmit={handleCreateMember} className="space-y-6">
@@ -1149,15 +1149,15 @@ export default function Admin() {
                           checked={newMemberIsAuthor}
                           onChange={(e) => setNewMemberIsAuthor(e.target.checked)}
                         />
-                        <label htmlFor="isAuthor" className="text-sm font-medium">Kann Workouts erstellen</label>
+                        <label htmlFor="isAuthor" className="text-sm font-medium">Can Create Workouts</label>
                       </div>
 
                     </div>
 
                     <div className="flex gap-2 pt-4">
-                      <Button type="submit">Mitglied erstellen</Button>
+                      <Button type="submit">Create Member</Button>
                       <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
-                        Abbrechen
+                        Cancel
                       </Button>
                     </div>
                   </form>
@@ -1406,9 +1406,9 @@ export default function Admin() {
         }}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Mitglied bearbeiten: {editingMember.display_name}</DialogTitle>
+              <DialogTitle>Edit Member: {editingMember.display_name}</DialogTitle>
               <DialogDescription>
-                Bearbeiten Sie Mitgliederdaten und Mitgliedschaftskonfiguration
+                Edit member data and membership configuration
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleEditSave} className="space-y-6">
@@ -1576,7 +1576,7 @@ export default function Admin() {
                             size="sm"
                             className="flex-1 sm:flex-none"
                           >
-                            Aufladen
+                            Add
                           </Button>
                         </div>
                       </div>
@@ -1585,7 +1585,7 @@ export default function Admin() {
                         onClick={() => handleManageCredits()}
                         className="w-full sm:w-auto sm:mt-6"
                       >
-                        Credits {isSubtracting ? 'abziehen' : 'aufladen'}
+                        {isSubtracting ? 'Subtract' : 'Add'} Credits
                       </Button>
                     </div>
                   </div>
@@ -1602,14 +1602,14 @@ export default function Admin() {
                       authors: e.target.checked
                     })}
                   />
-                  <label htmlFor="editAuthors" className="text-sm font-medium">Kann Workouts erstellen</label>
+                  <label htmlFor="editAuthors" className="text-sm font-medium">Can Create Workouts</label>
                 </div>
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button type="submit">Mitglied speichern</Button>
+                <Button type="submit">Save Member</Button>
                 <Button type="button" variant="outline" onClick={() => setEditDialogOpen(false)}>
-                  Abbrechen
+                  Cancel
                 </Button>
               </div>
             </form>
@@ -1621,19 +1621,19 @@ export default function Admin() {
       <AlertDialog open={!!memberToDelete} onOpenChange={() => setMemberToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Mitglied löschen</AlertDialogTitle>
+            <AlertDialogTitle>Delete Member</AlertDialogTitle>
             <AlertDialogDescription>
               Sind Sie sicher, dass Sie das Mitglied "{memberToDelete?.display_name || memberToDelete?.first_name + ' ' + memberToDelete?.last_name}" 
-              dauerhaft löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+              permanently delete? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={() => memberToDelete && deleteMember(memberToDelete)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Löschen
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

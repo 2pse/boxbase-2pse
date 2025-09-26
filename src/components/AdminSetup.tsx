@@ -24,19 +24,19 @@ export const AdminSetup = () => {
 
       if (error) {
         console.error('Error from edge function:', error);
-        toast.error(`Fehler beim Erstellen des Admin-Users: ${error.message}`);
+        toast.error(`Error creating admin user: ${error.message}`);
         return;
       }
 
       if (data?.success) {
-        toast.success("Admin-User erfolgreich erstellt!");
+        toast.success("Admin user successfully created!");
         setAdminCreated(true);
       } else {
-        toast.error("Fehler beim Erstellen des Admin-Users");
+        toast.error("Error creating admin user");
       }
     } catch (err) {
       console.error('Network error:', err);
-      toast.error(`Netzwerkfehler: ${err.message}`);
+      toast.error(`Network error: ${err.message}`);
     }
     setLoading(false);
   };
@@ -45,26 +45,26 @@ export const AdminSetup = () => {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="text-green-600">✓ Admin-User erstellt</CardTitle>
+          <CardTitle className="text-green-600">✓ Admin User Created</CardTitle>
           <CardDescription>
-            Der Admin-User wurde erfolgreich erstellt:
+            The admin user has been successfully created:
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2 text-sm">
             <p><strong>Email:</strong> fitness@app.com</p>
-            <p><strong>Passwort:</strong> 2025</p>
+            <p><strong>Password:</strong> 2025</p>
           </div>
           
           <Button 
             onClick={() => window.location.reload()} 
             className="w-full"
           >
-            Jetzt einloggen
+            Login Now
           </Button>
           
           <p className="text-xs text-muted-foreground text-center">
-            Klicken Sie auf "Jetzt einloggen" um sich mit den obigen Daten anzumelden.
+            Click "Login Now" to sign in with the credentials above.
           </p>
         </CardContent>
       </Card>
@@ -74,9 +74,9 @@ export const AdminSetup = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Admin-User erstellen</CardTitle>
+        <CardTitle>Create Admin User</CardTitle>
         <CardDescription>
-          Erstellen Sie zuerst einen Admin-User für die Verwaltung der App.
+          First create an admin user for managing the app.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -85,12 +85,12 @@ export const AdminSetup = () => {
           disabled={loading}
           className="w-full"
         >
-          {loading ? "Erstelle Admin-User..." : "Admin-User erstellen"}
+          {loading ? "Creating Admin User..." : "Create Admin User"}
         </Button>
         
         <div className="mt-4 text-xs text-muted-foreground">
           <p><strong>Email:</strong> fitness@app.com</p>
-          <p><strong>Passwort:</strong> 2025</p>
+          <p><strong>Password:</strong> 2025</p>
         </div>
       </CardContent>
     </Card>
