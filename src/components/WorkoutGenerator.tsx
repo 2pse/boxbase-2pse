@@ -154,17 +154,36 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
   const generateBodybuildingWorkout = async () => {
     if (!bodybuilding.focus || !bodybuilding.difficulty) return
 
+    // Map English difficulty to German (for database query)
+    const difficultyMap = {
+      'Easy': 'Leicht',
+      'Medium': 'Mittel', 
+      'Hard': 'Schwer'
+    }
+
+    // Map English focus to German (for database query)
+    const focusMap = {
+      'Push': 'Push',
+      'Pull': 'Pull',
+      'Lower Body': 'Unterkörper',
+      'Upper Body': 'Oberkörper',
+      'Full Body': 'Ganzkörper'
+    }
+
+    const dbDifficulty = difficultyMap[bodybuilding.difficulty as keyof typeof difficultyMap]
+    const dbFocus = focusMap[bodybuilding.focus as keyof typeof focusMap]
+
     try {
       const { data, error } = await supabase
         .from('bodybuilding_workouts')
         .select('*')
-        .eq('focus_area', bodybuilding.focus)
-        .eq('difficulty', bodybuilding.difficulty)
+        .eq('focus_area', dbFocus)
+        .eq('difficulty', dbDifficulty)
 
       if (error) throw error
 
       if (!data || data.length === 0) {
-        toast.error("Keine passenden Workouts gefunden.")
+        toast.error("No matching workouts found.")
         return
       }
 
@@ -186,7 +205,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
       }
     } catch (error) {
       console.error('Error generating new workout:', error)
-      toast.error("Fehler beim Generieren des neuen Workouts")
+      toast.error("Error generating new workout")
     } finally {
       setIsGenerating(false)
     }
@@ -363,7 +382,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                   onClick={() => setShowPercentageCalculator(true)}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl font-bold">Prozentrechner</h3>
+                    <h3 className="text-xl font-bold">Percentage Calculator</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">
                       Calculate your<br />
                       training weights
@@ -426,7 +445,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
           {step === 3 && workoutType === "crossfit" && (
             <div className="space-y-6">
               <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl mx-4">
-                <h4 className="font-semibold mb-2">Deine Auswahl:</h4>
+                <h4 className="font-semibold mb-2">Your Selection:</h4>
                 <p className="text-muted-foreground">Functional Fitness - {crossfitType}</p>
               </div>
 
@@ -448,7 +467,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
           {step === 4 && workoutType === "bodybuilding" && (
             <div className="space-y-6">
               <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl mx-4">
-                <h4 className="font-semibold mb-2">Deine Auswahl:</h4>
+                <h4 className="font-semibold mb-2">Your Selection:</h4>
                 <p className="text-muted-foreground">Bodybuilding - {bodybuilding.focus} ({bodybuilding.difficulty})</p>
               </div>
 
