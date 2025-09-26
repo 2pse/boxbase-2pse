@@ -149,7 +149,7 @@ serve(async (req) => {
         }
       } catch (error) {
         console.error(`[sync-access-codes] Exception for user ${profile.user_id}:`, error);
-        results.push({ user_id: profile.user_id, success: false, error: error.message });
+        results.push({ user_id: profile.user_id, success: false, error: error instanceof Error ? error.message : String(error) });
         errorCount++;
       }
     }
@@ -170,7 +170,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('[sync-access-codes] Unexpected error:', error);
     return new Response(
-      JSON.stringify({ error: 'Interner Serverfehler', details: error.message }),
+      JSON.stringify({ error: 'Interner Serverfehler', details: error instanceof Error ? error.message : String(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

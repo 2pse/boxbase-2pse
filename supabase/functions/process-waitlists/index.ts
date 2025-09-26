@@ -212,7 +212,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: 'Failed to process waitlists', 
-        details: error.message,
+        details: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString()
       }),
       { 

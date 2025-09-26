@@ -138,10 +138,10 @@ serve(async (req) => {
       });
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in manage-credits function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message || 'An error occurred while managing credits' 
+      error: error instanceof Error ? error.message : 'An error occurred while managing credits' 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
