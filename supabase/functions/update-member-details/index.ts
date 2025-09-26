@@ -25,9 +25,14 @@ serve(async (req) => {
   }
 
   try {
+    console.log(`[update-member-details] Request method: ${req.method}`);
+    
     // Get the authorization header
     const authHeader = req.headers.get('Authorization');
+    console.log(`[update-member-details] Auth header present: ${!!authHeader}`);
+    
     if (!authHeader) {
+      console.error('[update-member-details] Missing authorization header');
       return new Response(
         JSON.stringify({ error: 'Missing authorization header' }),
         { 
@@ -55,7 +60,7 @@ serve(async (req) => {
     // Verify user is authenticated and has admin role
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      console.error('Authentication failed:', authError);
+      console.error('[update-member-details] Authentication failed:', authError);
       return new Response(
         JSON.stringify({ error: 'Unauthorized - authentication failed' }),
         { 
@@ -65,7 +70,7 @@ serve(async (req) => {
       );
     }
     
-    console.log('User authenticated successfully:', user.id);
+    console.log('[update-member-details] User authenticated successfully:', user.id);
 
     // Check if user has admin role
     const { data: roleData } = await supabase
@@ -75,6 +80,7 @@ serve(async (req) => {
       .single();
 
     if (roleData?.role !== 'admin') {
+      console.error('[update-member-details] User does not have admin role:', roleData);
       return new Response(
         JSON.stringify({ error: 'Admin access required' }),
         { 
@@ -84,8 +90,15 @@ serve(async (req) => {
       );
     }
 
+    console.log('[update-member-details] Admin access confirmed');
+
     // Parse request body
     const { userId, profileData, email }: UpdateMemberRequest = await req.json();
+    console.log(`[update-member-details] Request body:`, { 
+      userId, 
+      hasProfileData: !!profileData,
+      hasEmail: !!email 
+    });
 
     if (!userId) {
       return new Response(
@@ -97,7 +110,7 @@ serve(async (req) => {
       );
     }
 
-    console.log(`Updating member ${userId}:`, { profileData, email });
+    console.log(`[update-member-details] Updating member ${userId}:`, { profileData, email });
 
     // Update profile data in profiles table
     if (profileData) {
@@ -107,7 +120,7 @@ serve(async (req) => {
         .eq('user_id', userId);
 
       if (profileError) {
-        console.error('Profile update error:', profileError);
+        console.error('[update-member-details] Profile update error:', profileError);
         return new Response(
           JSON.stringify({ error: 'Failed to update profile', details: profileError }),
           { 
@@ -116,6 +129,8 @@ serve(async (req) => {
           }
         );
       }
+      
+      console.log(`[update-member-details] Profile updated successfully`);
     }
 
     // Update email in auth.users if provided
@@ -126,7 +141,7 @@ serve(async (req) => {
       );
 
       if (emailError) {
-        console.error('Email update error:', emailError);
+        console.error('[update-member-details] Email update error:', emailError);
         return new Response(
           JSON.stringify({ error: 'Failed to update email', details: emailError }),
           { 
@@ -135,9 +150,11 @@ serve(async (req) => {
           }
         );
       }
+      
+      console.log(`[update-member-details] Email updated successfully`);
     }
 
-    console.log(`Successfully updated member ${userId}`);
+    console.log(`[update-member-details] Successfully updated member ${userId}`);
 
     return new Response(
       JSON.stringify({ 
@@ -151,7 +168,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in update-member-details function:', error);
+    console.error('[update-member-details] Error in update-member-details function:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
       { 
