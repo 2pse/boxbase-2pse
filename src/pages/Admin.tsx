@@ -1287,11 +1287,11 @@ export default function Admin() {
                                    {member.status === 'active' ? 'Active' : 'Inactive'}
                                  </span>
                                </TableCell>
-                               <TableCell className="hidden sm:table-cell">
-                                 {member.last_login_at 
-                                   ? new Date(member.last_login_at).toLocaleDateString('de-DE')
-                                   : 'Never'
-                                 }
+                                <TableCell className="hidden sm:table-cell">
+                                  {member.last_login_at 
+                                    ? new Date(member.last_login_at).toLocaleDateString('en-US')
+                                    : 'Never'
+                                  }
                                </TableCell>
                                <TableCell>
                                  <div className="flex gap-1">

@@ -56,7 +56,7 @@ export const EmomTimer: React.FC = () => {
           <div className="space-y-8">
             <div className="space-y-6">
               <div className="flex items-center justify-center gap-6">
-                <span className="text-2xl font-medium">Alle</span>
+                <span className="text-2xl font-medium">Every</span>
                 <Select value={interval.toString()} onValueChange={(value) => setInterval(Number(value))}>
                   <SelectTrigger 
                     className="w-32 h-16 text-center text-2xl border-2 bg-background rounded-xl"
@@ -78,7 +78,7 @@ export const EmomTimer: React.FC = () => {
               </div>
               
               <div className="flex items-center justify-center gap-6">
-                <span className="text-2xl font-medium">für</span>
+                <span className="text-2xl font-medium">for</span>
                 <Select value={rounds.toString()} onValueChange={(value) => setRounds(Number(value))}>
                   <SelectTrigger 
                     className="w-24 h-16 text-center text-2xl border-2 bg-background rounded-xl"

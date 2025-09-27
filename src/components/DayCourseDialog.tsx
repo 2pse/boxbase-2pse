@@ -598,7 +598,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('de-DE', {
+    return date.toLocaleDateString('en-US', {
       weekday: 'long',
       day: '2-digit',
       month: '2-digit'
@@ -758,7 +758,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                   className="w-full"
                   variant="outline"
                 >
-                  QR-Code für Open Gym scannen
+                  Scan QR Code for Open Gym
                 </Button>
               </div>
             )}

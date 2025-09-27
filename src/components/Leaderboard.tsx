@@ -241,7 +241,7 @@ export const Leaderboard: React.FC = () => {
     }
   }
 
-  const currentMonth = new Date().toLocaleDateString('de-DE', { 
+  const currentMonth = new Date().toLocaleDateString('en-US', { 
     month: 'long', 
     year: 'numeric' 
   })

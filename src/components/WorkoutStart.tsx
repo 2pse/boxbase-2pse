@@ -216,7 +216,7 @@ export const WorkoutStart: React.FC = () => {
                 </Button>
               </div>
               
-              <p className="text-xl text-muted-foreground">Klicke hier um zu starten</p>
+              <p className="text-xl text-muted-foreground">Click here to start</p>
             </div>
           )}
 
@@ -225,7 +225,7 @@ export const WorkoutStart: React.FC = () => {
               <h1 className={`text-8xl font-bold ${countdown <= 3 ? 'text-primary animate-pulse' : ''}`}>
                 {countdown}
               </h1>
-              <p className="text-xl text-muted-foreground">Bereit machen...</p>
+              <p className="text-xl text-muted-foreground">Get ready...</p>
             </div>
           )}
 
@@ -237,15 +237,15 @@ export const WorkoutStart: React.FC = () => {
                 )}
                 {type === 'emom' && (
                   <div className="mt-6">
-                    <p className="text-2xl">Runde {currentRound} von {settings.rounds}</p>
+                    <p className="text-2xl">Round {currentRound} of {settings.rounds}</p>
                     <p className="text-xl text-muted-foreground">
-                      Rundenzeit: {formatTime(roundTime)}
+                      Round Time: {formatTime(roundTime)}
                     </p>
                   </div>
                 )}
                 {type === 'tabata' && (
                   <div className="mt-6">
-                    <p className="text-2xl mb-8">Runde {currentRound} von {settings.rounds}</p>
+                    <p className="text-2xl mb-8">Round {currentRound} of {settings.rounds}</p>
                     <div className="space-y-4">
                       <p className={`text-8xl font-bold ${isWorkPhase ? 'text-primary' : 'text-muted-foreground'}`}>
                         {formatTime((isWorkPhase ? settings.workSeconds! : settings.restSeconds!) - roundTime)}
@@ -254,7 +254,7 @@ export const WorkoutStart: React.FC = () => {
                         {isWorkPhase ? 'WORK' : 'REST'}
                       </p>
                       <p className="text-xl text-muted-foreground mt-8">
-                        Gesamt: {formatTime(workoutTime)}
+                        Total: {formatTime(workoutTime)}
                       </p>
                     </div>
                   </div>
@@ -285,13 +285,13 @@ export const WorkoutStart: React.FC = () => {
 
           {isFinished && (
             <div className="text-center space-y-12">
-              <h1 className="text-6xl font-bold">FERTIG!</h1>
-              <p className="text-3xl">Zeit: {formatTime(workoutTime)}</p>
+              <h1 className="text-6xl font-bold">FINISHED!</h1>
+              <p className="text-3xl">Time: {formatTime(workoutTime)}</p>
               {type === 'emom' && (
-                <p className="text-2xl">Runden: {currentRound - 1} von {settings.rounds}</p>
+                <p className="text-2xl">Rounds: {currentRound - 1} of {settings.rounds}</p>
               )}
               {type === 'tabata' && (
-                <p className="text-2xl">Runden: {currentRound - 1} von {settings.rounds}</p>
+                <p className="text-2xl">Rounds: {currentRound - 1} of {settings.rounds}</p>
               )}
               
               <Button
@@ -299,7 +299,7 @@ export const WorkoutStart: React.FC = () => {
                 size="lg"
                 className="w-full h-16 text-xl"
               >
-                Neuer Versuch
+                Try Again
               </Button>
             </div>
           )}

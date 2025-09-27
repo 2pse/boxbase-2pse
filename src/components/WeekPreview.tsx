@@ -52,7 +52,7 @@ export const WeekPreview: React.FC<WeekPreviewProps> = ({ user, userRole, primar
         
         weekDays.push({
           date: dateString,
-          dayName: currentDate.toLocaleDateString('de-DE', { weekday: 'short' }),
+          dayName: currentDate.toLocaleDateString('en-US', { weekday: 'short' }),
           dayNumber: currentDate.getDate(),
           isToday: i === 0,
           hasRegistration: false,

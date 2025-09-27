@@ -43,7 +43,7 @@ export const BookingPatternsCard = () => {
       
       registrations?.forEach(registration => {
         const courseDate = new Date(registration.courses.course_date)
-        const dayOfWeek = courseDate.toLocaleDateString('de-DE', { weekday: 'short' })
+        const dayOfWeek = courseDate.toLocaleDateString('en-US', { weekday: 'short' })
         
         // Extract hour from start_time (format: "HH:MM:SS")
         const startTime = registration.courses.start_time

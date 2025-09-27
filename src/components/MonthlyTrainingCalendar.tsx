@@ -143,11 +143,11 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
     const currentDay = getCurrentDay()
     
     if (trainingDays.has(day)) {
-      return "bg-green-500" // Trainiert - grün
+      return "bg-green-500" // Trained - green
     } else if (day < currentDay) {
-      return "bg-red-500" // Verpasst - rot
+      return "bg-red-500" // Missed - red
     } else {
-      return "bg-gray-400" // Zukünftig - grau (auch wenn angemeldet)
+      return "bg-gray-400" // Future - gray (even if registered)
     }
   }
 
@@ -157,18 +157,18 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
     const isTrained = trainingDays.has(day)
     
     if (day < currentDay) {
-      // Vergangene Tage
+      // Past days
       if (isTrained) {
-        return "!border-2 !border-green-500" // Trainiert - grüner Rahmen
+        return "!border-2 !border-green-500" // Trained - green border
       } else {
-        return "!border-2 !border-red-500" // Nicht trainiert - roter Rahmen
+        return "!border-2 !border-red-500" // Not trained - red border
       }
     } else {
-      // Zukünftige Tage
+      // Future days
       if (isRegistered) {
-        return "!border-2 !border-green-400" // Angemeldet - grüner Rahmen
+        return "!border-2 !border-green-400" // Registered - green border
       } else {
-        return "border border-gray-400" // Nicht angemeldet - grauer Rahmen
+        return "border border-gray-400" // Not registered - gray border
       }
     }
   }
@@ -197,14 +197,14 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
           <div
             key={day}
             className={`w-3 h-3 rounded-full ${getDayStatus(day)} ${getDayBorderClass(day)} transition-all duration-200 relative flex items-center justify-center`}
-            title={`Tag ${day}: ${
+            title={`Day ${day}: ${
               trainingDays.has(day) 
-                ? 'Trainiert' 
+                ? 'Trained' 
                 : isRegistered
-                ? 'Angemeldet für Kurs'
+                ? 'Registered for course'
                 : day < getCurrentDay() 
-                ? 'Nicht trainiert' 
-                : 'Zukünftiger Tag'
+                ? 'Not trained' 
+                : 'Future day'
             }`}
           >
           </div>

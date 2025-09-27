@@ -52,7 +52,7 @@ export const TrainingSessionDialog: React.FC<TrainingSessionDialogProps> = ({
             {hasExistingSession ? 'Training ändern' : 'Training hinzufügen'}
           </DialogTitle>
           <p className="text-center text-muted-foreground">
-            {date.toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })} (Tag {dayNumber})
+            {date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' })} (Day {dayNumber})
           </p>
         </DialogHeader>
         

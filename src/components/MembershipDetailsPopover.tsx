@@ -159,8 +159,8 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
   }
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'Nicht verfügbar'
-    return new Date(dateStr).toLocaleDateString('de-DE')
+    if (!dateStr) return 'Not available'
+    return new Date(dateStr).toLocaleDateString('en-US')
   }
 
   const getMembershipIcon = (type: string | null) => {

@@ -208,7 +208,7 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
     }
   }, [user.id])
 
-  const currentMonth = new Date().toLocaleDateString('de-DE', { 
+  const currentMonth = new Date().toLocaleDateString('en-US', { 
     month: 'long', 
     year: 'numeric' 
   })

@@ -205,7 +205,7 @@ export const FinanceReport = () => {
           
         Object.entries(plans).forEach(([planId, data]) => {
           chartData.push({
-            month: new Date(month + '-01').toLocaleDateString('de-DE', { month: 'short', year: 'numeric' }),
+            month: new Date(month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
             booking_type: data.booking_type,
             membership_name: data.name,
             member_count: data.count,
@@ -233,7 +233,7 @@ export const FinanceReport = () => {
         .slice(0, 12) // Last 12 months
         .map(item => ({
           ...item,
-          month: new Date(item.month + '-01').toLocaleDateString('de-DE', { month: 'short', year: 'numeric' })
+          month: new Date(item.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
         }))
         .reverse() // Show oldest to newest for chart
 

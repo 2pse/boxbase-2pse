@@ -238,7 +238,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Trainer: {course.trainer} • {new Date(course.course_date).toLocaleDateString('de-DE')} • {course.start_time.slice(0, 5)} - {course.end_time.slice(0, 5)}
+            Trainer: {course.trainer} • {new Date(course.course_date).toLocaleDateString('en-US')} • {course.start_time.slice(0, 5)} - {course.end_time.slice(0, 5)}
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -264,7 +264,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                       <div className="flex flex-col min-w-0 flex-1">
                         <span className="font-medium truncate">{participant.display_name}</span>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(participant.registered_at).toLocaleDateString('de-DE')}
+                          {new Date(participant.registered_at).toLocaleDateString('en-US')}
                         </span>
                       </div>
                     </div>
@@ -308,7 +308,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                         <div className="flex flex-col min-w-0 flex-1">
                           <span className="font-medium truncate">{participant.display_name}</span>
                           <span className="text-xs text-muted-foreground">
-                            {new Date(participant.registered_at).toLocaleDateString('de-DE')}
+                            {new Date(participant.registered_at).toLocaleDateString('en-US')}
                           </span>
                         </div>
                       </div>

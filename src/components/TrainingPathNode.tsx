@@ -101,7 +101,7 @@ export const TrainingPathNode: React.FC<TrainingPathNodeProps> = ({
       
       <div className="text-center">
         <div className="text-xs text-muted-foreground">
-          {date.toLocaleDateString('de-DE', { weekday: 'long' })}
+          {date.toLocaleDateString('en-US', { weekday: 'long' })}
         </div>
         {(status === 'current' || status === 'completed') && workoutType && (
           <div className="text-xs font-medium mt-1">

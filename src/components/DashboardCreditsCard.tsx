@@ -240,17 +240,17 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
       </PopoverTrigger>
       <PopoverContent className="w-80 p-4">
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold">Mitgliedschaftsdetails</h3>
+          <h3 className="text-lg font-semibold">Membership Details</h3>
           {membershipInfo.type === 'credits' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Credits Plan'}</p>
-              <p className="text-sm">Verbleibende Credits: <span className="font-semibold">{membershipInfo.remainingCredits}</span></p>
+              <p className="text-sm">Remaining Credits: <span className="font-semibold">{membershipInfo.remainingCredits}</span></p>
             </div>
           )}
           {membershipInfo.type === 'unlimited' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Unlimited'}</p>
-              <p className="text-sm">Unbegrenzte Kursbuchungen verfügbar</p>
+              <p className="text-sm">Unlimited course bookings available</p>
             </div>
           )}
           {membershipInfo.type === 'monthly_limit' && (
