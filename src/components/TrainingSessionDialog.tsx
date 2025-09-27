@@ -67,7 +67,7 @@ export const TrainingSessionDialog: React.FC<TrainingSessionDialogProps> = ({
               <div className="text-left">
                 <div className="font-medium">Open Gym</div>
                 <div className="text-sm text-muted-foreground">
-                  QR Code scannen fürs Leaderboard
+                  Scan QR code for leaderboard
                 </div>
               </div>
             </Button>

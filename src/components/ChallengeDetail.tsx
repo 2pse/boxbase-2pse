@@ -141,7 +141,7 @@ export default function ChallengeDetail({
           console.error('Error awarding badge:', badgeError);
         }
 
-        toast.success('🏆 Challenge abgeschlossen! Badge erhalten!');
+        toast.success('🏆 Challenge completed! Badge earned!');
       } else {
         toast.success('Checkpoint added!');
       }
@@ -179,7 +179,7 @@ export default function ChallengeDetail({
       onProgressUpdate();
     } catch (error) {
       console.error('Error initializing progress:', error);
-      toast.error('Fehler beim Initialisieren des Fortschritts');
+      toast.error('Error initializing progress');
     }
   };
 
@@ -270,10 +270,10 @@ export default function ChallengeDetail({
                 <div className="text-center p-4 bg-primary/5 border border-primary/20 rounded-lg">
                   <Trophy className="w-8 h-8 mx-auto mb-2 text-primary" />
                   <p className="font-medium text-primary">
-                    Glückwunsch! Challenge abgeschlossen!
+                    Congratulations! Challenge completed!
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Du hast {challenge.bonus_points} Bonus-Punkte erhalten.
+                    You have earned {challenge.bonus_points} bonus points.
                   </p>
                 </div>
               )}
@@ -281,15 +281,15 @@ export default function ChallengeDetail({
           ) : (
             <div className="text-center p-6 border border-dashed rounded-lg">
               <Target className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-medium mb-2">Challenge starten</h3>
+              <h3 className="font-medium mb-2">Start Challenge</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Beginnen Sie mit dieser Challenge und verfolgen Sie Ihren Fortschritt.
+                Begin this challenge and track your progress.
               </p>
               <Button 
                 onClick={initializeProgress}
                 style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
               >
-                Challenge beitreten
+                Join Challenge
               </Button>
             </div>
           )}

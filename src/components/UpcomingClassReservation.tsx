@@ -330,13 +330,13 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
             {/* Participants */}
             <div className="space-y-3">
               <h4 className="font-medium text-sm text-muted-foreground">
-                Teilnehmer ({registrationCount}/{course.max_participants})
+                Participants ({registrationCount}/{course.max_participants})
               </h4>
               <div className="max-h-64 overflow-y-auto">
                 {participants.length === 0 ? (
                   <Card>
                     <CardContent className="p-6 text-center">
-                      <p className="text-muted-foreground">Keine Anmeldungen</p>
+                      <p className="text-muted-foreground">No registrations</p>
                     </CardContent>
                   </Card>
                 ) : (

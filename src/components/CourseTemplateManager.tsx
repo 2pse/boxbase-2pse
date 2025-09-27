@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { format, addDays, startOfWeek } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { CalendarIcon, Plus, Trash2 } from "lucide-react"
 
@@ -323,12 +323,11 @@ export const CourseTemplateManager = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="trainer">Trainer</Label>
+                    <Label htmlFor="trainer">Trainer (optional)</Label>
                     <Input
                       value={templateForm.trainer}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, trainer: e.target.value }))}
                       placeholder="Trainer Name"
-                      required
                     />
                   </div>
                   <div>
@@ -587,7 +586,7 @@ export const CourseTemplateManager = () => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP", { locale: de }) : "Select date"}
+                    {startDate ? format(startDate, "PPP", { locale: enUS }) : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -596,7 +595,7 @@ export const CourseTemplateManager = () => {
                     selected={startDate}
                     onSelect={setStartDate}
                     initialFocus
-                    locale={de}
+                     locale={enUS}
                   />
                 </PopoverContent>
               </Popover>
@@ -613,7 +612,7 @@ export const CourseTemplateManager = () => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP", { locale: de }) : "Select date"}
+                    {endDate ? format(endDate, "PPP", { locale: enUS }) : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -622,7 +621,7 @@ export const CourseTemplateManager = () => {
                     selected={endDate}
                     onSelect={setEndDate}
                     initialFocus
-                    locale={de}
+                    locale={enUS}
                   />
                 </PopoverContent>
               </Popover>

@@ -145,12 +145,12 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
         .eq('id', registrationId)
 
       if (error) throw error
-      toast.success('Teilnehmer entfernt')
+      toast.success('Participant removed')
 
       await loadParticipants()
     } catch (error) {
       console.error('Error removing participant:', error)
-      toast.error('Fehler beim Entfernen des Teilnehmers')
+      toast.error('Error removing participant')
     }
   }
 
@@ -204,7 +204,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Kurs-Teilnehmer verwalten</h2>
+        <h2 className="text-lg font-semibold">Manage Course Participants</h2>
         <div className="flex gap-2">
           {isAdmin && (
             <Button 
@@ -244,9 +244,9 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
         <CardContent className="space-y-4">
           {/* Registered Participants */}
           <div>
-            <h3 className="font-medium text-sm mb-3">Angemeldete Teilnehmer</h3>
+            <h3 className="font-medium text-sm mb-3">Registered Participants</h3>
             {registeredParticipants.length === 0 ? (
-              <p className="text-center text-muted-foreground py-4">Keine Anmeldungen</p>
+              <p className="text-center text-muted-foreground py-4">No registrations</p>
             ) : (
               <div className="space-y-3">
                  {registeredParticipants.map((participant) => (

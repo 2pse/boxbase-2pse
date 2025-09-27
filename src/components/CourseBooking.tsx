@@ -12,7 +12,7 @@ import { ProfileImageViewer } from "@/components/ProfileImageViewer"
 import { CourseCalendar } from "@/components/CourseCalendar"
 import { toast } from "sonner"
 import { format, startOfWeek, endOfWeek, addWeeks, subWeeks, isSameDay, parseISO } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 import { getDisplayName } from "@/lib/nameUtils"
 import { Database } from "@/integrations/supabase/types"
@@ -297,7 +297,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         } else if (userMembershipType === 'open_gym_only') {
           toast.error("Your membership only includes Open Gym. For courses you need an extended membership.")
         } else {
-          toast.error("Anmeldung nicht möglich")
+          toast.error("Registration not possible")
         }
         return
       }
@@ -316,7 +316,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       const deadlineTime = new Date(courseStart.getTime() - (courseData.registration_deadline_minutes * 60 * 1000))
 
       if (now > deadlineTime) {
-        toast.error(`Die Anmeldefrist ist bereits ${courseData.registration_deadline_minutes} Minuten vor Kursbeginn abgelaufen.`)
+        toast.error(`The registration deadline has already passed ${courseData.registration_deadline_minutes} minutes before course start.`)
         return
       }
 
@@ -443,14 +443,14 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         await supabase.rpc('mark_user_as_active', { user_id_param: user.id })
       }
 
-      toast.success(isWaitlist ? 'Du wurdest auf die Warteliste gesetzt' : 'Für Kurs angemeldet')
+      toast.success(isWaitlist ? 'You have been added to the waitlist' : 'Registered for course')
       await loadCourses()
       if (selectedCourse?.id === courseId) {
         await loadParticipants(courseId)
       }
     } catch (error) {
       console.error('Error registering for course:', error)
-      toast.error('Fehler bei der Anmeldung')
+      toast.error('Error during registration')
     }
   }
 
@@ -466,7 +466,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
     if (!targetCourse) return
 
     if (!canCancelCourse(targetCourse)) {
-      toast.error(`Die Abmeldefrist ist bereits ${targetCourse.cancellation_deadline_minutes} Minuten vor Kursbeginn abgelaufen.`)
+      toast.error(`The cancellation deadline has already passed ${targetCourse.cancellation_deadline_minutes} minutes before course start.`)
       return
     }
 
@@ -649,7 +649,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           {Object.entries(groupedCourses).map(([date, dayCourses]) => (
             <div key={date} className="space-y-2">
               <h3 className="font-medium text-sm text-muted-foreground">
-                {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: de })}
+                {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
               </h3>
               <div className="space-y-2">
                  {dayCourses.map(course => (
@@ -737,7 +737,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4" />
-                  {format(parseISO(selectedCourse.course_date), 'EEEE, dd.MM.yyyy', { locale: de })}
+                  {format(parseISO(selectedCourse.course_date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="h-4 w-4" />
@@ -765,12 +765,12 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
               {/* Participants */}
               <div className="space-y-3">
                 <h4 className="font-medium text-sm text-muted-foreground">
-                  Teilnehmer ({selectedCourse.registered_count}/{selectedCourse.max_participants})
+                  Participants ({selectedCourse.registered_count}/{selectedCourse.max_participants})
                 </h4>
                 <div className="max-h-64 overflow-y-auto">
                   {participants.filter(p => p.status === 'registered').length === 0 ? (
                     <div className="bg-gray-200 dark:bg-gray-700 rounded-2xl p-6 text-center">
-                      <p className="text-muted-foreground">Keine Anmeldungen</p>
+                      <p className="text-muted-foreground">No registrations</p>
                     </div>
                   ) : (
                     <div className="space-y-3">

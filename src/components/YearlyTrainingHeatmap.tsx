@@ -103,7 +103,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
 
   const chartConfig = {
     trainingDays: {
-      label: "Trainingstage",
+      label: "Training Days",
       color: primaryColor,
     },
   }

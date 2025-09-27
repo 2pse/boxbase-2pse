@@ -516,7 +516,7 @@ export const CourseParticipants = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="max_participants">Max. Teilnehmer</Label>
+                  <Label htmlFor="max_participants">Max. Participants</Label>
                   <Input name="max_participants" type="number" defaultValue={editingCourse.max_participants} required />
                 </div>
                 <div>

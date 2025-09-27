@@ -430,8 +430,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
         if (now > deadlineTime) {
           toast({
-            title: "Anmeldung nicht möglich",
-            description: `Die Anmeldefrist ist bereits ${courseData.registration_deadline_minutes} Minuten vor Kursbeginn abgelaufen.`,
+            title: "Registration not possible",
+            description: `The registration deadline has already passed ${courseData.registration_deadline_minutes} minutes before course start.`,
             variant: "destructive"
           })
           return
@@ -462,7 +462,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
           const creditData = creditDeductResult as { success: boolean; message: string; credits: number } | null
           if (creditData && !creditData.success) {
             toast({
-              title: "Anmeldung nicht möglich",
+              title: "Registration not possible",
               description: creditData.message,
               variant: "destructive"
             })
@@ -805,13 +805,13 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
               {/* Participants */}
               <div className="space-y-3">
                 <h4 className="font-medium text-sm text-muted-foreground">
-                  Teilnehmer ({selectedCourse.registered_count}/{selectedCourse.max_participants})
+                  Participants ({selectedCourse.registered_count}/{selectedCourse.max_participants})
                 </h4>
                 <div className="max-h-64 overflow-y-auto">
                   {participants.filter(p => p.status === 'registered').length === 0 ? (
                     <Card>
                       <CardContent className="p-6 text-center">
-                        <p className="text-muted-foreground">Keine Anmeldungen</p>
+                        <p className="text-muted-foreground">No registrations</p>
                       </CardContent>
                     </Card>
                   ) : (

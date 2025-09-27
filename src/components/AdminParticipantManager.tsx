@@ -203,12 +203,12 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
         if (insertError) throw insertError
       }
       
-      toast.success('Teilnehmer hinzugefügt')
+      toast.success('Participant added')
       await loadRegisteredUsers()
       onParticipantAdded()
     } catch (error) {
       console.error('Error adding participant:', error)
-      toast.error('Fehler beim Hinzufügen des Teilnehmers')
+      toast.error('Error adding participant')
     }
   }
 
@@ -250,7 +250,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Teilnehmer hinzufügen</DialogTitle>
+          <DialogTitle>Add Participant</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 flex-1 overflow-hidden">

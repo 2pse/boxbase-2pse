@@ -64,8 +64,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast({
-        title: "Datei zu groß",
-        description: "Die maximale Dateigröße beträgt 5MB.",
+        title: "File too large",
+        description: "Maximum file size is 5MB.",
         variant: "destructive"
       })
       return
@@ -75,8 +75,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/svg+xml']
     if (!allowedTypes.includes(file.type)) {
       toast({
-        title: "Ungültiger Dateityp",
-        description: "Nur JPEG, PNG, WebP und SVG Dateien sind erlaubt.",
+        title: "Invalid file type",
+        description: "Only JPEG, PNG, WebP and SVG files are allowed.",
         variant: "destructive"
       })
       return
@@ -111,7 +111,7 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
     } catch (error) {
       console.error('Error uploading badge:', error)
       toast({
-        title: "Upload fehlgeschlagen",
+        title: "Upload failed",
         description: "There was an error uploading the badge.",
         variant: "destructive"
       })
@@ -131,8 +131,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
       }
 
       toast({
-        title: "Badge gelöscht",
-        description: "Das Badge wurde erfolgreich gelöscht."
+        title: "Badge deleted",
+        description: "The badge was successfully deleted."
       })
 
       // Reload badges
@@ -141,8 +141,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
     } catch (error) {
       console.error('Error deleting badge:', error)
       toast({
-        title: "Löschen fehlgeschlagen",
-        description: "Es gab einen Fehler beim Löschen des Badges.",
+        title: "Delete failed",
+        description: "There was an error deleting the badge.",
         variant: "destructive"
       })
     }
@@ -153,7 +153,7 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Upload className="h-5 w-5" />
-          Challenge Badges verwalten
+          Manage Challenge Badges
         </CardTitle>
         <CardDescription>
           Upload custom badge images for challenges. 
@@ -163,8 +163,8 @@ export const BadgeUpload = ({ onBadgeUploaded }: BadgeUploadProps) => {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            <strong>Empfohlene Größe:</strong> 64x64 Pixel oder größer (quadratisch) für beste Darstellung. 
-            Maximale Dateigröße: 5MB. Unterstützte Formate: JPEG, PNG, WebP, SVG.
+            <strong>Recommended Size:</strong> 64x64 pixels or larger (square) for best display. 
+            Maximum file size: 5MB. Supported formats: JPEG, PNG, WebP, SVG.
           </AlertDescription>
         </Alert>
 

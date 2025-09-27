@@ -47,7 +47,7 @@ export const TabataTimer: React.FC = () => {
           <div className="space-y-8">
             {/* Runden */}
             <div className="flex items-center justify-center gap-6">
-              <span className="text-2xl font-medium">Runden:</span>
+              <span className="text-2xl font-medium">Rounds:</span>
               <Select value={rounds.toString()} onValueChange={(value) => setRounds(Number(value))}>
                 <SelectTrigger 
                   className="w-24 h-16 text-center text-2xl border-2 bg-background rounded-xl"
