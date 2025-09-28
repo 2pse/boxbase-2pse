@@ -533,14 +533,14 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         } : null)
       }
 
-      toast.success('Anmeldung erfolgreich storniert')
+      toast.success('Registration successfully cancelled')
       await loadCourses()
       if (selectedCourse?.id === courseId) {
         await loadParticipants(courseId)
       }
     } catch (error) {
       console.error('Error cancelling registration:', error)
-      toast.error('Fehler bei der Stornierung')
+      toast.error('Error cancelling registration')
     }
   }
 
@@ -582,10 +582,10 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   }
 
   const getStatusText = (course: Course) => {
-    if (course.is_registered) return "Angemeldet"
-    if (course.is_waitlisted) return "Warteliste"
-    if (course.registered_count >= course.max_participants) return "Ausgebucht"
-    return "Verfügbar"
+    if (course.is_registered) return "Registered"
+    if (course.is_waitlisted) return "Waitlist"
+    if (course.registered_count >= course.max_participants) return "Full"
+    return "Available"
   }
 
   if (loading) {
@@ -649,7 +649,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           {Object.entries(groupedCourses).map(([date, dayCourses]) => (
             <div key={date} className="space-y-2">
               <h3 className="font-medium text-sm text-muted-foreground">
-                {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
+                  {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
               </h3>
               <div className="space-y-2">
                  {dayCourses.map(course => (
@@ -806,9 +806,9 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                                         : participant.profiles?.nickname || participant.profiles?.display_name || 'Unbekannt'
                                       }
                                     </span>
-                                   <span className="text-xs text-muted-foreground">
-                                     Angemeldet
-                                   </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      Registered
+                                    </span>
                                  </div>
                                  <div className="flex items-center gap-2">
                                    {(isTrainer || isAdmin) && (
@@ -824,13 +824,13 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                 
                 {participants.filter(p => p.status === 'waitlist').length > 0 && (
                   <div className="space-y-3">
-                    <h5 className="font-medium text-sm text-muted-foreground">
-                      Warteliste ({selectedCourse.waitlist_count})
-                    </h5>
+                     <h5 className="font-medium text-sm text-muted-foreground">
+                       Waitlist ({selectedCourse.waitlist_count})
+                     </h5>
                     <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-2xl">
-                      <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                        {selectedCourse.waitlist_count} Person(en) auf der Warteliste
-                      </p>
+                       <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                         {selectedCourse.waitlist_count} person(s) on the waitlist
+                       </p>
                     </div>
                   </div>
                 )}
@@ -844,7 +844,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                     disabled={!canCancelCourse(selectedCourse)}
                     className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
                   >
-                    {canCancelCourse(selectedCourse) ? 'Abmelden' : 'Abmeldefrist abgelaufen'}
+                    {canCancelCourse(selectedCourse) ? 'Cancel Registration' : 'Cancellation deadline expired'}
                   </Button>
                 ) : selectedCourse.is_waitlisted ? (
                   <Button 
@@ -852,7 +852,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                     disabled={!canCancelCourse(selectedCourse)}
                     className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
                   >
-                    {canCancelCourse(selectedCourse) ? 'Von Warteliste entfernen' : 'Abmeldefrist abgelaufen'}
+                    {canCancelCourse(selectedCourse) ? 'Remove from Waitlist' : 'Cancellation deadline expired'}
                   </Button>
                 ) : (
                   <Button 

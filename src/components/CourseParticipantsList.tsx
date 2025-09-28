@@ -185,7 +185,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
       await loadParticipants()
     } catch (error) {
       console.error('Error promoting participant:', error)
-      toast.error('Fehler beim Hinzufügen zum Kurs')
+      toast.error('Error adding to course')
     }
   }
 
@@ -228,7 +228,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
             <CardTitle className="text-base">{course.title}</CardTitle>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className={`text-white ${registeredParticipants.length > course.max_participants ? 'bg-orange-500' : 'bg-green-500'}`}>
-                {registeredParticipants.length}/{course.max_participants} angemeldet
+                {registeredParticipants.length}/{course.max_participants} registered
               </Badge>
               {waitlistedParticipants.length > 0 && (
                 <Badge variant="outline" className="bg-yellow-500 text-white">
@@ -290,7 +290,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
           {/* Waitlist Section */}
           {waitlistedParticipants.length > 0 && (
             <div>
-              <h3 className="font-medium text-sm mb-3">Warteliste</h3>
+              <h3 className="font-medium text-sm mb-3">Waitlist</h3>
               {isAdmin ? (
                 <div className="space-y-3">
                   {waitlistedParticipants.map((participant) => (
@@ -338,7 +338,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
               ) : (
                 <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                   <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                    {waitlistedParticipants.length} Person(en) auf der Warteliste
+                    {waitlistedParticipants.length} person(s) on the waitlist
                   </p>
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
                     Namen werden aus Datenschutzgründen nicht angezeigt

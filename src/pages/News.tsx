@@ -6,7 +6,7 @@ import { Calendar, User, ArrowLeft, ExternalLink } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { format } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { useNavigate } from "react-router-dom"
 
 interface NewsItem {
@@ -92,7 +92,7 @@ export default function News() {
                     <CardTitle className="text-lg">{item.title}</CardTitle>
                     <Badge variant="outline" className="text-xs px-2 py-1 opacity-80 text-muted-foreground border-muted/30 bg-muted/20">
                       <Calendar className="h-3 w-3 mr-1" />
-                      {format(new Date(item.published_at), 'dd.MM.yyyy', { locale: de })}
+                      {format(new Date(item.published_at), 'dd.MM.yyyy', { locale: enUS })}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -112,7 +112,7 @@ export default function News() {
                         className="inline-flex items-center gap-2 bg-primary/5 hover:bg-primary/10 border-primary/20"
                       >
                         <ExternalLink className="h-4 w-4" />
-                        Hier Klicken
+                        Click Here
                       </Button>
                     </div>
                   )}

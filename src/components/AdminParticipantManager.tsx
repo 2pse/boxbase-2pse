@@ -237,12 +237,12 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
 
       // Email is read-only, no updates needed
 
-      toast.success('Mitglied erfolgreich aktualisiert')
+      toast.success('Member successfully updated')
       setEditingMember(null)
       await loadMembers()
     } catch (error) {
       console.error('Error updating member:', error)
-      toast.error('Fehler beim Aktualisieren des Mitglieds')
+      toast.error('Error updating member')
     }
   }
 

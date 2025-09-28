@@ -113,8 +113,8 @@ export const GymSettings = () => {
       if (error) {
         console.error('Error creating default settings:', error)
         toast({
-          title: "Fehler",
-          description: "Fehler beim Erstellen der Standard-Einstellungen",
+          title: "Error",
+          description: "Error creating default settings",
           variant: "destructive",
         })
         return
@@ -122,7 +122,7 @@ export const GymSettings = () => {
 
       setSettings(data)
       toast({
-        title: "Erfolg",
+        title: "Success",
         description: "Standard-Einstellungen wurden erstellt",
       })
     } catch (error) {
@@ -161,8 +161,8 @@ export const GymSettings = () => {
 
       if (!urlData?.publicUrl) {
         toast({
-          title: "Fehler",
-          description: "Fehler beim Abrufen der Logo-URL",
+          title: "Error",
+          description: "Error retrieving logo URL",
           variant: "destructive",
         })
         return
@@ -178,9 +178,9 @@ export const GymSettings = () => {
 
       setSettings(updatedSettings)
 
-      const description = type === 'light' ? 'Helles Logo erfolgreich hochgeladen' :
-                         type === 'dark' ? 'Dunkles Logo erfolgreich hochgeladen' :
-                         'App-Icon erfolgreich hochgeladen';
+      const description = type === 'light' ? 'Light logo successfully uploaded' :
+                         type === 'dark' ? 'Dark logo successfully uploaded' :
+                         'App icon successfully uploaded';
       toast({
         title: "Erfolg",
         description,
@@ -255,8 +255,8 @@ export const GymSettings = () => {
       }
 
       toast({
-        title: "Erfolg",
-        description: "Einstellungen erfolgreich gespeichert",
+        title: "Success",
+        description: "Settings successfully saved",
       })
 
       // Refresh global settings context to apply changes immediately
@@ -279,7 +279,7 @@ export const GymSettings = () => {
     if (!adminEmail && !adminPassword) {
       toast({
         title: "Fehler",
-        description: "Bitte geben Sie eine E-Mail oder ein neues Passwort ein",
+        description: "Please enter an email or new password",
         variant: "destructive",
       })
       return

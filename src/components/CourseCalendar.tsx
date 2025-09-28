@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Clock, MapPin } from "lucide-react"
 import { format, parseISO, isSameDay } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { timezone } from "@/lib/timezone"
 import { cn } from "@/lib/utils"
 
@@ -103,7 +103,7 @@ export const CourseCalendar = ({
             day_outside: "text-muted-foreground opacity-50",
             day_disabled: "text-muted-foreground opacity-50",
           }}
-          locale={de}
+          locale={enUS}
           fromDate={new Date()}
           toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
           modifiers={{
@@ -130,7 +130,7 @@ export const CourseCalendar = ({
       {selectedDate && (
         <div className="space-y-4">
           <h3 className="font-semibold text-left px-4">
-            Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
+            Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: enUS })}
           </h3>
           
           {coursesForSelectedDate.length === 0 ? (

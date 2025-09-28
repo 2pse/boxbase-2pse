@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Calendar, List, Clock, MapPin, Edit, Trash2 } from "lucide-react"
 import { format, parseISO, isSameDay } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { CourseParticipantsList } from "@/components/CourseParticipantsList"
 import { useToast } from "@/hooks/use-toast"
@@ -120,7 +120,7 @@ export const CourseParticipants = () => {
     } catch (error) {
       console.error('Error loading courses:', error)
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Courses could not be loaded",
         variant: "destructive"
       })
@@ -167,15 +167,15 @@ export const CourseParticipants = () => {
       if (error) throw error
 
       toast({
-        title: "Erfolg",
-        description: "Kurs erfolgreich aktualisiert",
+        title: "Success",
+        description: "Course successfully updated",
       })
       setEditingCourse(null)
       await loadCourses()
     } catch (error) {
       console.error('Error updating course:', error)
       toast({
-        title: "Fehler", 
+        title: "Error",
         description: "Error updating course",
         variant: "destructive"
       })
@@ -194,14 +194,14 @@ export const CourseParticipants = () => {
       if (error) throw error
 
       toast({
-        title: "Erfolg",
-        description: "Kurs erfolgreich gelöscht",
+        title: "Success",
+        description: "Course successfully deleted",
       })
       await loadCourses()
     } catch (error) {
       console.error('Error deleting course:', error)
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Error deleting course",
         variant: "destructive"
       })
@@ -282,7 +282,7 @@ export const CourseParticipants = () => {
           {Object.entries(groupedCourses).map(([date, dayCourses]) => (
             <div key={date} className="space-y-2">
               <h3 className="font-medium text-sm text-muted-foreground">
-                {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: de })}
+                {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
               </h3>
               <div className="space-y-2">
                 {dayCourses.map(course => (
@@ -383,7 +383,7 @@ export const CourseParticipants = () => {
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
               }}
-              locale={de}
+              locale={enUS}
               fromDate={new Date()}
               toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
               modifiers={{
@@ -396,7 +396,7 @@ export const CourseParticipants = () => {
           {selectedDate && (
             <div className="space-y-4">
               <h3 className="font-semibold text-left px-4">
-                Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: de })}
+                Courses on {format(selectedDate, 'EEEE, dd.MM.yyyy', { locale: enUS })}
               </h3>
               
               {coursesForSelectedDate.length === 0 ? (

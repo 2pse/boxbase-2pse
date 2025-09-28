@@ -13,7 +13,7 @@ import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipU
 import { ProfileImageViewer } from "@/components/ProfileImageViewer"
 import { getDisplayName } from "@/lib/nameUtils"
 import { format, parseISO } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 
 interface Course {
   id: string
@@ -228,7 +228,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
     } catch (error) {
       console.error('Error loading courses:', error)
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Courses could not be loaded.",
         variant: "destructive"
       })
@@ -372,7 +372,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
         toast({
           title: "Abgemeldet",
-          description: "Du wurdest erfolgreich vom Kurs abgemeldet."
+          description: "You have been successfully unregistered from the course."
         })
       } else {
         // Check if user can register (limits and credits)
@@ -585,8 +585,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
     } catch (error) {
       console.error('Error with registration:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler bei der Anmeldung",
+        title: "Error",
+        description: "Error with registration",
         variant: "destructive"
       })
     }
@@ -640,7 +640,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
       if (error) throw error
 
       toast({
-        title: "Open Gym Check-In erfolgreich",
+        title: "Open Gym Check-In Successful",
         description: "Dein freies Training wurde registriert."
       })
 
@@ -655,7 +655,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
     } catch (error) {
       console.error('Error creating training session:', error)
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Training konnte nicht registriert werden.",
         variant: "destructive"
       })
@@ -777,7 +777,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4" />
-                  {format(parseISO(selectedCourse.course_date), 'EEEE, dd.MM.yyyy', { locale: de })}
+                  {format(parseISO(selectedCourse.course_date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="h-4 w-4" />
@@ -845,9 +845,9 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                                   <span className="font-medium">
                                     {participant.profiles?.display_name || 'Unbekannt'}
                                   </span>
-                                 <span className="text-xs text-muted-foreground">
-                                   Angemeldet
-                                 </span>
+                                  <span className="text-xs text-muted-foreground">
+                                    Registered
+                                  </span>
                                </div>
                             </div>
                           )
@@ -858,13 +858,13 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                 
                 {participants.filter(p => p.status === 'waitlist').length > 0 && (
                   <div className="space-y-3">
-                    <h5 className="font-medium text-sm text-muted-foreground">
-                      Warteliste ({selectedCourse.waitlist_count})
-                    </h5>
+                     <h5 className="font-medium text-sm text-muted-foreground">
+                       Waitlist ({selectedCourse.waitlist_count})
+                     </h5>
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <p className="text-sm text-yellow-800">
-                        {selectedCourse.waitlist_count} Person(en) auf der Warteliste
-                      </p>
+                       <p className="text-sm text-yellow-800">
+                         {selectedCourse.waitlist_count} person(s) on the waitlist
+                       </p>
                     </div>
                   </div>
                 )}
@@ -879,7 +879,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                     className="flex-1 text-white hover:opacity-80"
                     style={{ backgroundColor: primaryColor }}
                   >
-                    {canCancelCourse(selectedCourse) ? 'Abmelden' : 'Abmeldefrist abgelaufen'}
+                    {canCancelCourse(selectedCourse) ? 'Cancel Registration' : 'Cancellation deadline expired'}
                   </Button>
                 ) : selectedCourse.is_waitlisted ? (
                   <Button 
@@ -888,7 +888,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                     className="flex-1 text-white hover:opacity-80"
                     style={{ backgroundColor: primaryColor }}
                   >
-                    {canCancelCourse(selectedCourse) ? 'Von Warteliste entfernen' : 'Abmeldefrist abgelaufen'}
+                    {canCancelCourse(selectedCourse) ? 'Remove from Waitlist' : 'Cancellation deadline expired'}
                   </Button>
                 ) : (
                   <Button 

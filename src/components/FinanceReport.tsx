@@ -285,7 +285,7 @@ export const FinanceReport = () => {
   const exportToCSV = async () => {
     if (!exportStartDate || !exportEndDate) {
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Bitte Start- und Enddatum auswählen",
         variant: "destructive",
       })
@@ -340,7 +340,7 @@ export const FinanceReport = () => {
       const link = document.createElement('a')
       const url = URL.createObjectURL(blob)
       link.setAttribute('href', url)
-      link.setAttribute('download', `finanzen_${exportStartDate}_bis_${exportEndDate}.csv`)
+      link.setAttribute('download', `finance_${exportStartDate}_to_${exportEndDate}.csv`)
       link.style.visibility = 'hidden'
       document.body.appendChild(link)
       link.click()

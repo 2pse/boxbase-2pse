@@ -523,8 +523,8 @@ export default function Admin() {
       if (profileUpdateError) {
         console.error('Error updating profile:', profileUpdateError);
         toast({
-          title: "Fehler",
-          description: "Fehler beim Aktualisieren des Profils",
+          title: "Error",
+          description: "Error updating profile",
           variant: "destructive",
         });
         return;
@@ -564,7 +564,7 @@ export default function Admin() {
 
         if (!selectedPlan) {
           toast({
-            title: "Fehler",
+             title: "Error",
             description: "Ausgewählter Plan nicht gefunden",
             variant: "destructive",
           });
@@ -603,8 +603,8 @@ export default function Admin() {
           if (membershipError) {
             console.error('Error updating membership:', membershipError);
             toast({
-              title: "Fehler",
-              description: "Fehler beim Aktualisieren der Mitgliedschaft",
+               title: "Error",
+               description: "Error updating membership",
               variant: "destructive",
             });
             return;
@@ -659,8 +659,8 @@ export default function Admin() {
     } catch (error) {
       console.error('Error updating member:', error);
       toast({
-        title: "Fehler",
-        description: "Fehler beim Aktualisieren des Mitglieds",
+        title: "Error",
+        description: "Error updating member",
         variant: "destructive",
       });
     }
@@ -816,8 +816,8 @@ export default function Admin() {
       if (error) {
         console.error('Error updating credits:', error);
         toast({
-          title: "Fehler",
-          description: "Fehler beim Aktualisieren der Credits",
+          title: "Error",
+          description: "Error updating credits",
           variant: "destructive",
         });
         return;
@@ -846,8 +846,8 @@ export default function Admin() {
     } catch (error) {
       console.error('Error managing credits:', error);
       toast({
-        title: "Fehler", 
-        description: "Fehler beim Verwalten der Credits",
+        title: "Error", 
+        description: "Error managing credits",
         variant: "destructive",
       });
     }
@@ -856,7 +856,7 @@ export default function Admin() {
   const deleteMember = async (member: Member) => {
     if (!member.user_id) {
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Benutzer-ID nicht gefunden",
         variant: "destructive",
       });
@@ -1483,7 +1483,7 @@ export default function Admin() {
                             }
                           });
                           toast({
-                            title: "Erfolg",
+                            title: "Success",
                             description: "New access code generated",
                           });
                         } catch (error) {

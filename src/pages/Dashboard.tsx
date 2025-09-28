@@ -446,8 +446,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       if (error) {
         console.error('Error saving training session:', error)
         toast({
-          title: "Fehler",
-          description: "Training konnte nicht gespeichert werden.",
+          title: "Error",
+          description: "Training could not be saved.",
           variant: "destructive"
         })
         return

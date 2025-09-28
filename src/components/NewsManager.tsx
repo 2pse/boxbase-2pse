@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { format } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { Edit, Trash2, Plus } from "lucide-react"
 
 interface NewsItem {
@@ -230,12 +230,12 @@ export const NewsManager = () => {
                       <div>
                         <div className="font-medium">{item.title}</div>
                         <div className="sm:hidden text-sm text-muted-foreground">
-                          {format(new Date(item.created_at), 'dd.MM.yyyy HH:mm', { locale: de })}
+                          {format(new Date(item.created_at), 'dd.MM.yyyy HH:mm', { locale: enUS })}
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {format(new Date(item.created_at), 'dd.MM.yyyy HH:mm', { locale: de })}
+                      {format(new Date(item.created_at), 'dd.MM.yyyy HH:mm', { locale: enUS })}
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1">

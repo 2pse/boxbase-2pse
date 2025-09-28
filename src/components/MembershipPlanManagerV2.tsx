@@ -124,10 +124,10 @@ export const MembershipPlanManagerV2: React.FC = () => {
 
       if (error) throw error;
       
-      toast.success('Plan erfolgreich gelöscht');
+      toast.success('Plan successfully deleted');
       loadPlans();
     } catch (error: any) {
-      toast.error('Fehler beim Löschen: ' + error.message);
+      toast.error('Error deleting: ' + error.message);
     }
   };
 

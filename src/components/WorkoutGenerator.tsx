@@ -91,7 +91,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
       }
     } catch (error) {
       console.error('Error generating workout:', error)
-      toast.error("Fehler beim Generieren des Workouts")
+      toast.error("Error generating workout")
     } finally {
       setIsGenerating(false)
     }
@@ -312,7 +312,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
         onBack={() => setShowCreationForm(false)}
         onWorkoutCreated={() => {
           setShowCreationForm(false)
-          toast.success("Workout erfolgreich erstellt!")
+          toast.success("Workout successfully created!")
         }}
       />
     )

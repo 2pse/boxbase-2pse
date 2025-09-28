@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { format } from "date-fns"
-import { de } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 import { useToast } from "@/hooks/use-toast"
 import { getDisplayName } from "@/lib/nameUtils"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
@@ -142,7 +142,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
       toast({
         title: "Abgemeldet",
-        description: "Du wurdest erfolgreich vom Kurs abgemeldet."
+        description: "You have been successfully unregistered from the course."
       })
 
       setShowDialog(false)
@@ -153,8 +153,8 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
     } catch (error) {
       console.error('Error cancelling registration:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim Abmelden vom Kurs.",
+        title: "Error",
+        description: "Error cancelling course registration.",
         variant: "destructive"
       })
     }
@@ -279,7 +279,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
   const { course, registrationCount } = upcomingReservation
   const courseDate = new Date(course.course_date)
-  const formattedDate = format(courseDate, 'EEEE, dd.MM.yyyy', { locale: de })
+  const formattedDate = format(courseDate, 'EEEE, dd.MM.yyyy', { locale: enUS })
   const timeRange = `${course.start_time.slice(0, 5)} - ${course.end_time.slice(0, 5)}`
 
   return (
@@ -294,7 +294,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
           </div>
           
           <div className="space-y-2 text-center">
-            <h3 className="font-medium text-sm text-muted-foreground">Nächste Reservierung</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">Next Reservation</h3>
             <h4 className="font-semibold text-base">{course.title}</h4>
             
             <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
@@ -361,7 +361,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
                             {participant.profiles?.display_name || 'Unbekannt'}
                           </span>
                           <span className="text-xs text-muted-foreground">
-                            Angemeldet
+                            Registered
                           </span>
                         </div>
                       </div>
@@ -378,7 +378,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
               className="w-full"
               variant="default"
             >
-              {canCancelCourse(course) ? 'Abmelden' : 'Abmeldefrist abgelaufen'}
+              {canCancelCourse(course) ? 'Cancel Registration' : 'Cancellation deadline expired'}
             </Button>
           </div>
         </DialogContent>

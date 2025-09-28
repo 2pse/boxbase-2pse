@@ -469,7 +469,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                         toast.error("Error saving setting")
                       } else {
                         await refreshSettings()
-                        toast.success("Einstellung gespeichert!")
+                        toast.success("Setting saved!")
                       }
                     } catch (error) {
                       console.error('Error saving setting:', error)
@@ -501,7 +501,7 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
                         toast.error("Error saving setting")
                       } else {
                         await refreshSettings()
-                        toast.success("Einstellung gespeichert!")
+                        toast.success("Setting saved!")
                       }
                     } catch (error) {
                       console.error('Error saving setting:', error)
