@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-
 import { ArrowLeft } from "lucide-react"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
+import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
 
 type WodStepType = 'selection' | 'timer-selection' | 'fortime' | 'amrap' | 'emom' | 'tabata'
 
@@ -119,6 +119,7 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, on
         </div>
       </div>
       
+      <TimerBottomNavigation />
     </div>
   )
 }

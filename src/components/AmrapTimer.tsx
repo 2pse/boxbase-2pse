@@ -2,9 +2,9 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useNavigate } from "react-router-dom"
-
 import { ArrowLeft } from "lucide-react"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
+import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
 
 interface AmrapTimerProps {
   embedded?: boolean
@@ -30,14 +30,25 @@ export const AmrapTimer: React.FC<AmrapTimerProps> = ({ embedded = false, onBack
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="p-4">
-      <Button
-        variant="ghost"
-        onClick={() => onBack ? onBack() : navigate(-1)}
-        className="mb-4"
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Back
-      </Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            if (onBack) {
+              onBack()
+            } else {
+              // Navigate back to timer selection
+              navigate('/pro')
+              setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('changeTab', { detail: 'wod' }))
+                window.dispatchEvent(new CustomEvent('changeWodStep', { detail: 'timer-selection' }))
+              }, 50)
+            }
+          }}
+          className="mb-4"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
       </div>
       
       <div className="flex-1 flex items-center justify-center p-6 pb-20 -mt-16">
@@ -93,6 +104,7 @@ export const AmrapTimer: React.FC<AmrapTimerProps> = ({ embedded = false, onBack
         </div>
       </div>
       
+      <TimerBottomNavigation />
     </div>
   )
 }
