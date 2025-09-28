@@ -16,7 +16,6 @@ export const TimerBottomNavigation: React.FC = () => {
 
   const getActiveTab = () => {
     if (location.pathname.includes('/workout-timer')) return 'wod'
-    if (location.pathname.includes('/workout-start')) return 'wod'
     if (location.pathname === '/pro') return 'uebersicht'
     return 'uebersicht'
   }

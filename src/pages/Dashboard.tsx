@@ -140,18 +140,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         })
       }
     }
-
-    const handleWodStepChange = (event: CustomEvent) => {
-      setWodStep(event.detail as WodStepType)
-    }
     
     window.addEventListener('changeTab', handleTabChange as EventListener)
-    window.addEventListener('changeWodStep', handleWodStepChange as EventListener)
     
     return () => {
       mounted = false
       window.removeEventListener('changeTab', handleTabChange as EventListener)
-      window.removeEventListener('changeWodStep', handleWodStepChange as EventListener)
     }
   }, [user.id])
 

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate, useLocation } from "react-router-dom"
 import { Play, Pause, RotateCcw, ArrowLeft } from "lucide-react"
-import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
 
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
@@ -184,16 +183,7 @@ export const WorkoutStart: React.FC = () => {
       <div className="p-4">
         <Button
           variant="ghost"
-          onClick={() => {
-            // Store the timer type for navigation back to the correct timer
-            sessionStorage.setItem('timer-type', type)
-            // Navigate to pro page and trigger WOD tab with timer selection
-            navigate('/pro')
-            setTimeout(() => {
-              window.dispatchEvent(new CustomEvent('changeTab', { detail: 'wod' }))
-              window.dispatchEvent(new CustomEvent('changeWodStep', { detail: 'timer-selection' }))
-            }, 50)
-          }}
+          onClick={() => navigate(-1)}
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -316,7 +306,6 @@ export const WorkoutStart: React.FC = () => {
         </div>
       </div>
       
-      <TimerBottomNavigation />
     </div>
   )
 }
