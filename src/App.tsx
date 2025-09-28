@@ -13,11 +13,6 @@ import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 import { StrengthValues } from "@/components/StrengthValues";
 import { ExerciseSelection } from "@/components/ExerciseSelection";
-import { WorkoutTimer } from "@/components/WorkoutTimer";
-import { ForTimeTimer } from "@/components/ForTimeTimer";
-import { AmrapTimer } from "@/components/AmrapTimer";
-import { EmomTimer } from "@/components/EmomTimer";
-import { TabataTimer } from "@/components/TabataTimer";
 import WorkoutManagement from "./pages/WorkoutManagement";
 import { WorkoutStart } from "@/components/WorkoutStart";
 import { AuthKeeper } from "@/components/AuthKeeper";
@@ -50,11 +45,6 @@ function App() {
                 <Route path="/pro/strength-values" element={<StrengthValues />} />
                 <Route path="/pro/exercises" element={<ExerciseSelection />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/workout-timer" element={<WorkoutTimer />} />
-                <Route path="/workout-timer/fortime" element={<ForTimeTimer />} />
-                <Route path="/workout-timer/amrap" element={<AmrapTimer />} />
-                <Route path="/workout-timer/emom" element={<EmomTimer />} />
-                <Route path="/workout-timer/tabata" element={<TabataTimer />} />
                 <Route path="/workout-timer/start" element={<WorkoutStart />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/workouts" element={<WorkoutManagement />} />

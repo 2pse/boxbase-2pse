@@ -10,6 +10,11 @@ import { UserProfile } from "@/components/UserProfile"
 import { Leaderboard } from "@/components/Leaderboard"
 import { NavigationButton } from "@/components/NavigationButton"
 import { WorkoutGenerator } from "@/components/WorkoutGenerator"
+import { WorkoutTimer } from "@/components/WorkoutTimer"
+import { ForTimeTimer } from "@/components/ForTimeTimer"
+import { AmrapTimer } from "@/components/AmrapTimer"
+import { EmomTimer } from "@/components/EmomTimer"
+import { TabataTimer } from "@/components/TabataTimer"
 import { CourseBooking } from "@/components/CourseBooking"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
@@ -32,6 +37,7 @@ import { getPriorizedMembership } from "@/lib/membershipUtils"
 import { UpcomingClassReservation } from "@/components/UpcomingClassReservation"
 
 type DashboardTabType = 'home' | 'wod' | 'courses' | 'leaderboard' | 'news'
+type WodStepType = 'selection' | 'fortime' | 'amrap' | 'emom' | 'tabata'
 
 interface TrainingDay {
   date: Date
@@ -60,7 +66,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
   const [userAvatar, setUserAvatar] = useState<string | null>(null)
   const [selectedChallenge, setSelectedChallenge] = useState<{challenge: any, progress: any} | null>(null)
   const [currentChallenge, setCurrentChallenge] = useState<any>(null)
-  const [wodStep, setWodStep] = useState(1)
+  const [wodStep, setWodStep] = useState<WodStepType>('selection')
   const [userMembershipType, setUserMembershipType] = useState<string | null>(null)
   const [showFirstLoginDialog, setShowFirstLoginDialog] = useState(false)
   const { toast } = useToast()
@@ -592,9 +598,36 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
           </div>
         )
       case 'wod':
+        const renderWodContent = () => {
+          switch (wodStep) {
+            case 'selection':
+              return (
+                <div className="flex-1">
+                  <WorkoutGenerator user={user} wodStep={1} onStepChange={() => {}} />
+                  <div className="mt-8">
+                    <WorkoutTimer 
+                      embedded={true}
+                      onTimerSelect={(timerType: WodStepType) => setWodStep(timerType)}
+                    />
+                  </div>
+                </div>
+              )
+            case 'fortime':
+              return <ForTimeTimer embedded={true} onBack={() => setWodStep('selection')} />
+            case 'amrap':
+              return <AmrapTimer embedded={true} onBack={() => setWodStep('selection')} />
+            case 'emom':
+              return <EmomTimer embedded={true} onBack={() => setWodStep('selection')} />
+            case 'tabata':
+              return <TabataTimer embedded={true} onBack={() => setWodStep('selection')} />
+            default:
+              return <WorkoutGenerator user={user} wodStep={1} onStepChange={() => {}} />
+          }
+        }
+        
         return (
           <div className="flex-1 container mx-auto px-6 py-8">
-            <WorkoutGenerator user={user} wodStep={wodStep} onStepChange={setWodStep} />
+            {renderWodContent()}
           </div>
         )
       case 'courses':

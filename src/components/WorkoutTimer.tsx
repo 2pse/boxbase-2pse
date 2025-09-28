@@ -6,9 +6,10 @@ import { useGymSettings } from "@/contexts/GymSettingsContext"
 
 interface WorkoutTimerProps {
   embedded?: boolean
+  onTimerSelect?: (timerType: string) => void
 }
 
-export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false }) => {
+export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, onTimerSelect }) => {
   const navigate = useNavigate()
   const { settings } = useGymSettings()
   const primaryColor = settings?.primary_color || '#B81243'
@@ -35,7 +36,7 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false }) 
                 <Button
                   key={type.id}
                   variant="outline"
-                  onClick={() => navigate(type.route)}
+                  onClick={() => onTimerSelect ? onTimerSelect(type.id) : navigate(type.route)}
                   className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
                   style={{
                     borderColor: primaryColor,
