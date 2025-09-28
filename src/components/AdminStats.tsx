@@ -228,8 +228,8 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
           <p className="text-xs text-muted-foreground">This month</p>
         </CardHeader>
         <CardContent>
-          <div className="w-full overflow-x-auto">
-            <ResponsiveContainer width="100%" height={300} minWidth={300}>
+          <div className="w-full">
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
