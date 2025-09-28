@@ -82,6 +82,7 @@ export const CourseCalendar = ({
           mode="single"
           selected={selectedDate}
           onSelect={handleDateSelect}
+          locale={enUS}
           className={cn("rounded-md border w-full max-w-md text-base", "pointer-events-auto")}
           classNames={{
             months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -103,7 +104,6 @@ export const CourseCalendar = ({
             day_outside: "text-muted-foreground opacity-50",
             day_disabled: "text-muted-foreground opacity-50",
           }}
-          locale={enUS}
           fromDate={new Date()}
           toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
           modifiers={{

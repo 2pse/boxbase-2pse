@@ -609,7 +609,7 @@ export const CourseTemplateManager = () => {
                     selected={startDate}
                     onSelect={setStartDate}
                     initialFocus
-                     locale={enUS}
+                    locale={enUS}
                   />
                 </PopoverContent>
               </Popover>
