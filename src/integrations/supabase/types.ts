@@ -987,6 +987,10 @@ export type Database = {
         Args: { "": unknown }
         Returns: unknown
       }
+      is_author: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
       ivfflat_bit_support: {
         Args: { "": unknown }
         Returns: unknown
