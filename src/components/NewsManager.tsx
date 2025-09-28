@@ -176,6 +176,8 @@ export const NewsManager = () => {
                   value={newsForm.title}
                   onChange={(e) => setNewsForm(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="News title"
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('News title is required')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                   required
                 />
               </div>
@@ -186,6 +188,8 @@ export const NewsManager = () => {
                   onChange={(e) => setNewsForm(prev => ({ ...prev, content: e.target.value }))}
                   placeholder="News content..."
                   rows={6}
+                  onInvalid={(e) => (e.target as HTMLTextAreaElement).setCustomValidity('News content is required')}
+                  onInput={(e) => (e.target as HTMLTextAreaElement).setCustomValidity('')}
                   required
                 />
               </div>
@@ -273,11 +277,24 @@ export const NewsManager = () => {
             <form onSubmit={handleUpdateNews} className="space-y-4">
               <div>
                 <Label htmlFor="title">Title</Label>
-                <Input name="title" defaultValue={editingNews.title} required />
+                <Input 
+                  name="title" 
+                  defaultValue={editingNews.title} 
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('News title is required')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                  required 
+                />
               </div>
               <div>
                 <Label htmlFor="content">Content</Label>
-                <Textarea name="content" defaultValue={editingNews.content} rows={6} required />
+                <Textarea 
+                  name="content" 
+                  defaultValue={editingNews.content} 
+                  rows={6} 
+                  onInvalid={(e) => (e.target as HTMLTextAreaElement).setCustomValidity('News content is required')}
+                  onInput={(e) => (e.target as HTMLTextAreaElement).setCustomValidity('')}
+                  required 
+                />
               </div>
               <div>
                 <Label htmlFor="link_url">Link (Optional)</Label>

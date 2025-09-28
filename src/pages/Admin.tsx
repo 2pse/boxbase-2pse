@@ -1075,6 +1075,8 @@ export default function Admin() {
                           placeholder="Max"
                           value={newMemberFirstName}
                           onChange={(e) => setNewMemberFirstName(e.target.value)}
+                          onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('First name is required')}
+                          onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                           required
                         />
                       </div>
@@ -1094,6 +1096,8 @@ export default function Admin() {
                         placeholder="Member's email address"
                         value={newMemberEmail}
                         onChange={(e) => setNewMemberEmail(e.target.value)}
+                        onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Please enter a valid email address')}
+                        onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                         required
                       />
                     </div>
@@ -1104,6 +1108,8 @@ export default function Admin() {
                           placeholder="Access Code"
                           value={newMemberCode}
                           onChange={(e) => setNewMemberCode(e.target.value.replace(/\s/g, ''))}
+                          onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Access code is required')}
+                          onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                           required
                         />
                         <Button
@@ -1423,6 +1429,8 @@ export default function Admin() {
                       ...editingMember,
                       first_name: e.target.value
                     })}
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('First name is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                     required
                   />
                 </div>
@@ -1461,6 +1469,8 @@ export default function Admin() {
                       ...editingMember,
                       access_code: e.target.value.replace(/\s/g, '')
                     })}
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Access code is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                     required
                   />
                   <Button

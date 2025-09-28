@@ -319,6 +319,8 @@ export const CourseTemplateManager = () => {
                       value={templateForm.title}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, title: e.target.value }))}
                       placeholder="Enter course title"
+                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Course title is required')}
+                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                       required
                     />
                   </div>
@@ -336,6 +338,8 @@ export const CourseTemplateManager = () => {
                       type="number"
                       value={templateForm.max_participants}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, max_participants: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }))}
+                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Maximum participants number is required')}
+                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                       required
                     />
                   </div>
@@ -346,6 +350,8 @@ export const CourseTemplateManager = () => {
                       max="120"
                       value={templateForm.registration_deadline_minutes}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, registration_deadline_minutes: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }))}
+                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Registration deadline is required')}
+                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                       required
                     />
                   </div>
@@ -356,6 +362,8 @@ export const CourseTemplateManager = () => {
                       max="480"
                       value={templateForm.cancellation_deadline_minutes}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, cancellation_deadline_minutes: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }))}
+                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Cancellation deadline is required')}
+                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                       required
                     />
                   </div>
@@ -366,6 +374,8 @@ export const CourseTemplateManager = () => {
                       max="120"
                       value={templateForm.duration_minutes}
                       onChange={(e) => setTemplateForm(prev => ({ ...prev, duration_minutes: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }))}
+                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Course duration is required')}
+                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                       required
                     />
                   </div>
@@ -483,21 +493,25 @@ export const CourseTemplateManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="startDate">Start Date</Label>
-                    <Input
-                      type="date"
-                      value={scheduleForm.startDate}
-                      onChange={(e) => setScheduleForm(prev => ({ ...prev, startDate: e.target.value }))}
-                      required
-                    />
+                  <Input
+                    type="date"
+                    value={scheduleForm.startDate}
+                    onChange={(e) => setScheduleForm(prev => ({ ...prev, startDate: e.target.value }))}
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Start date is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required
+                  />
                   </div>
                   <div>
                     <Label htmlFor="endDate">End Date</Label>
-                    <Input
-                      type="date"
-                      value={scheduleForm.endDate}
-                      onChange={(e) => setScheduleForm(prev => ({ ...prev, endDate: e.target.value }))}
-                      required
-                    />
+                  <Input
+                    type="date"
+                    value={scheduleForm.endDate}
+                    onChange={(e) => setScheduleForm(prev => ({ ...prev, endDate: e.target.value }))}
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('End date is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required
+                  />
                   </div>
                 </div>
 

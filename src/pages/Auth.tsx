@@ -140,6 +140,8 @@ export default function Auth() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Please enter a valid email address')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                   required
                 />
               </div>
@@ -149,6 +151,8 @@ export default function Auth() {
                   placeholder="Access Code"
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value.replace(/\s/g, ''))}
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Please enter your access code')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                   required
                 />
               </div>

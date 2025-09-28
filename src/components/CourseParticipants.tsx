@@ -493,7 +493,13 @@ export const CourseParticipants = () => {
               <form onSubmit={handleUpdateCourse} className="space-y-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
-                  <Input name="title" defaultValue={editingCourse.title} required />
+                <Input 
+                  name="title" 
+                  defaultValue={editingCourse.title} 
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Course title is required')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                  required 
+                />
                 </div>
                 <div>
                   <Label htmlFor="trainer">Trainer (optional)</Label>
@@ -514,23 +520,61 @@ export const CourseParticipants = () => {
                 </div>
                 <div>
                   <Label htmlFor="max_participants">Max. Participants</Label>
-                  <Input name="max_participants" type="number" defaultValue={editingCourse.max_participants} required />
+                  <Input 
+                    name="max_participants" 
+                    type="number" 
+                    defaultValue={editingCourse.max_participants} 
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Maximum participants number is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="registration_deadline_minutes">Anmeldefrist (Minuten vor Start)</Label>
-                  <Input name="registration_deadline_minutes" type="number" max="120" defaultValue={editingCourse.registration_deadline_minutes} required />
+                  <Input 
+                    name="registration_deadline_minutes" 
+                    type="number" 
+                    max="120" 
+                    defaultValue={editingCourse.registration_deadline_minutes} 
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Registration deadline is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="cancellation_deadline_minutes">Abmeldefrist (Minuten vor Start)</Label>
-                  <Input name="cancellation_deadline_minutes" type="number" max="480" defaultValue={editingCourse.cancellation_deadline_minutes} required />
+                  <Input 
+                    name="cancellation_deadline_minutes" 
+                    type="number" 
+                    max="480" 
+                    defaultValue={editingCourse.cancellation_deadline_minutes} 
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Cancellation deadline is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="start_time">Startzeit</Label>
-                  <Input name="start_time" type="time" defaultValue={editingCourse.start_time} required />
+                  <Input 
+                    name="start_time" 
+                    type="time" 
+                    defaultValue={editingCourse.start_time} 
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Start time is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="duration_minutes">Dauer (Minuten)</Label>
-                  <Input name="duration_minutes" type="number" max="120" defaultValue={editingCourse.duration_minutes} required />
+                  <Input 
+                    name="duration_minutes" 
+                    type="number" 
+                    max="120" 
+                    defaultValue={editingCourse.duration_minutes} 
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Course duration is required')}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
+                    required 
+                  />
                 </div>
                 <div className="pt-4">
                   <Button type="submit" className="w-full">
