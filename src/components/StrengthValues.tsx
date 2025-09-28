@@ -148,7 +148,7 @@ export const StrengthValues = () => {
                   step="0.5" 
                   value={value} 
                   onChange={(e) => setter(e.target.value)} 
-                  placeholder="kg" 
+                  placeholder="0.0" 
                   className="w-20" 
                 />
                 <span className="text-sm text-muted-foreground">kg</span>

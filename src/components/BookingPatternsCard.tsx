@@ -22,6 +22,13 @@ export const BookingPatternsCard = () => {
     loadBookingPatterns()
   }, [])
 
+  // Update patterns when page changes
+  useEffect(() => {
+    const start = currentPage * itemsPerPage
+    const end = start + itemsPerPage
+    setPatterns(allPatterns.slice(start, end))
+  }, [currentPage, allPatterns])
+
   const loadBookingPatterns = async () => {
     try {
       // Get course registrations with course data from the last 30 days
@@ -121,13 +128,6 @@ export const BookingPatternsCard = () => {
       </Card>
     )
   }
-
-  // Update patterns when page changes
-  useEffect(() => {
-    const start = currentPage * itemsPerPage
-    const end = start + itemsPerPage
-    setPatterns(allPatterns.slice(start, end))
-  }, [currentPage, allPatterns])
 
   return (
     <Card>

@@ -499,8 +499,8 @@ export const CourseParticipants = () => {
                   <Input name="title" defaultValue={editingCourse.title} required />
                 </div>
                 <div>
-                  <Label htmlFor="trainer">Trainer</Label>
-                  <Input name="trainer" defaultValue={editingCourse.trainer} required />
+                  <Label htmlFor="trainer">Trainer (optional)</Label>
+                  <Input name="trainer" defaultValue={editingCourse.trainer} />
                 </div>
                 <div>
                   <Label htmlFor="strength_exercise">Kraftübung</Label>

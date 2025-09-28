@@ -33,9 +33,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           <div className="max-w-md w-full">
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Etwas ist schiefgelaufen</AlertTitle>
+              <AlertTitle>Something went wrong</AlertTitle>
               <AlertDescription className="mt-2">
-                Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.
+                An unexpected error occurred. Please try again.
               </AlertDescription>
             </Alert>
             <Button 
@@ -45,7 +45,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               }}
               className="w-full mt-4"
             >
-              Seite neu laden
+              Reload page
             </Button>
           </div>
         </div>
