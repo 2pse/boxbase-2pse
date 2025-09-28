@@ -25,18 +25,18 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false }) 
       <div className="bg-background">
         <div className="p-6">
           <div className="max-w-md w-full mx-auto">
-            <div className="text-center mb-4">
-              <h1 className="text-6xl font-bold mb-1">WOD</h1>
-              <h2 className="text-2xl text-muted-foreground">Timer</h2>
+            <div className="text-center mb-6">
+              <h1 className="text-4xl font-bold mb-2">WOD</h1>
+              <h2 className="text-lg text-muted-foreground">Timer</h2>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {timerTypes.map((type) => (
                 <Button
                   key={type.id}
                   variant="outline"
                   onClick={() => navigate(type.route)}
-                  className="w-full h-20 text-2xl border-2 bg-background hover:text-white rounded-2xl font-medium transition-all duration-200"
+                  className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
                   style={{
                     borderColor: primaryColor,
                     color: primaryColor
@@ -84,18 +84,18 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false }) 
       
       <div className="flex-1 flex items-center justify-center p-6 pb-20">
         <div className="max-w-md w-full">
-          <div className="text-center mb-4">
-            <h1 className="text-6xl font-bold mb-1">WOD</h1>
-            <h2 className="text-2xl text-muted-foreground">Timer</h2>
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold mb-2">WOD</h1>
+            <h2 className="text-lg text-muted-foreground">Timer</h2>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {timerTypes.map((type) => (
               <Button
                 key={type.id}
                 variant="outline"
                 onClick={() => navigate(type.route)}
-                className="w-full h-20 text-2xl border-2 bg-background hover:text-white rounded-2xl font-medium transition-all duration-200"
+                className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
                 style={{
                   borderColor: primaryColor,
                   color: primaryColor
