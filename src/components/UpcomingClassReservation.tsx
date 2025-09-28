@@ -119,8 +119,8 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
     try {
       if (!canCancelCourse(upcomingReservation.course)) {
         toast({
-          title: "Abmeldung nicht möglich",
-          description: "Die Abmeldefrist ist bereits abgelaufen.",
+          title: "Cancellation not possible",
+          description: "The cancellation deadline has already passed.",
           variant: "destructive"
         })
         return
@@ -141,7 +141,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
       })
 
       toast({
-        title: "Abgemeldet",
+        title: "Unregistered",
         description: "You have been successfully unregistered from the course."
       })
 

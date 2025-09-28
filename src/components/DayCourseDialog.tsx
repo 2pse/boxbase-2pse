@@ -312,8 +312,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         // Check cancellation deadline before unregistering
         if (!canCancelCourse(course)) {
           toast({
-            title: "Abmeldung nicht möglich",
-            description: `Die Abmeldefrist ist bereits ${course.cancellation_deadline_minutes} Minuten vor Kursbeginn abgelaufen.`,
+            title: "Cancellation not possible",
+            description: `The cancellation deadline has already passed ${course.cancellation_deadline_minutes} minutes before course start.`,
             variant: "destructive"
           })
           return
@@ -371,7 +371,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         }
 
         toast({
-          title: "Abgemeldet",
+          title: "Unregistered",
           description: "You have been successfully unregistered from the course."
         })
       } else {
@@ -389,8 +389,8 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         if (checkError || (!canRegister && !canWaitlist)) {
           if (userMembershipType === 'Basic Member') {
             toast({
-              title: "Wöchentliches Limit erreicht",
-              description: "Du hast dein wöchentliches Limit von 2 Anmeldungen erreicht",
+               title: "Weekly limit reached",
+               description: "You have reached your weekly limit of 2 registrations",
               variant: "destructive",
             })
           } else if (userMembershipType === 'Credits') {
@@ -401,14 +401,14 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
             })
           } else if (userMembershipType === 'open_gym_only') {
             toast({
-              title: "Anmeldung nicht möglich",
-              description: "Deine Mitgliedschaft beinhaltet nur Open Gym. Für Kurse benötigst du eine erweiterte Mitgliedschaft.",
+              title: "Registration not possible",
+              description: "Your membership includes only Open Gym. For courses you need an extended membership.",
               variant: "destructive"
             })
           } else {
             toast({
-              title: "Anmeldung nicht möglich",
-              description: "Anmeldung nicht möglich",
+              title: "Registration not possible",
+              description: "Registration not possible",
               variant: "destructive"
             })
           }

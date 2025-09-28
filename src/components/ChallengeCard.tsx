@@ -102,7 +102,7 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
     return (
       <Card>
         <CardContent className="p-6">
-          <div className="text-center">Lädt Challenges...</div>
+          <div className="text-center">Loading challenges...</div>
         </CardContent>
       </Card>
     );
@@ -114,7 +114,7 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="w-5 h-5" />
-            Monats-Challenges
+            Monthly Challenges
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -150,12 +150,12 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   {challenge.is_primary && (
-                    <Badge variant="default">Haupt-Challenge</Badge>
+                    <Badge variant="default">Main Challenge</Badge>
                   )}
                   {isCompleted && (
                     <Badge variant="secondary" className="bg-green-100 text-green-700">
                       <CheckCircle className="w-3 h-3 mr-1" />
-                      Abgeschlossen
+                      Completed
                     </Badge>
                   )}
                 </div>
@@ -164,7 +164,7 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span>Fortschritt</span>
+                  <span>Progress</span>
                   <span>
                     {progress?.completed_checkpoints || 0} / {challenge.checkpoint_count}
                   </span>
@@ -173,11 +173,11 @@ export default function ChallengeCard({ onOpenChallenge }: ChallengeCardProps) {
                 
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">
-                    Bonus: {challenge.bonus_points} Punkte
+                    Bonus: {challenge.bonus_points} Points
                   </span>
                   {isCompleted && (
                     <span className="text-green-600 font-medium">
-                      ✓ Bonus erhalten!
+                      ✓ Bonus received!
                     </span>
                   )}
                 </div>

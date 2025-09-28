@@ -112,7 +112,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
       if (error) throw error
 
       if (!data || data.length === 0) {
-        toast.error("Keine passenden Workouts gefunden.")
+        toast.error("No matching workouts found.")
         return
       }
 
@@ -133,7 +133,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
         // If no workouts match preferences, use all available workouts
         if (filteredWorkouts.length === 0) {
           filteredWorkouts = data
-          toast.info("Keine Workouts mit deinen bevorzugten Übungen gefunden. Zeige alle verfügbaren WODs.")
+          toast.info("No workouts found with your preferred exercises. Showing all available WODs.")
         }
       }
 
@@ -413,7 +413,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                     className="w-full rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Workout hinzufügen
+                    Add Workout
                   </Button>
                 </div>
               )}

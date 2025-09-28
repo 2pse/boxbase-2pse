@@ -119,7 +119,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
         }
 
         setMembershipDetails({
-          planName: plan?.name || 'Unbekannt',
+          planName: plan?.name || 'Unknown',
           type: bookingRules?.type || null,
           remainingCredits,
           usedThisMonth,
@@ -146,7 +146,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
           })
         } else {
           setMembershipDetails({
-            planName: 'Keine aktive Mitgliedschaft',
+            planName: 'No active membership',
             type: null
           })
         }
@@ -181,18 +181,18 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
   const getMembershipDescription = (details: DetailedMembershipInfo) => {
     switch (details.type) {
       case 'unlimited':
-        return 'Unbegrenzte Teilnahme an allen Kursen'
+        return 'Unlimited access to all courses'
       case 'credits':
-        return `${details.remainingCredits} Credits verfügbar`
+        return `${details.remainingCredits} Credits available`
       case 'limited':
         if (details.periodType === 'week') {
-          return `${details.remainingCredits} von ${details.weeklyLimit} Kurse diese Woche`
+          return `${details.remainingCredits} of ${details.weeklyLimit} courses this week`
         }
-        return `${details.remainingCredits} von ${details.monthlyLimit} Kurse diesen Monat`
+        return `${details.remainingCredits} of ${details.monthlyLimit} courses this month`
       case 'open_gym_only':
-        return 'Nur Open Gym Zugang'
+        return 'Open Gym access only'
       default:
-        return 'Keine aktive Mitgliedschaft'
+        return 'No active membership'
     }
   }
 
@@ -209,7 +209,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
                 {membershipDetails && getMembershipIcon(membershipDetails.type)}
                 <div>
                   <CardTitle className="text-base">
-                    {loading ? 'Lädt...' : membershipDetails?.planName || 'Mitgliedschaft'}
+                    {loading ? 'Loading...' : membershipDetails?.planName || 'Membership'}
                   </CardTitle>
                   <CardDescription className="text-sm">
                     {loading ? '' : membershipDetails && getMembershipDescription(membershipDetails)}
@@ -223,7 +223,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
                 onClick={() => setOpen(false)}
               >
                 <X className="h-4 w-4" />
-                <span className="sr-only">Schließen</span>
+                <span className="sr-only">Close</span>
               </Button>
             </div>
           </CardHeader>
@@ -232,7 +232,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
             <CardContent className="space-y-3 pt-0">
               {membershipDetails.type === 'credits' && (
                 <div className="flex justify-between items-center p-2 bg-muted rounded-md">
-                  <span className="text-sm font-medium">Verfügbare Credits</span>
+                  <span className="text-sm font-medium">Available Credits</span>
                   <Badge variant="secondary" className="font-bold">
                     {membershipDetails.remainingCredits}
                   </Badge>
@@ -243,21 +243,21 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
                 <div className="space-y-2">
                   <div className="flex justify-between items-center p-2 bg-muted rounded-md">
                     <span className="text-sm font-medium">
-                      {membershipDetails.periodType === 'week' ? 'Wöchentliches Limit' : 'Monatliches Limit'}
+                      {membershipDetails.periodType === 'week' ? 'Weekly Limit' : 'Monthly Limit'}
                     </span>
                     <Badge variant="secondary">
                       {membershipDetails.weeklyLimit || membershipDetails.monthlyLimit}
                     </Badge>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-muted rounded-md">
-                    <span className="text-sm font-medium">Verbleibend</span>
+                    <span className="text-sm font-medium">Remaining</span>
                     <Badge variant="outline">
                       {membershipDetails.remainingCredits}
                     </Badge>
                   </div>
                   {membershipDetails.usedThisMonth !== undefined && (
                     <div className="flex justify-between items-center p-2 bg-muted rounded-md">
-                      <span className="text-sm font-medium">Verwendet</span>
+                      <span className="text-sm font-medium">Used</span>
                       <Badge variant="outline">
                         {membershipDetails.usedThisMonth}
                       </Badge>
@@ -269,7 +269,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
               {membershipDetails.startDate && (
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="font-medium">Beginn:</span>
+                    <span className="font-medium">Start:</span>
                     <br />
                     <span className="text-muted-foreground">
                       {formatDate(membershipDetails.startDate)}
@@ -277,7 +277,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
                   </div>
                   {membershipDetails.endDate && (
                     <div>
-                      <span className="font-medium">Ende:</span>
+                      <span className="font-medium">End:</span>
                       <br />
                       <span className="text-muted-foreground">
                         {formatDate(membershipDetails.endDate)}
@@ -289,7 +289,7 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
               
               {membershipDetails.autoRenewal !== undefined && (
                 <div className="flex justify-between items-center p-2 bg-muted rounded-md">
-                  <span className="text-sm font-medium">Automatische Verlängerung</span>
+                  <span className="text-sm font-medium">Auto Renewal</span>
                   <Badge variant={membershipDetails.autoRenewal ? "default" : "secondary"}>
                     {membershipDetails.autoRenewal ? 'Active' : 'Inactive'}
                   </Badge>

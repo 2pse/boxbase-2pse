@@ -664,7 +664,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       case 'news':
         return (
           <div>
-            <p className="text-center text-muted-foreground p-4">News sind jetzt über die separate News-Seite verfügbar.</p>
+            <p className="text-center text-muted-foreground p-4">News are now available via the separate news page.</p>
           </div>
         )
       default:

@@ -31,10 +31,10 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
       <div className="space-y-4 px-4">
         <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl h-32 shadow-sm">
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h3 className="text-xl font-bold text-muted-foreground">Keine Workouts verfügbar</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Momentan sind keine Workouts aktiviert.
-            </p>
+             <h3 className="text-xl font-bold text-muted-foreground">No workouts available</h3>
+             <p className="text-xs text-muted-foreground leading-relaxed">
+               Currently no workouts are activated.
+             </p>
           </div>
         </div>
       </div>

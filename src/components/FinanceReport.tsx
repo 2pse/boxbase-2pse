@@ -119,7 +119,7 @@ export const FinanceReport = () => {
           }
           
           if (!processedData[month][planId]) {
-            processedData[month][planId] = { count: 0, revenue: 0, name: `${planName} (Einmalig)`, booking_type: bookingType }
+            processedData[month][planId] = { count: 0, revenue: 0, name: `${planName} (One-time)`, booking_type: bookingType }
           }
           
           processedData[month][planId].count += 1
@@ -138,7 +138,7 @@ export const FinanceReport = () => {
             }
             
             if (!processedData[month][planId]) {
-              processedData[month][planId] = { count: 0, revenue: 0, name: `${planName} (Monatlich)`, booking_type: bookingType }
+              processedData[month][planId] = { count: 0, revenue: 0, name: `${planName} (Monthly)`, booking_type: bookingType }
             }
             
             processedData[month][planId].count += 1
@@ -286,7 +286,7 @@ export const FinanceReport = () => {
     if (!exportStartDate || !exportEndDate) {
       toast({
         title: "Error",
-        description: "Bitte Start- und Enddatum auswählen",
+        description: "Please select start and end date",
         variant: "destructive",
       })
       return
@@ -319,7 +319,7 @@ export const FinanceReport = () => {
       })
 
       // Create CSV content with one line per category per month
-      const headers = ['Monat', 'Kategorie', 'Anzahl Mitgliedschaften', 'Umsatz (€)']
+      const headers = ['Month', 'Category', 'Number of Memberships', 'Revenue (€)']
       const csvRows: string[] = []
       
       Object.entries(groupedData).forEach(([month, categories]) => {

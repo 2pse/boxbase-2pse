@@ -256,19 +256,19 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
           {membershipInfo.type === 'monthly_limit' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Monthly Limit'}</p>
-              <p className="text-sm">Monatslimit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
-              <p className="text-sm">Diesen Monat genutzt: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
-              <p className="text-sm">Verbleibend: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
+               <p className="text-sm">Monthly limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
+               <p className="text-sm">Used this month: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
+               <p className="text-sm">Remaining: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
             </div>
           )}
           {membershipInfo.type === 'open_gym_only' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Open Gym'}</p>
-              <p className="text-sm">Nur freies Training verfügbar</p>
+              <p className="text-sm">Only free training available</p>
             </div>
           )}
           {!membershipInfo.type && (
-            <p className="text-sm text-muted-foreground">Keine aktive Mitgliedschaft gefunden</p>
+            <p className="text-sm text-muted-foreground">No active membership found</p>
           )}
         </div>
       </PopoverContent>

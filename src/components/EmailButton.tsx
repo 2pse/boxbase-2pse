@@ -18,7 +18,7 @@ export const EmailButton = () => {
     <Button
       onClick={handleEmailClick}
       className="w-14 h-14 rounded-full bg-gray-600 hover:bg-gray-700 text-white shadow-lg p-0"
-      aria-label="E-Mail kontaktieren"
+      aria-label="Contact via email"
     >
       <Mail className="h-7 w-7" />
     </Button>
