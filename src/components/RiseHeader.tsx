@@ -249,7 +249,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
                 onPageChange?.('export');
                 setDropdownOpen(false);
               }}
-              className={`col-start-2 flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
             >
               <Download className="h-8 w-8 mb-2" />
               <span className="text-sm font-medium">Data Export</span>
