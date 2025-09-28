@@ -361,37 +361,50 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Training Log - Jahresübersicht */}
-        <div className="mb-4">
-          <YearlyTrainingHeatmap 
-            userId={userId}
-            primaryColor={primaryColor}
-          />
+        {/* Training Log - Kachel */}
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]">
+          <div className="text-center space-y-3">
+            <Trophy className="h-8 w-8 mx-auto text-primary" />
+            <h3 className="text-xl font-semibold text-foreground">Training Log</h3>
+            <p className="text-sm text-muted-foreground">View your yearly training overview</p>
+            <div className="mt-4">
+              <YearlyTrainingHeatmap 
+                userId={userId}
+                primaryColor={primaryColor}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Navigation to Strength Values and Exercises */}
+        {/* Navigation Kacheln - unified style */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Dumbbell className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Strength Values</h3>
+            <div className="text-center space-y-3">
+              <Dumbbell className="h-8 w-8 mx-auto text-primary" />
+              <h3 className="text-xl font-semibold text-foreground">Strength Values</h3>
               <p className="text-sm text-muted-foreground">Manage 1RM values</p>
             </div>
           </div>
           
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Target className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Exercises</h3>
+            <div className="text-center space-y-3">
+              <Target className="h-8 w-8 mx-auto text-primary" />
+              <h3 className="text-xl font-semibold text-foreground">Exercises</h3>
               <p className="text-sm text-muted-foreground">Edit preferences</p>
             </div>
           </div>
         </div>
 
-        {/* Contact Tile */}
+        {/* Contact Kachel */}
         {(settings?.whatsapp_number || settings?.contact_email) && (
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-            <h2 className="text-xl font-semibold text-foreground mb-4">Contact</h2>
+            <div className="text-center space-y-3 mb-4">
+              <svg className="h-8 w-8 mx-auto text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <h3 className="text-xl font-semibold text-foreground">Contact</h3>
+              <p className="text-sm text-muted-foreground">Get in touch with us</p>
+            </div>
             <div className="space-y-3">
               {settings?.whatsapp_number && (
                 <a
@@ -442,9 +455,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </div>
         )}
 
-        {/* Settings - moved to end */}
+        {/* Settings Kachel */}
         <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Settings</h2>
+          <div className="text-center space-y-3 mb-4">
+            <svg className="h-8 w-8 mx-auto text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <h3 className="text-xl font-semibold text-foreground">Settings</h3>
+            <p className="text-sm text-muted-foreground">Customize your experience</p>
+          </div>
           <div className="space-y-4">
             {/* Dark Mode Toggle */}
             <div className="flex items-center justify-between">
