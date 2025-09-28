@@ -98,7 +98,7 @@ export const CourseCalendar = ({
             row: "flex w-full mt-2",
             cell: "h-10 w-full text-center text-sm p-0 relative first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
             day: "h-10 w-full p-0 font-normal aria-selected:opacity-100 hover:bg-accent hover:text-accent-foreground rounded-md",
-            day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+            day_selected: "border-2 border-primary text-foreground hover:border-primary hover:text-foreground focus:border-primary focus:text-foreground bg-transparent",
             day_today: "bg-accent text-accent-foreground",
             day_outside: "text-muted-foreground opacity-50",
             day_disabled: "text-muted-foreground opacity-50",
@@ -108,8 +108,7 @@ export const CourseCalendar = ({
           toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
           modifiers={{
             registered: registeredDates,
-            waitlisted: waitlistedDates,
-            hasCourses: courseDates
+            waitlisted: waitlistedDates
           }}
           modifiersStyles={{
             registered: {
@@ -121,10 +120,6 @@ export const CourseCalendar = ({
               border: '2px solid #eab308',
               borderRadius: '6px',
               fontWeight: 'bold'
-            },
-            hasCourses: {
-              border: '1px solid hsl(var(--primary))',
-              borderRadius: '6px'
             }
           }}
         />
@@ -146,7 +141,7 @@ export const CourseCalendar = ({
               {coursesForSelectedDate.map(course => (
                    <div 
                      key={course.id}
-                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 ${
+                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md ${
                        course.is_registered 
                          ? 'border-2 border-green-500' 
                          : course.is_waitlisted 

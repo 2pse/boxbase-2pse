@@ -288,7 +288,7 @@ export const CourseParticipants = () => {
                 {dayCourses.map(course => (
                    <Card 
                      key={course.id}
-                     className="cursor-pointer transition-all duration-200 hover:shadow-md border-0"
+                     className="cursor-pointer transition-all duration-200 hover:shadow-md border-0 shadow-sm"
                      style={{
                        backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
                      }}
@@ -377,7 +377,7 @@ export const CourseParticipants = () => {
                 row: "flex w-full mt-2",
                 cell: "h-10 w-full text-center text-sm p-0 relative first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
                 day: "h-10 w-full p-0 font-normal aria-selected:opacity-100 hover:bg-accent hover:text-accent-foreground rounded-md",
-                day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                day_selected: "border-2 border-primary text-foreground hover:border-primary hover:text-foreground focus:border-primary focus:text-foreground bg-transparent",
                 day_today: "bg-accent text-accent-foreground",
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
@@ -385,15 +385,8 @@ export const CourseParticipants = () => {
               locale={enUS}
               fromDate={new Date()}
               toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
-               modifiers={{
-                 hasCourses: courseDates
-               }}
-               modifiersStyles={{
-                 hasCourses: {
-                   border: '1px solid hsl(var(--primary))',
-                   borderRadius: '6px'
-                 }
-               }}
+              modifiers={{}}
+              modifiersStyles={{}}
             />
           </div>
 
@@ -413,7 +406,7 @@ export const CourseParticipants = () => {
                   {coursesForSelectedDate.map(course => (
                      <div 
                        key={course.id}
-                       className="cursor-pointer hover:shadow-md transition-all duration-200 border-0 rounded-lg p-4"
+                       className="cursor-pointer hover:shadow-md transition-all duration-200 border-0 rounded-lg p-4 shadow-sm"
                        style={{
                          backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
                        }}

@@ -705,7 +705,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                  return (
                      <div 
                       key={course.id} 
-                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 ${
+                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md ${
                         course.is_registered 
                           ? 'border-2 border-green-500' 
                           : course.is_waitlisted 
