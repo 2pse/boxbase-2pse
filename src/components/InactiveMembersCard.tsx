@@ -151,14 +151,14 @@ export const InactiveMembersCard = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <UserX className="h-5 w-5 text-primary" />
-          Inactive members ({totalInactive})
+          Inactive members
         </CardTitle>
         <p className="text-xs text-muted-foreground">Members without login for 21+ days</p>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {inactiveMembers.length === 0 ? (
-            <p className="text-muted-foreground text-sm">All members are active! 🎉</p>
+            <p className="text-muted-foreground text-sm">All members are active!</p>
           ) : (
             inactiveMembers.map((member, index) => (
               <div key={`${member.display_name}-${index}`} className="flex justify-between items-center">

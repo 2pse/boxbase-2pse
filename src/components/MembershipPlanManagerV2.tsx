@@ -39,35 +39,35 @@ const getBookingTypeDisplay = (bookingRules: BookingRules) => {
       return {
         label: 'Unlimited',
         icon: Infinity,
-        description: 'Unbegrenzte Buchungen',
+        description: 'Unlimited bookings',
         color: 'bg-primary/10 text-primary'
       };
     case 'limited':
       return {
-        label: `${bookingRules.limit?.count} pro ${bookingRules.limit?.period === 'week' ? 'Woche' : 'Monat'}`,
+        label: `${bookingRules.limit?.count} per ${bookingRules.limit?.period === 'week' ? 'week' : 'month'}`,
         icon: Calendar,
-        description: 'Begrenzte Buchungen',
+        description: 'Limited bookings',
         color: 'bg-blue-100 text-blue-800'
       };
     case 'credits':
       return {
         label: `${bookingRules.credits?.initial_amount} Credits`,
         icon: CreditCard,
-        description: 'Credit-basiert',
+        description: 'Credit-based',
         color: 'bg-purple-100 text-purple-800'
       };
     case 'open_gym_only':
       return {
         label: 'Open Gym Only',
         icon: Dumbbell,
-        description: 'Nur Open Gym Zugang',
+        description: 'Open Gym access only',
         color: 'bg-orange-100 text-orange-800'
       };
     default:
       return {
-        label: 'Unbekannt',
+        label: 'Unknown',
         icon: Calendar,
-        description: 'Unbekannter Typ',
+        description: 'Unknown type',
         color: 'bg-gray-100 text-gray-800'
       };
   }
@@ -205,12 +205,12 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 <div className="space-y-1">
                   {plan.includes_open_gym && (
                     <Badge variant="outline" className="text-xs">
-                      Open Gym inklusive
+                      Open Gym inclusive
                     </Badge>
                   )}
                   {plan.auto_renewal && (
                     <Badge variant="outline" className="text-xs ml-2">
-                      Auto-Verlängerung
+                      Auto-renewal
                     </Badge>
                   )}
                 </div>
@@ -219,7 +219,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 {plan.booking_rules.type === 'credits' && plan.booking_rules.credits && (
                   <div className="text-xs text-muted-foreground">
                     Credits: {plan.booking_rules.credits.initial_amount} initial
-                    {plan.booking_rules.credits.refill_schedule === 'monthly' && ', monatlich aufgeladen'}
+                    {plan.booking_rules.credits.refill_schedule === 'monthly' && ', monthly refill'}
                   </div>
                 )}
 
@@ -247,19 +247,19 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Plan löschen</AlertDialogTitle>
+                        <AlertDialogTitle>Delete Plan</AlertDialogTitle>
                         <AlertDialogDescription>
                           Are you sure you want to delete plan "{plan.name}"? 
-                          Diese Aktion kann nicht rückgängig gemacht werden.
+                          This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(plan.id)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Löschen
+                          Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -275,13 +275,13 @@ export const MembershipPlanManagerV2: React.FC = () => {
         <Card className="shadow-none">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-medium">Keine Pläne vorhanden</h3>
+              <h3 className="text-lg font-medium">No plans available</h3>
               <p className="text-muted-foreground">
-                Erstellen Sie Ihren ersten Mitgliedschaftsplan
+                Create your first membership plan
               </p>
               <Button onClick={handleCreate} className="mt-4">
                 <Plus className="h-4 w-4 mr-2" />
-                Ersten Plan erstellen
+                Create first plan
               </Button>
             </div>
           </CardContent>

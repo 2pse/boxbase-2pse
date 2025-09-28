@@ -5,6 +5,9 @@ import './index.css'
 import { ThemeProvider } from "next-themes"
 import { GymSettingsProvider } from "./contexts/GymSettingsContext"
 
+// Set document language for browser validation messages
+document.documentElement.lang = 'en';
+
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
     <GymSettingsProvider>

@@ -1130,7 +1130,7 @@ export default function Admin() {
                           onValueChange={setSelectedMembershipPlan}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Mitgliedschaftsplan auswählen" />
+                            <SelectValue placeholder="Select membership plan" />
                           </SelectTrigger>
                           <SelectContent>
                             {availablePlans.map((plan) => (
@@ -1332,7 +1332,7 @@ export default function Admin() {
                         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                         disabled={currentPage === 1}
                       >
-                        Vorherige
+                        Previous
                       </Button>
                       
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -1342,7 +1342,7 @@ export default function Admin() {
                         
                         {/* Direct page jump */}
                         <div className="flex items-center gap-2">
-                          <span>Gehe zu Seite:</span>
+                          <span>Go to page:</span>
                           <Input
                             type="number"
                             min="1"
@@ -1365,7 +1365,7 @@ export default function Admin() {
                         onClick={() => setCurrentPage(Math.min(Math.ceil(totalMembers / membersPerPage), currentPage + 1))}
                         disabled={currentPage >= Math.ceil(totalMembers / membersPerPage)}
                       >
-                        Nächste
+                        Next
                       </Button>
                     </div>
                   )}

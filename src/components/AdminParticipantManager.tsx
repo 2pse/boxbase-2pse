@@ -257,7 +257,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Nach Mitglied suchen..."
+              placeholder="Search for member..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -334,7 +334,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
 
         <div className="flex justify-end pt-4 border-t">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Schließen
+            Close
           </Button>
         </div>
       </DialogContent>
@@ -379,10 +379,10 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
               </div>
               <div className="flex gap-2 pt-4">
                 <Button onClick={saveChanges} disabled={!editedFirstName || !editedLastName}>
-                  Speichern
+                  Save
                 </Button>
                 <Button variant="outline" onClick={() => setEditingMember(null)}>
-                  Abbrechen
+                  Cancel
                 </Button>
               </div>
             </div>

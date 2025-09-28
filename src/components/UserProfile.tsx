@@ -195,7 +195,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
       toast({
         title: "Profile saved",
-        description: data?.message || "Access code successfully changed. Use the new code for the next login.",
+        description: "Access code successfully changed. Use the new code for the next login.",
       })
     } catch (error) {
       console.error('Error saving profile:', error)
@@ -372,18 +372,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         {/* Navigation to Strength Values and Exercises */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center text-center">
               <Dumbbell className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-semibold text-foreground">Strength Values</h3>
-              <p className="text-sm text-muted-foreground text-center">Manage 1RM values</p>
+              <p className="text-sm text-muted-foreground">Manage 1RM values</p>
             </div>
           </div>
           
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center text-center">
               <Target className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-semibold text-foreground">Exercises</h3>
-              <p className="text-sm text-muted-foreground text-center">Edit preferences</p>
+              <p className="text-sm text-muted-foreground">Edit preferences</p>
             </div>
           </div>
         </div>

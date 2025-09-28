@@ -587,6 +587,7 @@ export const FinanceReport = () => {
                   value={exportStartDate}
                   onChange={(e) => setExportStartDate(e.target.value)}
                   className="text-sm"
+                  lang="en-US"
                 />
                 <Input
                   type="month"
@@ -594,6 +595,7 @@ export const FinanceReport = () => {
                   value={exportEndDate}
                   onChange={(e) => setExportEndDate(e.target.value)}
                   className="text-sm"
+                  lang="en-US"
                 />
               </div>
             </div>
