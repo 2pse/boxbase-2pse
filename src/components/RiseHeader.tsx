@@ -243,21 +243,17 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               <span className="text-sm font-medium">Finance</span>
             </div>
             
-            {/* Fourth row - Data Export centered */}
-            <div className="col-span-3 flex justify-center">
-              <div 
-                onClick={() => {
-                  onPageChange?.('export');
-                  setDropdownOpen(false);
-                }}
-                className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
-              >
-                <Download className="h-8 w-8 mb-2" />
-                <span className="text-sm font-medium">Data Export</span>
-              </div>
+            {/* Fourth row */}
+            <div 
+              onClick={() => {
+                onPageChange?.('export');
+                setDropdownOpen(false);
+              }}
+              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
+            >
+              <Download className="h-8 w-8 mb-2" />
+              <span className="text-sm font-medium">Data Export</span>
             </div>
-            
-            {/* Fifth row - Settings and Logout */}
             <div 
               onClick={() => {
                 onPageChange?.('settings');
