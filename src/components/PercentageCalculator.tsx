@@ -96,7 +96,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
     return (
       <div className="mx-4 space-y-6">
         {/* Header Card */}
-        <Card className="border-primary/20">
+        <Card className="border-primary/20 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div className="flex items-center gap-3">
@@ -128,7 +128,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
         </Card>
 
         {/* Calculator Card */}
-        <Card className="border-primary/20">
+        <Card className="border-primary/20 shadow-lg">
           <CardContent className="p-6">
             {!useFixedValues ? (
               <div className="space-y-6">
@@ -203,7 +203,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
   return (
     <div className="mx-4 space-y-6">
       {/* Header Card */}
-      <Card className="border-primary/20">
+      <Card className="border-primary/20 shadow-lg">
         <CardHeader className="pb-4">
           <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
       </Card>
 
       {/* Calculator Card */}
-      <Card className="border-primary/20">
+      <Card className="border-primary/20 shadow-lg">
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -249,7 +249,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                     <SelectTrigger className="h-12 text-lg border-primary/30 focus:border-primary">
                       <SelectValue placeholder="Übung wählen" />
                     </SelectTrigger>
-                    <SelectContent className="bg-background border z-50">
+                    <SelectContent className="bg-background border shadow-lg z-50">
                       {availableLifts.map((lift) => (
                         <SelectItem key={lift.name} value={lift.name} className="bg-background hover:bg-hover-neutral text-lg py-3">
                           <div className="flex justify-between items-center w-full">
