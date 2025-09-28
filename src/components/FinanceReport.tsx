@@ -131,12 +131,19 @@ export const FinanceReport = () => {
           processedData[month][planId].revenue += price
         } else {
           // For monthly payments, calculate revenue for each month the membership is active
-          let currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
-          const lastDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
+          const startMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
+          const endMonth = endDate ? new Date(endDate.getFullYear(), endDate.getMonth(), 1) : null
           const currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
           
-          while (currentDate <= lastDate && currentDate <= currentMonth) {
-            const month = currentDate.toISOString().slice(0, 7) // YYYY-MM format
+          console.log(`Processing monthly membership: ${planName}`)
+          console.log(`Start date: ${startDate.toISOString()}, Start month: ${startMonth.toISOString()}`)
+          console.log(`End date: ${endDate?.toISOString() || 'null'}, End month: ${endMonth?.toISOString() || 'null'}`)
+          console.log(`Current month: ${currentMonth.toISOString()}`)
+          
+          // Only process the current month for active memberships
+          if (startMonth <= currentMonth && (!endMonth || endMonth >= currentMonth)) {
+            const month = currentMonth.toISOString().slice(0, 7) // YYYY-MM format
+            console.log(`Adding revenue for month: ${month}`)
             
             if (!processedData[month]) {
               processedData[month] = {}
@@ -148,9 +155,8 @@ export const FinanceReport = () => {
             
             processedData[month][planId].count += 1
             processedData[month][planId].revenue += price
-            
-            // Move to next month
-            currentDate.setMonth(currentDate.getMonth() + 1)
+          } else {
+            console.log(`Skipping membership - not active in current month`)
           }
         }
       })
