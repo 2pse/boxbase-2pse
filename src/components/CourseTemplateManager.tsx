@@ -493,25 +493,57 @@ export const CourseTemplateManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="startDate">Start Date</Label>
-                  <Input
-                    type="date"
-                    value={scheduleForm.startDate}
-                    onChange={(e) => setScheduleForm(prev => ({ ...prev, startDate: e.target.value }))}
-                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Start date is required')}
-                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
-                    required
-                  />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !scheduleForm.startDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {scheduleForm.startDate ? format(new Date(scheduleForm.startDate), "PPP", { locale: enUS }) : "Select start date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={scheduleForm.startDate ? new Date(scheduleForm.startDate) : undefined}
+                          onSelect={(date) => setScheduleForm(prev => ({ ...prev, startDate: date ? format(date, 'yyyy-MM-dd') : '' }))}
+                          initialFocus
+                          locale={enUS}
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <div>
                     <Label htmlFor="endDate">End Date</Label>
-                  <Input
-                    type="date"
-                    value={scheduleForm.endDate}
-                    onChange={(e) => setScheduleForm(prev => ({ ...prev, endDate: e.target.value }))}
-                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('End date is required')}
-                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
-                    required
-                  />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !scheduleForm.endDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {scheduleForm.endDate ? format(new Date(scheduleForm.endDate), "PPP", { locale: enUS }) : "Select end date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={scheduleForm.endDate ? new Date(scheduleForm.endDate) : undefined}
+                          onSelect={(date) => setScheduleForm(prev => ({ ...prev, endDate: date ? format(date, 'yyyy-MM-dd') : '' }))}
+                          initialFocus
+                          locale={enUS}
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
 
