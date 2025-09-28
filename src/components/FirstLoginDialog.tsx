@@ -26,20 +26,20 @@ export const FirstLoginDialog = ({ open, onClose }: FirstLoginDialogProps) => {
             <X className="h-5 w-5" />
           </Button>
           <DialogTitle className="text-center pr-8 text-xl font-bold text-black dark:text-white">
-            Willkommen im Gym
+            Welcome to the Gym
           </DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
           <p className="text-center text-gray-700 dark:text-gray-300 text-base leading-relaxed">
-            Bitte schaue dir zu Beginn das kurze Erklärungsvideo zur App an
+            Please watch the short tutorial video for the app to get started
           </p>
           
           {/* Video Thumbnail */}
           <div className="relative rounded-lg overflow-hidden">
             <img 
               src={erklaerungsvideoImage} 
-              alt="Gym App Erklärungsvideo" 
+              alt="Gym App Tutorial Video" 
               className="w-full h-auto"
             />
           </div>
@@ -51,7 +51,7 @@ export const FirstLoginDialog = ({ open, onClose }: FirstLoginDialogProps) => {
             size="lg"
           >
             <Play className="h-5 w-5 mr-2 fill-current" />
-            Video ansehen
+            Watch Video
           </Button>
         </div>
       </DialogContent>
