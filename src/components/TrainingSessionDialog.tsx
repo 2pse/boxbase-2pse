@@ -49,7 +49,7 @@ export const TrainingSessionDialog: React.FC<TrainingSessionDialogProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">
-            {hasExistingSession ? 'Training ändern' : 'Training hinzufügen'}
+            {hasExistingSession ? 'Change Training' : 'Add Training'}
           </DialogTitle>
           <p className="text-center text-muted-foreground">
             {date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' })} (Day {dayNumber})
@@ -79,7 +79,7 @@ export const TrainingSessionDialog: React.FC<TrainingSessionDialogProps> = ({
               onClick={() => handleSelectType('remove')}
               className="w-full text-destructive hover:text-destructive"
             >
-              Training entfernen
+              Remove Training
             </Button>
           )}
         </div>

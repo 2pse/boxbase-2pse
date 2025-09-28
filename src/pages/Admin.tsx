@@ -319,7 +319,7 @@ export default function Admin() {
         const userMemberships = membershipsData.filter(m => m.user_id === member.user_id);
         
         // Determine membership type using V2 system only (consistent with FinanceReport)
-        let membershipType = 'Kein Abo'; // Default fallback
+        let membershipType = 'No Membership'; // Default fallback
         
         if (userMemberships.length > 0) {
           // Use shared prioritization logic from membershipUtils
@@ -1207,7 +1207,7 @@ export default function Admin() {
                                 {member.access_code}
                               </div>
                               <div className="flex items-center gap-2 mb-2">
-                                <MembershipBadge type={member.current_membership_type as any || 'Kein Abo'} noShadow />
+                                <MembershipBadge type={member.current_membership_type as any || 'No Membership'} noShadow />
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                   member.status === 'active' 
                                     ? 'bg-green-100 text-green-800' 
@@ -1282,7 +1282,7 @@ export default function Admin() {
                                </TableCell>
                                <TableCell className="font-mono hidden md:table-cell">{member.access_code}</TableCell>
                                <TableCell>
-                                 <MembershipBadge type={member.current_membership_type as any || 'Kein Abo'} noShadow />
+                                 <MembershipBadge type={member.current_membership_type as any || 'No Membership'} noShadow />
                                </TableCell>
                                <TableCell>
                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${

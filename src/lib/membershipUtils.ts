@@ -47,5 +47,5 @@ export const getMembershipTypeName = (membershipV2: MembershipV2 | null, members
   };
   
   const bookingType = membershipV1?.membership_plans?.booking_type;
-  return bookingType ? legacyMapping[bookingType as keyof typeof legacyMapping] || 'Kein Abo' : 'Kein Abo';
+  return bookingType ? legacyMapping[bookingType as keyof typeof legacyMapping] || 'No Membership' : 'No Membership';
 };

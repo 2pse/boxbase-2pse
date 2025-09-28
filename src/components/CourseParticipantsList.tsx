@@ -213,11 +213,11 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
               onClick={() => setShowAddDialog(true)}
             >
               <Plus className="h-4 w-4 mr-1" />
-              Hinzufügen
+              Add
             </Button>
           )}
           <Button variant="outline" onClick={onClose}>
-            Schließen
+            Close
           </Button>
         </div>
       </div>
@@ -318,7 +318,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                           size="sm"
                           onClick={() => promoteFromWaitlist(participant.id, participant.display_name)}
                           className="bg-green-600 hover:bg-green-700 text-white h-8 w-8 p-0"
-                          title="Zum Kurs hinzufügen"
+                          title="Add to Course"
                         >
                           <ArrowUp className="h-4 w-4" />
                         </Button>
@@ -327,7 +327,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                           size="sm"
                           onClick={() => removeParticipant(participant.id)}
                           className="text-destructive hover:text-destructive h-8 w-8 p-0"
-                          title="Entfernen"
+                          title="Remove"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

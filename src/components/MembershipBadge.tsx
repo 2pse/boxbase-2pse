@@ -23,7 +23,7 @@ const getTextColor = (type: MembershipType | string | null | undefined, forceBla
 
 const getDisplayText = (type: MembershipType | string | null | undefined): string => {
   if (!type || type === null || type === undefined) {
-    return 'Kein Abo'
+    return 'No Membership'
   }
   return type
 }
