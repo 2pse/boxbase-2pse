@@ -159,33 +159,67 @@ export const FinanceReport = () => {
       historicalRevenue?.forEach(item => {
         const startDate = new Date(item.period_start)
         const endDate = new Date(item.period_end)
+        const currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
         
-        // Generate monthly entries for the historical period
-        let currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
-        const lastDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
+        // Determine if this is a one-time payment based on booking_type
+        const isOneTimePayment = item.booking_type === 'credits' || 
+                                item.booking_type === 'one_time' ||
+                                item.deleted_reason === 'membership_deleted'
         
-        while (currentDate <= lastDate) {
-          const month = currentDate.toISOString().slice(0, 7) // YYYY-MM format
-          const planId = `historical_${item.id}` // Use unique ID for historical data
+        if (isOneTimePayment) {
+          // For one-time payments, only count revenue in the month of period_start
+          const month = startDate.toISOString().slice(0, 7) // YYYY-MM format
+          const startMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
           
-          if (!processedData[month]) {
-            processedData[month] = {}
-          }
-          
-          if (!processedData[month][planId]) {
-            processedData[month][planId] = {
-              count: 0,
-              revenue: 0,
-              name: `${item.membership_plan_name} (Historical)`,
-              booking_type: mapBookingTypeToCategory(item.booking_type)
+          // Only process if it's not a future month
+          if (startMonth <= currentMonth) {
+            const planId = `historical_${item.id}` // Use unique ID for historical data
+            
+            if (!processedData[month]) {
+              processedData[month] = {}
             }
+            
+            if (!processedData[month][planId]) {
+              processedData[month][planId] = {
+                count: 0,
+                revenue: 0,
+                name: `${item.membership_plan_name} (One-time)`,
+                booking_type: mapBookingTypeToCategory(item.booking_type)
+              }
+            }
+            
+            processedData[month][planId].count += 1
+            processedData[month][planId].revenue += Number(item.amount)
           }
+        } else {
+          // For monthly payments, generate monthly entries for the historical period
+          let currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
+          const lastDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
           
-          processedData[month][planId].count += 1
-          processedData[month][planId].revenue += Number(item.amount)
-          
-          // Move to next month
-          currentDate.setMonth(currentDate.getMonth() + 1)
+          // Stop processing at current month to avoid future months
+          while (currentDate <= lastDate && currentDate <= currentMonth) {
+            const month = currentDate.toISOString().slice(0, 7) // YYYY-MM format
+            const planId = `historical_${item.id}` // Use unique ID for historical data
+            
+            if (!processedData[month]) {
+              processedData[month] = {}
+            }
+            
+            if (!processedData[month][planId]) {
+              processedData[month][planId] = {
+                count: 0,
+                revenue: 0,
+                name: `${item.membership_plan_name} (Monthly)`,
+                booking_type: mapBookingTypeToCategory(item.booking_type)
+              }
+            }
+            
+            processedData[month][planId].count += 1
+            processedData[month][planId].revenue += Number(item.amount)
+            
+            // Move to next month
+            currentDate.setMonth(currentDate.getMonth() + 1)
+          }
         }
       })
 
