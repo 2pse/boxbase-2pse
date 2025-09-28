@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { X, Play } from "lucide-react"
-import erklaerungsvideoImage from "@/assets/erklaerungsvideo.png"
+import erklaerungsvideoImage from "@/assets/erklaerungsvideo.jpg"
 
 interface FirstLoginDialogProps {
   open: boolean
