@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
+type WodStepType = 'selection' | 'timer-selection' | 'fortime' | 'amrap' | 'emom' | 'tabata'
+
 interface WorkoutTimerProps {
   embedded?: boolean
-  onTimerSelect?: (timerType: string) => void
+  onTimerSelect?: (timerType: WodStepType) => void
 }
 
 export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, onTimerSelect }) => {
@@ -36,7 +38,7 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, on
                 <Button
                   key={type.id}
                   variant="outline"
-                  onClick={() => onTimerSelect ? onTimerSelect(type.id) : navigate(type.route)}
+                  onClick={() => onTimerSelect ? onTimerSelect(type.id as WodStepType) : navigate(type.route)}
                   className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
                   style={{
                     borderColor: primaryColor,

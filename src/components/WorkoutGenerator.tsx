@@ -17,7 +17,7 @@ interface WorkoutGeneratorProps {
   user?: User | null
   wodStep?: number
   onStepChange?: (step: number) => void
-  onTimerSelect?: (timerType: string) => void
+  onTimerSelect?: (timerType: 'timer-selection') => void
 }
 
 interface CrossfitWorkout {
@@ -363,7 +363,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                   className="bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-105 rounded-2xl h-32 shadow-sm p-6"
                   onClick={() => {
                     if (onTimerSelect) {
-                      onTimerSelect('selection')
+                      onTimerSelect('timer-selection')
                     } else {
                       navigate('/workout-timer')
                     }

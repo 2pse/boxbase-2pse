@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import { Home, Calendar, Trophy, Weight, Award, Clock } from "lucide-react"
+import { Home, Calendar, Trophy, Weight, Award, Clock, ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { TrainingPathHeader } from "@/components/TrainingPathHeader"
 import { MonthlyProgressCircle } from "@/components/MonthlyProgressCircle"
 import { WeekPreview } from "@/components/WeekPreview"
@@ -37,7 +38,7 @@ import { getPriorizedMembership } from "@/lib/membershipUtils"
 import { UpcomingClassReservation } from "@/components/UpcomingClassReservation"
 
 type DashboardTabType = 'home' | 'wod' | 'courses' | 'leaderboard' | 'news'
-type WodStepType = 'selection' | 'fortime' | 'amrap' | 'emom' | 'tabata'
+type WodStepType = 'selection' | 'timer-selection' | 'fortime' | 'amrap' | 'emom' | 'tabata'
 
 interface TrainingDay {
   date: Date
@@ -607,14 +608,27 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
                     user={user} 
                     wodStep={1} 
                     onStepChange={() => {}} 
-                    onTimerSelect={(timerType: WodStepType) => setWodStep(timerType)}
+                    onTimerSelect={(timerType) => setWodStep(timerType)}
                   />
-                  <div className="mt-8">
-                    <WorkoutTimer 
-                      embedded={true}
-                      onTimerSelect={(timerType: WodStepType) => setWodStep(timerType)}
-                    />
+                </div>
+              )
+            case 'timer-selection':
+              return (
+                <div className="flex-1">
+                  <div className="p-4">
+                    <Button
+                      variant="ghost"
+                      onClick={() => setWodStep('selection')}
+                      className="mb-4"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Back
+                    </Button>
                   </div>
+                  <WorkoutTimer 
+                    embedded={true}
+                    onTimerSelect={(timerType) => setWodStep(timerType)}
+                  />
                 </div>
               )
             case 'fortime':
