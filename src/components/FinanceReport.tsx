@@ -4,11 +4,16 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Calendar, DollarSign, TrendingUp, Users, Download } from "lucide-react"
+import { Calendar as CalendarIcon, DollarSign, TrendingUp, Users, Download } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipUtils"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
+import { enUS } from "date-fns/locale"
+import { cn } from "@/lib/utils"
 
 interface RevenueData {
   month: string
@@ -577,28 +582,66 @@ export const FinanceReport = () => {
       {/* CSV Export Section - Moved to bottom */}
       <Card className="border-dashed">
         <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-3 items-center">
-            <div className="flex-1">
-              <p className="text-sm font-medium mb-2">CSV Export</p>
-              <div className="flex gap-2">
-                <Input
-                  type="month"
-                  placeholder="From"
-                  value={exportStartDate}
-                  onChange={(e) => setExportStartDate(e.target.value)}
-                  className="text-sm"
-                  lang="en-US"
-                />
-                <Input
-                  type="month"
-                  placeholder="To"
-                  value={exportEndDate}
-                  onChange={(e) => setExportEndDate(e.target.value)}
-                  className="text-sm"
-                  lang="en-US"
-                />
-              </div>
-            </div>
+           <div className="flex flex-col md:flex-row gap-3 items-center">
+             <div className="flex-1">
+               <p className="text-sm font-medium mb-2">CSV Export</p>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                 <div>
+                   <Label className="text-xs text-muted-foreground mb-1 block">From</Label>
+                   <Popover>
+                     <PopoverTrigger asChild>
+                       <Button
+                         variant="outline"
+                         className={cn(
+                           "w-full justify-start text-left font-normal text-sm",
+                           !exportStartDate && "text-muted-foreground"
+                         )}
+                       >
+                         <CalendarIcon className="mr-2 h-4 w-4" />
+                         {exportStartDate ? format(new Date(exportStartDate + '-01'), "MMM yyyy", { locale: enUS }) : "Select month"}
+                       </Button>
+                     </PopoverTrigger>
+                     <PopoverContent className="w-auto p-0">
+                       <Calendar
+                         mode="single"
+                         selected={exportStartDate ? new Date(exportStartDate + '-01') : undefined}
+                         onSelect={(date) => setExportStartDate(date ? format(date, 'yyyy-MM') : '')}
+                         initialFocus
+                         locale={enUS}
+                         className="pointer-events-auto"
+                       />
+                     </PopoverContent>
+                   </Popover>
+                 </div>
+                 <div>
+                   <Label className="text-xs text-muted-foreground mb-1 block">To</Label>
+                   <Popover>
+                     <PopoverTrigger asChild>
+                       <Button
+                         variant="outline"
+                         className={cn(
+                           "w-full justify-start text-left font-normal text-sm",
+                           !exportEndDate && "text-muted-foreground"
+                         )}
+                       >
+                         <CalendarIcon className="mr-2 h-4 w-4" />
+                         {exportEndDate ? format(new Date(exportEndDate + '-01'), "MMM yyyy", { locale: enUS }) : "Select month"}
+                       </Button>
+                     </PopoverTrigger>
+                     <PopoverContent className="w-auto p-0">
+                       <Calendar
+                         mode="single"
+                         selected={exportEndDate ? new Date(exportEndDate + '-01') : undefined}
+                         onSelect={(date) => setExportEndDate(date ? format(date, 'yyyy-MM') : '')}
+                         initialFocus
+                         locale={enUS}
+                         className="pointer-events-auto"
+                       />
+                     </PopoverContent>
+                   </Popover>
+                 </div>
+               </div>
+             </div>
             <Button 
               onClick={exportToCSV} 
               disabled={exporting}
