@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate, useLocation } from "react-router-dom"
 import { Play, Pause, RotateCcw, ArrowLeft } from "lucide-react"
-import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
+
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
 interface LocationState {
@@ -305,7 +305,7 @@ export const WorkoutStart: React.FC = () => {
           )}
         </div>
       </div>
-      <TimerBottomNavigation />
+      
     </div>
   )
 }

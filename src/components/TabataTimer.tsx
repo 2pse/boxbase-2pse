@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useNavigate } from "react-router-dom"
-import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
+
 import { ArrowLeft } from "lucide-react"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
@@ -124,9 +124,11 @@ export const TabataTimer: React.FC = () => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = primaryColor
+                e.currentTarget.style.color = 'white'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.color = primaryColor
               }}
             >
               Start
@@ -134,7 +136,7 @@ export const TabataTimer: React.FC = () => {
           </div>
         </div>
       </div>
-      <TimerBottomNavigation />
+      
     </div>
   )
 }

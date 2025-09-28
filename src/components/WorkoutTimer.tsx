@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { TimerBottomNavigation } from "@/components/TimerBottomNavigation"
+
 import { ArrowLeft } from "lucide-react"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 
@@ -115,7 +115,7 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false }) 
           </div>
         </div>
       </div>
-      <TimerBottomNavigation />
+      
     </div>
   )
 }
