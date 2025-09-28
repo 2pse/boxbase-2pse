@@ -110,25 +110,32 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-        <h2 className="text-xl font-semibold text-foreground mb-4">Training Log</h2>
-        <div className="animate-pulse">
-          <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
-        </div>
-      </div>
+      <Card className="border-2 border-primary bg-background shadow-none mb-4">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold">Training Log</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Monthly training days in the last year
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="animate-pulse">
+            <div className="h-40 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+        </CardContent>
+      </Card>
     )
   }
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-4">
-      <div>
-        <h2 className="text-xl font-semibold text-foreground mb-1">Training Log</h2>
+    <Card className="border-2 border-primary bg-background shadow-none mb-4">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold">Training Log</CardTitle>
         <p className="text-sm text-muted-foreground">
           Monthly training days in the last year
         </p>
-      </div>
-      <div className="pl-2 mt-4">
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full -ml-4">
+      </CardHeader>
+      <CardContent className="pt-0">
+        <ChartContainer config={chartConfig} className="min-h-[240px] w-full">
           <LineChart data={monthlyData} margin={{ left: -20, right: 20, top: 5, bottom: 5 }}>
             <XAxis 
               dataKey="month" 
@@ -156,7 +163,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
             />
           </LineChart>
         </ChartContainer>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
