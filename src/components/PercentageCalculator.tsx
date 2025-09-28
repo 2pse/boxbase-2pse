@@ -96,7 +96,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
     return (
       <div className="mx-4 space-y-6">
         {/* Header Card */}
-        <Card className="border-primary/20 shadow-lg">
+        <Card className="border-primary/20">
           <CardHeader className="pb-4">
             <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div className="flex items-center gap-3">
@@ -128,7 +128,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
         </Card>
 
         {/* Calculator Card */}
-        <Card className="border-primary/20 shadow-lg">
+        <Card className="border-primary/20">
           <CardContent className="p-6">
             {!useFixedValues ? (
               <div className="space-y-6">
@@ -203,7 +203,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
   return (
     <div className="mx-4 space-y-6">
       {/* Header Card */}
-      <Card className="border-primary/20 shadow-lg">
+      <Card className="border-primary/20">
         <CardHeader className="pb-4">
           <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
       </Card>
 
       {/* Calculator Card */}
-      <Card className="border-primary/20 shadow-lg">
+      <Card className="border-primary/20">
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
