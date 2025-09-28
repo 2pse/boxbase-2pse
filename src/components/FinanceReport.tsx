@@ -131,18 +131,21 @@ export const FinanceReport = () => {
           processedData[month][planId].revenue += price
         } else {
           // For monthly payments, calculate revenue for each month the membership is active
-          const startMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
-          const endMonth = endDate ? new Date(endDate.getFullYear(), endDate.getMonth(), 1) : null
-          const currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+          // Use timezone-safe date calculations to extract year-month directly
+          const startMonthStr = startDate.toISOString().slice(0, 7) // YYYY-MM format
+          const endMonthStr = endDate ? endDate.toISOString().slice(0, 7) : null
+          const currentMonthStr = new Date().toISOString().slice(0, 7) // Current month in YYYY-MM format
           
           console.log(`Processing monthly membership: ${planName}`)
-          console.log(`Start date: ${startDate.toISOString()}, Start month: ${startMonth.toISOString()}`)
-          console.log(`End date: ${endDate?.toISOString() || 'null'}, End month: ${endMonth?.toISOString() || 'null'}`)
-          console.log(`Current month: ${currentMonth.toISOString()}`)
+          console.log(`Start date: ${startDate.toISOString()}, Start month: ${startMonthStr}`)
+          console.log(`End date: ${endDate?.toISOString() || 'null'}, End month: ${endMonthStr || 'null'}`)
+          console.log(`Current month: ${currentMonthStr}`)
           
           // Only process the current month for active memberships
-          if (startMonth <= currentMonth && (!endMonth || endMonth >= currentMonth)) {
-            const month = currentMonth.toISOString().slice(0, 7) // YYYY-MM format
+          const isActiveInCurrentMonth = startMonthStr <= currentMonthStr && (!endMonthStr || endMonthStr >= currentMonthStr)
+          
+          if (isActiveInCurrentMonth) {
+            const month = currentMonthStr
             console.log(`Adding revenue for month: ${month}`)
             
             if (!processedData[month]) {
