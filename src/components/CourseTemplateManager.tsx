@@ -50,20 +50,22 @@ export const CourseTemplateManager = () => {
     color: '#f3f4f6'
   })
 
-  // Color palette - fitness-appropriate colors
+  // Color palette - CrossFit-appropriate masculine colors
   const colorOptions = [
-    { value: '#f3f4f6', label: 'Light Gray' },
-    { value: '#6b7280', label: 'Gray' },
-    { value: '#374151', label: 'Dark Gray' },
-    { value: '#1f2937', label: 'Anthracite' },
-    { value: '#ef4444', label: 'Red' },
-    { value: '#dc2626', label: 'Dark Red' },
-    { value: '#f97316', label: 'Orange' },
-    { value: '#eab308', label: 'Yellow' },
-    { value: '#3B82F6', label: 'Blue' },
-    { value: '#1d4ed8', label: 'Dark Blue' },
-    { value: '#8B5CF6', label: 'Purple' },
-    { value: '#7c3aed', label: 'Dark Purple' }
+    { value: '#000000', label: 'Schwarz' },
+    { value: '#1a1a1a', label: 'Dunkelgrau' },
+    { value: '#065f46', label: 'Dunkelgrün' },
+    { value: '#064e3b', label: 'Waldgrün' },
+    { value: '#1e3a8a', label: 'Dunkelblau' },
+    { value: '#1e40af', label: 'Königsblau' },
+    { value: '#7f1d1d', label: 'Dunkelrot' },
+    { value: '#991b1b', label: 'Bordeaux' },
+    { value: '#78350f', label: 'Dunkelbraun' },
+    { value: '#451a03', label: 'Espresso' },
+    { value: '#374151', label: 'Schiefergrau' },
+    { value: '#4b5563', label: 'Steingrau' },
+    { value: '#6b7280', label: 'Hellgrau' },
+    { value: '#f3f4f6', label: 'Lichtgrau' }
   ]
 
   // Schedule form state
@@ -391,7 +393,7 @@ export const CourseTemplateManager = () => {
                             <div className="flex items-center gap-2">
                               <div 
                                 className="w-4 h-4 rounded border border-gray-300" 
-                                style={{ backgroundColor: color.value }}
+                                style={{ backgroundColor: `${color.value}80` }}
                               />
                               {color.label}
                             </div>
@@ -432,7 +434,7 @@ export const CourseTemplateManager = () => {
                             <div className="flex items-center gap-2">
                               <div 
                                 className="w-3 h-3 rounded-full border border-gray-300" 
-                                style={{ backgroundColor: template.color || '#f3f4f6' }}
+                                style={{ backgroundColor: `${template.color || '#f3f4f6'}80` }}
                               />
                               {template.title}
                             </div>
@@ -443,7 +445,7 @@ export const CourseTemplateManager = () => {
                           <TableCell className="hidden xl:table-cell">
                             <div 
                               className="w-6 h-6 rounded border border-gray-300" 
-                              style={{ backgroundColor: template.color || '#f3f4f6' }}
+                              style={{ backgroundColor: `${template.color || '#f3f4f6'}80` }}
                             />
                           </TableCell>
                           <TableCell>

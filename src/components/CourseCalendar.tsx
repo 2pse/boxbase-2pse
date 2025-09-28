@@ -148,9 +148,9 @@ export const CourseCalendar = ({
                          ? 'border-2 border-yellow-500'
                          : 'border-0'
                      }`}
-                     style={{
-                       backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
-                     }}
+                      style={{
+                        backgroundColor: course.color ? `${course.color}80` : '#f3f4f680'
+                      }}
                     onClick={() => onCourseClick(course)}
                 >
                       <div className="flex items-center justify-between">
