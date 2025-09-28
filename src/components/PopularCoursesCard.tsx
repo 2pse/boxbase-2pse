@@ -61,7 +61,7 @@ export const PopularCoursesCard = () => {
           avgUtilization: stats.totalCapacity > 0 ? (stats.registrations / stats.totalCapacity) * 100 : 0
         }))
         .sort((a, b) => b.registrations - a.registrations)
-        .slice(0, 5)
+        .slice(0, 5) // Already limited to 5 for tile size consistency
 
       setCourses(popularCourses)
     } catch (error) {

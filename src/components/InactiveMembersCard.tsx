@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { supabase } from "@/integrations/supabase/client"
-import { UserX } from "lucide-react"
+import { UserX, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface InactiveMember {
   display_name: string
@@ -13,8 +14,11 @@ interface InactiveMember {
 
 export const InactiveMembersCard = () => {
   const [inactiveMembers, setInactiveMembers] = useState<InactiveMember[]>([])
+  const [allInactiveMembers, setAllInactiveMembers] = useState<InactiveMember[]>([])
   const [totalInactive, setTotalInactive] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(0)
+  const itemsPerPage = 10
 
   useEffect(() => {
     loadInactiveMembers()
@@ -103,16 +107,27 @@ export const InactiveMembersCard = () => {
           daysSinceLogin,
           membership_type: membershipType
         }
-      }).slice(0, 10) || [] // Show top 10 most inactive
+      }) || []
 
-      setInactiveMembers(inactiveList)
+      setAllInactiveMembers(inactiveList)
+      const currentPageMembers = inactiveList.slice(0, itemsPerPage)
+
+      setInactiveMembers(currentPageMembers)
       setTotalInactive(profiles?.length || 0)
+      setCurrentPage(0)
     } catch (error) {
       console.error('Error loading inactive members:', error)
     } finally {
       setLoading(false)
     }
   }
+
+  // Update displayed members when page changes
+  useEffect(() => {
+    const start = currentPage * itemsPerPage
+    const end = start + itemsPerPage
+    setInactiveMembers(allInactiveMembers.slice(start, end))
+  }, [currentPage, allInactiveMembers])
 
   const formatLastLogin = (lastLogin: string | null, daysSince: number) => {
     if (!lastLogin) return 'Never logged in'
@@ -178,11 +193,28 @@ export const InactiveMembersCard = () => {
             ))
           )}
         </div>
-        {totalInactive > 10 && (
-          <div className="pt-3 border-t mt-3">
-            <p className="text-xs text-muted-foreground">
-              ... and {totalInactive - 10} more inactive members
-            </p>
+        
+        {allInactiveMembers.length > itemsPerPage && (
+          <div className="flex justify-between items-center pt-3 border-t">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+              disabled={currentPage === 0}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              Page {currentPage + 1} of {Math.ceil(allInactiveMembers.length / itemsPerPage)}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => prev + 1)}
+              disabled={(currentPage + 1) * itemsPerPage >= allInactiveMembers.length}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         )}
       </CardContent>

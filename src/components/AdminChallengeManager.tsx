@@ -335,7 +335,7 @@ export default function AdminChallengeManager() {
           resetForm();
         }
       }}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col pr-6">
           <DialogHeader>
             <DialogTitle>
               {editingChallenge ? 'Edit Challenge' : 'Create New Challenge'}
@@ -345,7 +345,7 @@ export default function AdminChallengeManager() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 overflow-y-auto flex-1 pr-2">
+          <div className="space-y-4 overflow-y-auto flex-1 pr-3 mr-1">
             <div>
               <Label htmlFor="title">Title</Label>
               <Input
@@ -353,6 +353,7 @@ export default function AdminChallengeManager() {
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                 placeholder="Challenge Title"
+                className="focus:ring-2 focus:ring-primary focus:ring-offset-2"
               />
             </div>
 
@@ -363,6 +364,7 @@ export default function AdminChallengeManager() {
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Challenge Description"
+                className="focus:ring-2 focus:ring-primary focus:ring-offset-2"
               />
             </div>
 

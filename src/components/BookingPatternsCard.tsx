@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { supabase } from "@/integrations/supabase/client"
-import { Clock } from "lucide-react"
+import { Clock, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface BookingPattern {
   dayOfWeek: string
@@ -11,8 +12,11 @@ interface BookingPattern {
 
 export const BookingPatternsCard = () => {
   const [patterns, setPatterns] = useState<BookingPattern[]>([])
+  const [allPatterns, setAllPatterns] = useState<BookingPattern[]>([])
   const [mostPopular, setMostPopular] = useState<BookingPattern | null>(null)
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(0)
+  const itemsPerPage = 10
 
   useEffect(() => {
     loadBookingPatterns()
@@ -66,7 +70,7 @@ export const BookingPatternsCard = () => {
         })
 
       // Sort chronologically for display
-      const topPatterns = [...allPatterns]
+      const sortedPatterns = [...allPatterns]
         .sort((a, b) => {
           // First sort by day of week
           const dayA = dayOrder.indexOf(a.dayOfWeek)
@@ -75,7 +79,9 @@ export const BookingPatternsCard = () => {
           // Then sort by hour
           return a.hour - b.hour
         })
-        .slice(0, 8)
+
+      setAllPatterns(sortedPatterns)
+      const topPatterns = sortedPatterns.slice(0, itemsPerPage)
 
       // Find most popular pattern for summary
       const mostPopularPattern = allPatterns.reduce((max, current) => 
@@ -84,6 +90,7 @@ export const BookingPatternsCard = () => {
       )
 
       setPatterns(topPatterns)
+      setCurrentPage(0)
       setMostPopular(mostPopularPattern)
     } catch (error) {
       console.error('Error loading booking patterns:', error)
@@ -114,6 +121,13 @@ export const BookingPatternsCard = () => {
       </Card>
     )
   }
+
+  // Update patterns when page changes
+  useEffect(() => {
+    const start = currentPage * itemsPerPage
+    const end = start + itemsPerPage
+    setPatterns(allPatterns.slice(start, end))
+  }, [currentPage, allPatterns])
 
   return (
     <Card>
@@ -149,6 +163,30 @@ export const BookingPatternsCard = () => {
             ))
           )}
         </div>
+        
+        {allPatterns.length > itemsPerPage && (
+          <div className="flex justify-between items-center pt-3 border-t">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+              disabled={currentPage === 0}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              Page {currentPage + 1} of {Math.ceil(allPatterns.length / itemsPerPage)}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => prev + 1)}
+              disabled={(currentPage + 1) * itemsPerPage >= allPatterns.length}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
         {patterns.length > 0 && mostPopular && (
           <div className="pt-3 border-t mt-3 space-y-1">
             <p className="text-xs text-muted-foreground">
