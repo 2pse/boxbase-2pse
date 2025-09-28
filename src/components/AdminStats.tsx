@@ -229,8 +229,8 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         </CardHeader>
         <CardContent>
           <div className="w-full">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+             <ResponsiveContainer width="100%" height={300}>
+               <BarChart data={chartData} margin={{ top: 20, right: 30, left: 5, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="name" 
