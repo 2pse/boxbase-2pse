@@ -655,10 +655,9 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                  {dayCourses.map(course => (
                    <div
                      key={course.id} 
-                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 border-2 ${getBorderColor(course)}`}
+                     className="rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200"
                      style={{
-                       backgroundColor: `${course.color || '#f3f4f6'}15`,
-                       borderColor: course.is_registered ? '#22c55e' : course.is_waitlisted ? '#eab308' : course.color || '#f3f4f6'
+                       backgroundColor: `${course.color || '#f3f4f6'}15`
                      }}
                      onClick={() => handleCourseClick(course)}
                    >
