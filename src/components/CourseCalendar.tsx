@@ -121,6 +121,10 @@ export const CourseCalendar = ({
               border: '2px solid #eab308',
               borderRadius: '6px',
               fontWeight: 'bold'
+            },
+            hasCourses: {
+              border: '1px solid hsl(var(--primary))',
+              borderRadius: '6px'
             }
           }}
         />
@@ -140,20 +144,19 @@ export const CourseCalendar = ({
           ) : (
             <div className="space-y-3 px-4">
               {coursesForSelectedDate.map(course => (
-                 <div 
-                   key={course.id}
-                   className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 border-2 ${
-                     course.is_registered 
-                       ? 'border-green-500' 
-                       : course.is_waitlisted 
-                       ? 'border-yellow-500'
-                       : ''
-                   }`}
-                   style={{
-                     backgroundColor: `${course.color || '#f3f4f6'}15`,
-                     borderColor: course.is_registered ? '#22c55e' : course.is_waitlisted ? '#eab308' : course.color || '#f3f4f6'
-                   }}
-                  onClick={() => onCourseClick(course)}
+                   <div 
+                     key={course.id}
+                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 ${
+                       course.is_registered 
+                         ? 'border-2 border-green-500' 
+                         : course.is_waitlisted 
+                         ? 'border-2 border-yellow-500'
+                         : 'border-0'
+                     }`}
+                     style={{
+                       backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                     }}
+                    onClick={() => onCourseClick(course)}
                 >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">

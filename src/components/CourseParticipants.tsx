@@ -286,14 +286,13 @@ export const CourseParticipants = () => {
               </h3>
               <div className="space-y-2">
                 {dayCourses.map(course => (
-                  <Card 
-                    key={course.id}
-                    className="cursor-pointer transition-all duration-200 hover:shadow-md border-2"
-                    style={{
-                      backgroundColor: `${course.color || '#f3f4f6'}15`,
-                      borderColor: course.color || '#f3f4f6'
-                    }}
-                    onClick={() => setSelectedCourse(course)}
+                   <Card 
+                     key={course.id}
+                     className="cursor-pointer transition-all duration-200 hover:shadow-md border-0"
+                     style={{
+                       backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                     }}
+                     onClick={() => setSelectedCourse(course)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -386,9 +385,15 @@ export const CourseParticipants = () => {
               locale={enUS}
               fromDate={new Date()}
               toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
-              modifiers={{
-                hasCourses: courseDates
-              }}
+               modifiers={{
+                 hasCourses: courseDates
+               }}
+               modifiersStyles={{
+                 hasCourses: {
+                   border: '1px solid hsl(var(--primary))',
+                   borderRadius: '6px'
+                 }
+               }}
             />
           </div>
 
@@ -406,14 +411,13 @@ export const CourseParticipants = () => {
               ) : (
                 <div className="space-y-3 px-4">
                   {coursesForSelectedDate.map(course => (
-                    <div 
-                      key={course.id}
-                      className="cursor-pointer hover:shadow-md transition-all duration-200 border-2 rounded-lg p-4"
-                      style={{
-                        backgroundColor: `${course.color || '#f3f4f6'}15`,
-                        borderColor: course.color || '#f3f4f6'
-                      }}
-                      onClick={() => setSelectedCourse(course)}
+                     <div 
+                       key={course.id}
+                       className="cursor-pointer hover:shadow-md transition-all duration-200 border-0 rounded-lg p-4"
+                       style={{
+                         backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                       }}
+                       onClick={() => setSelectedCourse(course)}
                     >
                       <div className="space-y-1">
                         {/* Course Title */}

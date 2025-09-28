@@ -703,14 +703,19 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                 else if (percentage >= 75) badgeColor = "bg-[#edb408]";
 
                  return (
-                    <div 
-                     key={course.id} 
-                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 border-2`}
-                     style={{
-                       backgroundColor: `${course.color || '#f3f4f6'}15`,
-                       borderColor: course.color || '#f3f4f6'
-                     }}
-                     onClick={() => handleCourseClick(course)}
+                     <div 
+                      key={course.id} 
+                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 ${
+                        course.is_registered 
+                          ? 'border-2 border-green-500' 
+                          : course.is_waitlisted 
+                          ? 'border-2 border-yellow-500'
+                          : 'border-0'
+                      }`}
+                      style={{
+                        backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                      }}
+                      onClick={() => handleCourseClick(course)}
                    >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
@@ -768,12 +773,12 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
       {/* Course Detail Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>{selectedCourse?.title}</DialogTitle>
           </DialogHeader>
           {selectedCourse && (
-            <div className="space-y-4">
+            <div className="space-y-4 flex-1 overflow-y-auto pr-2">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4" />
@@ -795,7 +800,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                   </div>
                 )}
                 {selectedCourse.wod_content && (
-                  <div className="mt-3 p-3 bg-muted/30 rounded-lg">
+                  <div className="mt-3 p-3 bg-muted/30 rounded-lg max-h-32 overflow-y-auto">
                     <h5 className="font-medium text-sm mb-2">WOD (Workout of the Day)</h5>
                     <p className="text-sm whitespace-pre-wrap">{selectedCourse.wod_content}</p>
                   </div>
