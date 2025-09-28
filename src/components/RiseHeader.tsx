@@ -257,7 +257,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               </div>
             </div>
             
-            {/* Fifth row */}
+            {/* Fifth row - Settings and Logout */}
             <div 
               onClick={() => {
                 onPageChange?.('settings');
