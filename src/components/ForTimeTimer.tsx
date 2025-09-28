@@ -35,29 +35,29 @@ export const ForTimeTimer: React.FC = () => {
         </Button>
       </div>
       
-      <div className="flex-1 flex items-center justify-center p-6 pb-20 -mt-16">
+      <div className="flex-1 flex items-center justify-center p-6 pb-20" style={{ marginTop: '-1cm' }}>
         <div className="max-w-md w-full">
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold mb-2">For Time</h1>
-            <p className="text-lg text-muted-foreground">As fast as possible</p>
+          <div className="text-center mb-8">
+            <h1 className="text-6xl font-bold mb-4">For Time</h1>
+            <p className="text-xl text-muted-foreground">As fast as possible</p>
           </div>
 
-          <div className="space-y-6">
-            <div className="flex items-center justify-center gap-4">
-              <span className="text-lg font-medium">Time Cap</span>
+          <div className="space-y-8">
+            <div className="flex items-center justify-center gap-6">
+              <span className="text-2xl font-medium">Time Cap</span>
               <Select value={timeCap.toString()} onValueChange={(value) => setTimeCap(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 h-12 text-center text-lg bg-background"
+                  className="w-24 h-16 text-center text-2xl border-2 bg-background rounded-xl"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent 
-                  className="bg-background z-50 max-h-60"
+                  className="bg-background border-2 rounded-xl max-h-60"
                   style={{ borderColor: primaryColor }}
                 >
                   {Array.from({ length: 60 }, (_, i) => i + 1).map((num) => (
-                    <SelectItem key={num} value={num.toString()} className="text-base">
+                    <SelectItem key={num} value={num.toString()} className="text-lg">
                       {num}
                     </SelectItem>
                   ))}
@@ -68,7 +68,7 @@ export const ForTimeTimer: React.FC = () => {
             <Button
               onClick={handleStart}
               variant="outline"
-              className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
+              className="w-full h-20 text-2xl border-2 bg-background hover:text-white rounded-2xl font-medium transition-all duration-200"
               style={{
                 borderColor: primaryColor,
                 color: primaryColor
