@@ -110,7 +110,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
 
   if (loading) {
     return (
-      <Card className="border-2 border-primary bg-background shadow-none mb-4">
+      <Card className="border-primary/20 bg-background shadow-none mb-4">
         <CardHeader className="pb-4">
           <CardTitle className="text-xl font-semibold">Training Log</CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -127,7 +127,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
   }
 
   return (
-    <Card className="border-2 border-primary bg-background shadow-none mb-4">
+    <Card className="border-primary/20 bg-background shadow-none mb-4">
       <CardHeader className="pb-4">
         <CardTitle className="text-xl font-semibold">Training Log</CardTitle>
         <p className="text-sm text-muted-foreground">
