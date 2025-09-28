@@ -40,7 +40,7 @@ export const ForTimeTimer: React.FC<ForTimeTimerProps> = ({ embedded = false, on
       </Button>
       </div>
       
-      <div className="flex-1 flex items-center justify-center p-6 pb-20 -mt-16">
+      <div className="flex-1 p-6 pt-8 pb-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-6">
             <h1 className="text-4xl font-bold mb-2">For Time</h1>
