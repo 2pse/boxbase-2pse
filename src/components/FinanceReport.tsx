@@ -451,7 +451,7 @@ export const FinanceReport = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center">
-              <Calendar className="h-8 w-8 text-primary" />
+              <CalendarIcon className="h-8 w-8 text-primary" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Last Month</p>
                 <p className="text-2xl font-bold">€{(() => {
