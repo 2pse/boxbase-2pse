@@ -603,7 +603,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
             case 'selection':
               return (
                 <div className="flex-1">
-                  <WorkoutGenerator user={user} wodStep={1} onStepChange={() => {}} />
+                  <WorkoutGenerator 
+                    user={user} 
+                    wodStep={1} 
+                    onStepChange={() => {}} 
+                    onTimerSelect={(timerType: WodStepType) => setWodStep(timerType)}
+                  />
                   <div className="mt-8">
                     <WorkoutTimer 
                       embedded={true}

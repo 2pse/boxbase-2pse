@@ -17,6 +17,7 @@ interface WorkoutGeneratorProps {
   user?: User | null
   wodStep?: number
   onStepChange?: (step: number) => void
+  onTimerSelect?: (timerType: string) => void
 }
 
 interface CrossfitWorkout {
@@ -41,7 +42,7 @@ interface BodybuildingWorkout {
   notes?: string
 }
 
-export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: WorkoutGeneratorProps) => {
+export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, onTimerSelect }: WorkoutGeneratorProps) => {
   const navigate = useNavigate()
   const [step, setStep] = useState(externalStep || 1)
   const [workoutType, setWorkoutType] = useState<WorkoutType>(null)
@@ -361,9 +362,11 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange }: 
                 <div 
                   className="bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-105 rounded-2xl h-32 shadow-sm p-6"
                   onClick={() => {
-                    // Set referrer to WOD page for proper back navigation
-                    sessionStorage.setItem('timer-referrer', '/pro?tab=wod')
-                    navigate('/workout-timer')
+                    if (onTimerSelect) {
+                      onTimerSelect('selection')
+                    } else {
+                      navigate('/workout-timer')
+                    }
                   }}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
