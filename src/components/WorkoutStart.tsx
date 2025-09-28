@@ -183,7 +183,12 @@ export const WorkoutStart: React.FC = () => {
       <div className="p-4">
         <Button
           variant="ghost"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            navigate('/pro')
+            setTimeout(() => {
+              window.dispatchEvent(new CustomEvent('changeTab', { detail: 'wod' }))
+            }, 50)
+          }}
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
