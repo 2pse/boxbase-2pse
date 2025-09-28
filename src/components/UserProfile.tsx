@@ -366,17 +366,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         </Card>
 
         {/* Training Log - Jahresübersicht */}
-        <Card className="border-primary/20 mb-4">
-          <CardHeader>
-            <CardTitle className="text-xl">Training Log</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <YearlyTrainingHeatmap 
-              userId={userId}
-              primaryColor={primaryColor}
-            />
-          </CardContent>
-        </Card>
+        <YearlyTrainingHeatmap 
+          userId={userId}
+          primaryColor={primaryColor}
+        />
 
         {/* Navigation to Strength Values and Exercises */}
         <div className="grid grid-cols-2 gap-4 mb-4">
