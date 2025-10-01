@@ -506,7 +506,7 @@ export const CourseParticipants = () => {
                   <Input name="trainer" defaultValue={editingCourse.trainer} />
                 </div>
                 <div>
-                  <Label htmlFor="strength_exercise">Kraftübung</Label>
+                  <Label htmlFor="strength_exercise">Strength</Label>
                   <Input name="strength_exercise" defaultValue={editingCourse.strength_exercise || ''} />
                 </div>
                 <div>
@@ -515,7 +515,7 @@ export const CourseParticipants = () => {
                     name="wod_content" 
                     className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     defaultValue={editingCourse.wod_content || ''} 
-                    placeholder="Beschreibung des WOD (optional)"
+                    placeholder="WOD Description (optional)"
                   />
                 </div>
                 <div>
@@ -530,7 +530,7 @@ export const CourseParticipants = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="registration_deadline_minutes">Anmeldefrist (Minuten vor Start)</Label>
+                  <Label htmlFor="registration_deadline_minutes">Registration Deadline (Minutes before Start)</Label>
                   <Input 
                     name="registration_deadline_minutes" 
                     type="number" 
@@ -542,7 +542,7 @@ export const CourseParticipants = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="cancellation_deadline_minutes">Abmeldefrist (Minuten vor Start)</Label>
+                  <Label htmlFor="cancellation_deadline_minutes">Cancellation Deadline (Minutes before Start)</Label>
                   <Input 
                     name="cancellation_deadline_minutes" 
                     type="number" 
@@ -554,7 +554,7 @@ export const CourseParticipants = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="start_time">Startzeit</Label>
+                  <Label htmlFor="start_time">Start Time</Label>
                   <Input 
                     name="start_time" 
                     type="time" 
@@ -565,7 +565,7 @@ export const CourseParticipants = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="duration_minutes">Dauer (Minuten)</Label>
+                  <Label htmlFor="duration_minutes">Duration (Minutes)</Label>
                   <Input 
                     name="duration_minutes" 
                     type="number" 

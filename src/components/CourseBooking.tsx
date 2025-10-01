@@ -752,7 +752,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                 {selectedCourse.strength_exercise && (
                   <div className="flex items-center gap-2 text-sm">
                     <Badge variant="outline">
-                      Kraftteil: {selectedCourse.strength_exercise}
+                      Strength: {selectedCourse.strength_exercise}
                     </Badge>
                   </div>
                 )}
