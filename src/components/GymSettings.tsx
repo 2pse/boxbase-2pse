@@ -123,7 +123,7 @@ export const GymSettings = () => {
       setSettings(data)
       toast({
         title: "Success",
-        description: "Standard-Einstellungen wurden erstellt",
+        description: "Default settings have been created",
       })
     } catch (error) {
       console.error('Error creating default settings:', error)
@@ -182,7 +182,7 @@ export const GymSettings = () => {
                          type === 'dark' ? 'Dark logo successfully uploaded' :
                          'App icon successfully uploaded';
       toast({
-        title: "Erfolg",
+        title: "Success",
         description,
       })
     } catch (error) {
@@ -210,11 +210,11 @@ export const GymSettings = () => {
 
     setSettings(updatedSettings)
 
-    const description = type === 'light' ? 'Helles Logo entfernt' :
-                       type === 'dark' ? 'Dunkles Logo entfernt' :
-                       'App-Icon entfernt';
+    const description = type === 'light' ? 'Light logo removed' :
+                       type === 'dark' ? 'Dark logo removed' :
+                       'App icon removed';
     toast({
-      title: "Erfolg",
+      title: "Success",
       description,
     })
   }
@@ -278,7 +278,7 @@ export const GymSettings = () => {
     
     if (!adminEmail && !adminPassword) {
       toast({
-        title: "Fehler",
+        title: "Error",
         description: "Please enter an email or new password",
         variant: "destructive",
       })
@@ -298,16 +298,16 @@ export const GymSettings = () => {
       if (error) {
         console.error('Error updating admin profile:', error)
         toast({
-          title: "Fehler",
-          description: "Fehler beim Aktualisieren des Admin-Profils",
+          title: "Error",
+          description: "Error updating admin profile",
           variant: "destructive",
         })
         return
       }
 
       toast({
-        title: "Erfolg",
-        description: "Admin-Profil erfolgreich aktualisiert",
+        title: "Success",
+        description: "Admin profile successfully updated",
       })
 
       // Clear password field after successful update
@@ -319,8 +319,8 @@ export const GymSettings = () => {
     } catch (error) {
       console.error('Error updating admin profile:', error)
       toast({
-        title: "Fehler",
-        description: "Unerwarteter Fehler beim Aktualisieren des Profils",
+        title: "Error",
+        description: "Unexpected error updating profile",
         variant: "destructive",
       })
     } finally {
@@ -350,7 +350,7 @@ export const GymSettings = () => {
       <Card>
         <CardContent className="p-6">
           <div className="text-center space-y-4">
-            <p className="text-muted-foreground">Standard-Einstellungen werden erstellt...</p>
+            <p className="text-muted-foreground">Creating default settings...</p>
             <div className="animate-pulse">
               <div className="h-4 bg-muted rounded w-1/2 mx-auto"></div>
             </div>

@@ -214,14 +214,14 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
   })
 
   const handleDayClick = (day: TrainingDay) => {
-    // Vergangene Tage können nicht angeklickt werden
+    // Past days cannot be clicked
     if (!day.isToday && !day.isFuture) {
       return
     }
     
     setSelectedDay(day)
     
-    // Für open_gym_only Mitgliedschaften zeige nur den Training Dialog (kein Kurse Dialog)
+    // For open_gym_only memberships, show only the training dialog (no courses dialog)
     if (userMembershipType === 'open_gym_only') {
       setShowDialog(true)
     } else {
@@ -242,21 +242,21 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
   const getNodeStatus = (day: TrainingDay) => {
     if (day.trainingSession) return 'completed'
     if (day.isToday) return 'current'
-    if (day.isFuture) return 'locked' // Zukünftige Tage sind grau
+    if (day.isFuture) return 'locked' // Future days are gray
     return 'pending'
   }
 
 
   return (
     <div className="flex-1 flex flex-col relative">
-      {/* Fixierte Überschrift */}
+      {/* Fixed header */}
       <div className="text-center p-4 bg-background">
         <h2 className="text-xl font-bold text-foreground">
           {currentMonth}
         </h2>
       </div>
 
-      {/* Scrollbarer Trainingsbereich */}
+      {/* Scrollable training area */}
       <div ref={containerRef} className="flex-1 overflow-auto bg-gradient-to-b from-background to-muted/20">
         <div className="flex flex-col items-center py-8 pb-24 max-w-md mx-auto">
           {trainingDays.map((day, index) => (
@@ -275,7 +275,7 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
                 isRegisteredForCourse={day.isRegisteredForCourse || false}
               />
               
-              {/* Verbindungslinie zum nächsten Tag */}
+              {/* Connection line to next day */}
               {index < trainingDays.length - 1 && (
                 <div className="w-1 h-12 bg-border my-2 shadow-[2px_0_8px_rgba(0,0,0,0.15)] dark:shadow-[2px_0_8px_rgba(255,255,255,0.1)]" />
               )}
@@ -284,8 +284,8 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
         </div>
       </div>
 
-      {/* Fixierte Elemente */}
-      {/* Links: Monatliche Trainingskalender - fixiert */}
+      {/* Fixed elements */}
+      {/* Left: Monthly training calendar - fixed */}
       <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-30">
         <MonthlyTrainingCalendar user={user} userRole={userRole} />
       </div>
@@ -299,7 +299,7 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
              markNewsAsRead()
            }}
            className="rounded-full w-14 h-14 border-2 border-foreground/20 bg-background/90 backdrop-blur-sm hover:bg-foreground/10 shadow-lg relative"
-           aria-label="Aktuelles anzeigen"
+           aria-label="Show news"
          >
            <Newspaper className="h-4 w-4" />
           {hasUnreadNews && (
@@ -315,7 +315,7 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
         <WhatsAppButton />
       </div>
 
-      {/* Dialog für Training-Auswahl */}
+      {/* Dialog for training selection */}
       <TrainingSessionDialog
         open={showDialog}
         onOpenChange={setShowDialog}
@@ -327,7 +327,7 @@ export const TrainingPath: React.FC<TrainingPathProps> = ({
         includesOpenGym={includesOpenGym}
       />
 
-      {/* Dialog für Tages-Kurse */}
+      {/* Dialog for daily courses */}
       <DayCourseDialog
         open={showDayCourses}
         onOpenChange={setShowDayCourses}

@@ -30,44 +30,44 @@ export const TrainingPathNode: React.FC<TrainingPathNodeProps> = ({
       case 'completed':
         return <CheckCircle className="h-8 w-8 text-green-600" />
       case 'current':
-        // Wenn für heute ein Kurs registriert ist, zeige grünes Häkchen
+        // If registered for a course today, show green checkmark
         if (isRegisteredForCourse) {
           return <CheckCircle className="h-8 w-8 text-green-600" />
         }
         return <Play className="h-8 w-8 text-gray-600" />
       case 'locked':
-        // Zukünftige Tage: wenn angemeldet grünes Häkchen, sonst graues Play
+        // Future days: if registered show green checkmark, otherwise gray play
         if (isRegisteredForCourse) {
           return <CheckCircle className="h-8 w-8 text-green-600" />
         }
         return <Play className="h-8 w-8 text-gray-600" />
       case 'pending':
-        // Für vergangene Tage: X für nicht besucht
+        // For past days: X for not attended
         return <X className="h-8 w-8 text-red-600" />
     }
   }
 
   const getTopIcon = () => {
-    // Icons außerhalb der Kreise entfernt
+    // Icons outside circles removed
     return null
   }
 
   const getStatusColor = () => {
     switch (status) {
       case 'completed':
-        // Vergangene Tage mit Training: intensives grün, nicht klickbar
+        // Past days with training: intense green, not clickable
         return 'bg-green-200 border-green-600 text-green-800 dark:bg-green-900/50 dark:border-green-500 dark:text-green-300'
       case 'current':
-        // Heute: wenn für Kurs angemeldet intensives grün, sonst grau mit rotem Rand
+        // Today: if registered for course intense green, otherwise gray with red border
         if (isRegisteredForCourse) {
           return 'bg-green-200 border-green-600 hover:bg-green-300 text-green-800 dark:bg-green-900/50 dark:border-green-500 dark:text-green-300'
         }
         return 'bg-gray-100 border-red-600 hover:bg-gray-200 text-gray-600 dark:bg-gray-800/50 dark:border-red-500 dark:text-gray-400'
       case 'pending':
-        // Vergangene Tage ohne Training: intensives rot, nicht klickbar
+        // Past days without training: intense red, not clickable
         return 'bg-red-200 border-red-600 text-red-800 dark:bg-red-900/50 dark:border-red-500 dark:text-red-300'
       case 'locked':
-        // Zukünftige Tage: wenn angemeldet nur grüner Rand, sonst normal grau
+        // Future days: if registered only green border, otherwise normal gray
         if (isRegisteredForCourse) {
           return 'bg-background border-green-600 hover:bg-green-50 text-foreground cursor-pointer dark:bg-background dark:border-green-500 dark:hover:bg-green-950/20'
         }
@@ -105,7 +105,7 @@ export const TrainingPathNode: React.FC<TrainingPathNodeProps> = ({
         </div>
         {(status === 'current' || status === 'completed') && workoutType && (
           <div className="text-xs font-medium mt-1">
-            {workoutType === 'course' ? 'Kurs' : 
+            {workoutType === 'course' ? 'Course' : 
              workoutType === 'free_training' ? 'Open Gym' : 'Plan'}
           </div>
         )}

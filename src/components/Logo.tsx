@@ -16,7 +16,7 @@ export const Logo: React.FC<LogoProps> = ({
   const { settings } = useGymSettings()
   
   // Use dynamic gym name for alt text
-  const altText = alt || `${settings?.gym_name || ''} - Dein Gym, Deine App Logo`
+  const altText = alt || `${settings?.gym_name || ''} - Your Gym, Your App Logo`
   
   // Use only dynamic logos from admin settings
   const logoSrc = theme === "dark" 

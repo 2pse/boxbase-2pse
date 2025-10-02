@@ -273,7 +273,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
           profiles: profile ? {
             ...profile,
             display_name: getDisplayName(profile, currentUserRole)
-          } : { display_name: 'Unbekannt' }
+          } : { display_name: 'Unknown' }
         }
       }) || []
 
@@ -618,10 +618,10 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
       if (checkError) throw checkError
 
       if (existingSession) {
-        toast({
-          title: "Training bereits registriert",
-          description: "Du hast bereits ein Training für heute registriert."
-        })
+      toast({
+        title: "Training already registered",
+        description: "You have already registered a training for today."
+      })
         setShowQRScanner(false)
         return
       }
@@ -641,7 +641,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
       toast({
         title: "Open Gym Check-In Successful",
-        description: "Dein freies Training wurde registriert."
+        description: "Your free training has been registered."
       })
 
       setShowQRScanner(false)
@@ -656,7 +656,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
       console.error('Error creating training session:', error)
       toast({
         title: "Error",
-        description: "Training konnte nicht registriert werden.",
+        description: "Training could not be registered.",
         variant: "destructive"
       })
     }
@@ -682,7 +682,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
               <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 text-center">
                 <h3 className="font-medium mb-3 text-foreground">Open Gym Training</h3>
                 <p className="text-muted-foreground text-sm mb-4">
-                  Scanne den QR-Code um dich für dein Open Gym Training einzuchecken
+                  Scan the QR code to check in for your Open Gym training
                 </p>
                 <Button 
                   onClick={() => setShowQRScanner(true)}
@@ -848,7 +848,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                                     )}
                                   </div>
                                   <span className="font-medium">
-                                    {participant.profiles?.display_name || 'Unbekannt'}
+                                    {participant.profiles?.display_name || 'Unknown'}
                                   </span>
                                   <span className="text-xs text-muted-foreground">
                                     Registered

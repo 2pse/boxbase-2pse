@@ -150,8 +150,8 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
       // Validate file type
       if (!file.type.startsWith('image/')) {
         toast({
-          title: "Ungültiger Dateityp",
-          description: "Bitte wählen Sie ein Bild aus.",
+          title: "Invalid file type",
+          description: "Please select an image.",
           variant: "destructive"
         })
         return
@@ -160,8 +160,8 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
       // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast({
-          title: "Datei zu groß",
-          description: "Das Bild darf maximal 5MB groß sein.",
+          title: "File too large",
+          description: "The image may not exceed 5MB.",
           variant: "destructive"
         })
         return

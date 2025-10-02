@@ -121,7 +121,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
             last_name: profile.last_name, // Show last_name for admin users
             nickname: profile.nickname,
             display_name: profile.display_name
-          }, currentUserRole) : 'Unbekannt',
+          }, currentUserRole) : 'Unknown',
           membership_type: 'Member', // Default since membership_type is not available for other users
           avatar_url: profile?.avatar_url,
           nickname: profile?.nickname
@@ -162,7 +162,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
         .eq('id', registrationId)
 
       if (error) throw error
-      toast.success(`${participantName} zum Kurs hinzugefügt`)
+      toast.success(`${participantName} added to course`)
 
       // Trigger Make.com notification via Edge Function
       try {
@@ -171,13 +171,13 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
         })
         if (notifyError) {
           console.error('Notify waitlist promotion error:', notifyError)
-          toast.warning('Benachrichtigung konnte nicht gesendet werden')
+          toast.warning('Notification could not be sent')
         } else {
           console.log('Waitlist notification triggered')
         }
       } catch (notifyErr) {
         console.error('Notify waitlist promotion exception:', notifyErr)
-        toast.warning('Benachrichtigung konnte nicht gesendet werden')
+        toast.warning('Notification could not be sent')
       }
 
       // Removed: Waitlist processing is now handled by database trigger automatically
@@ -232,7 +232,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
               </Badge>
               {waitlistedParticipants.length > 0 && (
                 <Badge variant="outline" className="bg-yellow-500 text-white">
-                  {waitlistedParticipants.length} wartend
+                  {waitlistedParticipants.length} waiting
                 </Badge>
               )}
             </div>
@@ -275,7 +275,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                           size="sm"
                           onClick={() => removeParticipant(participant.id)}
                           className="text-destructive hover:text-destructive h-8 w-8 p-0"
-                          title="Entfernen"
+                          title="Remove"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -341,7 +341,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                     {waitlistedParticipants.length} person(s) on the waitlist
                   </p>
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
-                    Namen werden aus Datenschutzgründen nicht angezeigt
+                    Names are not displayed for privacy reasons
                   </p>
                 </div>
               )}

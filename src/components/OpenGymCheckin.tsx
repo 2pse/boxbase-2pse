@@ -14,7 +14,7 @@ export const OpenGymCheckin: React.FC<OpenGymCheckinProps> = ({
   onCheckinComplete
 }) => {
   const handleScanSuccess = async (result: string) => {
-    // QR-Code wurde erfolgreich gescannt
+    // QR code successfully scanned
     try {
       // Mark user as active on Open Gym check-in (real activity)
       const { data: { user } } = await supabase.auth.getUser()

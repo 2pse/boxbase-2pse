@@ -565,7 +565,7 @@ export default function Admin() {
         if (!selectedPlan) {
           toast({
              title: "Error",
-            description: "Ausgewählter Plan nicht gefunden",
+            description: "Selected plan not found",
             variant: "destructive",
           });
           return;
