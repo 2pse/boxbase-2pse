@@ -660,7 +660,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                         course.is_waitlisted ? 'border-2 border-yellow-500' : 'border'
                       }`}
                       style={{
-                        borderLeft: `4px solid ${course.color || '#f3f4f6'}`
+                        borderLeft: `6px solid ${course.color || '#f3f4f6'}`
                       }}
                       onClick={() => handleCourseClick(course)}
                    >

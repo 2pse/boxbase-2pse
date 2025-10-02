@@ -140,18 +140,18 @@ export const CourseCalendar = ({
             <div className="space-y-3 px-4">
               {coursesForSelectedDate.map(course => (
                    <div 
-                     key={course.id}
-                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md ${
-                       course.is_registered 
-                         ? 'border-2 border-green-500' 
-                         : course.is_waitlisted 
-                         ? 'border-2 border-yellow-500'
-                         : 'border-0'
-                     }`}
-                      style={{
-                        backgroundColor: course.color ? `${course.color}80` : '#f3f4f680'
-                      }}
-                    onClick={() => onCourseClick(course)}
+                      key={course.id}
+                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md bg-card ${
+                        course.is_registered 
+                          ? 'border-2 border-green-500' 
+                          : course.is_waitlisted 
+                          ? 'border-2 border-yellow-500'
+                          : 'border'
+                      }`}
+                       style={{
+                         borderLeft: `6px solid ${course.color || '#f3f4f6'}`
+                       }}
+                     onClick={() => onCourseClick(course)}
                 >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">

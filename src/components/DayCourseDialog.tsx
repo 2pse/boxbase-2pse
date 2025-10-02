@@ -713,7 +713,7 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                           : 'border'
                       }`}
                       style={{
-                        borderLeft: `4px solid ${course.color || '#f3f4f6'}`
+                        borderLeft: `6px solid ${course.color || '#f3f4f6'}`
                       }}
                       onClick={() => handleCourseClick(course)}
                    >

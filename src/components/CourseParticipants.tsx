@@ -287,12 +287,12 @@ export const CourseParticipants = () => {
               <div className="space-y-2">
                 {dayCourses.map(course => (
                    <Card 
-                     key={course.id}
-                     className="cursor-pointer transition-all duration-200 hover:shadow-md border-0 shadow-sm"
-                     style={{
-                       backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
-                     }}
-                     onClick={() => setSelectedCourse(course)}
+                      key={course.id}
+                      className="cursor-pointer transition-all duration-200 hover:shadow-md shadow-sm"
+                      style={{
+                        borderLeft: `6px solid ${course.color || '#f3f4f6'}`
+                      }}
+                      onClick={() => setSelectedCourse(course)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -406,9 +406,9 @@ export const CourseParticipants = () => {
                   {coursesForSelectedDate.map(course => (
                      <div 
                        key={course.id}
-                       className="cursor-pointer hover:shadow-md transition-all duration-200 border-0 rounded-lg p-4 shadow-sm"
+                       className="cursor-pointer hover:shadow-md transition-all duration-200 border rounded-lg p-4 shadow-sm bg-card"
                        style={{
-                         backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                         borderLeft: `6px solid ${course.color || '#f3f4f6'}`
                        }}
                        onClick={() => setSelectedCourse(course)}
                     >

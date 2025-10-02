@@ -50,22 +50,26 @@ export const CourseTemplateManager = () => {
     color: '#f3f4f6'
   })
 
-  // Color palette - CrossFit-appropriate masculine colors
+  // Color palette - Clear and distinguishable colors
   const colorOptions = [
-    { value: '#000000', label: 'Schwarz' },
-    { value: '#1a1a1a', label: 'Dunkelgrau' },
-    { value: '#065f46', label: 'Dunkelgrün' },
-    { value: '#064e3b', label: 'Waldgrün' },
-    { value: '#1e3a8a', label: 'Dunkelblau' },
-    { value: '#1e40af', label: 'Königsblau' },
-    { value: '#7f1d1d', label: 'Dunkelrot' },
-    { value: '#991b1b', label: 'Bordeaux' },
-    { value: '#78350f', label: 'Dunkelbraun' },
-    { value: '#451a03', label: 'Espresso' },
-    { value: '#374151', label: 'Schiefergrau' },
-    { value: '#4b5563', label: 'Steingrau' },
-    { value: '#6b7280', label: 'Hellgrau' },
-    { value: '#f3f4f6', label: 'Lichtgrau' }
+    { value: '#ef4444', label: 'Red' },
+    { value: '#f97316', label: 'Orange' },
+    { value: '#f59e0b', label: 'Amber' },
+    { value: '#eab308', label: 'Yellow' },
+    { value: '#84cc16', label: 'Lime' },
+    { value: '#22c55e', label: 'Green' },
+    { value: '#10b981', label: 'Emerald' },
+    { value: '#14b8a6', label: 'Teal' },
+    { value: '#06b6d4', label: 'Cyan' },
+    { value: '#0ea5e9', label: 'Sky Blue' },
+    { value: '#3b82f6', label: 'Blue' },
+    { value: '#6366f1', label: 'Indigo' },
+    { value: '#8b5cf6', label: 'Violet' },
+    { value: '#a855f7', label: 'Purple' },
+    { value: '#d946ef', label: 'Fuchsia' },
+    { value: '#ec4899', label: 'Pink' },
+    { value: '#f43f5e', label: 'Rose' },
+    { value: '#64748b', label: 'Slate' }
   ]
 
   // Schedule form state
