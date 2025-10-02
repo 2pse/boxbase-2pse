@@ -47,30 +47,11 @@ export const CourseTemplateManager = () => {
     registration_deadline_minutes: 30,
     cancellation_deadline_minutes: 60,
     duration_minutes: 60,
-    color: '#f3f4f6'
+    color: '#3b82f6'
   })
 
-  // Color palette - Clear and distinguishable colors
-  const colorOptions = [
-    { value: '#ef4444', label: 'Red' },
-    { value: '#f97316', label: 'Orange' },
-    { value: '#f59e0b', label: 'Amber' },
-    { value: '#eab308', label: 'Yellow' },
-    { value: '#84cc16', label: 'Lime' },
-    { value: '#22c55e', label: 'Green' },
-    { value: '#10b981', label: 'Emerald' },
-    { value: '#14b8a6', label: 'Teal' },
-    { value: '#06b6d4', label: 'Cyan' },
-    { value: '#0ea5e9', label: 'Sky Blue' },
-    { value: '#3b82f6', label: 'Blue' },
-    { value: '#6366f1', label: 'Indigo' },
-    { value: '#8b5cf6', label: 'Violet' },
-    { value: '#a855f7', label: 'Purple' },
-    { value: '#d946ef', label: 'Fuchsia' },
-    { value: '#ec4899', label: 'Pink' },
-    { value: '#f43f5e', label: 'Rose' },
-    { value: '#64748b', label: 'Slate' }
-  ]
+  // Default color for new templates
+  const defaultColor = '#3b82f6'
 
   // Schedule form state
   const [scheduleForm, setScheduleForm] = useState({
@@ -387,24 +368,16 @@ export const CourseTemplateManager = () => {
                   </div>
                   <div>
                     <Label htmlFor="color">Course Color</Label>
-                    <Select value={templateForm.color} onValueChange={(value) => setTemplateForm(prev => ({ ...prev, color: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {colorOptions.map((color) => (
-                          <SelectItem key={color.value} value={color.value}>
-                            <div className="flex items-center gap-2">
-                              <div 
-                                className="w-4 h-4 rounded border border-gray-300" 
-                                style={{ backgroundColor: `${color.value}80` }}
-                              />
-                              {color.label}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-3">
+                      <Input
+                        id="color"
+                        type="color"
+                        value={templateForm.color}
+                        onChange={(e) => setTemplateForm(prev => ({ ...prev, color: e.target.value }))}
+                        className="w-20 h-10 cursor-pointer"
+                      />
+                      <span className="text-sm text-muted-foreground">{templateForm.color}</span>
+                    </div>
                   </div>
                 </div>
                 <Button type="submit" className="w-full">
