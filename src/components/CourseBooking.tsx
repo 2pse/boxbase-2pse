@@ -654,15 +654,15 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
               <div className="space-y-2">
                  {dayCourses.map(course => (
                    <div
-                     key={course.id} 
-                     className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm ${
-                       course.is_registered ? 'border-2 border-green-500' : 
-                       course.is_waitlisted ? 'border-2 border-yellow-500' : ''
-                     }`}
-                     style={{
-                       backgroundColor: `${course.color || '#f3f4f6'}15`
-                     }}
-                     onClick={() => handleCourseClick(course)}
+                      key={course.id} 
+                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm bg-card ${
+                        course.is_registered ? 'border-2 border-green-500' : 
+                        course.is_waitlisted ? 'border-2 border-yellow-500' : 'border'
+                      }`}
+                      style={{
+                        borderLeft: `4px solid ${course.color || '#f3f4f6'}`
+                      }}
+                      onClick={() => handleCourseClick(course)}
                    >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">

@@ -705,15 +705,15 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                  return (
                      <div 
                       key={course.id} 
-                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md ${
+                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md bg-card ${
                         course.is_registered 
                           ? 'border-2 border-green-500' 
                           : course.is_waitlisted 
                           ? 'border-2 border-yellow-500'
-                          : 'border-0'
+                          : 'border'
                       }`}
                       style={{
-                        backgroundColor: course.color ? `${course.color}20` : '#f3f4f615'
+                        borderLeft: `4px solid ${course.color || '#f3f4f6'}`
                       }}
                       onClick={() => handleCourseClick(course)}
                    >
