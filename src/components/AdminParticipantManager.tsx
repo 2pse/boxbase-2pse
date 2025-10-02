@@ -282,13 +282,10 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
                       <CardContent className="p-3">
                          <div className="flex items-center justify-between">
                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-1">
+                              <div className="flex items-center gap-3">
                                 <span className="font-medium">{getDisplayName(member, currentUserRole)}</span>
                                 <MembershipBadge type={member.membership_type as any} forceBlack />
                               </div>
-                             {member.email && (
-                               <span className="text-sm text-muted-foreground">{member.email}</span>
-                             )}
                            </div>
                             <Button
                               size="sm"
