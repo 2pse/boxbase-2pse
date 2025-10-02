@@ -79,6 +79,10 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       const currentYear = currentDate.getFullYear()
       const currentMonth = currentDate.getMonth() + 1
       
+      // Calculate first and last day of current month
+      const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1)
+      const lastDayOfMonth = new Date(currentYear, currentMonth, 0)
+      
       // Get current month from leaderboard entries (this counts all completed training)
       const { data: leaderboardData } = await supabase
         .from('leaderboard_entries')
@@ -86,20 +90,22 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .eq('year', currentYear)
         .eq('month', currentMonth)
 
-      // Get admin/trainer roles to exclude from membership counts
-      const { data: adminTrainerRoles } = await supabase
-        .from('user_roles')
-        .select('user_id')
-        .in('role', ['admin', 'trainer'])
-      
-      const adminTrainerUserIds = new Set(adminTrainerRoles?.map(r => r.user_id) || [])
+      // Get actual course registrations for the current month grouped by membership type
+      const { data: courseRegistrations } = await supabase
+        .from('course_registrations')
+        .select(`
+          id,
+          user_id,
+          course_id,
+          courses!inner(course_date)
+        `)
+        .eq('status', 'registered')
+        .gte('courses.course_date', firstDayOfMonth.toISOString().split('T')[0])
+        .lte('courses.course_date', lastDayOfMonth.toISOString().split('T')[0])
 
-      // Get all profiles (source of truth for member count)
-      const { data: allProfiles } = await supabase
-        .from('profiles')
-        .select('user_id')
+      console.log('Course Registrations for current month:', courseRegistrations?.length)
 
-      // Get all active memberships V2
+      // Get all active memberships V2 to map users to membership types
       const { data: allMembershipsV2 } = await supabase
         .from('user_memberships_v2')
         .select(`
@@ -113,16 +119,12 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .eq('status', 'active')
         .eq('membership_plans_v2.is_active', true)
 
-      console.log('All Profiles:', allProfiles?.length)  
-      console.log('All V2 Memberships:', allMembershipsV2?.length)
-      console.log('Admin/Trainer User IDs:', Array.from(adminTrainerUserIds))
-
-      // Create a map of user_id to membership for easier lookup
+      // Create a map of user_id to membership type
       const userMembershipMap = new Map()
       allMembershipsV2?.forEach(membership => {
         const plan = membership.membership_plans_v2
         if (plan?.is_active) {
-          const bookingRules = plan.booking_rules as any // Type assertion for Json type
+          const bookingRules = plan.booking_rules as any
           userMembershipMap.set(membership.user_id, {
             type: bookingRules?.type || 'unknown',
             name: plan.name
@@ -130,10 +132,41 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         }
       })
 
-      // Note: V1 system has been deprecated, using only V2 memberships now
+      // Count registrations by membership type
+      const registrationCounts = {
+        'Unlimited': 0,
+        'Limited': 0, 
+        'Credits': 0,
+        'Open Gym': 0
+      }
+
+      courseRegistrations?.forEach(registration => {
+        const membershipInfo = userMembershipMap.get(registration.user_id)
+        if (membershipInfo) {
+          const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
+          registrationCounts[membershipCategory as keyof typeof registrationCounts] += 1
+        } else {
+          // If no membership found, count as Unlimited (default for admins/trainers)
+          registrationCounts['Unlimited'] += 1
+        }
+      })
+
+      console.log('Registration Counts by Type:', registrationCounts)
 
       // Calculate total training sessions from leaderboard
       const totalCurrentMonth = leaderboardData?.reduce((sum, entry) => sum + entry.training_count, 0) || 0
+
+      // For member stats, get all profiles (source of truth for member count)
+      const { data: adminTrainerRoles } = await supabase
+        .from('user_roles')
+        .select('user_id')
+        .in('role', ['admin', 'trainer'])
+      
+      const adminTrainerUserIds = new Set(adminTrainerRoles?.map(r => r.user_id) || [])
+
+      const { data: allProfiles } = await supabase
+        .from('profiles')
+        .select('user_id')
 
       // Count memberships by type based on profiles, excluding admins/trainers
       const membershipCounts = {
@@ -160,13 +193,11 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       console.log('Total Active Members:', totalActiveMembers)
       console.log('Membership Counts:', membershipCounts)
 
-      // Note: V1 system has been deprecated, only using V2 memberships now
-
       const statsData = {
         totalEntries: totalCurrentMonth,
         memberStats: membershipCounts,
         currentMonthEntries: totalCurrentMonth,
-        registrationsByType: membershipCounts
+        registrationsByType: registrationCounts
       }
 
       setStats(statsData)
@@ -224,7 +255,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Registrations by membership type</CardTitle>
+          <CardTitle>Course registrations by membership type</CardTitle>
           <p className="text-xs text-muted-foreground">This month</p>
         </CardHeader>
         <CardContent>

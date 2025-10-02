@@ -411,7 +411,7 @@ export const CourseTemplateManager = () => {
                             <div className="flex items-center gap-2">
                               <div 
                                 className="w-3 h-3 rounded-full border border-gray-300" 
-                                style={{ backgroundColor: `${template.color || '#f3f4f6'}80` }}
+                                style={{ backgroundColor: template.color || '#f3f4f6' }}
                               />
                               {template.title}
                             </div>
@@ -422,7 +422,7 @@ export const CourseTemplateManager = () => {
                           <TableCell className="hidden xl:table-cell">
                             <div 
                               className="w-6 h-6 rounded border border-gray-300" 
-                              style={{ backgroundColor: `${template.color || '#f3f4f6'}80` }}
+                              style={{ backgroundColor: template.color || '#f3f4f6' }}
                             />
                           </TableCell>
                           <TableCell>
