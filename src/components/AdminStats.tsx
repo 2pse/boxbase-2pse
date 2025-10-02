@@ -90,20 +90,14 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .eq('year', currentYear)
         .eq('month', currentMonth)
 
-      // Get actual course registrations for the current month grouped by membership type
-      const { data: courseRegistrations } = await supabase
-        .from('course_registrations')
-        .select(`
-          id,
-          user_id,
-          course_id,
-          courses!inner(course_date)
-        `)
-        .eq('status', 'registered')
-        .gte('courses.course_date', firstDayOfMonth.toISOString().split('T')[0])
-        .lte('courses.course_date', lastDayOfMonth.toISOString().split('T')[0])
+      // Get actual completed training sessions for the current month grouped by membership type
+      const { data: trainingSessions } = await supabase
+        .from('training_sessions')
+        .select('id, user_id, session_date')
+        .gte('session_date', firstDayOfMonth.toISOString().split('T')[0])
+        .lte('session_date', lastDayOfMonth.toISOString().split('T')[0])
 
-      console.log('Course Registrations for current month:', courseRegistrations?.length)
+      console.log('Completed Training Sessions for current month:', trainingSessions?.length)
 
       // Get all active memberships V2 to map users to membership types
       const { data: allMembershipsV2 } = await supabase
@@ -132,26 +126,26 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         }
       })
 
-      // Count registrations by membership type
-      const registrationCounts = {
+      // Count completed trainings by membership type
+      const trainingCounts = {
         'Unlimited': 0,
         'Limited': 0, 
         'Credits': 0,
         'Open Gym': 0
       }
 
-      courseRegistrations?.forEach(registration => {
-        const membershipInfo = userMembershipMap.get(registration.user_id)
+      trainingSessions?.forEach(session => {
+        const membershipInfo = userMembershipMap.get(session.user_id)
         if (membershipInfo) {
           const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
-          registrationCounts[membershipCategory as keyof typeof registrationCounts] += 1
+          trainingCounts[membershipCategory as keyof typeof trainingCounts] += 1
         } else {
           // If no membership found, count as Unlimited (default for admins/trainers)
-          registrationCounts['Unlimited'] += 1
+          trainingCounts['Unlimited'] += 1
         }
       })
 
-      console.log('Registration Counts by Type:', registrationCounts)
+      console.log('Completed Training Counts by Type:', trainingCounts)
 
       // Calculate total training sessions from leaderboard
       const totalCurrentMonth = leaderboardData?.reduce((sum, entry) => sum + entry.training_count, 0) || 0
@@ -197,7 +191,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         totalEntries: totalCurrentMonth,
         memberStats: membershipCounts,
         currentMonthEntries: totalCurrentMonth,
-        registrationsByType: registrationCounts
+        registrationsByType: trainingCounts
       }
 
       setStats(statsData)
@@ -255,7 +249,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Course registrations by membership type</CardTitle>
+          <CardTitle>Completed trainings by membership type</CardTitle>
           <p className="text-xs text-muted-foreground">This month</p>
         </CardHeader>
         <CardContent>
