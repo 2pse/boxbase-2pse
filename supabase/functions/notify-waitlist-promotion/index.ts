@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
     // Get course details
     const { data: course, error: courseError } = await supabase
       .from('courses')
-      .select('id, title')
+      .select('id, title, course_date, start_time')
       .eq('id', registration.course_id)
       .single()
 
@@ -98,6 +98,8 @@ Deno.serve(async (req) => {
       membership_type: profile?.membership_type || 'Member',
       course_id: course?.id,
       course_title: course?.title,
+      course_date: course?.course_date,
+      start_time: course?.start_time,
       promoted_at: new Date().toISOString(),
     }
 
