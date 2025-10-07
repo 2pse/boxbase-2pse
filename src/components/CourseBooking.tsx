@@ -330,7 +330,21 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
 
       if (regCheckError && regCheckError.code !== 'PGRST116') throw regCheckError
 
-      const isWaitlist = course.registered_count >= course.max_participants
+      // Aktuelle Teilnehmerzahl direkt aus DB abrufen (Race-Condition-Prävention)
+      const { data: currentRegistrations, error: countError } = await supabase
+        .from('course_registrations')
+        .select('id', { count: 'exact' })
+        .eq('course_id', courseId)
+        .eq('status', 'registered')
+
+      if (countError) {
+        console.error('Error checking current registrations:', countError)
+        toast.error('Fehler beim Prüfen der verfügbaren Plätze')
+        return
+      }
+
+      const currentCount = currentRegistrations?.length || 0
+      const isWaitlist = currentCount >= course.max_participants
       const newStatus = isWaitlist ? 'waitlist' : 'registered'
 
       // Handle credit management before registration (only for non-waitlist registrations)
