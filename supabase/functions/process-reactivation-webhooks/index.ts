@@ -68,15 +68,25 @@ const handler = async (req: Request): Promise<Response> => {
 
       try {
         if (event.webhook_url) {
-          // Send webhook with payload structure matching member creation webhook
+          // Extract profile data
+          const firstName = event.profile_data?.first_name || '';
+          const lastName = event.profile_data?.last_name || '';
+          const displayName = event.profile_data?.display_name || `${firstName} ${lastName}`.trim();
+          const accessCode = event.profile_data?.access_code || null;
+          const membershipType = event.profile_data?.membership_type || 'member';
+
+          // Send webhook with same structure as member creation webhook
           const webhookPayload = {
-            type: 'member_reactivation_needed',
-            user_id: event.user_id,
-            profile_data: event.profile_data,
+            event_type: 'reactivation',
+            name: displayName,
+            first_name: firstName,
+            last_name: lastName,
+            email: event.profile_data?.email || '',
+            access_code: accessCode,
+            membership_type: membershipType,
             created_at: event.created_at,
-            inactivity_duration_days: 21,
-            // Mirror structure from member creation for Make.com compatibility
-            data: event.profile_data
+            user_id: event.user_id,
+            inactivity_duration_days: 21
           };
 
           console.log(`Sending webhook to: ${event.webhook_url}`);
