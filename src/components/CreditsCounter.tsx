@@ -11,10 +11,11 @@ interface CreditsCounterProps {
 }
 
 interface MembershipInfo {
-  type: 'credits' | 'unlimited' | 'monthly_limit' | 'open_gym_only' | null
+  type: 'credits' | 'unlimited' | 'monthly_limit' | 'weekly_limit' | 'open_gym_only' | null
   remainingCredits?: number
   usedThisMonth?: number
   monthlyLimit?: number
+  limitPeriod?: 'week' | 'month'
 }
 
 export const CreditsCounter = ({ user }: CreditsCounterProps) => {
@@ -86,7 +87,8 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
         periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1); // Monday
         periodStart.setHours(0, 0, 0, 0);
         periodEnd = new Date(periodStart);
-        periodEnd.setDate(periodEnd.getDate() + 7);
+        periodEnd.setDate(periodEnd.getDate() + 6); // Sunday (not +7)
+        periodEnd.setHours(23, 59, 59, 999); // End of Sunday
       } else {
         periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
         periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -99,15 +101,16 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
         .eq('user_id', user.id)
         .eq('status', 'registered')
         .gte('courses.course_date', periodStart.toISOString().split('T')[0])
-        .lt('courses.course_date', periodEnd.toISOString().split('T')[0]);
+        .lte('courses.course_date', periodEnd.toISOString().split('T')[0]);
 
       const usedThisPeriod = registrations?.length || 0;
 
       setMembershipInfo({
-        type: 'monthly_limit',
+        type: limitPeriod === 'week' ? 'weekly_limit' : 'monthly_limit',
         usedThisMonth: usedThisPeriod,
         monthlyLimit: limitCount,
-        remainingCredits: Math.max(0, limitCount - usedThisPeriod)
+        remainingCredits: Math.max(0, limitCount - usedThisPeriod),
+        limitPeriod: limitPeriod
       });
       return;
         } else if (bookingRules.type === 'open_gym_only') {
@@ -150,6 +153,7 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
       case 'open_gym_only':
         return <Infinity className="w-6 h-6 text-white" />
       case 'monthly_limit':
+      case 'weekly_limit':
         return <span className="text-white text-lg font-bold">{membershipInfo.remainingCredits}</span>
       default:
         return <span className="text-white text-sm font-bold">?</span>

@@ -148,8 +148,10 @@ serve(async (req) => {
           // Monday of course week
           targetPeriodStart = new Date(courseDate);
           targetPeriodStart.setDate(courseDate.getDate() - courseDate.getDay() + 1);
+          targetPeriodStart.setHours(0, 0, 0, 0);
           targetPeriodEnd = new Date(targetPeriodStart);
-          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 7);
+          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 6); // Sunday (not +7)
+          targetPeriodEnd.setHours(23, 59, 59, 999); // End of Sunday
         } else {
           // First of course month
           targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), 1);
@@ -163,7 +165,7 @@ serve(async (req) => {
           .eq('user_id', user_id)
           .eq('status', 'registered')
           .gte('courses.course_date', targetPeriodStart.toISOString().split('T')[0])
-          .lt('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
+          .lte('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
 
         if (periodError) {
           console.error('Period registration error:', periodError);
@@ -194,7 +196,8 @@ serve(async (req) => {
           limitCount,
           dynamicCredits,
           canRegister,
-          periodStart: periodStart.toISOString()
+          periodStart: targetPeriodStart.toISOString(),
+          periodEnd: targetPeriodEnd.toISOString()
         });
 
         return new Response(
@@ -283,8 +286,10 @@ serve(async (req) => {
         if (plan.booking_type === 'weekly_limit') {
           targetPeriodStart = new Date(courseDate);
           targetPeriodStart.setDate(courseDate.getDate() - courseDate.getDay() + 1);
+          targetPeriodStart.setHours(0, 0, 0, 0);
           targetPeriodEnd = new Date(targetPeriodStart);
-          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 7);
+          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 6); // Sunday (not +7)
+          targetPeriodEnd.setHours(23, 59, 59, 999); // End of Sunday
         } else {
           targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), 1);
           targetPeriodEnd = new Date(courseDate.getFullYear(), courseDate.getMonth() + 1, 1);
@@ -296,7 +301,7 @@ serve(async (req) => {
           .eq('user_id', user_id)
           .eq('status', 'registered')
           .gte('courses.course_date', targetPeriodStart.toISOString().split('T')[0])
-          .lt('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
+          .lte('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
 
         if (periodError) {
           console.error('Period registration error:', periodError);

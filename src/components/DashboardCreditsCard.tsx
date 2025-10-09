@@ -11,11 +11,12 @@ interface DashboardCreditsCardProps {
 }
 
 interface MembershipInfo {
-  type: 'credits' | 'unlimited' | 'monthly_limit' | 'open_gym_only' | null
+  type: 'credits' | 'unlimited' | 'monthly_limit' | 'weekly_limit' | 'open_gym_only' | null
   remainingCredits?: number
   usedThisMonth?: number
   monthlyLimit?: number
   planName?: string
+  limitPeriod?: 'week' | 'month'
 }
 
 export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user }) => {
@@ -87,7 +88,8 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1) // Monday
             periodStart.setHours(0, 0, 0, 0)
             periodEnd = new Date(periodStart)
-            periodEnd.setDate(periodEnd.getDate() + 7)
+            periodEnd.setDate(periodEnd.getDate() + 6) // Sunday (not +7)
+            periodEnd.setHours(23, 59, 59, 999) // End of Sunday
           } else {
             periodStart = new Date(now.getFullYear(), now.getMonth(), 1)
             periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1)
@@ -100,17 +102,18 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             .eq('user_id', user.id)
             .eq('status', 'registered')
             .gte('courses.course_date', periodStart.toISOString().split('T')[0])
-            .lt('courses.course_date', periodEnd.toISOString().split('T')[0])
+            .lte('courses.course_date', periodEnd.toISOString().split('T')[0])
 
           const usedThisPeriod = registrations?.length || 0
           const remainingCredits = Math.max(0, limitCount - usedThisPeriod)
 
           setMembershipInfo({
-            type: 'monthly_limit',
+            type: limitPeriod === 'week' ? 'weekly_limit' : 'monthly_limit',
             remainingCredits,
             usedThisMonth: usedThisPeriod,
             monthlyLimit: limitCount,
-            planName
+            planName,
+            limitPeriod: limitPeriod
           })
         } else if (bookingRules?.type === 'open_gym_only') {
           setMembershipInfo({
@@ -201,6 +204,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         )
 
       case 'monthly_limit':
+      case 'weekly_limit':
         const remaining = (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0)
         return (
           <div className="flex items-center justify-center h-full">
@@ -261,12 +265,12 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
               <p className="text-sm">Unlimited course bookings available</p>
             </div>
           )}
-          {membershipInfo.type === 'monthly_limit' && (
+          {(membershipInfo.type === 'monthly_limit' || membershipInfo.type === 'weekly_limit') && (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Monthly Limit'}</p>
-               <p className="text-sm">Monthly limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
-               <p className="text-sm">Used this month: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
-               <p className="text-sm">Remaining: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
+              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || (membershipInfo.limitPeriod === 'week' ? 'Wöchentliches Limit' : 'Monatliches Limit')}</p>
+               <p className="text-sm">{membershipInfo.limitPeriod === 'week' ? 'Wöchentliches' : 'Monatliches'} Limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
+               <p className="text-sm">Verbraucht {membershipInfo.limitPeriod === 'week' ? 'diese Woche' : 'diesen Monat'}: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
+               <p className="text-sm">Verbleibend: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
             </div>
           )}
           {membershipInfo.type === 'open_gym_only' && (
