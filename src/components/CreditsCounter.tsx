@@ -68,40 +68,48 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             remainingCredits: membershipData.remaining_credits || 0
           });
           return;
-        } else if (bookingRules.type === 'unlimited') {
-          setMembershipInfo({ type: 'unlimited' });
-          return;
-        } else if (bookingRules.type === 'limited') {
-          const limit = bookingRules.limit;
-          
-          // Calculate current period based on limit type
-          let periodQuery;
-          if (limit?.period === 'week') {
-            const currentWeekStart = new Date();
-            currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1);
-            periodQuery = currentWeekStart.toISOString().split('T')[0];
-          } else {
-            const currentDate = new Date();
-            periodQuery = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-01`;
-          }
-          
-          const { data: registrations } = await supabase
-            .from('course_registrations')
-            .select('id')
-            .eq('user_id', user.id)
-            .eq('status', 'registered')
-            .gte('registered_at', periodQuery);
+    } else if (bookingRules.type === 'unlimited') {
+      setMembershipInfo({ type: 'unlimited' });
+      return;
+    } else if (bookingRules.type === 'limited') {
+      const limit = bookingRules.limit;
+      const limitPeriod = limit?.period || 'month';
+      const limitCount = limit?.count || 0;
+      
+      // Calculate period start/end based on course_date
+      const now = new Date();
+      let periodStart: Date;
+      let periodEnd: Date;
+      
+      if (limitPeriod === 'week') {
+        periodStart = new Date(now);
+        periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1); // Monday
+        periodStart.setHours(0, 0, 0, 0);
+        periodEnd = new Date(periodStart);
+        periodEnd.setDate(periodEnd.getDate() + 7);
+      } else {
+        periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      }
+      
+      // Count registrations in current period based on course_date
+      const { data: registrations } = await supabase
+        .from('course_registrations')
+        .select('id, courses!inner(course_date)')
+        .eq('user_id', user.id)
+        .eq('status', 'registered')
+        .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+        .lt('courses.course_date', periodEnd.toISOString().split('T')[0]);
 
-          const usedThisMonth = registrations?.length || 0;
-          const monthlyLimit = limit?.count || 0;
+      const usedThisPeriod = registrations?.length || 0;
 
-          setMembershipInfo({
-            type: 'monthly_limit',
-            usedThisMonth,
-            monthlyLimit,
-            remainingCredits: Math.max(0, monthlyLimit - usedThisMonth)
-          });
-          return;
+      setMembershipInfo({
+        type: 'monthly_limit',
+        usedThisMonth: usedThisPeriod,
+        monthlyLimit: limitCount,
+        remainingCredits: Math.max(0, limitCount - usedThisPeriod)
+      });
+      return;
         } else if (bookingRules.type === 'open_gym_only') {
           setMembershipInfo({ type: 'open_gym_only' });
           return;

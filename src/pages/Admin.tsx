@@ -429,12 +429,9 @@ export default function Admin() {
         initialMembershipData = {
           remaining_credits: selectedPlan.booking_rules.credits?.initial_amount || 10
         };
-      } else if (selectedPlan.booking_rules?.type === 'limited') {
-        // Initialize limited memberships with their limit count as credits
-        initialMembershipData = {
-          remaining_credits: selectedPlan.booking_rules.limit?.count || 12
-        };
       }
+      // Limited memberships don't use remaining_credits
+      // They calculate availability dynamically based on period
 
       const { error: membershipError } = await supabase
         .from('user_memberships_v2')
