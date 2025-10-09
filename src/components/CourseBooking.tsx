@@ -285,19 +285,34 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           p_course_id: courseId
         })
 
+      console.log('🔍 Registration Check Result:', {
+        checkError,
+        registrationCheck,
+        userMembershipType,
+        courseId,
+        courseDate: course?.course_date
+      });
+
       const response = registrationCheck as any
       const canRegister = response?.canRegister || false
       const canWaitlist = response?.canWaitlist || false
 
+      console.log('🔍 Parsed Result:', { canRegister, canWaitlist });
+
       if (checkError || (!canRegister && !canWaitlist)) {
+        console.error('🚫 Registration blocked:', { checkError, canRegister, canWaitlist });
+        
         if (userMembershipType === 'Basic Member') {
           toast.error("You have reached your weekly limit of 2 registrations")
         } else if (userMembershipType === 'Credits') {
           toast.error("You have no credits left. Please top up your credits at the reception")
         } else if (userMembershipType === 'open_gym_only') {
           toast.error("Your membership only includes Open Gym. For courses you need an extended membership.")
+        } else if (userMembershipType.includes('Limited')) {
+          // ✅ NEW: Special handling for "Limited X/Week" memberships
+          toast.error("You have reached your weekly limit. Try again next week.")
         } else {
-          toast.error("Registration not possible")
+          toast.error(`Registration not possible. Membership: ${userMembershipType}`)
         }
         return
       }

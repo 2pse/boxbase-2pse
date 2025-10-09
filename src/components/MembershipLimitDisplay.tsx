@@ -7,23 +7,51 @@ import { Calendar, CreditCard, AlertCircle } from "lucide-react"
 interface MembershipLimitDisplayProps {
   userId: string
   membershipType: string
+  courseDate?: string // ← NEW: Optional course date for preview
 }
 
-export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLimitDisplayProps) => {
+export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: MembershipLimitDisplayProps) => {
   const [weeklyCount, setWeeklyCount] = useState<number>(0)
   const [credits, setCredits] = useState<number>(0)
   const [loading, setLoading] = useState(true)
+  const [periodStart, setPeriodStart] = useState<string>('')
+  const [periodEnd, setPeriodEnd] = useState<string>('')
 
   useEffect(() => {
     const fetchLimits = async () => {
+      // Determine target date (courseDate or current week)
+      const targetDate = courseDate ? new Date(courseDate) : new Date()
+      
+      // Calculate week period (Monday-Sunday)
+      const dayOfWeek = targetDate.getDay()
+      const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+      const monday = new Date(targetDate)
+      monday.setDate(monday.getDate() + diff)
+      monday.setHours(0, 0, 0, 0)
+      
+      const sunday = new Date(monday)
+      sunday.setDate(sunday.getDate() + 6)
+      sunday.setHours(23, 59, 59, 999)
+
+      const periodStartStr = monday.toISOString().split('T')[0]
+      const periodEndStr = sunday.toISOString().split('T')[0]
+      
+      setPeriodStart(periodStartStr)
+      setPeriodEnd(periodEndStr)
+
       // Map new booking types to legacy checks
-      if (membershipType === 'monthly_limit' || membershipType === 'Basic Member') {
-        // Fetch weekly registration count
-        const { data, error } = await supabase
-          .rpc('get_weekly_registrations_count', { p_user_id: userId })
+      if (membershipType === 'monthly_limit' || membershipType === 'Basic Member' || membershipType.includes('Limited')) {
+        // Fetch registrations in target period
+        const { data: registrations, error } = await supabase
+          .from('course_registrations')
+          .select('id, courses!inner(course_date)')
+          .eq('user_id', userId)
+          .eq('status', 'registered')
+          .gte('courses.course_date', periodStartStr)
+          .lte('courses.course_date', periodEndStr)
         
-        if (!error && data !== null) {
-          setWeeklyCount(data)
+        if (!error && registrations) {
+          setWeeklyCount(registrations.length)
         }
       } else if (membershipType === 'credits' || membershipType === 'Credits') {
         // V1 system has been deprecated, setting credits to 0
@@ -33,7 +61,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType }: MembershipLim
     }
 
     fetchLimits()
-  }, [userId, membershipType])
+  }, [userId, membershipType, courseDate])
 
   if (loading) {
     return (

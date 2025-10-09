@@ -382,11 +382,23 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
             p_course_id: courseId
           })
 
+        console.log('🔍 Registration Check Result:', {
+          checkError,
+          registrationCheck,
+          userMembershipType,
+          courseId,
+          courseDate: course?.course_date
+        });
+
         const response = registrationCheck as any
         const canRegister = response?.canRegister || false
         const canWaitlist = response?.canWaitlist || false
 
+        console.log('🔍 Parsed Result:', { canRegister, canWaitlist });
+
         if (checkError || (!canRegister && !canWaitlist)) {
+          console.error('🚫 Registration blocked:', { checkError, canRegister, canWaitlist });
+          
           if (userMembershipType === 'Basic Member') {
             toast({
                title: "Weekly limit reached",
@@ -405,10 +417,17 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
               description: "Your membership includes only Open Gym. For courses you need an extended membership.",
               variant: "destructive"
             })
+          } else if (userMembershipType.includes('Limited')) {
+            // ✅ NEW: Special handling for "Limited X/Week" memberships
+            toast({
+              title: "Weekly limit reached",
+              description: `You have reached your weekly limit. Try again next week.`,
+              variant: "destructive"
+            })
           } else {
             toast({
               title: "Registration not possible",
-              description: "Registration not possible",
+              description: `Current membership: ${userMembershipType}. Please contact us for details.`,
               variant: "destructive"
             })
           }
