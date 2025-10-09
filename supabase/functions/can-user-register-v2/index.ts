@@ -124,23 +124,46 @@ serve(async (req) => {
       if (bookingRules.type === 'limited') {
         const limit = bookingRules.limit;
         
-        // Calculate period start based on limit type
-        const now = new Date();
-        let periodStart: Date;
-        if (limit?.period === 'week') {
-          periodStart = new Date(now);
-          periodStart.setDate(now.getDate() - now.getDay() + 1); // Monday
-        } else {
-          periodStart = new Date(now.getFullYear(), now.getMonth(), 1); // First of month
+        // Get course date to determine target period
+        const { data: courseData } = await supabase
+          .from('courses')
+          .select('course_date')
+          .eq('id', course_id)
+          .single();
+
+        if (!courseData) {
+          return new Response(
+            JSON.stringify({ canRegister: false, reason: 'Course not found' }),
+            { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
         }
 
-        // Count registrations in current period
+        const courseDate = new Date(courseData.course_date);
+        
+        // Calculate target period based on course date (not current date)
+        let targetPeriodStart: Date;
+        let targetPeriodEnd: Date;
+        
+        if (limit?.period === 'week') {
+          // Monday of course week
+          targetPeriodStart = new Date(courseDate);
+          targetPeriodStart.setDate(courseDate.getDate() - courseDate.getDay() + 1);
+          targetPeriodEnd = new Date(targetPeriodStart);
+          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 7);
+        } else {
+          // First of course month
+          targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), 1);
+          targetPeriodEnd = new Date(courseDate.getFullYear(), courseDate.getMonth() + 1, 1);
+        }
+
+        // Count registrations in TARGET period (based on course_date, not registered_at)
         const { data: periodRegistrations, error: periodError } = await supabase
           .from('course_registrations')
-          .select('id')
+          .select('id, courses!inner(course_date)')
           .eq('user_id', user_id)
           .eq('status', 'registered')
-          .gte('registered_at', periodStart.toISOString());
+          .gte('courses.course_date', targetPeriodStart.toISOString().split('T')[0])
+          .lt('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
 
         if (periodError) {
           console.error('Period registration error:', periodError);
@@ -239,21 +262,41 @@ serve(async (req) => {
 
       // Handle monthly/weekly limits in v1 system
       if (plan.booking_type === 'monthly_limit' || plan.booking_type === 'weekly_limit') {
-        const now = new Date();
-        let periodStart: Date;
+        // Get course date to determine target period
+        const { data: courseData } = await supabase
+          .from('courses')
+          .select('course_date')
+          .eq('id', course_id)
+          .single();
+
+        if (!courseData) {
+          return new Response(
+            JSON.stringify({ canRegister: false, reason: 'Course not found' }),
+            { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        const courseDate = new Date(courseData.course_date);
+        let targetPeriodStart: Date;
+        let targetPeriodEnd: Date;
+        
         if (plan.booking_type === 'weekly_limit') {
-          periodStart = new Date(now);
-          periodStart.setDate(now.getDate() - now.getDay() + 1);
+          targetPeriodStart = new Date(courseDate);
+          targetPeriodStart.setDate(courseDate.getDate() - courseDate.getDay() + 1);
+          targetPeriodEnd = new Date(targetPeriodStart);
+          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 7);
         } else {
-          periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), 1);
+          targetPeriodEnd = new Date(courseDate.getFullYear(), courseDate.getMonth() + 1, 1);
         }
 
         const { data: periodRegistrations, error: periodError } = await supabase
           .from('course_registrations')
-          .select('id')
+          .select('id, courses!inner(course_date)')
           .eq('user_id', user_id)
           .eq('status', 'registered')
-          .gte('registered_at', periodStart.toISOString());
+          .gte('courses.course_date', targetPeriodStart.toISOString().split('T')[0])
+          .lt('courses.course_date', targetPeriodEnd.toISOString().split('T')[0]);
 
         if (periodError) {
           console.error('Period registration error:', periodError);

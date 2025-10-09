@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { QRCodeScanner } from "./QRCodeScanner"
 import { supabase } from "@/integrations/supabase/client"
+import { useToast } from "@/hooks/use-toast"
 
 interface OpenGymCheckinProps {
   open: boolean
@@ -13,21 +14,80 @@ export const OpenGymCheckin: React.FC<OpenGymCheckinProps> = ({
   onOpenChange,
   onCheckinComplete
 }) => {
+  const { toast } = useToast()
+
   const handleScanSuccess = async (result: string) => {
     // QR code successfully scanned
     try {
-      // Mark user as active on Open Gym check-in (real activity)
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.rpc('mark_user_as_active', { user_id_param: user.id })
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "User not authenticated",
+          variant: "destructive"
+        })
+        return
       }
+
+      // Process Open Gym check-in via Edge Function
+      const { data: session } = await supabase.auth.getSession()
+      const response = await supabase.functions.invoke('process-open-gym-checkin', {
+        headers: {
+          Authorization: `Bearer ${session.session?.access_token}`
+        }
+      })
+
+      if (response.error) {
+        console.error('Open Gym check-in error:', response.error)
+        toast({
+          title: "Check-in failed",
+          description: response.error.message || "An error occurred during check-in",
+          variant: "destructive"
+        })
+        return
+      }
+
+      const result = response.data as {
+        success: boolean
+        message: string
+        error?: string
+        remainingCredits?: number
+        creditsDeducted?: boolean
+      }
+
+      if (!result.success) {
+        toast({
+          title: "Check-in failed",
+          description: result.error || "Check-in not possible",
+          variant: "destructive"
+        })
+        return
+      }
+
+      // Success - show appropriate message
+      const message = result.creditsDeducted 
+        ? `Check-in successful! 1 credit deducted. Remaining: ${result.remainingCredits}`
+        : result.message
+
+      toast({
+        title: "Check-in successful",
+        description: message
+      })
+
+      // Dispatch event to update credits display
+      window.dispatchEvent(new CustomEvent("creditsUpdated"))
+      window.dispatchEvent(new CustomEvent("open-gym-checkin-success"))
+      
+      onCheckinComplete()
+      onOpenChange(false)
     } catch (error) {
-      console.error('Error marking user as active:', error)
+      console.error('Error during Open Gym check-in:', error)
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      })
     }
-    
-    onCheckinComplete()
-    window.dispatchEvent(new CustomEvent("open-gym-checkin-success"))
-    onOpenChange(false)
   }
 
   return (
