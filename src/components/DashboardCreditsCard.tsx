@@ -74,33 +74,41 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             planName
           })
         } else if (bookingRules?.type === 'limited') {
-          // For limited memberships, calculate used credits this period
+          // For limited memberships, dynamically calculate based on period
           const limitPeriod = bookingRules.limit?.period || 'month'
           const limitCount = bookingRules.limit?.count || 0
           
+          const now = new Date()
           let periodStart: Date
+          let periodEnd: Date
+          
           if (limitPeriod === 'week') {
-            periodStart = new Date()
+            periodStart = new Date(now)
             periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1) // Monday
+            periodStart.setHours(0, 0, 0, 0)
+            periodEnd = new Date(periodStart)
+            periodEnd.setDate(periodEnd.getDate() + 7)
           } else {
-            periodStart = new Date()
-            periodStart.setDate(1) // First day of month
+            periodStart = new Date(now.getFullYear(), now.getMonth(), 1)
+            periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1)
           }
 
+          // Count registrations based on course_date in current period
           const { data: registrations } = await supabase
             .from('course_registrations')
-            .select('id')
+            .select('id, courses!inner(course_date)')
             .eq('user_id', user.id)
             .eq('status', 'registered')
-            .gte('registered_at', periodStart.toISOString())
+            .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+            .lt('courses.course_date', periodEnd.toISOString().split('T')[0])
 
-          const usedThisMonth = registrations?.length || 0
-          const remainingCredits = membershipData?.remaining_credits || 0
+          const usedThisPeriod = registrations?.length || 0
+          const remainingCredits = Math.max(0, limitCount - usedThisPeriod)
 
           setMembershipInfo({
             type: 'monthly_limit',
             remainingCredits,
-            usedThisMonth,
+            usedThisMonth: usedThisPeriod,
             monthlyLimit: limitCount,
             planName
           })

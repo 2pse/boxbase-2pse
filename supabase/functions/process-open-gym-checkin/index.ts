@@ -76,8 +76,25 @@ serve(async (req) => {
         );
       }
 
-      // For credits and limited memberships, deduct 1 credit
-      if (bookingRules.type === 'credits' || bookingRules.type === 'limited') {
+      // Limited memberships: Open Gym is FREE (only courses count against weekly/monthly limit)
+      if (bookingRules.type === 'limited') {
+        console.log('Limited membership - Open Gym check-in is free');
+        
+        await supabase.rpc('mark_user_as_active', { user_id_param: user.id });
+        
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: 'Check-in successful (Open Gym is free for Limited members)',
+            membershipType: 'limited',
+            creditsDeducted: false
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // For credits memberships, deduct 1 credit
+      if (bookingRules.type === 'credits') {
         const currentCredits = membershipData.remaining_credits || 0;
         
         if (currentCredits <= 0) {
@@ -129,7 +146,7 @@ serve(async (req) => {
           JSON.stringify({
             success: true,
             message: `Check-in successful. 1 credit deducted.`,
-            membershipType: bookingRules.type,
+            membershipType: 'credits',
             creditsDeducted: true,
             previousCredits: currentCredits,
             remainingCredits: newCredits
