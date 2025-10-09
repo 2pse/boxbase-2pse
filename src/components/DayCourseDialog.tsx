@@ -96,7 +96,6 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
   const loadUserMembershipType = async () => {
     try {
-      // First, try V2 membership system
       const { data: membershipV2Data } = await supabase
         .from('user_memberships_v2')
         .select(`
@@ -115,16 +114,15 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
       let hasOpenGymAccess = false;
 
       if (membershipV2Data && membershipV2Data.length > 0) {
-        // Use V2 system with prioritization
         const prioritizedMembership = getPriorizedMembership(membershipV2Data);
-        const bookingType = prioritizedMembership?.membership_plans_v2?.booking_rules?.type;
         const membershipPlan = prioritizedMembership?.membership_plans_v2 as any;
         
-        membershipType = getMembershipTypeName(prioritizedMembership, null);
-        // Check the actual includes_open_gym field from the database
+        // ✅ Use full membership plan name consistently
+        membershipType = membershipPlan?.name || '';
         hasOpenGymAccess = membershipPlan?.includes_open_gym === true;
+        
+        console.log('✅ V2 Membership loaded:', membershipType);
       } else {
-        // V1 system has been deprecated, using fallback to legacy profile system
         const { data: profileData } = await supabase
           .from('profiles')
           .select('membership_type')
@@ -132,9 +130,10 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
           .single();
         membershipType = profileData?.membership_type || '';
         hasOpenGymAccess = membershipType !== 'Credits';
+        
+        console.log('✅ Legacy membership loaded:', membershipType);
       }
 
-      console.log('User membership loaded in DayCourseDialog:', { membershipType, hasOpenGymAccess });
       setUserMembershipType(membershipType);
       setIncludesOpenGym(hasOpenGymAccess);
       
@@ -399,35 +398,36 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
         if (checkError || (!canRegister && !canWaitlist)) {
           console.error('🚫 Registration blocked:', { checkError, canRegister, canWaitlist });
           
-          if (userMembershipType === 'Basic Member') {
+          const membershipTypeLower = userMembershipType.toLowerCase()
+          
+          if (membershipTypeLower.includes('basic') || membershipTypeLower.includes('weekly_limit')) {
             toast({
-               title: "Weekly limit reached",
-               description: "You have reached your weekly limit of 2 registrations",
+              title: "Weekly limit reached",
+              description: "You have reached your weekly limit of registrations",
               variant: "destructive",
             })
-          } else if (userMembershipType === 'Credits') {
+          } else if (membershipTypeLower.includes('limited')) {
+            toast({
+              title: "Weekly limit reached",
+              description: "You have reached your weekly limit. Try again next week.",
+              variant: "destructive"
+            })
+          } else if (membershipTypeLower.includes('credit')) {
             toast({
               title: "No Credits Available",
               description: "You have no credits left. Please top up your credits at the reception",
               variant: "destructive",
             })
-          } else if (userMembershipType === 'open_gym_only') {
+          } else if (membershipTypeLower.includes('open gym') || membershipTypeLower === 'open_gym_only') {
             toast({
               title: "Registration not possible",
               description: "Your membership includes only Open Gym. For courses you need an extended membership.",
               variant: "destructive"
             })
-          } else if (userMembershipType.includes('Limited')) {
-            // ✅ NEW: Special handling for "Limited X/Week" memberships
-            toast({
-              title: "Weekly limit reached",
-              description: `You have reached your weekly limit. Try again next week.`,
-              variant: "destructive"
-            })
           } else {
             toast({
               title: "Registration not possible",
-              description: `Current membership: ${userMembershipType}. Please contact us for details.`,
+              description: `Your current membership (${userMembershipType}) does not allow this registration. Please contact us for details.`,
               variant: "destructive"
             })
           }
