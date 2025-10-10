@@ -15,7 +15,7 @@ export interface BookingRules {
   type: 'unlimited' | 'limited' | 'credits' | 'open_gym_only';
   limit?: {
     count: number;
-    period: 'week' | 'month';
+    period: 'month'; // Only monthly periods supported
   };
   credits?: {
     initial_amount: number;
@@ -386,31 +386,12 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   
                   <div className="space-y-2">
                     <Label htmlFor="limit-period">Time Period</Label>
-                    <RadioGroup
-                      value={formData.booking_rules.limit?.period ?? 'month'}
-                      onValueChange={(value) => {
-                        console.log('Updating period:', value);
-                        setFormData(prev => ({
-                          ...prev,
-                          booking_rules: {
-                            ...prev.booking_rules,
-                            limit: {
-                              count: prev.booking_rules.limit?.count ?? 8,
-                              period: value as 'week' | 'month'
-                            }
-                          }
-                        }));
-                      }}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="week" id="week" />
-                        <Label htmlFor="week">Per Week</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="month" id="month" />
-                        <Label htmlFor="month">Per Month</Label>
-                      </div>
-                    </RadioGroup>
+                    <div className="p-3 bg-muted rounded-md">
+                      <p className="text-sm font-medium">Per Month</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Bookings are counted per calendar month
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -554,7 +535,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   <span>
                     {formData.booking_rules.type === 'unlimited' && 'Unlimited'}
                     {formData.booking_rules.type === 'limited' && 
-                      `${formData.booking_rules.limit?.count} per ${formData.booking_rules.limit?.period === 'week' ? 'week' : 'month'}`}
+                      `${formData.booking_rules.limit?.count} per month`}
                     {formData.booking_rules.type === 'credits' && 
                       `${formData.booking_rules.credits?.initial_amount} Credits`}
                     {formData.booking_rules.type === 'open_gym_only' && 'Open Gym Only'}

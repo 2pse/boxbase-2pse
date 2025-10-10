@@ -7,11 +7,12 @@ import { Calendar, CreditCard, AlertCircle } from "lucide-react"
 interface MembershipLimitDisplayProps {
   userId: string
   membershipType: string
-  courseDate?: string // ← NEW: Optional course date for preview
+  courseDate?: string
 }
 
 export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: MembershipLimitDisplayProps) => {
-  const [weeklyCount, setWeeklyCount] = useState<number>(0)
+  const [monthlyCount, setMonthlyCount] = useState<number>(0)
+  const [monthlyLimit, setMonthlyLimit] = useState<number>(0)
   const [credits, setCredits] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   const [periodStart, setPeriodStart] = useState<string>('')
@@ -19,30 +20,33 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
 
   useEffect(() => {
     const fetchLimits = async () => {
-      // Determine target date (courseDate or current week)
       const targetDate = courseDate ? new Date(courseDate) : new Date()
       
-      // Calculate week period (Monday-Sunday)
-      const dayOfWeek = targetDate.getDay()
-      const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
-      const monday = new Date(targetDate)
-      monday.setDate(monday.getDate() + diff)
-      monday.setHours(0, 0, 0, 0)
-      
-      const sunday = new Date(monday)
-      sunday.setDate(sunday.getDate() + 6)
-      sunday.setHours(23, 59, 59, 999)
+      // Calculate MONTHLY period only
+      const monthStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1)
+      const monthEnd = new Date(targetDate.getFullYear(), targetDate.getMonth() + 1, 0)
 
-      const periodStartStr = monday.toISOString().split('T')[0]
-      const periodEndStr = sunday.toISOString().split('T')[0]
+      const periodStartStr = monthStart.toISOString().split('T')[0]
+      const periodEndStr = monthEnd.toISOString().split('T')[0]
       
       setPeriodStart(periodStartStr)
       setPeriodEnd(periodEndStr)
 
-      // Map new booking types to legacy checks
-      if (membershipType === 'monthly_limit' || membershipType === 'Basic Member' || membershipType.includes('Limited')) {
-        // Fetch registrations in target period
-        const { data: registrations, error } = await supabase
+      if (membershipType.includes('Limited')) {
+        // Get V2 membership limit
+        const { data: membershipData } = await supabase
+          .from('user_memberships_v2')
+          .select('membership_plans_v2(booking_rules)')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+          .single()
+
+        const bookingRules = membershipData?.membership_plans_v2?.booking_rules as any
+        const limit = bookingRules?.limit?.count || 0
+        setMonthlyLimit(limit)
+
+        // Fetch registrations in MONTHLY period
+        const { data: registrations } = await supabase
           .from('course_registrations')
           .select('id, courses!inner(course_date)')
           .eq('user_id', userId)
@@ -50,11 +54,8 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
           .gte('courses.course_date', periodStartStr)
           .lte('courses.course_date', periodEndStr)
         
-        if (!error && registrations) {
-          setWeeklyCount(registrations.length)
-        }
+        setMonthlyCount(registrations?.length || 0)
       } else if (membershipType === 'credits' || membershipType === 'Credits') {
-        // V1 system has been deprecated, setting credits to 0
         setCredits(0)
       }
       setLoading(false)
@@ -73,8 +74,8 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
     )
   }
 
-  if (membershipType === 'monthly_limit' || membershipType === 'Basic Member') {
-    const remaining = Math.max(0, 2 - weeklyCount)
+  if (membershipType.includes('Limited')) {
+    const remaining = Math.max(0, monthlyLimit - monthlyCount)
     
     return (
       <Card className="w-full">
@@ -83,15 +84,15 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
             <Calendar className="h-5 w-5 text-primary" />
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium">Weekly Registrations</span>
+                <span className="font-medium">Monthly Registrations</span>
                 <Badge variant={remaining > 0 ? "default" : "destructive"}>
-                  {weeklyCount}/2
+                  {monthlyCount}/{monthlyLimit}
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
                 {remaining > 0 
-                  ? `You can register ${remaining} more times this week`
-                  : "You have reached your weekly limit"
+                  ? `You can register ${remaining} more times this month`
+                  : "You have reached your monthly limit"
                 }
               </p>
             </div>
@@ -100,7 +101,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
             <div className="mt-3 p-2 bg-destructive/10 rounded-md flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-destructive" />
               <span className="text-sm text-destructive">
-                Limit reached - new registrations possible from Monday
+                Monthly limit reached - new registrations possible next month
               </span>
             </div>
           )}

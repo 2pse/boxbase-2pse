@@ -44,7 +44,7 @@ const getBookingTypeDisplay = (bookingRules: BookingRules) => {
       };
     case 'limited':
       return {
-        label: `${bookingRules.limit?.count} per ${bookingRules.limit?.period === 'week' ? 'week' : 'month'}`,
+        label: `${bookingRules.limit?.count} per month`,
         icon: Calendar,
         description: 'Limited bookings',
         color: 'bg-blue-100 text-blue-800'
