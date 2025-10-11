@@ -1025,6 +1025,10 @@ export type Database = {
         Args: { course_id_param: string }
         Returns: undefined
       }
+      renew_limited_credits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       renew_membership_credits: {
         Args: Record<PropertyKey, never>
         Returns: undefined

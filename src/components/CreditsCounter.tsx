@@ -73,44 +73,10 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
       setMembershipInfo({ type: 'unlimited' });
       return;
     } else if (bookingRules.type === 'limited') {
-      const limit = bookingRules.limit;
-      const limitPeriod = limit?.period || 'month';
-      const limitCount = limit?.count || 0;
-      
-      // Calculate period start/end based on course_date
-      const now = new Date();
-      let periodStart: Date;
-      let periodEnd: Date;
-      
-      if (limitPeriod === 'week') {
-        periodStart = new Date(now);
-        periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1); // Monday
-        periodStart.setHours(0, 0, 0, 0);
-        periodEnd = new Date(periodStart);
-        periodEnd.setDate(periodEnd.getDate() + 6); // Sunday (not +7)
-        periodEnd.setHours(23, 59, 59, 999); // End of Sunday
-      } else {
-        periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      }
-      
-      // Count registrations in current period based on course_date
-      const { data: registrations } = await supabase
-        .from('course_registrations')
-        .select('id, courses!inner(course_date)')
-        .eq('user_id', user.id)
-        .eq('status', 'registered')
-        .gte('courses.course_date', periodStart.toISOString().split('T')[0])
-        .lte('courses.course_date', periodEnd.toISOString().split('T')[0]);
-
-      const usedThisPeriod = registrations?.length || 0;
-
+      // Limited memberships now use credit-based system
       setMembershipInfo({
-        type: limitPeriod === 'week' ? 'weekly_limit' : 'monthly_limit',
-        usedThisMonth: usedThisPeriod,
-        monthlyLimit: limitCount,
-        remainingCredits: Math.max(0, limitCount - usedThisPeriod),
-        limitPeriod: limitPeriod
+        type: 'credits',
+        remainingCredits: membershipData.remaining_credits || 0
       });
       return;
         } else if (bookingRules.type === 'open_gym_only') {
