@@ -402,14 +402,14 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
           
           if (membershipTypeLower.includes('basic') || membershipTypeLower.includes('weekly_limit')) {
             toast({
-              title: "Weekly limit reached",
-              description: "You have reached your weekly limit of registrations",
+              title: "Monthly limit reached",
+              description: "You have reached your monthly limit of registrations",
               variant: "destructive",
             })
           } else if (membershipTypeLower.includes('limited')) {
             toast({
-              title: "Weekly limit reached",
-              description: "You have reached your weekly limit. Try again next week.",
+              title: "Monthly limit reached",
+              description: "You have no credits left this month. Credits renew on your billing date.",
               variant: "destructive"
             })
           } else if (membershipTypeLower.includes('credit')) {

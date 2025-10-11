@@ -10,7 +10,7 @@ interface FirstLoginDialogProps {
 
 export const FirstLoginDialog = ({ open, onClose }: FirstLoginDialogProps) => {
   const handleYouTubeClick = () => {
-    window.open("https://youtube.com/shorts/GXhPX6__sI4?feature=shared", "_blank")
+    window.open("https://youtube.com/shorts/2A0oAXPXO7U?feature=share", "_blank")
   }
 
   return (
