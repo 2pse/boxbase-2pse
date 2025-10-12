@@ -45,7 +45,7 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
     if (!user?.id) return;
 
     try {
-      // First check new v2 system - get ALL active memberships
+      // First check new v2 system - get ALL active memberships (including start_date)
       const { data: membershipsV2, error: v2Error } = await supabase
         .from('user_memberships_v2')
         .select(`
@@ -73,12 +73,16 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
           setMembershipInfo({ type: 'unlimited' });
           return;
         } else if (bookingRules.type === 'limited') {
-          // Limited memberships use period-based calculation
-          // Calculate remaining credits for CURRENT period
+          // Limited memberships use individual period-based calculation
+          // Calculate remaining credits for CURRENT period based on start_date
           const limit = bookingRules.limit;
           const currentDate = new Date();
           
-          // Calculate current period start
+          // Get membership start_date for individual period calculation
+          const membershipStartDate = new Date(prioritizedMembership.start_date);
+          const startDay = membershipStartDate.getDate();
+          
+          // Calculate current period start based on individual start_date
           let periodStart: Date;
           if (limit.period === 'week') {
             // Week starts on Monday
@@ -88,8 +92,23 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             periodStart.setDate(currentDate.getDate() + diff);
             periodStart.setHours(0, 0, 0, 0);
           } else {
-            // Month period
-            periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            // Individual monthly period based on start_date
+            // Example: start_date = 11.10.2025 → current period could be 11.10. - 10.11.
+            periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), startDay);
+            
+            // If we're before the start day, we're still in the previous period
+            if (currentDate.getDate() < startDay) {
+              periodStart.setMonth(periodStart.getMonth() - 1);
+            }
+          }
+          
+          // Calculate period end
+          let periodEnd = new Date(periodStart);
+          if (limit.period === 'week') {
+            periodEnd.setDate(periodEnd.getDate() + 6);
+          } else {
+            periodEnd.setMonth(periodEnd.getMonth() + 1);
+            periodEnd.setDate(periodEnd.getDate() - 1);
           }
           
           // Count registrations in current period
@@ -98,7 +117,8 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             .select('id, courses!inner(course_date)')
             .eq('user_id', user.id)
             .eq('status', 'registered')
-            .gte('courses.course_date', periodStart.toISOString().split('T')[0]);
+            .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+            .lte('courses.course_date', periodEnd.toISOString().split('T')[0]);
           
           const usedInPeriod = registrations?.length || 0;
           const remaining = Math.max(0, limit.count - usedInPeriod);

@@ -4,6 +4,7 @@ interface MembershipV2 {
     name?: string;
   };
   membership_data?: any;
+  start_date?: string;
 }
 
 interface MembershipV1 {

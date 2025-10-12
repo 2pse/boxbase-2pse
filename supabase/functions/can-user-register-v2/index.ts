@@ -140,7 +140,11 @@ serve(async (req) => {
 
         const courseDate = new Date(courseData.course_date);
         
-        // Calculate target period based on course date (not current date)
+        // Get membership start_date for individual period calculation
+        const membershipStartDate = new Date(membershipV2.start_date);
+        const startDay = membershipStartDate.getDate();
+        
+        // Calculate target period based on course date AND membership start_date
         let targetPeriodStart: Date;
         let targetPeriodEnd: Date;
         
@@ -150,12 +154,22 @@ serve(async (req) => {
           targetPeriodStart.setDate(courseDate.getDate() - courseDate.getDay() + 1);
           targetPeriodStart.setHours(0, 0, 0, 0);
           targetPeriodEnd = new Date(targetPeriodStart);
-          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 6); // Sunday (not +7)
-          targetPeriodEnd.setHours(23, 59, 59, 999); // End of Sunday
+          targetPeriodEnd.setDate(targetPeriodStart.getDate() + 6);
+          targetPeriodEnd.setHours(23, 59, 59, 999);
         } else {
-          // First of course month
-          targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), 1);
-          targetPeriodEnd = new Date(courseDate.getFullYear(), courseDate.getMonth() + 1, 1);
+          // Individual monthly period based on start_date
+          // Example: start_date = 11.10.2025 → period 11.10. - 10.11.
+          targetPeriodStart = new Date(courseDate.getFullYear(), courseDate.getMonth(), startDay);
+          
+          // If course is before the start day, we're in the previous period
+          if (courseDate.getDate() < startDay) {
+            targetPeriodStart.setMonth(targetPeriodStart.getMonth() - 1);
+          }
+          
+          targetPeriodEnd = new Date(targetPeriodStart);
+          targetPeriodEnd.setMonth(targetPeriodEnd.getMonth() + 1);
+          targetPeriodEnd.setDate(targetPeriodEnd.getDate() - 1); // Last day of period
+          targetPeriodEnd.setHours(23, 59, 59, 999);
         }
 
         // Count registrations in TARGET period (based on course_date, not registered_at)

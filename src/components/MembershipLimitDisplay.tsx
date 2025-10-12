@@ -21,10 +21,10 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
   useEffect(() => {
     const fetchLimits = async () => {
       if (membershipType.includes('Limited')) {
-        // Get V2 membership data for LIMITED memberships
+        // Get V2 membership data for LIMITED memberships (including start_date)
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
-          .select('membership_data, membership_plans_v2(booking_rules)')
+          .select('membership_data, start_date, membership_plans_v2(booking_rules)')
           .eq('user_id', userId)
           .eq('status', 'active')
           .single()
@@ -33,34 +33,60 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
           const bookingRules = membershipData.membership_plans_v2.booking_rules as any
           
           if (bookingRules.type === 'limited') {
-            // Period-based calculation for LIMITED memberships
+            // Individual period-based calculation for LIMITED memberships
             const limit = bookingRules.limit
-            const currentDate = new Date()
             
-            // Calculate current period start
+            // Get membership start_date for individual period calculation
+            const membershipStartDate = new Date(membershipData.start_date)
+            const startDay = membershipStartDate.getDate()
+            
+            // Use course_date if provided, otherwise use current date
+            const targetDate = courseDate ? new Date(courseDate) : new Date()
+            
+            // Calculate period start based on individual start_date
             let periodStart: Date
             if (limit.period === 'week') {
-              const day = currentDate.getDay()
+              const day = targetDate.getDay()
               const diff = day === 0 ? -6 : 1 - day
-              periodStart = new Date(currentDate)
-              periodStart.setDate(currentDate.getDate() + diff)
+              periodStart = new Date(targetDate)
+              periodStart.setDate(targetDate.getDate() + diff)
               periodStart.setHours(0, 0, 0, 0)
             } else {
-              periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+              // Individual monthly period based on start_date
+              periodStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), startDay)
+              
+              // If target date is before the start day, we're in the previous period
+              if (targetDate.getDate() < startDay) {
+                periodStart.setMonth(periodStart.getMonth() - 1)
+              }
             }
             
-            // Count registrations in current period
+            // Calculate period end
+            let periodEnd = new Date(periodStart)
+            if (limit.period === 'week') {
+              periodEnd.setDate(periodEnd.getDate() + 6)
+            } else {
+              periodEnd.setMonth(periodEnd.getMonth() + 1)
+              periodEnd.setDate(periodEnd.getDate() - 1)
+            }
+            
+            // Count registrations in the target period
             const { data: registrations } = await supabase
               .from('course_registrations')
               .select('id, courses!inner(course_date)')
               .eq('user_id', userId)
               .eq('status', 'registered')
               .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+              .lte('courses.course_date', periodEnd.toISOString().split('T')[0])
             
             const usedInPeriod = registrations?.length || 0
             const remaining = Math.max(0, limit.count - usedInPeriod)
             
             setCredits(remaining)
+            setMonthlyLimit(limit.count)
+            setMonthlyCount(usedInPeriod)
+            setPeriodStart(periodStart.toISOString().split('T')[0])
+            setPeriodEnd(periodEnd.toISOString().split('T')[0])
           }
         }
       } else if (membershipType === 'credits' || membershipType === 'Credits') {
