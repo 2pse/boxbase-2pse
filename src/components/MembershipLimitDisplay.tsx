@@ -20,11 +20,54 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
 
   useEffect(() => {
     const fetchLimits = async () => {
-      if (membershipType.includes('Limited') || membershipType === 'credits' || membershipType === 'Credits') {
-        // Get V2 membership data (credits stored in membership_data)
+      if (membershipType.includes('Limited')) {
+        // Get V2 membership data for LIMITED memberships
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
           .select('membership_data, membership_plans_v2(booking_rules)')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+          .single()
+
+        if (membershipData?.membership_plans_v2?.booking_rules) {
+          const bookingRules = membershipData.membership_plans_v2.booking_rules as any
+          
+          if (bookingRules.type === 'limited') {
+            // Period-based calculation for LIMITED memberships
+            const limit = bookingRules.limit
+            const currentDate = new Date()
+            
+            // Calculate current period start
+            let periodStart: Date
+            if (limit.period === 'week') {
+              const day = currentDate.getDay()
+              const diff = day === 0 ? -6 : 1 - day
+              periodStart = new Date(currentDate)
+              periodStart.setDate(currentDate.getDate() + diff)
+              periodStart.setHours(0, 0, 0, 0)
+            } else {
+              periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+            }
+            
+            // Count registrations in current period
+            const { data: registrations } = await supabase
+              .from('course_registrations')
+              .select('id, courses!inner(course_date)')
+              .eq('user_id', userId)
+              .eq('status', 'registered')
+              .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+            
+            const usedInPeriod = registrations?.length || 0
+            const remaining = Math.max(0, limit.count - usedInPeriod)
+            
+            setCredits(remaining)
+          }
+        }
+      } else if (membershipType === 'credits' || membershipType === 'Credits') {
+        // For CREDITS type, still use stored credits
+        const { data: membershipData } = await supabase
+          .from('user_memberships_v2')
+          .select('membership_data')
           .eq('user_id', userId)
           .eq('status', 'active')
           .single()

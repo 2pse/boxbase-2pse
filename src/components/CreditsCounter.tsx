@@ -69,16 +69,45 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             remainingCredits: membershipData.remaining_credits || 0
           });
           return;
-    } else if (bookingRules.type === 'unlimited') {
-      setMembershipInfo({ type: 'unlimited' });
-      return;
-    } else if (bookingRules.type === 'limited') {
-      // Limited memberships now use credit-based system
-      setMembershipInfo({
-        type: 'credits',
-        remainingCredits: membershipData.remaining_credits || 0
-      });
-      return;
+        } else if (bookingRules.type === 'unlimited') {
+          setMembershipInfo({ type: 'unlimited' });
+          return;
+        } else if (bookingRules.type === 'limited') {
+          // Limited memberships use period-based calculation
+          // Calculate remaining credits for CURRENT period
+          const limit = bookingRules.limit;
+          const currentDate = new Date();
+          
+          // Calculate current period start
+          let periodStart: Date;
+          if (limit.period === 'week') {
+            // Week starts on Monday
+            const day = currentDate.getDay();
+            const diff = day === 0 ? -6 : 1 - day;
+            periodStart = new Date(currentDate);
+            periodStart.setDate(currentDate.getDate() + diff);
+            periodStart.setHours(0, 0, 0, 0);
+          } else {
+            // Month period
+            periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+          }
+          
+          // Count registrations in current period
+          const { data: registrations } = await supabase
+            .from('course_registrations')
+            .select('id, courses!inner(course_date)')
+            .eq('user_id', user.id)
+            .eq('status', 'registered')
+            .gte('courses.course_date', periodStart.toISOString().split('T')[0]);
+          
+          const usedInPeriod = registrations?.length || 0;
+          const remaining = Math.max(0, limit.count - usedInPeriod);
+          
+          setMembershipInfo({
+            type: 'credits',
+            remainingCredits: remaining
+          });
+          return;
         } else if (bookingRules.type === 'open_gym_only') {
           setMembershipInfo({ type: 'open_gym_only' });
           return;

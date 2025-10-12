@@ -305,9 +305,9 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         const membershipTypeLower = userMembershipType.toLowerCase()
         
         if (membershipTypeLower.includes('basic') || membershipTypeLower.includes('weekly_limit')) {
-          toast.error("You have reached your weekly limit of registrations")
+          toast.error("You have reached your monthly limit of registrations")
         } else if (membershipTypeLower.includes('limited')) {
-          toast.error("You have reached your weekly limit. Try again next week.")
+          toast.error("You have reached your monthly limit for this period. You can book for next month now!")
         } else if (membershipTypeLower.includes('credit')) {
           toast.error("You have no credits left. Please top up your credits at the reception")
         } else if (membershipTypeLower.includes('open gym') || membershipTypeLower === 'open_gym_only') {
