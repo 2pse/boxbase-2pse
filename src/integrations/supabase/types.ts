@@ -1011,7 +1011,7 @@ export type Database = {
       }
       l2_normalize: {
         Args: { "": string } | { "": unknown } | { "": unknown }
-        Returns: string
+        Returns: unknown
       }
       mark_user_as_active: {
         Args: { user_id_param: string }
