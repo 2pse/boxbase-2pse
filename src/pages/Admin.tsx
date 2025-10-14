@@ -922,7 +922,7 @@ export default function Admin() {
     }
   };
 
-  const getMembershipDuration = (endDate: string | null, autoRenewal: boolean) => {
+  const getMembershipDuration = (endDate: string | null, autoRenewal: boolean, startDate: string | null) => {
     if (!endDate) {
       return { text: '-', className: 'text-muted-foreground' };
     }
@@ -932,8 +932,21 @@ export default function Admin() {
     const end = new Date(endDate);
     end.setHours(0, 0, 0, 0);
     
-    const diffTime = end.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let diffTime = end.getTime() - today.getTime();
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Bei Auto-Renewal und abgelaufener Mitgliedschaft: nächste Periode berechnen
+    if (diffDays < 0 && autoRenewal && startDate) {
+      const start = new Date(startDate);
+      const durationMonths = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30.44)); // durchschnittliche Monatslänge
+      
+      // Berechne nächstes End-Datum durch Hinzufügen der Vertragsdauer
+      const nextEnd = new Date(end);
+      nextEnd.setMonth(nextEnd.getMonth() + Math.max(1, durationMonths || 1));
+      
+      diffTime = nextEnd.getTime() - today.getTime();
+      diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
     
     if (diffDays < 0) {
       return { 
@@ -1358,24 +1371,28 @@ export default function Admin() {
                                    {member.status === 'active' ? 'Active' : 'Inactive'}
                                  </span>
                                </TableCell>
-                                 <TableCell className="hidden sm:table-cell">
-                                   <div className="flex items-center gap-2">
-                                     {(() => {
-                                       const duration = getMembershipDuration(member.membership_end_date, member.membership_auto_renewal || false);
-                                       return (
-                                         <span className={duration.className}>
-                                           {duration.text}
-                                         </span>
-                                       );
-                                     })()}
-                                     {member.membership_auto_renewal && (
-                                       <Badge variant="outline" className="text-xs flex items-center gap-1">
-                                         <span className="text-green-600">🔄</span>
-                                         Auto
-                                       </Badge>
-                                     )}
-                                   </div>
-                                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  <div className="flex items-center gap-2">
+                    {(() => {
+                      const duration = getMembershipDuration(
+                        member.membership_end_date, 
+                        member.membership_auto_renewal || false,
+                        member.membership_start_date
+                      );
+                      return (
+                        <span className={duration.className}>
+                          {duration.text}
+                        </span>
+                      );
+                    })()}
+                    {member.membership_auto_renewal && (
+                      <Badge variant="outline" className="text-xs flex items-center gap-1">
+                        <span className="text-green-600">🔄</span>
+                        Auto
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
                                <TableCell>
                                  <div className="flex gap-1">
                                    <Button
