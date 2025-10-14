@@ -37,6 +37,21 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     loadMembershipInfo()
   }, [user.id])
 
+  // Listen for course registration events for instant updates
+  useEffect(() => {
+    const handleCourseRegistrationChanged = () => {
+      loadMembershipInfo()
+    }
+
+    window.addEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
+    window.addEventListener('creditsUpdated', handleCourseRegistrationChanged)
+    
+    return () => {
+      window.removeEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
+      window.removeEventListener('creditsUpdated', handleCourseRegistrationChanged)
+    }
+  }, [])
+
   const loadMembershipInfo = async () => {
     try {
       // Check v2 system first

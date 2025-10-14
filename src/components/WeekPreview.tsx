@@ -38,6 +38,19 @@ export const WeekPreview: React.FC<WeekPreviewProps> = ({ user, userRole, primar
     loadWeekData()
   }, [user.id])
 
+  // Listen for course registration events for instant updates
+  useEffect(() => {
+    const handleCourseRegistrationChanged = () => {
+      loadWeekData()
+    }
+
+    window.addEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
+    
+    return () => {
+      window.removeEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
+    }
+  }, [])
+
   const loadWeekData = async () => {
     try {
       const today = timezone.nowInBerlin()

@@ -474,6 +474,11 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       }
 
       toast.success(isWaitlist ? 'You have been added to the waitlist' : 'Registered for course')
+      
+      // Dispatch events for instant UI updates
+      window.dispatchEvent(new CustomEvent('courseRegistrationChanged'))
+      window.dispatchEvent(new CustomEvent('creditsUpdated'))
+      
       await loadCourses()
       if (selectedCourse?.id === courseId) {
         await loadParticipants(courseId)
@@ -549,6 +554,11 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       }
 
       toast.success('Registration successfully cancelled')
+      
+      // Dispatch events for instant UI updates
+      window.dispatchEvent(new CustomEvent('courseRegistrationChanged'))
+      window.dispatchEvent(new CustomEvent('creditsUpdated'))
+      
       await loadCourses()
       if (selectedCourse?.id === courseId) {
         await loadParticipants(courseId)
