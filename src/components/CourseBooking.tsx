@@ -509,21 +509,6 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
 
       if (error) throw error
 
-      // Refund credit for credits and limited memberships (only for actual registrations, not waitlist)
-      if (targetCourse.is_registered) {
-        const { data: creditResult } = await supabase
-          .rpc('handle_course_registration_credits', {
-            p_user_id: user.id,
-            p_course_id: courseId,
-            p_action: 'refund'
-          })
-
-        // Log credit refund result (don't fail the cancellation if this fails)
-        if (creditResult && typeof creditResult === 'object' && 'success' in creditResult && creditResult.success) {
-          console.log('Credit refunded:', creditResult.message)
-        }
-      }
-
       // Handle credit refund after successful cancellation (only for registered courses, not waitlist)
       if (targetCourse.is_registered) {
         const { data: creditResult, error: creditError } = await supabase
