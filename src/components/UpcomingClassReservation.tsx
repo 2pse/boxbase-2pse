@@ -179,7 +179,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
       console.log('Loading upcoming reservation for user:', user.id)
       
-      // Get user's next upcoming course registration
+      // Get all upcoming course registrations (today and future)
       const { data: coursesData, error } = await supabase
         .from('courses')
         .select(`
@@ -201,7 +201,6 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
         .gte('course_date', new Date().toISOString().split('T')[0])
         .order('course_date', { ascending: true })
         .order('start_time', { ascending: true })
-        .limit(1)
 
       console.log('Upcoming reservation query result:', { coursesData, error })
 
@@ -210,8 +209,15 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
         return
       }
 
-      if (coursesData && coursesData.length > 0) {
-        const course = coursesData[0]
+      // Filter courses to only show those that haven't started yet
+      const now = new Date()
+      const upcomingCourses = coursesData?.filter(course => {
+        const courseDateTime = new Date(`${course.course_date}T${course.start_time}`)
+        return courseDateTime > now
+      }) || []
+
+      if (upcomingCourses.length > 0) {
+        const course = upcomingCourses[0]
         const registration = course.course_registrations[0]
         console.log('Found upcoming registration:', { course, registration })
         
