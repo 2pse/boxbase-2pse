@@ -5,6 +5,8 @@ interface MembershipV2 {
   };
   membership_data?: any;
   start_date?: string;
+  end_date?: string;
+  auto_renewal?: boolean;
 }
 
 interface MembershipV1 {

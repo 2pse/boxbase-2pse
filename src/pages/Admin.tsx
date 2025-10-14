@@ -48,6 +48,9 @@ interface Member {
   last_login_at: string | null;
   authors?: boolean;
   current_membership_type?: string;
+  membership_end_date?: string | null;
+  membership_auto_renewal?: boolean;
+  membership_start_date?: string | null;
   user_memberships?: Array<{
     status: string;
     membership_plan_id: string;
@@ -301,6 +304,9 @@ export default function Admin() {
             user_id,
             status,
             membership_data,
+            start_date,
+            end_date,
+            auto_renewal,
             membership_plans_v2(
               name,
               booking_rules,
@@ -320,17 +326,26 @@ export default function Admin() {
         
         // Determine membership type using V2 system only (consistent with FinanceReport)
         let membershipType = 'No Membership'; // Default fallback
+        let endDate = null;
+        let autoRenewal = false;
+        let startDate = null;
         
         if (userMemberships.length > 0) {
           // Use shared prioritization logic from membershipUtils
           const selectedMembership = getPriorizedMembership(userMemberships);
           membershipType = getMembershipTypeName(selectedMembership, null);
+          endDate = selectedMembership.end_date;
+          autoRenewal = selectedMembership.auto_renewal;
+          startDate = selectedMembership.start_date;
         }
         
         return {
           ...member,
           email: emailData[member.user_id] || '',
-          current_membership_type: membershipType
+          current_membership_type: membershipType,
+          membership_end_date: endDate,
+          membership_auto_renewal: autoRenewal,
+          membership_start_date: startDate
         };
       }) || [];
       
@@ -907,6 +922,59 @@ export default function Admin() {
     }
   };
 
+  const getMembershipDuration = (endDate: string | null, autoRenewal: boolean) => {
+    if (!endDate) {
+      return { text: '-', className: 'text-muted-foreground' };
+    }
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+    
+    const diffTime = end.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) {
+      return { 
+        text: 'Abgelaufen', 
+        className: 'text-red-600 font-medium' 
+      };
+    } else if (diffDays === 0) {
+      return { 
+        text: 'Heute', 
+        className: 'text-orange-600 font-medium' 
+      };
+    } else if (diffDays <= 7) {
+      return { 
+        text: `${diffDays} Tag${diffDays !== 1 ? 'e' : ''}`, 
+        className: 'text-orange-500' 
+      };
+    } else if (diffDays <= 30) {
+      return { 
+        text: `${diffDays} Tage`, 
+        className: 'text-yellow-600' 
+      };
+    } else {
+      const months = Math.floor(diffDays / 30);
+      const remainingDays = diffDays % 30;
+      
+      if (months >= 1 && remainingDays > 0) {
+        return { 
+          text: `${months} Mon. ${remainingDays} Tag${remainingDays !== 1 ? 'e' : ''}`, 
+          className: 'text-green-600' 
+        };
+      } else if (months >= 1) {
+        return { 
+          text: `${months} Monat${months !== 1 ? 'e' : ''}`, 
+          className: 'text-green-600' 
+        };
+      }
+    }
+    
+    return { text: `${diffDays} Tage`, className: 'text-muted-foreground' };
+  };
+
 
   const handleDeleteMember = async (memberId: string, memberName: string, userId?: string) => {
     if (!confirm(`Sind Sie sicher, dass Sie das Mitglied "${memberName}" komplett löschen möchten? Dies entfernt sowohl das Profil als auch den Account unwiderruflich.`)) return;
@@ -1252,7 +1320,7 @@ export default function Admin() {
                             <TableHead className="hidden md:table-cell">Access Code</TableHead>
                             <TableHead>Membership</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead className="hidden sm:table-cell">Last Login</TableHead>
+                            <TableHead className="hidden sm:table-cell">Vertragslaufzeit</TableHead>
                             <TableHead>Actions</TableHead>
                           </TableRow>
                       </TableHeader>
@@ -1290,12 +1358,24 @@ export default function Admin() {
                                    {member.status === 'active' ? 'Active' : 'Inactive'}
                                  </span>
                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                  {member.last_login_at 
-                                    ? new Date(member.last_login_at).toLocaleDateString('en-US')
-                                    : 'Never'
-                                  }
-                               </TableCell>
+                                 <TableCell className="hidden sm:table-cell">
+                                   <div className="flex items-center gap-2">
+                                     {(() => {
+                                       const duration = getMembershipDuration(member.membership_end_date, member.membership_auto_renewal || false);
+                                       return (
+                                         <span className={duration.className}>
+                                           {duration.text}
+                                         </span>
+                                       );
+                                     })()}
+                                     {member.membership_auto_renewal && (
+                                       <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                         <span className="text-green-600">🔄</span>
+                                         Auto
+                                       </Badge>
+                                     )}
+                                   </div>
+                                </TableCell>
                                <TableCell>
                                  <div className="flex gap-1">
                                    <Button
