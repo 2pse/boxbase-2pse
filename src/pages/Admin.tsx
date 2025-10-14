@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipUtils"
-import { UserPlus, Edit, Trash2, Search, CreditCard, Home, Users, Calendar, FileText, Newspaper, Dumbbell, Trophy, DollarSign, Settings, LogOut, Percent, Download } from "lucide-react";
+import { UserPlus, Edit, Trash2, Search, CreditCard, Home, Users, Calendar, FileText, Newspaper, Dumbbell, Trophy, DollarSign, Settings, LogOut, Percent, Download, RefreshCw } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CourseTemplateManager from "@/components/CourseTemplateManager";
@@ -935,12 +935,11 @@ export default function Admin() {
     let diffTime = end.getTime() - today.getTime();
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    // Bei Auto-Renewal und abgelaufener Mitgliedschaft: nächste Periode berechnen
+    // Calculate next period for auto-renewal if membership expired
     if (diffDays < 0 && autoRenewal && startDate) {
       const start = new Date(startDate);
-      const durationMonths = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30.44)); // durchschnittliche Monatslänge
+      const durationMonths = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30.44));
       
-      // Berechne nächstes End-Datum durch Hinzufügen der Vertragsdauer
       const nextEnd = new Date(end);
       nextEnd.setMonth(nextEnd.getMonth() + Math.max(1, durationMonths || 1));
       
@@ -950,22 +949,22 @@ export default function Admin() {
     
     if (diffDays < 0) {
       return { 
-        text: 'Abgelaufen', 
+        text: 'Expired', 
         className: 'text-red-600 font-medium' 
       };
     } else if (diffDays === 0) {
       return { 
-        text: 'Heute', 
+        text: 'Today', 
         className: 'text-orange-600 font-medium' 
       };
     } else if (diffDays <= 7) {
       return { 
-        text: `${diffDays} Tag${diffDays !== 1 ? 'e' : ''}`, 
+        text: `${diffDays} day${diffDays !== 1 ? 's' : ''}`, 
         className: 'text-orange-500' 
       };
     } else if (diffDays <= 30) {
       return { 
-        text: `${diffDays} Tage`, 
+        text: `${diffDays} days`, 
         className: 'text-yellow-600' 
       };
     } else {
@@ -974,18 +973,18 @@ export default function Admin() {
       
       if (months >= 1 && remainingDays > 0) {
         return { 
-          text: `${months} Mon. ${remainingDays} Tag${remainingDays !== 1 ? 'e' : ''}`, 
+          text: `${months} mo. ${remainingDays} day${remainingDays !== 1 ? 's' : ''}`, 
           className: 'text-green-600' 
         };
       } else if (months >= 1) {
         return { 
-          text: `${months} Monat${months !== 1 ? 'e' : ''}`, 
+          text: `${months} month${months !== 1 ? 's' : ''}`, 
           className: 'text-green-600' 
         };
       }
     }
     
-    return { text: `${diffDays} Tage`, className: 'text-muted-foreground' };
+    return { text: `${diffDays} days`, className: 'text-muted-foreground' };
   };
 
 
@@ -1386,10 +1385,7 @@ export default function Admin() {
                       );
                     })()}
                     {member.membership_auto_renewal && (
-                      <Badge variant="outline" className="text-xs flex items-center gap-1">
-                        <span className="text-green-600">🔄</span>
-                        Auto
-                      </Badge>
+                      <RefreshCw className="h-4 w-4 text-green-600" />
                     )}
                   </div>
                 </TableCell>
