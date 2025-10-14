@@ -968,10 +968,31 @@ export default function Admin() {
         className: 'text-yellow-600' 
       };
     } else {
-      const months = Math.floor(diffDays / 30);
-      const remainingDays = diffDays % 30;
+      // Calculate months based on start date for accurate duration
+      let months = 0;
+      let remainingDays = diffDays;
       
-      if (months >= 1 && remainingDays > 0) {
+      if (startDate) {
+        const start = new Date(startDate);
+        const calculationEnd = new Date(today);
+        calculationEnd.setDate(calculationEnd.getDate() + diffDays);
+        
+        // Calculate difference in months
+        months = (calculationEnd.getFullYear() - start.getFullYear()) * 12;
+        months += calculationEnd.getMonth() - start.getMonth();
+        
+        // Calculate remaining days after months
+        const monthBoundary = new Date(start);
+        monthBoundary.setMonth(monthBoundary.getMonth() + months);
+        remainingDays = Math.ceil((calculationEnd.getTime() - monthBoundary.getTime()) / (1000 * 60 * 60 * 24));
+      } else {
+        // Fallback without start date: use rough estimation
+        months = Math.floor(diffDays / 30);
+        remainingDays = diffDays % 30;
+      }
+      
+      // Only show full months if less than 7 days remaining
+      if (months >= 1 && remainingDays > 7) {
         return { 
           text: `${months} mo. ${remainingDays} day${remainingDays !== 1 ? 's' : ''}`, 
           className: 'text-green-600' 
@@ -1332,7 +1353,7 @@ export default function Admin() {
                             <TableHead className="hidden md:table-cell">Access Code</TableHead>
                             <TableHead>Membership</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead className="hidden sm:table-cell">Vertragslaufzeit</TableHead>
+                            <TableHead className="hidden sm:table-cell">Contract Duration</TableHead>
                             <TableHead>Actions</TableHead>
                           </TableRow>
                       </TableHeader>
