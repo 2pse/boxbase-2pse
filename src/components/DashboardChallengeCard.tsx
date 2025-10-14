@@ -167,21 +167,19 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <button
-        onClick={handleClick}
-        className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 w-full text-left relative"
-      >
-        <div className="absolute top-3 right-3">
-          {renderProgressCircle()}
-        </div>
-        
-        <div className="flex items-center justify-center h-full">
-          <h3 className="text-lg font-semibold text-foreground">
-            Monthly Challenge
-          </h3>
-        </div>
-      </button>
-    </div>
+    <button
+      onClick={handleClick}
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 w-full text-left relative"
+    >
+      <div className="absolute top-3 right-3">
+        {renderProgressCircle()}
+      </div>
+      
+      <div className="flex items-center justify-center h-full">
+        <h3 className="text-lg font-semibold text-foreground">
+          Monthly Challenge
+        </h3>
+      </div>
+    </button>
   )
 }
