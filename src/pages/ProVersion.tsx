@@ -92,7 +92,7 @@ const ProVersion = () => {
 
   // Show Dashboard when authenticated
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen h-screen bg-background pb-20 flex flex-col">
       <Dashboard user={user} userRole={userRole} />
     </div>
   )

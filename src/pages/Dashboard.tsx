@@ -684,7 +684,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         />
       </div>
       
-      <div className="pt-16 pb-20 px-4">
+      <div className="pt-16 pb-20 px-4 flex-1 md:flex md:flex-col">
         {renderTabContent()}
       </div>
       
