@@ -565,9 +565,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
     switch (activeTab) {
       case 'home':
         return (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 md:gap-6">
             {/* Monthly Progress Circle */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center md:h-[400px]">
               <MonthlyProgressCircle 
                 user={user}
                 trainingCount={trainingCount}
@@ -575,7 +575,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Week Preview */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full md:h-[200px]">
               <WeekPreview 
                 user={user} 
                 userRole={userRole} 
@@ -584,11 +584,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Upcoming Class Reservation */}
-            <div className="w-full">
+            <div className="w-full md:h-[200px]">
               {!isOpenGym && <UpcomingClassReservation user={user} />}
             </div>
             {/* Dashboard Tile Grid */}
-            <div>
+            <div className="md:h-[800px]">
               <DashboardTileGrid 
                 user={user}
                 onChallengeClick={(challenge, progress) => {

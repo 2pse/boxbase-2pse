@@ -13,14 +13,14 @@ export const DashboardTileGrid: React.FC<DashboardTileGridProps> = ({
   onChallengeClick
 }) => {
   return (
-    <div className="min-h-[600px] md:min-h-[700px] lg:h-full flex flex-col gap-3">
-      <div style={{ height: 'calc(50% - 6px)' }}>
+    <div className="h-full flex flex-col gap-3 md:gap-6">
+      <div className="h-[300px] md:h-[400px]">
         <DashboardChallengeCard 
           user={user} 
           onChallengeClick={onChallengeClick}
         />
       </div>
-      <div className="grid grid-cols-2 gap-2" style={{ height: 'calc(50% - 6px)' }}>
+      <div className="grid grid-cols-2 gap-2 md:gap-4 h-[300px] md:h-[380px]">
         <DashboardNewsCard user={user} />
         <DashboardCreditsCard user={user} />
       </div>
