@@ -77,7 +77,7 @@ const ProVersion = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
           <p className="text-muted-foreground">Loading...</p>
@@ -92,7 +92,7 @@ const ProVersion = () => {
 
   // Show Dashboard when authenticated
   return (
-    <div className="min-h-screen h-screen bg-background pb-20 flex flex-col">
+    <div className="min-h-screen h-screen bg-background pb-20 flex flex-col overflow-hidden">
       <Dashboard user={user} userRole={userRole} />
     </div>
   )
