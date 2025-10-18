@@ -192,14 +192,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-6xl font-bold text-primary mb-1">
+              <div className="text-4xl font-bold text-primary mb-1">
                 {membershipInfo.remainingCredits}
               </div>
-              <div className="text-sm md:text-xl text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-6 right-3 md:right-6 h-5 w-5 md:h-8 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
           </div>
         )
 
@@ -207,14 +207,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-6xl text-primary mb-1 flex justify-center">
-                <Infinity className="h-10 w-10 md:h-16 md:w-16" />
+              <div className="text-4xl text-primary mb-1 flex justify-center">
+                <Infinity className="h-10 w-10" />
               </div>
-              <div className="text-sm md:text-xl text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-6 right-3 md:right-6 h-5 w-5 md:h-8 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
           </div>
         )
 
@@ -224,14 +224,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-6xl font-bold text-primary mb-1">
+              <div className="text-4xl font-bold text-primary mb-1">
                 {Math.max(0, remaining)}
               </div>
-              <div className="text-sm md:text-xl text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-6 right-3 md:right-6 h-5 w-5 md:h-8 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
           </div>
         )
 
@@ -239,14 +239,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-6xl text-primary mb-1 flex justify-center">
-                <Infinity className="h-10 w-10 md:h-16 md:w-16" />
+              <div className="text-4xl text-primary mb-1 flex justify-center">
+                <Infinity className="h-10 w-10" />
               </div>
-              <div className="text-sm md:text-xl text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-6 right-3 md:right-6 h-5 w-5 md:h-8 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
           </div>
         )
 
@@ -259,7 +259,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <button 
-          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-full relative w-full cursor-pointer"
+          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 relative w-full cursor-pointer"
           onClick={() => setPopoverOpen(true)}
         >
           {renderContent()}

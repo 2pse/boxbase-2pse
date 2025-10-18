@@ -149,18 +149,18 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 h-full flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground md:text-xl">Loading Challenge...</div>
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Loading Challenge...</div>
       </div>
     )
   }
 
   if (!currentChallenge) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 h-full flex items-center justify-center">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
         <div className="text-center text-muted-foreground">
-          <Award className="h-8 w-8 md:h-16 md:w-16 mx-auto mb-2 opacity-50" />
-          <p className="text-sm md:text-xl">No challenge available</p>
+          <Award className="h-8 w-8 mx-auto mb-2 opacity-50" />
+          <p className="text-sm">No challenge available</p>
         </div>
       </div>
     )
@@ -169,14 +169,14 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-full w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 w-full text-left relative"
     >
-      <div className="absolute top-3 md:top-6 right-3 md:right-6 md:scale-150">
+      <div className="absolute top-3 right-3">
         {renderProgressCircle()}
       </div>
       
       <div className="flex items-center justify-center h-full">
-        <h3 className="text-lg md:text-3xl font-semibold text-foreground">
+        <h3 className="text-lg font-semibold text-foreground">
           Monthly Challenge
         </h3>
       </div>
