@@ -575,7 +575,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Week Preview */}
-            <div className="flex items-center w-full md:h-[200px] md:mb-3">
+            <div className="flex items-center w-full md:h-[200px] md:mb-6">
               <WeekPreview 
                 user={user} 
                 userRole={userRole} 
