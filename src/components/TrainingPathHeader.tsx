@@ -74,13 +74,13 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
   }
 
   return (
-    <div className="flex items-center justify-between p-4 bg-background border-b">
+    <div className="flex items-center justify-between p-4 md:p-6 bg-background border-b">
       {/* Left side - Avatar */}
       <div className="flex-1">
-        <Avatar className="h-10 w-10 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
+        <Avatar className="h-10 w-10 md:h-15 md:w-15 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
           <AvatarImage src={userAvatar} />
           <AvatarFallback>
-            <User className="h-5 w-5" />
+            <User className="h-5 w-5 md:h-7 md:w-7" />
           </AvatarFallback>
         </Avatar>
       </div>
@@ -88,13 +88,13 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
       {/* Center - Logo */}
       <div className="flex-1 flex justify-center">
         <Logo 
-          className="h-10 mt-1"
+          className="h-10 md:h-15 mt-1"
           onClick={() => window.location.href = '/pro'}
         />
       </div>
       
       {/* Right side - Leaderboard Position */}
-      <div className="flex items-center gap-3 flex-1 justify-end">
+      <div className="flex items-center gap-3 md:gap-4 flex-1 justify-end">
         {/* Leaderboard Position - Only show for users who opted in */}
         <LeaderboardPosition user={user} />
 
@@ -104,9 +104,9 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="p-2 hover:bg-primary/10"
+            className="p-2 md:p-3 hover:bg-primary/10"
           >
-            <Grid3X3 className="h-5 w-5 text-primary" />
+            <Grid3X3 className="h-5 w-5 md:h-7 md:w-7 text-primary" />
           </Button>
         )}
       </div>
