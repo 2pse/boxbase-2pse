@@ -138,14 +138,14 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   }
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="h-full w-full flex items-center justify-center">
       <svg 
         width="100%" 
         height="100%" 
         viewBox="0 0 360 360" 
         className="drop-shadow-sm"
         preserveAspectRatio="xMidYMid meet"
-        style={{ maxWidth: '360px', maxHeight: '360px' }}
+        style={{ maxWidth: '100%', maxHeight: '100%' }}
       >
         {/* Circle dots for each day */}
         {renderCircleDots()}
