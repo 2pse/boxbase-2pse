@@ -575,7 +575,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Week Preview */}
-            <div className="flex items-center w-full md:h-[200px]">
+            <div className="flex items-center w-full md:h-[200px] md:mb-6">
               <WeekPreview 
                 user={user} 
                 userRole={userRole} 
@@ -584,7 +584,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Upcoming Class Reservation */}
-            <div className="w-full md:h-[200px] md:mb-6">
+            <div className="w-full md:h-[200px]">
               {!isOpenGym && <UpcomingClassReservation user={user} />}
             </div>
             {/* Dashboard Tile Grid */}
