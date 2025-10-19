@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { User } from '@supabase/supabase-js'
 
@@ -15,15 +15,24 @@ export const useRealtimeSync = ({
   onTrainingSessionChange,
   onCourseChange
 }: UseRealtimeSyncProps) => {
+  const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   
   const triggerReload = useCallback(() => {
-    // Dispatch custom event for backward compatibility
-    window.dispatchEvent(new CustomEvent('courseRegistrationChanged'))
+    // Clear existing timeout to prevent multiple rapid calls (debouncing)
+    if (reloadTimeoutRef.current) {
+      clearTimeout(reloadTimeoutRef.current)
+    }
     
-    // Call all provided callbacks
-    onCourseRegistrationChange?.()
-    onTrainingSessionChange?.()
-    onCourseChange?.()
+    // Debounce: wait 300ms before triggering reload to batch rapid events
+    reloadTimeoutRef.current = setTimeout(() => {
+      // Dispatch custom event for backward compatibility
+      window.dispatchEvent(new CustomEvent('courseRegistrationChanged'))
+      
+      // Call all provided callbacks
+      onCourseRegistrationChange?.()
+      onTrainingSessionChange?.()
+      onCourseChange?.()
+    }, 300)
   }, [onCourseRegistrationChange, onTrainingSessionChange, onCourseChange])
 
   useEffect(() => {

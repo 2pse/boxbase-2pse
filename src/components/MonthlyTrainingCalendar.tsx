@@ -79,37 +79,24 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
               const now = new Date()
               
               if (now > courseEndTime) {
-
                 days.add(day)
 
-                const { data: existingSession } = await supabase
+                // Use upsert with ignoreDuplicates to prevent race conditions
+                // The UNIQUE index on (user_id, session_date, session_type) ensures no duplicates
+                const { error: upsertError } = await supabase
                   .from('training_sessions')
-                  .select('id')
-                  .eq('user_id', user.id)
-                  .eq('session_date', reg.courses.course_date)
-                  .eq('session_type', 'course')
-                  .maybeSingle()
-
-                if (!existingSession) {
-                  try {
-                    const { error: insertError } = await supabase
-                      .from('training_sessions')
-                      .insert({
-                        user_id: user.id,
-                        session_date: reg.courses.course_date,
-                        session_type: 'course',
-                        status: 'completed'
-                      })
-                    
-                    if (insertError && !insertError.message?.includes('duplicate key')) {
-                      console.error('Error creating training session:', insertError)
-                    }
-                  } catch (error) {
-                    // Silently ignore duplicate key errors - session already exists
-                    if (!error?.message?.includes('duplicate key')) {
-                      console.error('Error creating training session:', error)
-                    }
-                  }
+                  .upsert({
+                    user_id: user.id,
+                    session_date: reg.courses.course_date,
+                    session_type: 'course',
+                    status: 'completed'
+                  }, {
+                    onConflict: 'user_id,session_date,session_type',
+                    ignoreDuplicates: true
+                  })
+                
+                if (upsertError) {
+                  console.error('Error creating training session:', upsertError)
                 }
               }
             }
