@@ -153,18 +153,18 @@ export const WeekPreview: React.FC<WeekPreviewProps> = ({ user, userRole, primar
   return (
     <>
       <div className="h-full flex items-center w-full">
-        <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-2xl p-2 md:p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.01]">
-          <div className="flex gap-1 md:gap-2">
+        <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.01]">
+          <div className="flex gap-1">
             {weekData.map((day) => (
               <button
                 key={day.date}
                 onClick={() => setSelectedDate(day.date)}
-                className={`min-w-0 flex-1 p-2 md:p-4 rounded-lg transition-all hover:scale-105 ${getDayStyle(day)}`}
+                className={`min-w-0 flex-1 p-2 rounded-lg transition-all hover:scale-105 ${getDayStyle(day)}`}
                 style={getRegisteredBorderStyle(day)}
               >
                 <div className="text-center">
-                  <div className="text-xs md:text-base font-medium mb-0.5 md:mb-2">{day.dayName}</div>
-                  <div className="text-sm md:text-2xl font-bold">{day.dayNumber}</div>
+                  <div className="text-xs font-medium mb-0.5">{day.dayName}</div>
+                  <div className="text-sm font-bold">{day.dayNumber}</div>
                 </div>
               </button>
             ))}
