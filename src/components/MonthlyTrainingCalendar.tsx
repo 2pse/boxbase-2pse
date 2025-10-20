@@ -174,7 +174,7 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 md:gap-1.5">
       {Array.from({ length: getDaysInMonth() }, (_, i) => {
         const day = i + 1
         const currentDay = getCurrentDay()
@@ -183,7 +183,7 @@ export const MonthlyTrainingCalendar = ({ user, userRole }: MonthlyTrainingCalen
         return (
           <div
             key={day}
-            className={`w-3 h-3 rounded-full ${getDayStatus(day)} ${getDayBorderClass(day)} transition-all duration-200 relative flex items-center justify-center`}
+            className={`w-3 md:w-4 h-3 md:h-4 rounded-full ${getDayStatus(day)} ${getDayBorderClass(day)} transition-all duration-200 relative flex items-center justify-center`}
             title={`Day ${day}: ${
               trainingDays.has(day) 
                 ? 'Trained' 

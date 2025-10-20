@@ -291,20 +291,20 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
   return (
     <>
       <Card 
-        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative" 
+        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-48" 
         onClick={handleCardClick}
       >
-        <CardContent className="p-4">
-          <div className="absolute top-3 right-3">
-            <Calendar className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+        <CardContent className="p-4 md:p-9 h-full flex items-center justify-center">
+          <div className="absolute top-3 md:top-5 right-3 md:right-5">
+            <Calendar className="h-4 md:h-8 w-4 md:w-8 text-gray-600 dark:text-gray-400" />
           </div>
           
           <div className="space-y-2 text-center">
-            <h3 className="font-medium text-sm text-muted-foreground">Next Reservation</h3>
-            <h4 className="font-semibold text-base">{course.title}</h4>
+            <h3 className="font-medium text-sm md:text-lg text-muted-foreground">Next Reservation</h3>
+            <h4 className="font-semibold text-base md:text-3xl">{course.title}</h4>
             
-            <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
-              <Clock className="h-3 w-3" />
+            <div className="flex items-center justify-center gap-1 text-sm md:text-base text-muted-foreground">
+              <Clock className="h-3 md:h-5 w-3 md:w-5" />
               <span>{formattedDate.split(',')[0]} {timeRange}</span>
             </div>
           </div>

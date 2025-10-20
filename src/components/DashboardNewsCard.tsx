@@ -57,15 +57,15 @@ export const DashboardNewsCard: React.FC<DashboardNewsCardProps> = ({ user }) =>
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-7 md:p-9 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-40 md:h-48 w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-9 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-48 w-full text-left relative"
     >
       <div className="flex items-center justify-center h-full">
-        <h3 className="text-3xl md:text-4xl font-semibold text-foreground">
+        <h3 className="text-lg md:text-4xl font-semibold text-foreground">
           News
         </h3>
-        <Bell className="absolute top-6 right-6 h-8 w-8 text-muted-foreground" />
+        <Bell className="absolute top-4 md:top-6 right-4 md:right-6 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
         {hasUnreadNews && (
-          <div className="absolute top-5 right-5 w-5 h-5 bg-red-500 rounded-full" />
+          <div className="absolute top-3 md:top-5 right-3 md:right-5 w-3 md:w-5 h-3 md:h-5 bg-red-500 rounded-full" />
         )}
       </div>
     </button>
