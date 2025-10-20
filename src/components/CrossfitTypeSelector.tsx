@@ -37,8 +37,8 @@ export const CrossfitTypeSelector = ({ selectedType, onTypeSelect }: CrossfitTyp
           onClick={() => onTypeSelect(type)}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h4 className="text-xl md:text-2xl font-bold">{title}</h4>
-            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            <h4 className="text-xl md:text-3xl font-bold">{title}</h4>
+            <p className="text-xs md:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
               {description}
             </p>
           </div>

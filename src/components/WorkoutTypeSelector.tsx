@@ -54,8 +54,8 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           onClick={() => onTypeSelect("crossfit")}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h3 className="text-xl md:text-2xl font-bold">Functional Fitness</h3>
-            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+            <h3 className="text-xl md:text-3xl font-bold">Functional Fitness</h3>
+            <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
               High-intensity,<br />
               functional workouts<br />
               and weightlifting
@@ -75,8 +75,8 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           onClick={() => onTypeSelect("bodybuilding")}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h3 className="text-xl md:text-2xl font-bold">Bodybuilding</h3>
-            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+            <h3 className="text-xl md:text-3xl font-bold">Bodybuilding</h3>
+            <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
               Targeted muscle building<br />
               and strength improvement
             </p>

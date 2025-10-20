@@ -51,8 +51,8 @@ export const EmomTimer: React.FC<EmomTimerProps> = ({ embedded = false, onBack }
       </Button>
       </div>
       
-      <div className="flex-1 p-6 pt-8 pb-20">
-        <div className="max-w-md w-full">
+      <div className="flex-1 p-6 pt-8 pb-20 flex items-center justify-center">
+        <div className="max-w-md w-full mx-auto">
           <div className="text-center mb-6">
             <h1 className="text-4xl md:text-5xl font-bold mb-2">EMOM</h1>
             <p className="text-lg md:text-xl text-muted-foreground">Every Minute on the Minute</p>

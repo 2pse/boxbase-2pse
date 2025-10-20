@@ -48,8 +48,8 @@ export const BodybuildingSelector = ({
             onClick={() => onFocusSelect(type)}
           >
             <div className="text-center space-y-3 flex flex-col justify-center h-full">
-              <h4 className="text-xl md:text-2xl font-bold">{title}</h4>
-              <p className="text-xs md:text-sm text-muted-foreground">
+              <h4 className="text-xl md:text-3xl font-bold">{title}</h4>
+              <p className="text-xs md:text-base text-muted-foreground">
                 {description}
               </p>
             </div>
@@ -74,8 +74,8 @@ export const BodybuildingSelector = ({
           onClick={() => onDifficultySelect(type)}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h4 className="text-xl md:text-2xl font-bold">{title}</h4>
-            <p className="text-xs md:text-sm text-muted-foreground">{description}</p>
+            <h4 className="text-xl md:text-3xl font-bold">{title}</h4>
+            <p className="text-xs md:text-base text-muted-foreground">{description}</p>
           </div>
         </div>
       ))}
