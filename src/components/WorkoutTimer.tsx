@@ -88,8 +88,8 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, on
       <div className="flex-1 flex items-center justify-center p-4 md:p-6 pb-20 md:pb-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-4 md:mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">WOD</h1>
-            <h2 className="text-base md:text-lg text-muted-foreground">Timer</h2>
+            <h1 className="text-3xl md:text-5xl font-bold mb-2">WOD</h1>
+            <h2 className="text-base md:text-xl text-muted-foreground">Timer</h2>
           </div>
 
           <div className="space-y-3 md:space-y-4">
@@ -98,7 +98,7 @@ export const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ embedded = false, on
                 key={type.id}
                 variant="outline"
                 onClick={() => navigate(type.route)}
-                className="w-full h-12 md:h-14 text-base md:text-lg font-medium transition-all duration-200 hover:text-white"
+                className="w-full h-12 md:h-16 text-base md:text-xl font-medium transition-all duration-200 hover:text-white"
                 style={{
                   borderColor: primaryColor,
                   color: primaryColor

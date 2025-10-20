@@ -45,17 +45,17 @@ export const TabataTimer: React.FC<TabataTimerProps> = ({ embedded = false, onBa
       <div className="flex-1 p-6 pt-8 pb-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold mb-2">TABATA</h1>
-            <p className="text-lg text-muted-foreground">High Intensity Interval Training</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">TABATA</h1>
+            <p className="text-lg md:text-xl text-muted-foreground">High Intensity Interval Training</p>
           </div>
 
           <div className="space-y-6">
             {/* Runden */}
             <div className="flex items-center justify-center gap-4">
-              <span className="text-lg font-medium">Rounds:</span>
+              <span className="text-lg md:text-xl font-medium">Rounds:</span>
               <Select value={rounds.toString()} onValueChange={(value) => setRounds(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 h-12 text-center text-lg bg-background"
+                  className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
@@ -75,10 +75,10 @@ export const TabataTimer: React.FC<TabataTimerProps> = ({ embedded = false, onBa
 
             {/* Work Zeit */}
             <div className="flex items-center justify-center gap-4">
-              <span className="text-lg font-medium">Work:</span>
+              <span className="text-lg md:text-xl font-medium">Work:</span>
               <Select value={workSeconds.toString()} onValueChange={(value) => setWorkSeconds(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 h-12 text-center text-lg bg-background"
+                  className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
@@ -98,10 +98,10 @@ export const TabataTimer: React.FC<TabataTimerProps> = ({ embedded = false, onBa
 
             {/* Rest Zeit */}
             <div className="flex items-center justify-center gap-4">
-              <span className="text-lg font-medium">Rest:</span>
+              <span className="text-lg md:text-xl font-medium">Rest:</span>
               <Select value={restSeconds.toString()} onValueChange={(value) => setRestSeconds(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 h-12 text-center text-lg bg-background"
+                  className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
@@ -122,7 +122,7 @@ export const TabataTimer: React.FC<TabataTimerProps> = ({ embedded = false, onBa
             <Button
               onClick={handleStart}
               variant="outline"
-              className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
+              className="w-full h-14 md:h-16 text-lg md:text-xl font-medium transition-all duration-200 hover:text-white"
               style={{
                 borderColor: primaryColor,
                 color: primaryColor

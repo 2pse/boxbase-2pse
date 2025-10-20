@@ -43,15 +43,15 @@ export const AmrapTimer: React.FC<AmrapTimerProps> = ({ embedded = false, onBack
       <div className="flex-1 p-6 pt-8 pb-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold mb-2">AMRAP</h1>
-            <p className="text-lg text-muted-foreground">As many reps as possible</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">AMRAP</h1>
+            <p className="text-lg md:text-xl text-muted-foreground">As many reps as possible</p>
           </div>
 
           <div className="space-y-6">
             <div className="flex items-center justify-center gap-4">
               <Select value={minutes.toString()} onValueChange={(value) => setMinutes(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 h-12 text-center text-lg bg-background"
+                  className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
@@ -67,13 +67,13 @@ export const AmrapTimer: React.FC<AmrapTimerProps> = ({ embedded = false, onBack
                   ))}
                 </SelectContent>
               </Select>
-              <span className="text-lg font-medium">Minutes</span>
+              <span className="text-lg md:text-xl font-medium">Minutes</span>
             </div>
 
             <Button
               onClick={handleStart}
               variant="outline"
-              className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
+              className="w-full h-14 md:h-16 text-lg md:text-xl font-medium transition-all duration-200 hover:text-white"
               style={{
                 borderColor: primaryColor,
                 color: primaryColor

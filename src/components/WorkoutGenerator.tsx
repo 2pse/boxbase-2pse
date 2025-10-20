@@ -298,7 +298,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
           </Button>
         </div>
         <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-foreground">Percentage Calculator</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Percentage Calculator</h1>
         </div>
         <PercentageCalculator user={user} />
       </div>
@@ -345,7 +345,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
       )}
       
         <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-foreground">Workout</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Workout</h1>
         </div>
       <div className="py-8">
         <div className="space-y-8">
@@ -370,8 +370,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                   }}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl md:text-2xl font-bold">Workout-Timer</h3>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                    <h3 className="text-xl md:text-3xl font-bold">Workout-Timer</h3>
+                    <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
                       Timer for your workouts
                     </p>
                   </div>
@@ -385,8 +385,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                   onClick={() => setShowPercentageCalculator(true)}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl md:text-2xl font-bold">Percentage Calculator</h3>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                    <h3 className="text-xl md:text-3xl font-bold">Percentage Calculator</h3>
+                    <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
                       Calculate your<br />
                       training weights
                     </p>

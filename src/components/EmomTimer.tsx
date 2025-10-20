@@ -54,17 +54,17 @@ export const EmomTimer: React.FC<EmomTimerProps> = ({ embedded = false, onBack }
       <div className="flex-1 p-6 pt-8 pb-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold mb-2">EMOM</h1>
-            <p className="text-lg text-muted-foreground">Every Minute on the Minute</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">EMOM</h1>
+            <p className="text-lg md:text-xl text-muted-foreground">Every Minute on the Minute</p>
           </div>
 
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-4">
-                <span className="text-lg font-medium">Every</span>
+                <span className="text-lg md:text-xl font-medium">Every</span>
                 <Select value={interval.toString()} onValueChange={(value) => setInterval(Number(value))}>
                   <SelectTrigger 
-                    className="w-24 h-12 text-center text-lg bg-background"
+                    className="w-24 md:w-28 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                     style={{ borderColor: primaryColor, color: primaryColor }}
                   >
                     <SelectValue />
@@ -83,10 +83,10 @@ export const EmomTimer: React.FC<EmomTimerProps> = ({ embedded = false, onBack }
               </div>
               
               <div className="flex items-center justify-center gap-4">
-                <span className="text-lg font-medium">for</span>
+                <span className="text-lg md:text-xl font-medium">for</span>
                 <Select value={rounds.toString()} onValueChange={(value) => setRounds(Number(value))}>
                   <SelectTrigger 
-                    className="w-20 h-12 text-center text-lg bg-background"
+                    className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                     style={{ borderColor: primaryColor, color: primaryColor }}
                   >
                     <SelectValue />
@@ -108,7 +108,7 @@ export const EmomTimer: React.FC<EmomTimerProps> = ({ embedded = false, onBack }
             <Button
               onClick={handleStart}
               variant="outline"
-              className="w-full h-14 text-lg font-medium transition-all duration-200 hover:text-white"
+              className="w-full h-14 md:h-16 text-lg md:text-xl font-medium transition-all duration-200 hover:text-white"
               style={{
                 borderColor: primaryColor,
                 color: primaryColor

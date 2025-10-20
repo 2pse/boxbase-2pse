@@ -101,11 +101,11 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
             <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
-                  <Calculator className="h-6 w-6 text-primary" />
+                  <Calculator className="h-6 w-6 md:h-8 md:w-8 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Percentage Calculator</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <CardTitle className="text-xl md:text-2xl">Percentage Calculator</CardTitle>
+                  <p className="text-sm md:text-base text-muted-foreground mt-1">
                     {useFixedValues 
                       ? 'Calculate with saved strength values' 
                       : 'Free calculation with your own values'
@@ -144,7 +144,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                       value={freeWeight}
                       onChange={(e) => setFreeWeight(e.target.value)}
                       placeholder="e.g. 100"
-                      className="h-12 text-lg border-primary/30 focus:border-primary"
+                      className="h-12 md:h-14 text-lg md:text-xl border-primary/30 focus:border-primary"
                     />
                   </div>
                   <div className="space-y-2">
@@ -159,7 +159,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                       value={percentage}
                       onChange={(e) => setPercentage(e.target.value)}
                       placeholder="e.g. 75"
-                      className="h-12 text-lg border-primary/30 focus:border-primary"
+                      className="h-12 md:h-14 text-lg md:text-xl border-primary/30 focus:border-primary"
                     />
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ user
                     <Label className="text-sm font-semibold text-muted-foreground mb-2 block">
                       RESULT
                     </Label>
-                    <div className="text-4xl font-bold text-primary mb-2">
+                    <div className="text-4xl md:text-6xl font-bold text-primary mb-2">
                       {calculatePercentage() ? `${calculatePercentage()} kg` : '---'}
                     </div>
                     {calculatePercentage() && (
