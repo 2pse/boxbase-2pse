@@ -645,7 +645,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         }
         
         return (
-          <div className="flex-1">
+          <div className="flex-1 md:px-8 lg:px-12">
             {renderWodContent()}
           </div>
         )

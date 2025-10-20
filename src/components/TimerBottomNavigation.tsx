@@ -23,8 +23,8 @@ export const TimerBottomNavigation: React.FC = () => {
   const activeTab = getActiveTab()
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-3 z-50">
-      <div className="flex justify-around max-w-md mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-3 md:p-4 z-50">
+      <div className="flex justify-around max-w-md md:max-w-2xl mx-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id

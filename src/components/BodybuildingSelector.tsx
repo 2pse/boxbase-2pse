@@ -35,12 +35,12 @@ export const BodybuildingSelector = ({
   // For focus selection step (step 2)
   if (!selectedFocus) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 md:mx-8 lg:mx-12">
         {focusOptions.map(({ type, title, description }) => (
           <div 
             key={type}
             className={cn(
-              "bg-gray-100 dark:bg-gray-800 p-6 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 shadow-sm hover:scale-105",
+              "bg-gray-100 dark:bg-gray-800 p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 md:h-40 shadow-sm hover:scale-105",
               selectedFocus === type 
                 ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
                 : ""
@@ -48,8 +48,8 @@ export const BodybuildingSelector = ({
             onClick={() => onFocusSelect(type)}
           >
             <div className="text-center space-y-3 flex flex-col justify-center h-full">
-              <h4 className="text-xl font-bold">{title}</h4>
-              <p className="text-xs text-muted-foreground">
+              <h4 className="text-xl md:text-2xl font-bold">{title}</h4>
+              <p className="text-xs md:text-sm text-muted-foreground">
                 {description}
               </p>
             </div>
@@ -61,12 +61,12 @@ export const BodybuildingSelector = ({
 
   // For difficulty selection step (step 3)
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:mx-8 lg:mx-12">
       {difficultyOptions.map(({ type, title, description }) => (
         <div 
           key={type}
           className={cn(
-            "bg-gray-100 dark:bg-gray-800 p-6 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 shadow-sm hover:scale-105",
+            "bg-gray-100 dark:bg-gray-800 p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 md:h-40 shadow-sm hover:scale-105",
             selectedDifficulty === type 
               ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
               : ""
@@ -74,8 +74,8 @@ export const BodybuildingSelector = ({
           onClick={() => onDifficultySelect(type)}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h4 className="text-xl font-bold">{title}</h4>
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <h4 className="text-xl md:text-2xl font-bold">{title}</h4>
+            <p className="text-xs md:text-sm text-muted-foreground">{description}</p>
           </div>
         </div>
       ))}

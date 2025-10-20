@@ -42,11 +42,11 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:mx-8 lg:mx-12">
       {showFunctionalFitness && (
         <div 
           className={cn(
-            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
+            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
             selectedType === "crossfit" 
               ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
               : ""
@@ -54,8 +54,8 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           onClick={() => onTypeSelect("crossfit")}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h3 className="text-xl font-bold">Functional Fitness</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <h3 className="text-xl md:text-2xl font-bold">Functional Fitness</h3>
+            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
               High-intensity,<br />
               functional workouts<br />
               and weightlifting
@@ -67,7 +67,7 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
       {showBodybuilding && (
         <div 
           className={cn(
-            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
+            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
             selectedType === "bodybuilding" 
               ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
               : ""
@@ -75,8 +75,8 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
           onClick={() => onTypeSelect("bodybuilding")}
         >
           <div className="text-center space-y-3 flex flex-col justify-center h-full">
-            <h3 className="text-xl font-bold">Bodybuilding</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <h3 className="text-xl md:text-2xl font-bold">Bodybuilding</h3>
+            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
               Targeted muscle building<br />
               and strength improvement
             </p>
