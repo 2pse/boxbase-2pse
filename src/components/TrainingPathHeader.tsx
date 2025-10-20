@@ -88,7 +88,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
       {/* Center - Logo */}
       <div className="flex-1 flex justify-center">
         <Logo 
-          className="h-8 md:h-13 mt-1"
+          className="h-10 md:h-13 mt-1"
           onClick={() => window.location.href = '/pro'}
         />
       </div>
