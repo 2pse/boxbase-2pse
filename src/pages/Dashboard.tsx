@@ -567,7 +567,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         return (
           <div className="flex flex-col gap-3">
             {/* Monthly Progress Circle */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center h-48 md:h-[400px] overflow-visible">
               <MonthlyProgressCircle 
                 user={user}
                 trainingCount={trainingCount}
@@ -684,7 +684,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         />
       </div>
       
-      <div className="pt-16 md:pt-24 pb-20 md:pb-28 px-4 flex-1 overflow-y-auto">
+      <div className="pt-16 md:pt-32 pb-20 md:pb-32 px-4 flex-1 overflow-y-auto">
         {renderTabContent()}
       </div>
       

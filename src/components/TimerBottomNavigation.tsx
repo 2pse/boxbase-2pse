@@ -23,7 +23,7 @@ export const TimerBottomNavigation: React.FC = () => {
   const activeTab = getActiveTab()
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-6 z-50 h-[72px] md:h-[88px]">
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-6 z-50 h-[72px] md:h-[108px]">
       <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
         {tabs.map((tab) => {
           const Icon = tab.icon

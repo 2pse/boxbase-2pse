@@ -145,7 +145,6 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
         viewBox="0 0 360 360" 
         className="drop-shadow-sm w-full md:w-[156%] h-full md:h-[156%]"
         preserveAspectRatio="xMidYMid meet"
-        style={{ maxWidth: '360px', maxHeight: '360px' }}
       >
         {/* Circle dots for each day */}
         {renderCircleDots()}
