@@ -358,8 +358,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
               />
               
               {/* Timer Button */}
-              <div className="mt-4 px-4">
-                <div 
+              <div className="mt-4">
+                <div
                   className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
                   onClick={() => {
                     if (onTimerSelect) {
@@ -379,8 +379,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
               </div>
               
               {/* Percentage Calculator Button */}
-              <div className="mt-4 px-4">
-                <div 
+              <div className="mt-4">
+                <div
                   className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
                   onClick={() => setShowPercentageCalculator(true)}
                 >
