@@ -169,7 +169,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-[22px] md:h-[155px] w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[155px] w-full text-left relative"
     >
       <div className="absolute top-3 md:top-5 right-3 md:right-5">
         {renderProgressCircle()}

@@ -291,10 +291,10 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
   return (
     <>
       <Card 
-        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-[22px] md:h-[155px]" 
+        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-[155px]" 
         onClick={handleCardClick}
       >
-        <CardContent className="p-3 md:p-8 h-full flex items-center justify-center">
+        <CardContent className="p-4 md:p-8 h-full flex items-center justify-center">
           <div className="absolute top-3 md:top-5 right-3 md:right-5">
             <Calendar className="h-4 md:h-8 w-4 md:w-8 text-gray-600 dark:text-gray-400" />
           </div>
