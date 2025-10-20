@@ -23,8 +23,8 @@ export const TimerBottomNavigation: React.FC = () => {
   const activeTab = getActiveTab()
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-3 md:p-4 z-50">
-      <div className="flex justify-around max-w-md md:max-w-2xl mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-6 z-50 h-[72px] md:h-[88px]">
+      <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -36,12 +36,12 @@ export const TimerBottomNavigation: React.FC = () => {
               size="sm"
               onClick={() => navigate(tab.route)}
               className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 px-3",
+                "flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-5",
                 isActive && "text-primary bg-primary/10"
               )}
             >
-              <Icon className="h-6 w-6" />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <Icon className="h-5 md:h-8 w-5 md:w-8" />
+              <span className="text-xs md:text-base font-medium">{tab.label}</span>
             </Button>
           )
         })}
