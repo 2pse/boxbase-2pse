@@ -159,12 +159,12 @@ export const WeekPreview: React.FC<WeekPreviewProps> = ({ user, userRole, primar
               <button
                 key={day.date}
                 onClick={() => setSelectedDate(day.date)}
-                className={`min-w-0 flex-1 p-2 md:p-4 rounded-lg transition-all hover:scale-105 ${getDayStyle(day)}`}
+                className={`min-w-0 flex-1 p-1.5 md:p-3.5 rounded-lg transition-all hover:scale-105 ${getDayStyle(day)}`}
                 style={getRegisteredBorderStyle(day)}
               >
                 <div className="text-center">
-                  <div className="text-xs md:text-base font-medium mb-0.5 md:mb-1">{day.dayName}</div>
-                  <div className="text-sm md:text-xl font-bold">{day.dayNumber}</div>
+                  <div className="text-xs md:text-sm font-medium mb-0.5 md:mb-1">{day.dayName}</div>
+                  <div className="text-sm md:text-lg font-bold">{day.dayNumber}</div>
                 </div>
               </button>
             ))}

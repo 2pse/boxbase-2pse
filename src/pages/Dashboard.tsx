@@ -567,7 +567,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         return (
           <div className="flex flex-col gap-3">
             {/* Monthly Progress Circle */}
-            <div className="flex items-center justify-center h-48 md:h-[400px] overflow-visible">
+            <div className="flex items-center justify-center h-48 md:h-[360px] overflow-visible">
               <MonthlyProgressCircle 
                 user={user}
                 trainingCount={trainingCount}
@@ -684,11 +684,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         />
       </div>
       
-      <div className="pt-16 md:pt-32 pb-20 md:pb-32 px-4 flex-1 overflow-y-auto">
+      <div className="pt-16 md:pt-32 pb-16 md:pb-28 px-4 flex-1 overflow-y-auto">
         {renderTabContent()}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-6 z-50 h-[72px] md:h-[108px]">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-5 z-50 h-[58px] md:h-[86px]">
         <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
           {[
             { id: 'home', icon: Home, label: 'Overview' },
@@ -711,14 +711,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
                     })
                   }
                 }}
-                className={`flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-5 rounded-md transition-colors ${
+                className={`flex flex-col items-center gap-1 md:gap-2 h-full py-1 md:py-2 px-2 md:px-4 rounded-md transition-colors ${
                   activeTab === tab.id 
                     ? 'text-primary bg-primary/10' 
                     : 'text-muted-foreground hover:text-foreground hover:bg-hover-neutral'
                 }`}
               >
-                <Icon className="h-5 md:h-8 w-5 md:w-8" />
-                <span className="text-xs md:text-base">{tab.label}</span>
+                <Icon className="h-5 md:h-7 w-5 md:w-7" />
+                <span className="text-xs md:text-sm">{tab.label}</span>
               </button>
             )
           })}

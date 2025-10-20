@@ -291,20 +291,20 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
   return (
     <>
       <Card 
-        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-[172px]" 
+        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-22 md:h-[155px]" 
         onClick={handleCardClick}
       >
-        <CardContent className="p-4 md:p-9 h-full flex items-center justify-center">
-          <div className="absolute top-3 md:top-5 right-3 md:right-5">
-            <Calendar className="h-4 md:h-8 w-4 md:w-8 text-gray-600 dark:text-gray-400" />
+        <CardContent className="p-3.5 md:p-8 h-full flex items-center justify-center">
+          <div className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5">
+            <Calendar className="h-3.5 md:h-7 w-3.5 md:w-7 text-gray-600 dark:text-gray-400" />
           </div>
           
-          <div className="space-y-2 text-center">
-            <h3 className="font-medium text-sm md:text-lg text-muted-foreground">Next Reservation</h3>
-            <h4 className="font-semibold text-base md:text-3xl">{course.title}</h4>
+          <div className="space-y-1.5 md:space-y-2 text-center">
+            <h3 className="font-medium text-xs md:text-base text-muted-foreground">Next Reservation</h3>
+            <h4 className="font-semibold text-sm md:text-2.5xl">{course.title}</h4>
             
-            <div className="flex items-center justify-center gap-1 text-sm md:text-base text-muted-foreground">
-              <Clock className="h-3 md:h-5 w-3 md:w-5" />
+            <div className="flex items-center justify-center gap-1 text-xs md:text-sm text-muted-foreground">
+              <Clock className="h-2.5 md:h-4.5 w-2.5 md:w-4.5" />
               <span>{formattedDate.split(',')[0]} {timeRange}</span>
             </div>
           </div>
