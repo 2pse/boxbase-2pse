@@ -280,7 +280,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <button 
-          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-7 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-48 relative w-full cursor-pointer"
+          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-7 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[172px] relative w-full cursor-pointer"
           onClick={() => setPopoverOpen(true)}
         >
           {renderContent()}

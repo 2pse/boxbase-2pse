@@ -143,7 +143,7 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
         width="100%" 
         height="100%" 
         viewBox="0 0 360 360" 
-        className="drop-shadow-sm"
+        className="drop-shadow-sm w-full md:w-[130%] h-full md:h-[130%]"
         preserveAspectRatio="xMidYMid meet"
         style={{ maxWidth: '360px', maxHeight: '360px' }}
       >

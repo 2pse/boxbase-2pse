@@ -29,7 +29,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     : tabs
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-4 z-50">
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-6 z-50">
       <div className="flex justify-around max-w-md md:max-w-2xl mx-auto">
         {availableTabs.map((tab) => {
           const Icon = tab.icon
@@ -42,12 +42,12 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
               size="sm"
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 px-3",
+                "flex flex-col items-center gap-1 md:gap-2 h-auto py-2 md:py-4 px-3 md:px-5",
                 isActive && "text-primary bg-primary/10"
               )}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-xs">{tab.label}</span>
+              <Icon className="h-5 md:h-8 w-5 md:w-8" />
+              <span className="text-xs md:text-base">{tab.label}</span>
             </Button>
           )
         })}

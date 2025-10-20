@@ -291,7 +291,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
   return (
     <>
       <Card 
-        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-48" 
+        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-[172px]" 
         onClick={handleCardClick}
       >
         <CardContent className="p-4 md:p-9 h-full flex items-center justify-center">

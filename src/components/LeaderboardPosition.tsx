@@ -115,10 +115,10 @@ export const LeaderboardPosition: React.FC<LeaderboardPositionProps> = ({ user }
   return (
     <div 
       onClick={handleLeaderboardClick}
-      className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="flex items-center gap-2 cursor-pointer p-2 md:p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
     >
-      <Trophy className="h-6 w-6 text-black dark:text-white" />
-      <span className="text-black dark:text-white font-medium text-lg">
+      <Trophy className="h-6 md:h-9 w-6 md:w-9 text-black dark:text-white" />
+      <span className="text-black dark:text-white font-medium text-lg md:text-2xl">
         {position}
       </span>
     </div>
