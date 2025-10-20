@@ -717,7 +717,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-hover-neutral'
                 }`}
               >
-                <Icon className="h-5 w-5 md:h-12 md:w-12" />
+                <Icon className="h-5 w-5 md:h-[48px] md:w-[48px]" />
                 <span className="text-xs md:text-sm font-medium">{tab.label}</span>
               </button>
             )

@@ -40,7 +40,7 @@ export const TimerBottomNavigation: React.FC = () => {
                 isActive && "text-primary bg-primary/10"
               )}
             >
-              <Icon className="h-5 w-5 md:h-12 md:w-12" />
+              <Icon className="h-5 w-5 md:h-[48px] md:w-[48px]" />
               <span className="text-xs md:text-sm font-medium">{tab.label}</span>
             </Button>
           )
