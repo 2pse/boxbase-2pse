@@ -688,7 +688,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         {renderTabContent()}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-3 z-50 h-[72px] md:h-[86px]">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-3 z-50 h-[72px] md:h-[120px]">
         <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
           {[
             { id: 'home', icon: Home, label: 'Overview' },
