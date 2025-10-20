@@ -347,7 +347,7 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
         <div className="text-center py-6">
           <h1 className="text-3xl font-bold text-foreground">Workout</h1>
         </div>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="py-8">
         <div className="space-y-8">
           {/* Step 1: Workout Type Selection */}
           {step === 1 && (
