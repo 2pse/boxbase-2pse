@@ -218,13 +218,13 @@ export const Leaderboard: React.FC = () => {
   const getRankIcon = (position: number) => {
     switch (position) {
       case 1:
-        return <Trophy className="h-6 w-6 text-yellow-500" />
+        return <Trophy className="h-6 w-6 md:h-8 md:w-8 text-yellow-500" />
       case 2:
-        return <Medal className="h-6 w-6 text-gray-400" />
+        return <Medal className="h-6 w-6 md:h-8 md:w-8 text-gray-400" />
       case 3:
-        return <Award className="h-6 w-6 text-orange-500" />
+        return <Award className="h-6 w-6 md:h-8 md:w-8 text-orange-500" />
       default:
-        return <div className="h-6 w-6 flex items-center justify-center text-muted-foreground font-bold">{position}</div>
+        return <div className="h-6 w-6 md:h-8 md:w-8 flex items-center justify-center text-muted-foreground font-bold text-sm md:text-base">{position}</div>
     }
   }
 
@@ -290,11 +290,11 @@ export const Leaderboard: React.FC = () => {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-4 md:mb-6 relative">
           <h1 className="text-xl md:text-2xl font-bold mb-2">Leaderboard</h1>
-          <p className="text-muted-foreground">{getHeaderText()}</p>
+          <p className="text-sm md:text-lg text-muted-foreground">{getHeaderText()}</p>
           {activeTab === 'month' && (
-            <div className="absolute top-0 right-0 flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="absolute top-0 right-0 flex items-center gap-2 text-sm md:text-base text-muted-foreground">
               <span className="font-medium">{getRemainingDaysInMonth()}</span>
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4 md:h-5 md:w-5" />
             </div>
           )}
         </div>
@@ -302,7 +302,7 @@ export const Leaderboard: React.FC = () => {
         <div className="flex items-center justify-center gap-4 md:gap-6 mb-4 md:mb-6">
           <button
             onClick={() => handleTabChange('month')}
-            className={`text-sm md:text-base font-medium pb-1 border-b-2 transition-colors ${
+            className={`text-sm md:text-lg font-medium pb-1 border-b-2 transition-colors ${
               activeTab === 'month'
                 ? 'text-foreground border-foreground'
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -312,7 +312,7 @@ export const Leaderboard: React.FC = () => {
           </button>
           <button
             onClick={() => handleTabChange('year')}
-            className={`text-sm md:text-base font-medium pb-1 border-b-2 transition-colors ${
+            className={`text-sm md:text-lg font-medium pb-1 border-b-2 transition-colors ${
               activeTab === 'year'
                 ? 'text-foreground border-foreground'
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -337,26 +337,26 @@ export const Leaderboard: React.FC = () => {
                       <CardContent className="p-3 md:p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3 md:gap-4">
-                            <div className="flex items-center justify-center w-10 md:w-12 h-10 md:h-12">
+                            <div className="flex items-center justify-center w-10 md:w-14 h-10 md:h-14">
                               {getRankIcon(position)}
                             </div>
                             <div className="flex items-center space-x-2">
                               <img
                                 src={entry.avatar_url || '/placeholder.svg'}
                                 alt={entry.display_name}
-                                className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-border cursor-pointer hover:opacity-80 transition-opacity"
+                                className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover border-2 border-border cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => setSelectedProfile({ 
                                   imageUrl: entry.avatar_url, 
                                   displayName: entry.display_name 
                                 })}
                               />
                               <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-base md:text-lg text-foreground">{entry.display_name}</h3>
+                                <h3 className="font-semibold text-base md:text-xl text-foreground">{entry.display_name}</h3>
                                 {activeTab === 'month' && entry.hasCompletedChallenge && (
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
-                                        <CheckCircle className="h-5 w-5 text-green-500 cursor-help" />
+                                        <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-500 cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent>
                                         <p>Monthly challenge completed</p>
@@ -369,8 +369,8 @@ export const Leaderboard: React.FC = () => {
                           </div>
                           <div className="text-right flex items-center gap-1 md:gap-2">
                             <div className="text-right">
-                              <Badge variant="secondary" className="text-sm md:text-lg px-2 md:px-3 py-1 bg-muted text-foreground flex items-center gap-1">
-                                <Dumbbell className="h-3 w-3 md:h-4 md:w-4" />
+                              <Badge variant="secondary" className="text-sm md:text-xl px-2 md:px-4 py-1 md:py-2 bg-muted text-foreground flex items-center gap-1">
+                                <Dumbbell className="h-3 w-3 md:h-5 md:w-5" />
                                 {entry.total_score}
                               </Badge>
                             </div>
