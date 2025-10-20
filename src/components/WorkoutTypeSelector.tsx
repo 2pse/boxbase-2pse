@@ -46,7 +46,7 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
       {showFunctionalFitness && (
         <div 
           className={cn(
-            "bg-gray-100 dark:bg-gray-800 p-6 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 shadow-sm hover:scale-105",
+            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
             selectedType === "crossfit" 
               ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
               : ""
@@ -67,7 +67,7 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
       {showBodybuilding && (
         <div 
           className={cn(
-            "bg-gray-100 dark:bg-gray-800 p-6 cursor-pointer transition-all duration-300 hover:bg-gray-150 dark:hover:bg-gray-700 rounded-2xl h-32 shadow-sm hover:scale-105",
+            "bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]",
             selectedType === "bodybuilding" 
               ? "bg-primary/10 dark:bg-primary/20 border-2 border-primary" 
               : ""
