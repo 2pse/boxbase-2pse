@@ -143,9 +143,6 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
             strokeLinecap="round"
           />
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[8px] md:text-xs font-bold">{Math.round(percentage)}%</span>
-        </div>
       </div>
     )
   }

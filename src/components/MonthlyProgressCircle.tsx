@@ -143,7 +143,7 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
         width="100%" 
         height="100%" 
         viewBox="0 0 360 360" 
-        className="drop-shadow-sm w-full md:w-[117%] h-full md:h-[117%]"
+        className="drop-shadow-sm w-[130%] md:w-[117%] h-[130%] md:h-[117%]"
         preserveAspectRatio="xMidYMid meet"
       >
         {/* Circle dots for each day */}
@@ -164,6 +164,16 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
             className="fill-foreground text-6xl font-bold"
           >
             {trainingCount}
+          </text>
+          
+          {/* Label */}
+          <text
+            x="0"
+            y="50"
+            textAnchor="middle"
+            className="fill-muted-foreground text-lg"
+          >
+            Trainings
           </text>
         </g>
       </svg>
