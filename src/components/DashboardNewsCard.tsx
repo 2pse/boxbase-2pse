@@ -57,7 +57,7 @@ export const DashboardNewsCard: React.FC<DashboardNewsCardProps> = ({ user }) =>
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-9 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[172px] w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-[22px] md:h-[155px] w-full text-left relative"
     >
       <div className="flex items-center justify-center h-full">
         <h3 className="text-lg md:text-4xl font-semibold text-foreground">
