@@ -8,10 +8,9 @@ interface MembershipLimitDisplayProps {
   userId: string
   membershipType: string
   courseDate?: string
-  bookingType?: string
 }
 
-export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, bookingType }: MembershipLimitDisplayProps) => {
+export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: MembershipLimitDisplayProps) => {
   const [monthlyCount, setMonthlyCount] = useState<number>(0)
   const [monthlyLimit, setMonthlyLimit] = useState<number>(0)
   const [credits, setCredits] = useState<number>(0)
@@ -21,7 +20,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
 
   useEffect(() => {
     const fetchLimits = async () => {
-      if (bookingType === 'limited') {
+      if (membershipType.includes('Limited')) {
         // Get V2 membership data for LIMITED memberships (including start_date)
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
@@ -90,8 +89,8 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
             setPeriodEnd(periodEnd.toISOString().split('T')[0])
           }
         }
-      } else if (bookingType === 'credits') {
-        // For CREDITS type, use stored credits from membership_data
+      } else if (membershipType === 'credits' || membershipType === 'Credits') {
+        // For CREDITS type, still use stored credits
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
           .select('membership_data')
@@ -108,7 +107,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
     }
 
     fetchLimits()
-  }, [userId, membershipType, courseDate, bookingType])
+  }, [userId, membershipType, courseDate])
 
   if (loading) {
     return (
@@ -120,7 +119,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
     )
   }
 
-  if (bookingType === 'limited' || bookingType === 'credits') {
+  if (membershipType.includes('Limited') || membershipType === 'credits' || membershipType === 'Credits') {
     return (
       <Card className="w-full">
         <CardContent className="p-4">
