@@ -152,7 +152,7 @@ export const WeekPreview: React.FC<WeekPreviewProps> = ({ user, userRole, primar
 
   return (
     <>
-      <div className="h-full flex items-center w-full">
+      <div className="h-full flex items-center w-full py-3">
         <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 md:p-3 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.01]">
           <div className="flex gap-1 md:gap-2">
             {weekData.map((day) => (
