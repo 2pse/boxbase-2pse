@@ -76,18 +76,37 @@ serve(async (req) => {
         );
       }
 
-      // Limited memberships: Open Gym is FREE (only courses count against weekly/monthly limit)
+      // Limited memberships: Each Open Gym check-in counts towards period limit
       if (bookingRules.type === 'limited') {
-        console.log('Limited membership - Open Gym check-in is free');
+        console.log('Limited membership - Open Gym check-in counts towards period limit');
         
+        // Create a training session to track this Open Gym visit
+        const { error: sessionError } = await supabase
+          .from('training_sessions')
+          .upsert({
+            user_id: user.id,
+            session_date: new Date().toISOString().split('T')[0],
+            session_type: 'free_training',
+            status: 'completed'
+          }, {
+            onConflict: 'user_id,session_date,session_type',
+            ignoreDuplicates: true
+          });
+
+        if (sessionError) {
+          console.error('Training session creation error:', sessionError);
+        }
+        
+        // Mark user as active
         await supabase.rpc('mark_user_as_active', { user_id_param: user.id });
         
         return new Response(
           JSON.stringify({
             success: true,
-            message: 'Check-in successful (Open Gym is free for Limited members)',
+            message: 'Check-in successful. This visit counts towards your period limit.',
             membershipType: 'limited',
-            creditsDeducted: false
+            creditsDeducted: false,
+            sessionTracked: !sessionError
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );

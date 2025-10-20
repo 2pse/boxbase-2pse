@@ -111,7 +111,7 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             periodEnd.setDate(periodEnd.getDate() - 1);
           }
           
-          // Count registrations in current period
+          // Count BOTH course registrations AND open gym sessions in current period
           const { data: registrations } = await supabase
             .from('course_registrations')
             .select('id, courses!inner(course_date)')
@@ -119,8 +119,17 @@ export const CreditsCounter = ({ user }: CreditsCounterProps) => {
             .eq('status', 'registered')
             .gte('courses.course_date', periodStart.toISOString().split('T')[0])
             .lte('courses.course_date', periodEnd.toISOString().split('T')[0]);
+
+          const { data: gymSessions } = await supabase
+            .from('training_sessions')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('session_type', 'free_training')
+            .eq('status', 'completed')
+            .gte('session_date', periodStart.toISOString().split('T')[0])
+            .lte('session_date', periodEnd.toISOString().split('T')[0]);
           
-          const usedInPeriod = registrations?.length || 0;
+          const usedInPeriod = (registrations?.length || 0) + (gymSessions?.length || 0);
           const remaining = Math.max(0, limit.count - usedInPeriod);
           
           setMembershipInfo({
