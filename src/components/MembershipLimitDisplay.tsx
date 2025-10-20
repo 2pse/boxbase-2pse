@@ -21,7 +21,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
 
   useEffect(() => {
     const fetchLimits = async () => {
-      if (bookingType === 'limited') {
+      if (membershipType.includes('Limited')) {
         // Get V2 membership data for LIMITED memberships (including start_date)
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
@@ -108,7 +108,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
     }
 
     fetchLimits()
-  }, [userId, membershipType, courseDate, bookingType])
+  }, [userId, membershipType, courseDate])
 
   if (loading) {
     return (
@@ -120,7 +120,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, boo
     )
   }
 
-  if (bookingType === 'limited' || bookingType === 'credits') {
+  if (membershipType.includes('Limited') || membershipType === 'credits' || membershipType === 'Credits') {
     return (
       <Card className="w-full">
         <CardContent className="p-4">
