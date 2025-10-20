@@ -645,7 +645,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         }
         
         return (
-          <div className="flex-1 container mx-auto px-6 py-8">
+          <div className="flex-1">
             {renderWodContent()}
           </div>
         )
