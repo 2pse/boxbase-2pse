@@ -117,15 +117,15 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
     const strokeDashoffset = circumference - (percentage / 100) * circumference
 
     return (
-      <div className="relative w-8 h-8">
-        <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 60 60">
+      <div className="relative w-14 h-14">
+        <svg className="w-14 h-14 transform -rotate-90" viewBox="0 0 60 60">
           {/* Background circle */}
           <circle
             cx="30"
             cy="30"
             r="20"
             stroke="currentColor"
-            strokeWidth="4"
+            strokeWidth="6"
             fill="none"
             className="text-gray-300 dark:text-gray-600"
           />
@@ -135,7 +135,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
             cy="30"
             r="20"
             stroke="currentColor"
-            strokeWidth="4"
+            strokeWidth="6"
             fill="none"
             strokeDasharray={strokeDasharray}
             strokeDashoffset={strokeDashoffset}
@@ -143,6 +143,9 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
             strokeLinecap="round"
           />
         </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-xs font-bold">{Math.round(percentage)}%</span>
+        </div>
       </div>
     )
   }
@@ -169,14 +172,14 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-7 md:p-9 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-40 md:h-48 w-full text-left relative"
     >
-      <div className="absolute top-3 right-3">
+      <div className="absolute top-5 right-5">
         {renderProgressCircle()}
       </div>
       
       <div className="flex items-center justify-center h-full">
-        <h3 className="text-lg font-semibold text-foreground">
+        <h3 className="text-3xl md:text-4xl font-semibold text-foreground">
           Monthly Challenge
         </h3>
       </div>

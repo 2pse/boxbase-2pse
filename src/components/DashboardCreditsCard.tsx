@@ -196,14 +196,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
       return (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <div className="text-4xl font-bold text-muted-foreground mb-1">
+            <div className="text-6xl md:text-7xl font-bold text-muted-foreground mb-2">
               -
             </div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-base md:text-lg text-muted-foreground">
               Credits
             </div>
           </div>
-          <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
+          <Dumbbell className="absolute top-5 right-5 h-8 w-8 text-muted-foreground" />
         </div>
       )
     }
@@ -213,14 +213,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-1">
+              <div className="text-6xl md:text-7xl font-bold text-primary mb-2">
                 {membershipInfo.remainingCredits}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-base md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
+            <Dumbbell className="absolute top-5 right-5 h-8 w-8 text-muted-foreground" />
           </div>
         )
 
@@ -228,14 +228,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl text-primary mb-1 flex justify-center">
-                <Infinity className="h-10 w-10" />
+              <div className="text-6xl md:text-7xl text-primary mb-2 flex justify-center">
+                <Infinity className="h-16 w-16" />
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-base md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
+            <Dumbbell className="absolute top-5 right-5 h-8 w-8 text-muted-foreground" />
           </div>
         )
 
@@ -245,14 +245,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-1">
+              <div className="text-6xl md:text-7xl font-bold text-primary mb-2">
                 {Math.max(0, remaining)}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-base md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
+            <Dumbbell className="absolute top-5 right-5 h-8 w-8 text-muted-foreground" />
           </div>
         )
 
@@ -260,14 +260,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl text-primary mb-1 flex justify-center">
-                <Infinity className="h-10 w-10" />
+              <div className="text-6xl md:text-7xl text-primary mb-2 flex justify-center">
+                <Infinity className="h-16 w-16" />
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-base md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 right-3 h-5 w-5 text-muted-foreground" />
+            <Dumbbell className="absolute top-5 right-5 h-8 w-8 text-muted-foreground" />
           </div>
         )
 
@@ -280,7 +280,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <button 
-          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 relative w-full cursor-pointer"
+          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-5 md:p-7 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-40 md:h-48 relative w-full cursor-pointer"
           onClick={() => setPopoverOpen(true)}
         >
           {renderContent()}

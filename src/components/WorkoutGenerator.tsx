@@ -358,9 +358,9 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
               />
               
               {/* Timer Button */}
-              <div className="mt-4">
+              <div className="mt-4 md:mx-8 lg:mx-12">
                 <div
-                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
+                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
                   onClick={() => {
                     if (onTimerSelect) {
                       onTimerSelect('timer-selection')
@@ -370,8 +370,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                   }}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl font-bold">Workout-Timer</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <h3 className="text-xl md:text-2xl font-bold">Workout-Timer</h3>
+                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
                       Timer for your workouts
                     </p>
                   </div>
@@ -379,14 +379,14 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
               </div>
               
               {/* Percentage Calculator Button */}
-              <div className="mt-4">
+              <div className="mt-4 md:mx-8 lg:mx-12">
                 <div
-                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 shadow-sm p-6 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
+                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
                   onClick={() => setShowPercentageCalculator(true)}
                 >
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl font-bold">Percentage Calculator</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <h3 className="text-xl md:text-2xl font-bold">Percentage Calculator</h3>
+                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
                       Calculate your<br />
                       training weights
                     </p>
