@@ -94,28 +94,57 @@ export const MembershipDetailsPopover = ({ user, children }: MembershipDetailsPo
           remainingCredits = membershipData.remaining_credits || 0
         } else if (bookingRules?.type === 'limited') {
           const limit = bookingRules.limit
+          const limitCount = limit?.count || 0
+          const limitPeriod = limit?.period || 'month'
           
-          // Calculate current period based on limit type
-          let periodQuery
-          if (limit?.period === 'week') {
-            const currentWeekStart = new Date()
-            currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1)
-            periodQuery = currentWeekStart.toISOString().split('T')[0]
+          const now = new Date()
+          const membershipStartDate = new Date((prioritizedMembership as any).start_date)
+          const startDay = membershipStartDate.getDate()
+          
+          let periodStart: Date
+          let periodEnd: Date
+          
+          if (limitPeriod === 'week') {
+            // Week starts on Monday
+            const day = now.getDay()
+            const diff = day === 0 ? -6 : 1 - day
+            periodStart = new Date(now)
+            periodStart.setDate(now.getDate() + diff)
+            periodStart.setHours(0, 0, 0, 0)
+            periodEnd = new Date(periodStart)
+            periodEnd.setDate(periodEnd.getDate() + 6)
           } else {
-            const currentDate = new Date()
-            periodQuery = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-01`
+            // Individual monthly period based on start_date
+            periodStart = new Date(now.getFullYear(), now.getMonth(), startDay)
+            if (now.getDate() < startDay) {
+              periodStart.setMonth(periodStart.getMonth() - 1)
+            }
+            periodEnd = new Date(periodStart)
+            periodEnd.setMonth(periodEnd.getMonth() + 1)
+            periodEnd.setDate(periodEnd.getDate() - 1)
           }
           
+          // Count course registrations in period
           const { data: registrations } = await supabase
             .from('course_registrations')
-            .select('id')
+            .select('id, courses!inner(course_date)')
             .eq('user_id', user.id)
             .eq('status', 'registered')
-            .gte('registered_at', periodQuery)
+            .gte('courses.course_date', periodStart.toISOString().split('T')[0])
+            .lte('courses.course_date', periodEnd.toISOString().split('T')[0])
 
-          usedThisMonth = registrations?.length || 0
-          const monthlyLimit = limit?.count || 0
-          remainingCredits = Math.max(0, monthlyLimit - usedThisMonth)
+          // Count Open Gym sessions in period
+          const { data: gymSessions } = await supabase
+            .from('training_sessions')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('session_type', 'free_training')
+            .eq('status', 'completed')
+            .gte('session_date', periodStart.toISOString().split('T')[0])
+            .lte('session_date', periodEnd.toISOString().split('T')[0])
+
+          usedThisMonth = (registrations?.length || 0) + (gymSessions?.length || 0)
+          remainingCredits = Math.max(0, limitCount - usedThisMonth)
         }
 
         setMembershipDetails({

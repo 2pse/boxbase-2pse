@@ -90,27 +90,38 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             planName
           })
         } else if (bookingRules?.type === 'limited') {
-          // For limited memberships, dynamically calculate based on period
+          // For limited memberships, dynamically calculate based on individual period
           const limitPeriod = bookingRules.limit?.period || 'month'
           const limitCount = bookingRules.limit?.count || 0
           
           const now = new Date()
+          const membershipStartDate = new Date(prioritizedMembership.start_date)
+          const startDay = membershipStartDate.getDate()
+          
           let periodStart: Date
           let periodEnd: Date
           
           if (limitPeriod === 'week') {
+            // Week starts on Monday
+            const day = now.getDay()
+            const diff = day === 0 ? -6 : 1 - day
             periodStart = new Date(now)
-            periodStart.setDate(periodStart.getDate() - periodStart.getDay() + 1) // Monday
+            periodStart.setDate(now.getDate() + diff)
             periodStart.setHours(0, 0, 0, 0)
             periodEnd = new Date(periodStart)
-            periodEnd.setDate(periodEnd.getDate() + 6) // Sunday (not +7)
-            periodEnd.setHours(23, 59, 59, 999) // End of Sunday
+            periodEnd.setDate(periodEnd.getDate() + 6)
           } else {
-            periodStart = new Date(now.getFullYear(), now.getMonth(), 1)
-            periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+            // Individual monthly period based on start_date
+            periodStart = new Date(now.getFullYear(), now.getMonth(), startDay)
+            if (now.getDate() < startDay) {
+              periodStart.setMonth(periodStart.getMonth() - 1)
+            }
+            periodEnd = new Date(periodStart)
+            periodEnd.setMonth(periodEnd.getMonth() + 1)
+            periodEnd.setDate(periodEnd.getDate() - 1)
           }
 
-          // Count registrations based on course_date in current period
+          // Count course registrations based on course_date in current period
           const { data: registrations } = await supabase
             .from('course_registrations')
             .select('id, courses!inner(course_date)')
@@ -119,7 +130,17 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             .gte('courses.course_date', periodStart.toISOString().split('T')[0])
             .lte('courses.course_date', periodEnd.toISOString().split('T')[0])
 
-          const usedThisPeriod = registrations?.length || 0
+          // Count Open Gym sessions in current period
+          const { data: gymSessions } = await supabase
+            .from('training_sessions')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('session_type', 'free_training')
+            .eq('status', 'completed')
+            .gte('session_date', periodStart.toISOString().split('T')[0])
+            .lte('session_date', periodEnd.toISOString().split('T')[0])
+
+          const usedThisPeriod = (registrations?.length || 0) + (gymSessions?.length || 0)
           const remainingCredits = Math.max(0, limitCount - usedThisPeriod)
 
           setMembershipInfo({
