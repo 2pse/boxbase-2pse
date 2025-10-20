@@ -271,7 +271,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     <div className="fixed inset-0 bg-background z-50 overflow-auto">
       <div className="max-w-2xl mx-auto p-3 md:p-4 pb-20 md:pb-24">
         <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h1 className="text-xl md:text-2xl font-bold">Profile</h1>
+          <h1 className="text-xl md:text-3xl font-bold">Profile</h1>
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
@@ -281,14 +281,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         <Card className="border-primary/20 mb-3 md:mb-4">
           <CardHeader className="pb-3 md:pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg md:text-xl">Basic Data</CardTitle>
+              <CardTitle className="text-lg md:text-2xl">Basic Data</CardTitle>
               <Button
                 onClick={handleRefresh}
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0"
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw className="h-4 w-4 md:h-5 md:w-5" />
               </Button>
             </div>
           </CardHeader>
@@ -306,24 +306,24 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                   }}
                 />
                 <div className="text-center">
-                  <h3 className="text-base md:text-lg font-semibold text-foreground">{displayName || `${firstName} ${lastName}`.trim()}</h3>
-                  <p className="text-xs md:text-sm text-muted-foreground">{membershipType}</p>
+                  <h3 className="text-base md:text-xl font-semibold text-foreground">{displayName || `${firstName} ${lastName}`.trim()}</h3>
+                  <p className="text-xs md:text-base text-muted-foreground">{membershipType}</p>
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="nickname" className="text-sm md:text-base text-foreground">Nickname (visible to others) *</Label>
+                <Label htmlFor="nickname" className="text-sm md:text-lg text-foreground">Nickname (visible to others) *</Label>
                 <Input
                   id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="Your nickname (optional)"
-                  className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-10"
+                  className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-12 text-sm md:text-lg"
                 />
               </div>
 
               <div>
-                <Label htmlFor="accessCode" className="text-sm md:text-base text-foreground">Access Code (at least 6 digits) *</Label>
+                <Label htmlFor="accessCode" className="text-sm md:text-lg text-foreground">Access Code (at least 6 digits) *</Label>
                 <div className="relative">
                   <Input
                     id="accessCode"
@@ -334,7 +334,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     onChange={(e) => handleAccessCodeChange(e.target.value.replace(/\s/g, ''))}
                     placeholder="123456"
                     maxLength={12}
-                    className={`pr-10 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-10 ${accessCodeError ? "border-destructive" : ""}`}
+                    className={`pr-10 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-12 text-sm md:text-lg ${accessCodeError ? "border-destructive" : ""}`}
                   />
                   <Button
                     type="button"
@@ -344,16 +344,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     onClick={() => setShowAccessCode(!showAccessCode)}
                   >
                     {showAccessCode ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
                 {accessCodeError && (
-                  <p className="text-sm text-destructive mt-1">{accessCodeError}</p>
+                  <p className="text-sm md:text-base text-destructive mt-1">{accessCodeError}</p>
                 )}
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs md:text-base text-muted-foreground mt-1">
                   Your personal access code for the app
                 </p>
               </div>
@@ -375,17 +375,17 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
             <div className="flex flex-col items-center justify-center text-center">
-              <Dumbbell className="h-6 w-6 md:h-8 md:w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-sm md:text-base text-foreground">Strength Values</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">Manage 1RM values</p>
+              <Dumbbell className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
+              <h3 className="font-semibold text-sm md:text-lg text-foreground">Strength Values</h3>
+              <p className="text-xs md:text-base text-muted-foreground">Manage 1RM values</p>
             </div>
           </div>
           
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
             <div className="flex flex-col items-center justify-center text-center">
-              <Target className="h-6 w-6 md:h-8 md:w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-sm md:text-base text-foreground">Exercises</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">Edit preferences</p>
+              <Target className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
+              <h3 className="font-semibold text-sm md:text-lg text-foreground">Exercises</h3>
+              <p className="text-xs md:text-base text-muted-foreground">Edit preferences</p>
             </div>
           </div>
         </div>
@@ -394,7 +394,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         {(settings?.whatsapp_number || settings?.contact_email) && (
           <Card className="border-primary/20 mb-4">
             <CardHeader>
-              <CardTitle className="text-xl">Contact</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">Contact</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -412,8 +412,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">WhatsApp</p>
-                        <p className="text-sm text-muted-foreground">{settings.whatsapp_number}</p>
+                        <p className="font-medium text-sm md:text-lg text-foreground">WhatsApp</p>
+                        <p className="text-xs md:text-base text-muted-foreground">{settings.whatsapp_number}</p>
                       </div>
                     </div>
                     <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,8 +434,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">Email</p>
-                        <p className="text-sm text-muted-foreground">{settings.contact_email}</p>
+                        <p className="font-medium text-sm md:text-lg text-foreground">Email</p>
+                        <p className="text-xs md:text-base text-muted-foreground">{settings.contact_email}</p>
                       </div>
                     </div>
                     <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -451,7 +451,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         {/* Settings - moved to end */}
         <Card className="border-primary/20 mb-4">
           <CardHeader>
-            <CardTitle className="text-xl">Settings</CardTitle>
+            <CardTitle className="text-xl md:text-2xl">Settings</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -459,11 +459,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {theme === 'dark' ? (
-                    <Moon className="h-4 w-4 text-foreground" />
+                    <Moon className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
                   ) : (
-                    <Sun className="h-4 w-4 text-foreground" />
+                    <Sun className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
                   )}
-                  <Label htmlFor="dark-mode" className="text-foreground">Dark Mode</Label>
+                  <Label htmlFor="dark-mode" className="text-sm md:text-lg text-foreground">Dark Mode</Label>
                 </div>
                 <Switch
                   id="dark-mode"
@@ -475,8 +475,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               {/* Leaderboard Visibility Toggle */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Trophy className="h-4 w-4 text-foreground" />
-                  <Label htmlFor="leaderboard-visible" className="text-foreground">Show in Leaderboard</Label>
+                  <Trophy className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
+                  <Label htmlFor="leaderboard-visible" className="text-sm md:text-lg text-foreground">Show in Leaderboard</Label>
                 </div>
                 <Switch
                   id="leaderboard-visible"
@@ -495,7 +495,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
             size="lg"
           >
-            <LogOut className="mr-2 h-4 w-4" />
+            <LogOut className="mr-2 h-4 w-4 md:h-5 md:w-5" />
             Log out
           </Button>
         </div>
