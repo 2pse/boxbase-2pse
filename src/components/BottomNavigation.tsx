@@ -46,7 +46,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 isActive && "text-primary bg-primary/10"
               )}
             >
-              <Icon className="h-5 md:h-8 w-5 md:w-8" />
+              <Icon className="h-5 md:h-10 w-5 md:w-10" />
               <span className="text-xs md:text-base">{tab.label}</span>
             </Button>
           )
