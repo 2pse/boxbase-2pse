@@ -42,7 +42,7 @@ export const WorkoutTypeSelector = ({ selectedType, onTypeSelect }: WorkoutTypeS
   }
 
   return (
-    <div className="space-y-4 px-2">
+    <div className="space-y-4 px-1">
       {showFunctionalFitness && (
         <div 
           className={cn(
