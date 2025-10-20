@@ -684,11 +684,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         />
       </div>
       
-      <div className="pt-16 pb-20 px-4 flex-1 overflow-y-auto">
+      <div className="pt-16 md:pt-32 pb-20 md:pb-32 px-4 flex-1 overflow-y-auto">
         {renderTabContent()}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-3 z-50 h-[72px] md:h-[110px]">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-3 z-50 h-[72px] md:h-[100px]">
         <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
           {[
             { id: 'home', icon: Home, label: 'Overview' },
@@ -717,7 +717,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-hover-neutral'
                 }`}
               >
-                <Icon className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+                <Icon className="h-5 w-5 md:h-[32px] md:w-[32px]" />
                 <span className="text-xs md:text-sm font-medium">{tab.label}</span>
               </button>
             )

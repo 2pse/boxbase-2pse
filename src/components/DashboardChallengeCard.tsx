@@ -117,31 +117,33 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
     const strokeDashoffset = circumference - (percentage / 100) * circumference
 
     return (
-      <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 60 60">
-        {/* Background circle */}
-        <circle
-          cx="30"
-          cy="30"
-          r="20"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="none"
-          className="text-gray-300 dark:text-gray-600"
-        />
-        {/* Progress circle */}
-        <circle
-          cx="30"
-          cy="30"
-          r="20"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="none"
-          strokeDasharray={strokeDasharray}
-          strokeDashoffset={strokeDashoffset}
-          className="text-primary transition-all duration-300"
-          strokeLinecap="round"
-        />
-      </svg>
+      <div className="relative w-8 md:w-14 h-8 md:h-14">
+        <svg className="w-8 md:w-14 h-8 md:h-14 transform -rotate-90" viewBox="0 0 60 60">
+          {/* Background circle */}
+          <circle
+            cx="30"
+            cy="30"
+            r="20"
+            stroke="currentColor"
+            strokeWidth="4"
+            fill="none"
+            className="text-gray-300 dark:text-gray-600 md:[stroke-width:6]"
+          />
+          {/* Progress circle */}
+          <circle
+            cx="30"
+            cy="30"
+            r="20"
+            stroke="currentColor"
+            strokeWidth="4"
+            fill="none"
+            strokeDasharray={strokeDasharray}
+            strokeDashoffset={strokeDashoffset}
+            className="text-primary transition-all duration-300 md:[stroke-width:6]"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
     )
   }
 
@@ -167,15 +169,15 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 w-full text-left relative"
+      className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[155px] w-full text-left relative"
     >
-      <div className="absolute top-3 right-3">
+      <div className="absolute top-3 md:top-5 right-3 md:right-5">
         {renderProgressCircle()}
       </div>
       
       <div className="flex items-center justify-center h-full">
-        <h3 className="text-lg font-semibold text-foreground">
-          Monatschallenge
+        <h3 className="text-lg md:text-4xl font-semibold text-foreground">
+          Monthly Challenge
         </h3>
       </div>
     </button>
