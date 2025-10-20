@@ -78,7 +78,79 @@ serve(async (req) => {
 
       // Limited memberships: Each Open Gym check-in counts towards period limit
       if (bookingRules.type === 'limited') {
-        console.log('Limited membership - Open Gym check-in counts towards period limit');
+        console.log('Limited membership - checking period limit before Open Gym check-in');
+        
+        // Calculate individual period based on start_date
+        const membershipStartDate = new Date(membershipV2.start_date);
+        const startDay = membershipStartDate.getDate();
+        const currentDate = new Date();
+        const limit = bookingRules.limit;
+        
+        let periodStart: Date;
+        if (limit?.period === 'week') {
+          // Weekly (Monday-Sunday)
+          const day = currentDate.getDay();
+          const diff = day === 0 ? -6 : 1 - day;
+          periodStart = new Date(currentDate);
+          periodStart.setDate(currentDate.getDate() + diff);
+        } else {
+          // Individual monthly period
+          periodStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), startDay);
+          if (currentDate.getDate() < startDay) {
+            periodStart.setMonth(periodStart.getMonth() - 1);
+          }
+        }
+        periodStart.setHours(0, 0, 0, 0);
+        
+        // Calculate period end
+        let periodEnd = new Date(periodStart);
+        if (limit?.period === 'week') {
+          periodEnd.setDate(periodEnd.getDate() + 6);
+        } else {
+          periodEnd.setMonth(periodEnd.getMonth() + 1);
+          periodEnd.setDate(periodEnd.getDate() - 1);
+        }
+        
+        const periodStartStr = periodStart.toISOString().split('T')[0];
+        const periodEndStr = periodEnd.toISOString().split('T')[0];
+        
+        // Count course registrations in period
+        const { data: registrations } = await supabase
+          .from('course_registrations')
+          .select('id, courses!inner(course_date)')
+          .eq('user_id', user.id)
+          .eq('status', 'registered')
+          .gte('courses.course_date', periodStartStr)
+          .lte('courses.course_date', periodEndStr);
+        
+        // Count free training sessions in period
+        const { data: trainingSessions } = await supabase
+          .from('training_sessions')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('session_type', 'free_training')
+          .eq('status', 'completed')
+          .gte('session_date', periodStartStr)
+          .lte('session_date', periodEndStr);
+        
+        const usedInPeriod = (registrations?.length || 0) + (trainingSessions?.length || 0);
+        const limitCount = limit?.count || 0;
+        const remainingCredits = Math.max(0, limitCount - usedInPeriod);
+        
+        // Check if user has credits available
+        if (remainingCredits <= 0) {
+          console.log(`Limited membership - period limit reached: ${usedInPeriod}/${limitCount}`);
+          return new Response(
+            JSON.stringify({
+              success: false,
+              error: `Periodenlimit erreicht. Du hast alle ${limitCount} Buchungen in dieser Periode verbraucht.`,
+              remainingCredits: 0,
+              usedInPeriod,
+              limitCount
+            }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
         
         // Create a training session to track this Open Gym visit
         const { error: sessionError } = await supabase
@@ -95,18 +167,31 @@ serve(async (req) => {
 
         if (sessionError) {
           console.error('Training session creation error:', sessionError);
+          return new Response(
+            JSON.stringify({
+              success: false,
+              error: 'Failed to create training session',
+              details: sessionError.message
+            }),
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
         }
         
         // Mark user as active
         await supabase.rpc('mark_user_as_active', { user_id_param: user.id });
         
+        const newRemainingCredits = remainingCredits - 1;
+        
         return new Response(
           JSON.stringify({
             success: true,
-            message: 'Check-in successful. This visit counts towards your period limit.',
+            message: `Check-in erfolgreich! 1 Buchung abgezogen. Verbleibend: ${newRemainingCredits}`,
             membershipType: 'limited',
-            creditsDeducted: false,
-            sessionTracked: !sessionError
+            creditsDeducted: true,
+            previousCredits: remainingCredits,
+            remainingCredits: newRemainingCredits,
+            usedInPeriod: usedInPeriod + 1,
+            limitCount
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
