@@ -77,10 +77,10 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
     <div className="flex items-center justify-between p-3 md:p-5 bg-background border-b">
       {/* Left side - Avatar */}
       <div className="flex-1">
-        <Avatar className="h-8 md:h-16 w-8 md:w-16 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
+        <Avatar className="h-8 md:h-14 w-8 md:w-14 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
           <AvatarImage src={userAvatar} />
           <AvatarFallback>
-            <User className="h-4 md:h-8 w-4 md:w-8" />
+            <User className="h-4 md:h-7 w-4 md:w-7" />
           </AvatarFallback>
         </Avatar>
       </div>
