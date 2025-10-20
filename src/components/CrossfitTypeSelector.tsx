@@ -24,7 +24,7 @@ export const CrossfitTypeSelector = ({ selectedType, onTypeSelect }: CrossfitTyp
   ]
 
   return (
-    <div className="space-y-4 px-4">
+    <div className="space-y-4">
       {types.map(({ type, title, description }) => (
         <div 
           key={type}

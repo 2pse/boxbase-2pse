@@ -35,7 +35,7 @@ export const BodybuildingSelector = ({
   // For focus selection step (step 2)
   if (!selectedFocus) {
     return (
-      <div className="space-y-4 px-4">
+      <div className="space-y-4">
         {focusOptions.map(({ type, title, description }) => (
           <div 
             key={type}
@@ -61,7 +61,7 @@ export const BodybuildingSelector = ({
 
   // For difficulty selection step (step 3)
   return (
-    <div className="space-y-4 px-4">
+    <div className="space-y-4">
       {difficultyOptions.map(({ type, title, description }) => (
         <div 
           key={type}
