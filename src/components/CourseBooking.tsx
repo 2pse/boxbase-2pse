@@ -643,7 +643,8 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       {userMembershipType && userMembershipType !== 'Unlimited' && userMembershipType !== 'Open Gym' && (
         <MembershipLimitDisplay 
           userId={user.id} 
-          membershipType={userMembershipType} 
+          membershipType={userMembershipType}
+          bookingType={userBookingType}
         />
       )}
       
