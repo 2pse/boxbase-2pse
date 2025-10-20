@@ -132,7 +132,7 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   if (loading) {
     return (
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 flex items-center justify-center h-48">
-        <div className="animate-pulse text-muted-foreground">Loading Monthly Overview...</div>
+        <div className="animate-pulse text-muted-foreground">Lade Monatsübersicht...</div>
       </div>
     )
   }
@@ -143,8 +143,9 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
         width="100%" 
         height="100%" 
         viewBox="0 0 360 360" 
-        className="drop-shadow-sm w-[160%] md:w-[117%] h-[160%] md:h-[117%]"
+        className="drop-shadow-sm md:w-[117%] md:h-[117%]"
         preserveAspectRatio="xMidYMid meet"
+        style={{ maxWidth: '360px', maxHeight: '360px' }}
       >
         {/* Circle dots for each day */}
         {renderCircleDots()}
