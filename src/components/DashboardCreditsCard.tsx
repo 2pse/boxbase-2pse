@@ -196,14 +196,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
       return (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <div className="text-3.5xl md:text-6xl font-bold text-muted-foreground mb-1 md:mb-2">
+            <div className="text-4xl md:text-7xl font-bold text-muted-foreground mb-1 md:mb-2">
               -
             </div>
-            <div className="text-xs md:text-base text-muted-foreground">
+            <div className="text-sm md:text-lg text-muted-foreground">
               Credits
             </div>
           </div>
-          <Dumbbell className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5 h-4.5 md:h-7 w-4.5 md:w-7 text-muted-foreground" />
+          <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
         </div>
       )
     }
@@ -213,14 +213,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-3.5xl md:text-6xl font-bold text-primary mb-1 md:mb-2">
+              <div className="text-4xl md:text-7xl font-bold text-primary mb-1 md:mb-2">
                 {membershipInfo.remainingCredits}
               </div>
-              <div className="text-xs md:text-base text-muted-foreground">
+              <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5 h-4.5 md:h-7 w-4.5 md:w-7 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
           </div>
         )
 
@@ -228,14 +228,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-3.5xl md:text-6xl text-primary mb-1 md:mb-2 flex justify-center">
-                <Infinity className="h-9 md:h-14 w-9 md:w-14" />
+              <div className="text-4xl md:text-7xl text-primary mb-1 md:mb-2 flex justify-center">
+                <Infinity className="h-10 md:h-16 w-10 md:w-16" />
               </div>
-              <div className="text-xs md:text-base text-muted-foreground">
+              <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5 h-4.5 md:h-7 w-4.5 md:w-7 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
           </div>
         )
 
@@ -245,14 +245,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-3.5xl md:text-6xl font-bold text-primary mb-1 md:mb-2">
+              <div className="text-4xl md:text-7xl font-bold text-primary mb-1 md:mb-2">
                 {Math.max(0, remaining)}
               </div>
-              <div className="text-xs md:text-base text-muted-foreground">
+              <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5 h-4.5 md:h-7 w-4.5 md:w-7 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
           </div>
         )
 
@@ -260,14 +260,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-3.5xl md:text-6xl text-primary mb-1 md:mb-2 flex justify-center">
-                <Infinity className="h-9 md:h-14 w-9 md:w-14" />
+              <div className="text-4xl md:text-7xl text-primary mb-1 md:mb-2 flex justify-center">
+                <Infinity className="h-10 md:h-16 w-10 md:w-16" />
               </div>
-              <div className="text-xs md:text-base text-muted-foreground">
+              <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-2.5 md:top-4.5 right-2.5 md:right-4.5 h-4.5 md:h-7 w-4.5 md:w-7 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
           </div>
         )
 
@@ -280,7 +280,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <button 
-          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-2.5 md:p-6.5 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-22 md:h-[155px] relative w-full cursor-pointer"
+          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-3 md:p-7 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[172px] relative w-full cursor-pointer"
           onClick={() => setPopoverOpen(true)}
         >
           {renderContent()}

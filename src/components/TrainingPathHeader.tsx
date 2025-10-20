@@ -74,13 +74,13 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
   }
 
   return (
-    <div className="flex items-center justify-between p-3 md:p-5 bg-background border-b">
+    <div className="flex items-center justify-between p-4 md:p-6 bg-background border-b">
       {/* Left side - Avatar */}
       <div className="flex-1">
-        <Avatar className="h-8 md:h-13 w-8 md:w-13 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
+        <Avatar className="h-10 md:h-16 w-10 md:w-16 cursor-pointer hover:ring-2 hover:ring-primary transition-all" onClick={onProfileClick}>
           <AvatarImage src={userAvatar} />
           <AvatarFallback>
-            <User className="h-4 md:h-7 w-4 md:w-7" />
+            <User className="h-5 md:h-8 w-5 md:w-8" />
           </AvatarFallback>
         </Avatar>
       </div>
@@ -88,7 +88,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
       {/* Center - Logo */}
       <div className="flex-1 flex justify-center">
         <Logo 
-          className="h-8 md:h-13 mt-1"
+          className="h-10 md:h-16 mt-1"
           onClick={() => window.location.href = '/pro'}
         />
       </div>
@@ -106,7 +106,7 @@ export const TrainingPathHeader: React.FC<TrainingPathHeaderProps> = ({
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="p-2 md:p-3 hover:bg-primary/10"
           >
-            <Grid3X3 className="h-4 md:h-7 w-4 md:w-7 text-primary" />
+            <Grid3X3 className="h-5 md:h-8 w-5 md:w-8 text-primary" />
           </Button>
         )}
       </div>
