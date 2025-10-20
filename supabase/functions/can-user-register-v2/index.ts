@@ -93,6 +93,37 @@ serve(async (req) => {
       const bookingRules = membershipV2.membership_plans_v2.booking_rules as any;
       const membershipData = membershipV2.membership_data as any || {};
 
+      // ========== CENTRAL EXPIRATION CHECK FOR ALL MEMBERSHIP TYPES ==========
+      // Check if membership is still valid at course date
+      // EXCEPTION: With auto_renewal, membership is always valid
+      if (membershipV2.end_date !== null) {
+        // Get course date
+        const { data: courseData } = await supabase
+          .from('courses')
+          .select('course_date')
+          .eq('id', course_id)
+          .single();
+
+        if (courseData) {
+          const endDate = new Date(membershipV2.end_date);
+          const courseDate = new Date(courseData.course_date);
+          const autoRenewal = membershipV2.auto_renewal || false;
+          
+          if (endDate < courseDate && !autoRenewal) {
+            console.log(`Membership expired for user ${user_id}: end_date=${membershipV2.end_date}, course_date=${courseData.course_date}, auto_renewal=${autoRenewal}`);
+            return new Response(
+              JSON.stringify({ 
+                canRegister: false, 
+                reason: 'Membership expired at course date',
+                membershipType: bookingRules.type
+              }),
+              { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
+        }
+      }
+      // ========== END CENTRAL CHECK ==========
+
       // Check membership type and permissions
       if (bookingRules.type === 'unlimited') {
         return new Response(

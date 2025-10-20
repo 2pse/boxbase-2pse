@@ -497,7 +497,15 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
               })
               .eq('id', existingReg.id)
 
-            if (error) throw error
+            if (error) {
+              // Rollback credit deduction if registration fails
+              await supabase.rpc('handle_course_registration_credits', {
+                p_user_id: user.id,
+                p_course_id: courseId,
+                p_action: 'refund'
+              })
+              throw error
+            }
           } else {
             // Create new registration
             const { error } = await supabase

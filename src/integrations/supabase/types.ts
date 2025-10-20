@@ -962,7 +962,7 @@ export type Database = {
       }
       handle_course_registration_credits: {
         Args:
-          | { p_action: string; p_course_id: string; p_user_id: string }
+          | { p_action?: string; p_course_id: string; p_user_id: string }
           | { p_course_id: string; p_user_id: string }
         Returns: Json
       }
