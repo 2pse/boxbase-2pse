@@ -638,7 +638,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   }
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-3 md:p-4 space-y-3 md:space-y-4">
       {/* Membership limits display - show for all memberships except Unlimited and Open Gym */}
       {userMembershipType && userMembershipType !== 'Unlimited' && userMembershipType !== 'Open Gym' && (
         <MembershipLimitDisplay 
@@ -649,9 +649,9 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       )}
       
       {/* Header with View Toggle */}
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         <div className="text-center">
-          <h2 className="font-semibold text-foreground">Courses</h2>
+          <h2 className="font-semibold text-base md:text-lg text-foreground">Courses</h2>
         </div>
         
         <div className="flex justify-center gap-8">

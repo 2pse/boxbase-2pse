@@ -204,35 +204,35 @@ export const ExerciseSelection = () => {
         WebkitOverflowScrolling: "touch",
       }}
     >
-      <div className="max-w-2xl mx-auto p-4">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+      <div className="max-w-2xl mx-auto p-3 md:p-4">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <div className="flex items-center gap-2 md:gap-3">
             <Button variant="outline" size="sm" onClick={handleBack}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold">Exercise Preferences</h1>
+            <h1 className="text-xl md:text-2xl font-bold">Exercise Preferences</h1>
           </div>
         </div>
 
-        <Card className="mb-4">
-          <CardHeader>
-            <CardTitle>Preferred Exercises</CardTitle>
+        <Card className="mb-3 md:mb-4">
+          <CardHeader className="pb-3 md:pb-6">
+            <CardTitle className="text-lg md:text-xl">Preferred Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
               Green exercises will be preferred in your workouts. Click on an exercise to deactivate it.
             </p>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 md:space-y-6">
             {Object.entries(groupedExercises).map(([category, exercises]) => (
-              <div key={category} className="space-y-3">
-                <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
+              <div key={category} className="space-y-2 md:space-y-3">
+                <h4 className="font-medium text-xs md:text-sm text-muted-foreground uppercase tracking-wide">
                   {category}
                 </h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 md:gap-2">
                   {exercises.map((exercise) => (
                     <Badge
                       key={exercise.name}
                       variant={selectedExercises.includes(exercise.name) ? "default" : "secondary"}
-                      className={`cursor-pointer hover:opacity-80 transition-colors ${
+                      className={`cursor-pointer hover:opacity-80 transition-colors text-xs md:text-sm ${
                         selectedExercises.includes(exercise.name) 
                           ? "bg-green-600 hover:bg-green-700 text-white" 
                           : "bg-gray-300 hover:bg-gray-400 text-gray-700"

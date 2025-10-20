@@ -269,19 +269,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 overflow-auto">
-      <div className="max-w-2xl mx-auto p-4 pb-24">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Profile</h1>
+      <div className="max-w-2xl mx-auto p-3 md:p-4 pb-20 md:pb-24">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <h1 className="text-xl md:text-2xl font-bold">Profile</h1>
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
         </div>
 
         {/* Basic Data - always visible */}
-        <Card className="border-primary/20 mb-4">
-          <CardHeader className="pb-4">
+        <Card className="border-primary/20 mb-3 md:mb-4">
+          <CardHeader className="pb-3 md:pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl">Basic Data</CardTitle>
+              <CardTitle className="text-lg md:text-xl">Basic Data</CardTitle>
               <Button
                 onClick={handleRefresh}
                 variant="ghost"
@@ -293,8 +293,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex flex-col items-center space-y-4 mb-6">
+            <div className="space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-3 md:space-y-4 mb-4 md:mb-6">
                 <AvatarUpload 
                   userId={userId} 
                   currentAvatarUrl={avatarUrl}
@@ -306,24 +306,24 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                   }}
                 />
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold text-foreground">{displayName || `${firstName} ${lastName}`.trim()}</h3>
-                  <p className="text-sm text-muted-foreground">{membershipType}</p>
+                  <h3 className="text-base md:text-lg font-semibold text-foreground">{displayName || `${firstName} ${lastName}`.trim()}</h3>
+                  <p className="text-xs md:text-sm text-muted-foreground">{membershipType}</p>
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="nickname" className="text-foreground">Nickname (visible to others) *</Label>
+                <Label htmlFor="nickname" className="text-sm md:text-base text-foreground">Nickname (visible to others) *</Label>
                 <Input
                   id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="Your nickname (optional)"
-                  className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                  className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-10"
                 />
               </div>
 
               <div>
-                <Label htmlFor="accessCode" className="text-foreground">Access Code (at least 6 digits) *</Label>
+                <Label htmlFor="accessCode" className="text-sm md:text-base text-foreground">Access Code (at least 6 digits) *</Label>
                 <div className="relative">
                   <Input
                     id="accessCode"
@@ -334,7 +334,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     onChange={(e) => handleAccessCodeChange(e.target.value.replace(/\s/g, ''))}
                     placeholder="123456"
                     maxLength={12}
-                    className={`pr-10 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 ${accessCodeError ? "border-destructive" : ""}`}
+                    className={`pr-10 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-10 ${accessCodeError ? "border-destructive" : ""}`}
                   />
                   <Button
                     type="button"
@@ -372,20 +372,20 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         />
 
         {/* Navigation to Strength Values and Exercises */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
+        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
             <div className="flex flex-col items-center justify-center text-center">
-              <Dumbbell className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Strength Values</h3>
-              <p className="text-sm text-muted-foreground">Manage 1RM values</p>
+              <Dumbbell className="h-6 w-6 md:h-8 md:w-8 mb-2 text-primary" />
+              <h3 className="font-semibold text-sm md:text-base text-foreground">Strength Values</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">Manage 1RM values</p>
             </div>
           </div>
           
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
             <div className="flex flex-col items-center justify-center text-center">
-              <Target className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-semibold text-foreground">Exercises</h3>
-              <p className="text-sm text-muted-foreground">Edit preferences</p>
+              <Target className="h-6 w-6 md:h-8 md:w-8 mb-2 text-primary" />
+              <h3 className="font-semibold text-sm md:text-base text-foreground">Exercises</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">Edit preferences</p>
             </div>
           </div>
         </div>

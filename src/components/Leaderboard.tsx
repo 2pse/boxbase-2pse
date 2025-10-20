@@ -286,10 +286,10 @@ export const Leaderboard: React.FC = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-8rem)] overflow-auto p-4">
+    <div className="h-[calc(100vh-8rem)] overflow-auto p-3 md:p-4">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-6 relative">
-          <h1 className="text-2xl font-bold mb-2">Leaderboard</h1>
+        <div className="text-center mb-4 md:mb-6 relative">
+          <h1 className="text-xl md:text-2xl font-bold mb-2">Leaderboard</h1>
           <p className="text-muted-foreground">{getHeaderText()}</p>
           {activeTab === 'month' && (
             <div className="absolute top-0 right-0 flex items-center gap-2 text-sm text-muted-foreground">
@@ -299,10 +299,10 @@ export const Leaderboard: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-center gap-6 mb-6">
+        <div className="flex items-center justify-center gap-4 md:gap-6 mb-4 md:mb-6">
           <button
             onClick={() => handleTabChange('month')}
-            className={`text-base font-medium pb-1 border-b-2 transition-colors ${
+            className={`text-sm md:text-base font-medium pb-1 border-b-2 transition-colors ${
               activeTab === 'month'
                 ? 'text-foreground border-foreground'
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -312,7 +312,7 @@ export const Leaderboard: React.FC = () => {
           </button>
           <button
             onClick={() => handleTabChange('year')}
-            className={`text-base font-medium pb-1 border-b-2 transition-colors ${
+            className={`text-sm md:text-base font-medium pb-1 border-b-2 transition-colors ${
               activeTab === 'year'
                 ? 'text-foreground border-foreground'
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -322,7 +322,7 @@ export const Leaderboard: React.FC = () => {
           </button>
         </div>
 
-        <div className="space-y-3 pb-2">
+        <div className="space-y-2 md:space-y-3 pb-2">
               {leaderboard.length === 0 ? (
                 <Card>
                   <CardContent className="p-6 text-center">
@@ -334,24 +334,24 @@ export const Leaderboard: React.FC = () => {
                   const position = index + 1
                   return (
                     <Card key={entry.id} className={`transition-all duration-200 ${getRankColor(position)}`}>
-                      <CardContent className="p-4">
+                      <CardContent className="p-3 md:p-4">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center justify-center w-12 h-12">
+                          <div className="flex items-center gap-3 md:gap-4">
+                            <div className="flex items-center justify-center w-10 md:w-12 h-10 md:h-12">
                               {getRankIcon(position)}
                             </div>
                             <div className="flex items-center space-x-2">
                               <img
                                 src={entry.avatar_url || '/placeholder.svg'}
                                 alt={entry.display_name}
-                                className="w-10 h-10 rounded-full object-cover border-2 border-border cursor-pointer hover:opacity-80 transition-opacity"
+                                className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-border cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => setSelectedProfile({ 
                                   imageUrl: entry.avatar_url, 
                                   displayName: entry.display_name 
                                 })}
                               />
                               <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-lg text-foreground">{entry.display_name}</h3>
+                                <h3 className="font-semibold text-base md:text-lg text-foreground">{entry.display_name}</h3>
                                 {activeTab === 'month' && entry.hasCompletedChallenge && (
                                   <TooltipProvider>
                                     <Tooltip>
@@ -367,10 +367,10 @@ export const Leaderboard: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="text-right flex items-center gap-2">
+                          <div className="text-right flex items-center gap-1 md:gap-2">
                             <div className="text-right">
-                              <Badge variant="secondary" className="text-lg px-3 py-1 bg-muted text-foreground flex items-center gap-1">
-                                <Dumbbell className="h-4 w-4" />
+                              <Badge variant="secondary" className="text-sm md:text-lg px-2 md:px-3 py-1 bg-muted text-foreground flex items-center gap-1">
+                                <Dumbbell className="h-3 w-3 md:h-4 md:w-4" />
                                 {entry.total_score}
                               </Badge>
                             </div>

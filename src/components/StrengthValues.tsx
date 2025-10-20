@@ -112,25 +112,25 @@ export const StrengthValues = () => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 overflow-auto">
-      <div className="max-w-2xl mx-auto p-4 pb-24">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+      <div className="max-w-2xl mx-auto p-3 md:p-4 pb-20 md:pb-24">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <div className="flex items-center gap-2 md:gap-3">
             <Button variant="outline" size="sm" onClick={handleBack}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold">Strength Values</h1>
+            <h1 className="text-xl md:text-2xl font-bold">Strength Values</h1>
           </div>
         </div>
 
         {/* Standard Kraftwerte */}
-        <Card className="mb-4">
-          <CardHeader>
-            <CardTitle>1RM Basic Exercises</CardTitle>
+        <Card className="mb-3 md:mb-4">
+          <CardHeader className="pb-3 md:pb-6">
+            <CardTitle className="text-lg md:text-xl">1RM Basic Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
               Enter your 1 rep max for future training references
             </p>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2 md:space-y-3">
             {[
               { name: "Front Squat", value: frontSquat1rm, setter: setFrontSquat1rm },
               { name: "Back Squat", value: backSquat1rm, setter: setBackSquat1rm },
@@ -142,47 +142,49 @@ export const StrengthValues = () => {
               { name: "Clean & Jerk", value: cleanAndJerk1rm, setter: setCleanAndJerk1rm }
             ].map(({ name, value, setter }) => (
               <div key={name} className="flex gap-2 items-center">
-                <Label className="text-sm font-medium min-w-24 text-right">{name}:</Label>
+                <Label className="text-xs md:text-sm font-medium min-w-20 md:min-w-24 text-right">{name}:</Label>
                 <Input 
                   type="number" 
                   step="0.5" 
                   value={value} 
                   onChange={(e) => setter(e.target.value)} 
                   placeholder="0.0" 
-                  className="w-20" 
+                  className="w-16 md:w-20 h-9 md:h-10" 
                 />
-                <span className="text-sm text-muted-foreground">kg</span>
+                <span className="text-xs md:text-sm text-muted-foreground">kg</span>
               </div>
             ))}
           </CardContent>
         </Card>
 
         {/* Zusätzliche Übungen */}
-        <Card className="mb-4">
-          <CardHeader>
-            <CardTitle>Additional Exercises</CardTitle>
+        <Card className="mb-3 md:mb-4">
+          <CardHeader className="pb-3 md:pb-6">
+            <CardTitle className="text-lg md:text-xl">Additional Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
               Add any additional exercises and their values.
             </p>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 md:space-y-4">
             {extraLifts.map((lift, index) => (
               <div key={index} className="flex gap-2 items-end">
                 <div className="flex-1">
-                  <Label>Exercise Name</Label>
+                  <Label className="text-sm md:text-base">Exercise Name</Label>
                   <Input
                     placeholder="e.g. Overhead Press"
                     value={lift.name}
                     onChange={(e) => updateExtraLift(index, 'name', e.target.value)}
+                    className="h-9 md:h-10"
                   />
                 </div>
                 <div className="flex-1">
-                  <Label>Weight/Reps</Label>
+                  <Label className="text-sm md:text-base">Weight/Reps</Label>
                   <Input
                     placeholder="e.g. 60kg or 15 reps"
                     type="text"
                     value={lift.weight}
                     onChange={(e) => updateExtraLift(index, 'weight', e.target.value)}
+                    className="h-9 md:h-10"
                   />
                 </div>
                 <Button
