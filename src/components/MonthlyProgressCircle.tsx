@@ -165,16 +165,6 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
           >
             {trainingCount}
           </text>
-          
-          {/* Label */}
-          <text
-            x="0"
-            y="50"
-            textAnchor="middle"
-            className="fill-muted-foreground text-lg"
-          >
-            Trainings
-          </text>
         </g>
       </svg>
     </div>
