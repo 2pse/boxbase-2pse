@@ -52,6 +52,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   const [isTrainer, setIsTrainer] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [userMembershipType, setUserMembershipType] = useState<string>('')
+  const [userBookingType, setUserBookingType] = useState<string>('')
   const [selectedProfile, setSelectedProfile] = useState<{ imageUrl: string | null; displayName: string } | null>(null)
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'trainer' | 'member' | null>(null)
@@ -117,20 +118,32 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         setIsAdmin(roles.includes('admin'))
       }
       
-      // Set membership type from V2 system
+      // Set membership type from V2 system (use plan name, not booking_rules.type)
       let membershipType = '';
-      if (membershipResult.data?.membership_plans_v2?.booking_rules) {
-        const bookingRules = membershipResult.data.membership_plans_v2.booking_rules as any;
-        membershipType = bookingRules.type || '';
+      let bookingType = '';
+      
+      if (membershipResult.data?.membership_plans_v2) {
+        const membershipPlan = membershipResult.data.membership_plans_v2 as any;
+        membershipType = membershipPlan.name || '';
+        
+        // Store booking_rules separately for internal logic
+        const bookingRules = membershipPlan.booking_rules;
+        bookingType = bookingRules?.type || '';
+        
+        console.log('User membership loaded:', { 
+          membershipType, 
+          bookingType 
+        });
       } else {
         // Fallback to user roles for admin/trainer
         if (rolesResult.data?.some(r => ['admin', 'trainer'].includes(r.role))) {
-          membershipType = 'unlimited';
+          membershipType = 'Unlimited';
+          bookingType = 'unlimited';
         }
       }
       
-      console.log('User membership type loaded:', membershipType);
       setUserMembershipType(membershipType);
+      setUserBookingType(bookingType);
 
       // Set current user role for name display
       const roles = rolesResult.data?.map(r => r.role) || []
@@ -302,15 +315,15 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       if (checkError || (!canRegister && !canWaitlist)) {
         console.error('🚫 Registration blocked:', { checkError, canRegister, canWaitlist });
         
-        const membershipTypeLower = userMembershipType.toLowerCase()
+        const bookingTypeLower = userBookingType.toLowerCase()
         
-        if (membershipTypeLower.includes('basic') || membershipTypeLower.includes('weekly_limit')) {
+        if (bookingTypeLower.includes('basic') || bookingTypeLower === 'weekly_limit') {
           toast.error("You have reached your monthly limit of registrations")
-        } else if (membershipTypeLower.includes('limited')) {
+        } else if (bookingTypeLower === 'limited') {
           toast.error("You have reached your monthly limit for this period. You can book for next month now!")
-        } else if (membershipTypeLower.includes('credit')) {
+        } else if (bookingTypeLower === 'credits') {
           toast.error("You have no credits left. Please top up your credits at the reception")
-        } else if (membershipTypeLower.includes('open gym') || membershipTypeLower === 'open_gym_only') {
+        } else if (bookingTypeLower === 'open_gym_only') {
           toast.error("Your membership only includes Open Gym. For courses you need an extended membership.")
         } else {
           toast.error(`Your current membership (${userMembershipType}) does not allow this registration. Please contact us for details.`)
@@ -626,11 +639,12 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Membership limits display for Basic Member and Credits */}
-      {(userMembershipType === 'Basic Member' || userMembershipType === 'Credits') && (
+      {/* Membership limits display - show for all memberships except Unlimited and Open Gym */}
+      {userMembershipType && userMembershipType !== 'Unlimited' && userMembershipType !== 'Open Gym' && (
         <MembershipLimitDisplay 
           userId={user.id} 
-          membershipType={userMembershipType} 
+          membershipType={userMembershipType}
+          bookingType={userBookingType}
         />
       )}
       

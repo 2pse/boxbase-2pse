@@ -8,9 +8,10 @@ interface MembershipLimitDisplayProps {
   userId: string
   membershipType: string
   courseDate?: string
+  bookingType?: string
 }
 
-export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: MembershipLimitDisplayProps) => {
+export const MembershipLimitDisplay = ({ userId, membershipType, courseDate, bookingType }: MembershipLimitDisplayProps) => {
   const [monthlyCount, setMonthlyCount] = useState<number>(0)
   const [monthlyLimit, setMonthlyLimit] = useState<number>(0)
   const [credits, setCredits] = useState<number>(0)
@@ -89,7 +90,7 @@ export const MembershipLimitDisplay = ({ userId, membershipType, courseDate }: M
             setPeriodEnd(periodEnd.toISOString().split('T')[0])
           }
         }
-      } else if (membershipType === 'credits' || membershipType === 'Credits') {
+      } else if (bookingType === 'credits') {
         // For CREDITS type, still use stored credits
         const { data: membershipData } = await supabase
           .from('user_memberships_v2')
