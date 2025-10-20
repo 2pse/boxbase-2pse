@@ -651,14 +651,14 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
       {/* Header with View Toggle */}
       <div className="space-y-3 md:space-y-4">
         <div className="text-center">
-          <h2 className="font-semibold text-base md:text-lg text-foreground">Courses</h2>
+          <h2 className="font-semibold text-base md:text-xl text-foreground">Courses</h2>
         </div>
         
         <div className="flex justify-center gap-8">
           <button
             onClick={() => setViewMode('list')}
             className={`
-              text-sm font-medium transition-all pb-1 border-b-2
+              text-sm md:text-lg font-medium transition-all pb-1 border-b-2
               ${viewMode === 'list' 
                 ? 'text-primary border-primary' 
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -670,7 +670,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           <button
             onClick={() => setViewMode('calendar')}
             className={`
-              text-sm font-medium transition-all pb-1 border-b-2
+              text-sm md:text-lg font-medium transition-all pb-1 border-b-2
               ${viewMode === 'calendar' 
                 ? 'text-primary border-primary' 
                 : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -687,14 +687,14 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
         <div className="grid grid-cols-1 gap-4 pb-24">
           {Object.entries(groupedCourses).map(([date, dayCourses]) => (
             <div key={date} className="space-y-2">
-              <h3 className="font-medium text-sm text-muted-foreground">
+              <h3 className="font-medium text-sm md:text-lg text-muted-foreground">
                   {format(parseISO(date), 'EEEE, dd.MM.yyyy', { locale: enUS })}
               </h3>
               <div className="space-y-2">
                  {dayCourses.map(course => (
                    <div
                       key={course.id} 
-                      className={`rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm bg-card ${
+                      className={`rounded-2xl p-4 md:p-6 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-sm bg-card ${
                         course.is_registered ? 'border-2 border-green-500' : 
                         course.is_waitlisted ? 'border-2 border-yellow-500' : 'border'
                       }`}
@@ -706,20 +706,20 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1 whitespace-nowrap overflow-hidden">
-                            <h4 className="font-medium truncate text-foreground">{course.title}</h4>
+                            <h4 className="font-medium text-base md:text-xl truncate text-foreground">{course.title}</h4>
                           </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-4 text-sm md:text-lg text-muted-foreground">
                             <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
+                              <Clock className="h-3 w-3 md:h-5 md:w-5" />
                               {course.start_time.slice(0, 5)} - {course.end_time.slice(0, 5)}
                             </div>
                             <div className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3" />
+                              <MapPin className="h-3 w-3 md:h-5 md:w-5" />
                               {course.trainer}
                             </div>
                           </div>
                           {course.strength_exercise && (
-                            <Badge variant="outline" className="text-xs mt-1 w-fit bg-primary/10 text-primary border-primary/20">
+                            <Badge variant="outline" className="text-xs md:text-sm mt-1 w-fit bg-primary/10 text-primary border-primary/20">
                               {course.strength_exercise}
                             </Badge>
                           )}
@@ -732,13 +732,13 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                             else if (percentage >= 75) badgeColor = "bg-[#edb408]";
                             
                             return (
-                              <Badge className={`text-white ${badgeColor} shadow-sm`}>
+                              <Badge className={`text-xs md:text-base text-white ${badgeColor} shadow-sm`}>
                                 {course.registered_count}/{course.max_participants}
                               </Badge>
                             );
                           })()}
                            {course.waitlist_count > 0 && (
-                             <Badge className="text-white bg-yellow-500 shadow-sm">
+                             <Badge className="text-xs md:text-base text-white bg-yellow-500 shadow-sm">
                                WL: {course.waitlist_count}
                              </Badge>
                            )}
