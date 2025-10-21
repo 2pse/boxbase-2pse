@@ -203,7 +203,48 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
         if (insertError) throw insertError
       }
       
-      toast.success('Participant added')
+      // Call credit management function to handle credits/bookings
+      const { data: creditResult, error: creditError } = await supabase
+        .rpc('handle_course_registration_credits', {
+          p_user_id: userId,
+          p_course_id: courseId,
+          p_action: 'deduct'
+        })
+
+      if (creditError) {
+        console.error('Error managing credits:', creditError)
+        // Rollback: Remove the registration
+        await supabase
+          .from('course_registrations')
+          .delete()
+          .eq('course_id', courseId)
+          .eq('user_id', userId)
+        
+        toast.error('Credit management failed')
+        return
+      }
+
+      // Check if credits were successfully deducted
+      const result = creditResult as { success: boolean; message: string; credits?: number }
+      if (!result.success) {
+        // Rollback: Remove the registration
+        await supabase
+          .from('course_registrations')
+          .delete()
+          .eq('course_id', courseId)
+          .eq('user_id', userId)
+        
+        toast.error(result.message || 'Keine Credits verfügbar')
+        return
+      }
+
+      // Success - show appropriate message
+      if (typeof result.credits === 'number') {
+        toast.success(`Teilnehmer hinzugefügt (${result.credits} Credits verbleibend)`)
+      } else {
+        toast.success('Teilnehmer hinzugefügt')
+      }
+      
       await loadRegisteredUsers()
       onParticipantAdded()
     } catch (error) {
