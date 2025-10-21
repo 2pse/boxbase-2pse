@@ -565,9 +565,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
     switch (activeTab) {
       case 'home':
         return (
-          <div className="flex flex-col gap-3 pt-6 md:pt-0">
+          <div className="flex flex-col gap-3 pt-8 md:pt-0">
             {/* Monthly Progress Circle */}
-            <div className="flex items-center justify-center h-48 md:h-[400px] overflow-visible">
+            <div className="flex items-center justify-center h-64 md:h-[400px] overflow-visible">
               <MonthlyProgressCircle 
                 user={user}
                 trainingCount={trainingCount}
@@ -575,7 +575,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
               />
             </div>
             {/* Week Preview */}
-            <div className="flex items-center w-full mt-4 md:mt-0">
+            <div className="flex items-center w-full mt-6 md:mt-0">
               <WeekPreview 
                 user={user} 
                 userRole={userRole} 
