@@ -239,7 +239,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
       }
 
       // Success - show appropriate message
-      if (typeof result.credits === 'number') {
+      if (typeof result.credits === 'number' && result.credits > 0) {
         toast.success(`Teilnehmer hinzugefügt (${result.credits} Credits verbleibend)`)
       } else {
         toast.success('Teilnehmer hinzugefügt')
