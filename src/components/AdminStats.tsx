@@ -90,14 +90,41 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .eq('year', currentYear)
         .eq('month', currentMonth)
 
-      // Get actual completed training sessions for the current month grouped by membership type
-      const { data: trainingSessions } = await supabase
+      // Get completed course registrations for current month
+      const { data: completedCourseRegistrations } = await supabase
+        .from('course_registrations')
+        .select(`
+          user_id,
+          courses!inner(
+            course_date,
+            end_time
+          )
+        `)
+        .eq('status', 'registered')
+        .gte('courses.course_date', firstDayOfMonth.toISOString().split('T')[0])
+        .lte('courses.course_date', lastDayOfMonth.toISOString().split('T')[0])
+
+      // Filter only courses that have already ended
+      const now = new Date()
+      const completedCourses = completedCourseRegistrations?.filter(reg => {
+        const course = reg.courses
+        if (!course) return false
+        
+        const courseEndTime = new Date(`${course.course_date}T${course.end_time}`)
+        return courseEndTime <= now
+      }) || []
+
+      console.log('Completed Course Registrations:', completedCourses.length)
+
+      // Get Open Gym check-ins for current month
+      const { data: openGymSessions } = await supabase
         .from('training_sessions')
-        .select('id, user_id, session_date')
+        .select('user_id, session_date, session_type')
+        .eq('session_type', 'free_training')
         .gte('session_date', firstDayOfMonth.toISOString().split('T')[0])
         .lte('session_date', lastDayOfMonth.toISOString().split('T')[0])
 
-      console.log('Completed Training Sessions for current month:', trainingSessions?.length)
+      console.log('Open Gym Check-ins:', openGymSessions?.length || 0)
 
       // Get all active memberships V2 to map users to membership types
       const { data: allMembershipsV2 } = await supabase
@@ -126,7 +153,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         }
       })
 
-      // Count completed trainings by membership type
+      // Count all completed trainings by membership type
       const trainingCounts = {
         'Unlimited': 0,
         'Limited': 0, 
@@ -134,18 +161,31 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         'Open Gym': 0
       }
 
-      trainingSessions?.forEach(session => {
+      // Count completed courses
+      completedCourses.forEach(registration => {
+        const membershipInfo = userMembershipMap.get(registration.user_id)
+        if (membershipInfo) {
+          const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
+          trainingCounts[membershipCategory as keyof typeof trainingCounts] += 1
+        } else {
+          trainingCounts['Unlimited'] += 1 // Default for admins/trainers
+        }
+      })
+
+      // Count Open Gym check-ins
+      openGymSessions?.forEach(session => {
         const membershipInfo = userMembershipMap.get(session.user_id)
         if (membershipInfo) {
           const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
           trainingCounts[membershipCategory as keyof typeof trainingCounts] += 1
         } else {
-          // If no membership found, count as Unlimited (default for admins/trainers)
-          trainingCounts['Unlimited'] += 1
+          trainingCounts['Unlimited'] += 1 // Default for admins/trainers
         }
       })
 
-      console.log('Completed Training Counts by Type:', trainingCounts)
+      const totalRegistrations = completedCourses.length + (openGymSessions?.length || 0)
+      console.log('Total Registrations (Courses + Open Gym):', totalRegistrations)
+      console.log('Registrations by Type:', trainingCounts)
 
       // Calculate total training sessions from leaderboard
       const totalCurrentMonth = leaderboardData?.reduce((sum, entry) => sum + entry.training_count, 0) || 0
@@ -190,7 +230,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       const statsData = {
         totalEntries: totalCurrentMonth,
         memberStats: membershipCounts,
-        currentMonthEntries: totalCurrentMonth,
+        currentMonthEntries: totalRegistrations,
         registrationsByType: trainingCounts
       }
 
