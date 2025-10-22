@@ -106,6 +106,7 @@ export const CourseCalendar = ({
           }}
           fromDate={new Date(Date.now() - 42 * 24 * 60 * 60 * 1000)} // 6 weeks back
           toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
+          disabled={false} // Allow selecting past dates
           modifiers={{
             registered: registeredDates,
             waitlisted: waitlistedDates
