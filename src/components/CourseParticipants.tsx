@@ -54,8 +54,12 @@ export const CourseParticipants = () => {
       const now = new Date()
       const nowDate = now.toISOString().split('T')[0]
       const nowTime = now.toTimeString().slice(0, 8)
+      
+      // Calculate date 6 weeks ago for calendar view
+      const sixWeeksAgo = new Date(now.getTime() - 42 * 24 * 60 * 60 * 1000)
+      const sixWeeksAgoDate = sixWeeksAgo.toISOString().split('T')[0]
 
-      const { data, error } = await supabase
+      let query = supabase
         .from('courses')
           .select(`
             id,
@@ -73,8 +77,17 @@ export const CourseParticipants = () => {
             color
           `)
         .eq('is_cancelled', false)
-        // Only future courses by date and time
-        .or(`course_date.gt.${nowDate},and(course_date.eq.${nowDate},end_time.gt.${nowTime})`)
+      
+      // Different filter based on view mode
+      if (viewMode === 'calendar') {
+        // Calendar: 6 weeks back to future
+        query = query.gte('course_date', sixWeeksAgoDate)
+      } else {
+        // List: Only future courses
+        query = query.or(`course_date.gt.${nowDate},and(course_date.eq.${nowDate},end_time.gt.${nowTime})`)
+      }
+      
+      const { data, error } = await query
         .order('course_date', { ascending: true })
         .order('start_time', { ascending: true })
 
@@ -383,8 +396,9 @@ export const CourseParticipants = () => {
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
               }}
-              fromDate={new Date()}
+              fromDate={new Date(Date.now() - 42 * 24 * 60 * 60 * 1000)} // 6 weeks back
               toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
+              disabled={false} // Allow selecting past dates for admin
               modifiers={{}}
               modifiersStyles={{}}
             />
