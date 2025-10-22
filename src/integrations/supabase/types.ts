@@ -897,14 +897,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      archive_old_challenges: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      binary_quantize: {
-        Args: { "": string } | { "": unknown }
-        Returns: unknown
-      }
+      archive_old_challenges: { Args: never; Returns: undefined }
+      auto_complete_past_courses: { Args: never; Returns: undefined }
       can_user_register_for_course: {
         Args: { p_course_id: string; p_user_id: string }
         Returns: boolean
@@ -917,10 +911,7 @@ export type Database = {
         Args: { p_course_id: string; p_user_id: string }
         Returns: boolean
       }
-      cleanup_old_waitlist_events: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_old_waitlist_events: { Args: never; Returns: undefined }
       generate_courses_from_template: {
         Args: {
           end_date_param: string
@@ -930,7 +921,7 @@ export type Database = {
         Returns: undefined
       }
       get_current_user_role: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: Database["public"]["Enums"]["app_role"]
       }
       get_member_emails_for_admin: {
@@ -944,28 +935,12 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: number
       }
-      halfvec_avg: {
-        Args: { "": number[] }
-        Returns: unknown
-      }
-      halfvec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      halfvec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      halfvec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
-      handle_course_registration_credits: {
-        Args:
-          | { p_action?: string; p_course_id: string; p_user_id: string }
-          | { p_course_id: string; p_user_id: string }
-        Returns: Json
-      }
+      handle_course_registration_credits:
+        | { Args: { p_course_id: string; p_user_id: string }; Returns: Json }
+        | {
+            Args: { p_action?: string; p_course_id: string; p_user_id: string }
+            Returns: Json
+          }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -973,46 +948,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      hnsw_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_sparsevec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnswhandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      is_author: {
-        Args: { _user_id: string }
-        Returns: boolean
-      }
-      ivfflat_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflat_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflathandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      l2_norm: {
-        Args: { "": unknown } | { "": unknown }
-        Returns: number
-      }
-      l2_normalize: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
-        Returns: unknown
-      }
+      is_author: { Args: { _user_id: string }; Returns: boolean }
       mark_user_as_active: {
         Args: { user_id_param: string }
         Returns: undefined
@@ -1025,30 +961,9 @@ export type Database = {
         Args: { course_id_param: string }
         Returns: undefined
       }
-      renew_limited_credits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      renew_membership_credits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      sparsevec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      sparsevec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      sparsevec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
-      sync_user_login_status: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      renew_limited_credits: { Args: never; Returns: undefined }
+      renew_membership_credits: { Args: never; Returns: undefined }
+      sync_user_login_status: { Args: never; Returns: undefined }
       update_leaderboard_entry: {
         Args: { p_session_date: string; p_user_id: string }
         Returns: undefined
@@ -1057,34 +972,7 @@ export type Database = {
         Args: { p_session_date: string; p_user_id: string }
         Returns: undefined
       }
-      update_member_status: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      vector_avg: {
-        Args: { "": number[] }
-        Returns: string
-      }
-      vector_dims: {
-        Args: { "": string } | { "": unknown }
-        Returns: number
-      }
-      vector_norm: {
-        Args: { "": string }
-        Returns: number
-      }
-      vector_out: {
-        Args: { "": string }
-        Returns: unknown
-      }
-      vector_send: {
-        Args: { "": string }
-        Returns: string
-      }
-      vector_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
+      update_member_status: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role:
