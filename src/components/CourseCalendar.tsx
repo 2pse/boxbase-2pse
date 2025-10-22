@@ -104,7 +104,7 @@ export const CourseCalendar = ({
             day_outside: "text-muted-foreground opacity-50",
             day_disabled: "text-muted-foreground opacity-50",
           }}
-          fromDate={new Date()}
+          fromDate={new Date(Date.now() - 42 * 24 * 60 * 60 * 1000)} // 6 weeks back
           toDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // Next 3 months
           modifiers={{
             registered: registeredDates,

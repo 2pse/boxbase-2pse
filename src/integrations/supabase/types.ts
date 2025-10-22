@@ -898,6 +898,7 @@ export type Database = {
     }
     Functions: {
       archive_old_challenges: { Args: never; Returns: undefined }
+      auto_complete_finished_courses_today: { Args: never; Returns: undefined }
       auto_complete_past_courses: { Args: never; Returns: undefined }
       can_user_register_for_course: {
         Args: { p_course_id: string; p_user_id: string }
