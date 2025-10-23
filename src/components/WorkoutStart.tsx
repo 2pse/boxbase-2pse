@@ -135,11 +135,11 @@ export const WorkoutStart: React.FC = () => {
               setIsFinished(true)
               playBeep(600, 1000) // End sound
             }
-        } else if (type === 'fortime' && settings.timeCap && workoutTime >= settings.timeCap * 60) {
+        } else if (type === 'fortime' && settings.timeCap && workoutTime + 1 >= settings.timeCap * 60) {
           setIsRunning(false)
           setIsFinished(true)
           playBeep(600, 1000) // End sound
-        } else if (type === 'amrap' && settings.minutes && workoutTime >= settings.minutes * 60) {
+        } else if (type === 'amrap' && settings.minutes && workoutTime + 1 >= settings.minutes * 60) {
           setIsRunning(false)
           setIsFinished(true)
           playBeep(600, 1000) // End sound
