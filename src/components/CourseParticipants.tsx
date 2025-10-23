@@ -46,6 +46,29 @@ export const CourseParticipants = () => {
     loadCourses()
   }, [viewMode])
 
+  // Subscribe to course_registrations changes for real-time updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin_course_registrations_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'course_registrations'
+        },
+        (payload) => {
+          console.log('Course registration changed (admin view):', payload)
+          loadCourses()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [viewMode])
+
   const loadCourses = async () => {
     try {
       setLoading(true)

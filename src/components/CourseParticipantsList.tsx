@@ -61,6 +61,32 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
     }
   }, [course.id, currentUserRole])
 
+  // Subscribe to course_registrations changes for this specific course
+  useEffect(() => {
+    if (currentUserRole === null) return
+
+    const channel = supabase
+      .channel(`course_${course.id}_registrations`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'course_registrations',
+          filter: `course_id=eq.${course.id}`
+        },
+        (payload) => {
+          console.log('Participant change detected:', payload)
+          loadParticipants()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [course.id, currentUserRole])
+
   const loadCurrentUserRole = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -227,9 +253,18 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">{course.title}</CardTitle>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className={`text-white ${registeredParticipants.length > course.max_participants ? 'bg-orange-500' : 'bg-green-500'}`}>
-                {registeredParticipants.length}/{course.max_participants} registered
-              </Badge>
+              {(() => {
+                const percentage = (registeredParticipants.length / course.max_participants) * 100;
+                let badgeColor = "bg-green-500";
+                if (percentage >= 100) badgeColor = "bg-red-500";
+                else if (percentage >= 75) badgeColor = "bg-[#edb408]"; // Orange
+                
+                return (
+                  <Badge variant="secondary" className={`text-white ${badgeColor}`}>
+                    {registeredParticipants.length}/{course.max_participants} registered
+                  </Badge>
+                );
+              })()}
               {waitlistedParticipants.length > 0 && (
                 <Badge variant="outline" className="bg-yellow-500 text-white">
                   {waitlistedParticipants.length} waiting
