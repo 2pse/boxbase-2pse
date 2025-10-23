@@ -52,7 +52,7 @@ export const ForTimeTimer: React.FC<ForTimeTimerProps> = ({ embedded = false, on
               <span className="text-lg md:text-xl font-medium">Time Cap</span>
               <Select value={timeCap.toString()} onValueChange={(value) => setTimeCap(Number(value))}>
                 <SelectTrigger 
-                  className="w-20 md:w-24 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
+                  className="w-24 md:w-28 h-12 md:h-14 text-center text-lg md:text-xl bg-background"
                   style={{ borderColor: primaryColor, color: primaryColor }}
                 >
                   <SelectValue />
@@ -61,9 +61,12 @@ export const ForTimeTimer: React.FC<ForTimeTimerProps> = ({ embedded = false, on
                   className="bg-background z-50 max-h-60"
                   style={{ borderColor: primaryColor }}
                 >
+                  <SelectItem key={0.5} value="0.5" className="text-base">
+                    30 sec
+                  </SelectItem>
                   {Array.from({ length: 60 }, (_, i) => i + 1).map((num) => (
                     <SelectItem key={num} value={num.toString()} className="text-base">
-                      {num}
+                      {num} min
                     </SelectItem>
                   ))}
                 </SelectContent>
