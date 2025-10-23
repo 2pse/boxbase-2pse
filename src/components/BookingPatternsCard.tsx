@@ -65,7 +65,7 @@ export const BookingPatternsCard = () => {
       })
 
       // Convert to array and get top patterns
-      const dayOrder = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+      const dayOrder = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
       const allPatterns = Array.from(patternMap.entries())
         .map(([key, count]) => {
           const [dayOfWeek, hourStr] = key.split('-')
