@@ -9,11 +9,13 @@ import { GymSettingsProvider } from "./contexts/GymSettingsContext"
 document.documentElement.lang = 'en';
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-    <GymSettingsProvider>
-      <App />
-    </GymSettingsProvider>
-  </ThemeProvider>
+  <React.StrictMode>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <GymSettingsProvider>
+        <App />
+      </GymSettingsProvider>
+    </ThemeProvider>
+  </React.StrictMode>
 );
 
 // Register Service Worker for PWA
