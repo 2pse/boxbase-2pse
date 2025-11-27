@@ -721,45 +721,6 @@ export type Database = {
         }
         Relationships: []
       }
-      revenue_history: {
-        Row: {
-          amount: number
-          booking_type: string
-          created_at: string
-          deleted_reason: string | null
-          id: string
-          membership_plan_id: string | null
-          membership_plan_name: string
-          period_end: string
-          period_start: string
-          user_id: string | null
-        }
-        Insert: {
-          amount: number
-          booking_type: string
-          created_at?: string
-          deleted_reason?: string | null
-          id?: string
-          membership_plan_id?: string | null
-          membership_plan_name: string
-          period_end: string
-          period_start: string
-          user_id?: string | null
-        }
-        Update: {
-          amount?: number
-          booking_type?: string
-          created_at?: string
-          deleted_reason?: string | null
-          id?: string
-          membership_plan_id?: string | null
-          membership_plan_name?: string
-          period_end?: string
-          period_start?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       shop_product_images: {
         Row: {
           created_at: string | null

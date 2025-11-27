@@ -70,13 +70,13 @@ serve(async (req) => {
     const exportMappings: Record<string, string[]> = {
       members: ['profiles', 'user_memberships_v2', 'user_roles'],
       courses: ['courses', 'course_registrations', 'course_templates', 'waitlist_promotion_events'],
-      finance: ['membership_plans_v2', 'revenue_history'],
+      finance: ['membership_plans_v2', 'purchase_history'],
       training: ['training_sessions', 'user_challenge_progress', 'challenge_checkpoints', 'user_badges', 'monthly_challenges', 'leaderboard_entries'],
       content: ['news', 'user_read_news', 'crossfit_workouts', 'bodybuilding_workouts'],
       settings: ['gym_settings', 'reactivation_webhook_events'],
       full: [
         'profiles', 'user_memberships_v2', 'user_roles', 'courses', 'course_registrations', 
-        'course_templates', 'waitlist_promotion_events', 'membership_plans_v2', 'revenue_history',
+        'course_templates', 'waitlist_promotion_events', 'membership_plans_v2', 'purchase_history',
         'training_sessions', 'user_challenge_progress', 'challenge_checkpoints', 'user_badges', 
         'monthly_challenges', 'leaderboard_entries', 'news', 'user_read_news', 'crossfit_workouts', 
         'bodybuilding_workouts', 'gym_settings', 'reactivation_webhook_events'
