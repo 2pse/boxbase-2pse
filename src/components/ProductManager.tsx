@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,22 +7,20 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Package, Loader2, Link as LinkIcon, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, Loader2, Link as LinkIcon, Upload, X } from "lucide-react";
 import { ShopProduct } from "@/types/shop";
 import { Badge } from "@/components/ui/badge";
 
-const CATEGORIES = ["Bekleidung", "Equipment", "Supplements", "Accessoires", "Sonstiges"];
-
 export const ProductManager = () => {
-  const navigate = useNavigate();
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ShopProduct | null>(null);
   const [saving, setSaving] = useState(false);
   const [linkingStripe, setLinkingStripe] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -81,6 +78,56 @@ export const ProductManager = () => {
       is_active: product.is_active,
     });
     setDialogOpen(true);
+  };
+
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Bitte nur Bilder hochladen");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Bild darf maximal 5MB groß sein");
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `products/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("shop-products")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        toast.error("Fehler beim Hochladen");
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("shop-products")
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, image_url: publicUrl });
+      toast.success("Bild hochgeladen");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Fehler beim Hochladen");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, image_url: "" });
   };
 
   const handleSave = async () => {
@@ -199,16 +246,10 @@ export const ProductManager = () => {
           <h2 className="text-2xl font-bold">Shop Produkte</h2>
           <p className="text-muted-foreground">Verwalte deine Shop-Produkte</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={openCreateDialog}>
-            <Plus className="h-4 w-4 mr-2" />
-            Neues Produkt
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/shop")}>
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Shop öffnen
-          </Button>
-        </div>
+        <Button onClick={openCreateDialog}>
+          <Plus className="h-4 w-4 mr-2" />
+          Neues Produkt
+        </Button>
       </div>
 
       {products.length === 0 ? (
@@ -365,30 +406,63 @@ export const ProductManager = () => {
 
             <div className="space-y-2">
               <Label htmlFor="category">Kategorie</Label>
-              <Select
+              <Input
+                id="category"
                 value={formData.category}
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Kategorie wählen" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CATEGORIES.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                placeholder="z.B. Bekleidung, Equipment, Supplements..."
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image">Bild URL</Label>
-              <Input
-                id="image"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                placeholder="https://..."
+              <Label>Produktbild</Label>
+              {formData.image_url ? (
+                <div className="relative">
+                  <div className="aspect-video rounded-lg overflow-hidden bg-muted">
+                    <img
+                      src={formData.image_url}
+                      alt="Produktbild"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-2 right-2 h-8 w-8"
+                    onClick={handleRemoveImage}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div
+                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {uploading ? (
+                    <Loader2 className="h-8 w-8 mx-auto animate-spin text-muted-foreground" />
+                  ) : (
+                    <>
+                      <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        Klicke zum Hochladen
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        PNG, JPG bis 5MB
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file);
+                }}
               />
             </div>
 
@@ -406,7 +480,7 @@ export const ProductManager = () => {
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               Abbrechen
             </Button>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button onClick={handleSave} disabled={saving || uploading}>
               {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               {editingProduct ? "Speichern" : "Erstellen"}
             </Button>
