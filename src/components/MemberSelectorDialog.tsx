@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Search, Star, X } from "lucide-react"
+import { Search, Star } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { useToast } from "@/hooks/use-toast"
@@ -253,12 +253,7 @@ export const MemberSelectorDialog: React.FC<MemberSelectorDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md h-[85vh] flex flex-col p-0">
         <DialogHeader className="p-4 pb-2 border-b">
-          <div className="flex items-center justify-between">
-            <DialogTitle>Invite Members</DialogTitle>
-            <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle>Invite Members</DialogTitle>
           <div className="text-sm text-muted-foreground">
             <p className="font-medium">{courseName}</p>
             <p>{formatDate(courseDate)} · {courseTime}</p>
