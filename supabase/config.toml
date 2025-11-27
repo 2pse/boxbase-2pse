@@ -62,3 +62,6 @@ verify_jwt = true
 
 [functions.stripe-webhook-handler]
 verify_jwt = false
+
+[functions.cancel-membership]
+verify_jwt = true

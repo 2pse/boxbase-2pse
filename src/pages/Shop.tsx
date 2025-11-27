@@ -7,7 +7,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { ArrowLeft, CreditCard, Package, Loader2, ShoppingBag, Infinity, CalendarDays, Coins, Building, AlertTriangle } from "lucide-react";
+import { ArrowLeft, CreditCard, Package, Loader2, ShoppingBag, Infinity, CalendarDays, Coins, Building, AlertTriangle, XCircle, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { ShopProduct, MembershipPlanV2Extended } from "@/types/shop";
 import { Logo } from "@/components/Logo";
@@ -58,6 +58,8 @@ export default function Shop() {
   const [pendingUpgrade, setPendingUpgrade] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("memberships");
   const [upgradeDialogPlan, setUpgradeDialogPlan] = useState<MembershipPlanV2Extended | null>(null);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -251,6 +253,38 @@ export default function Shop() {
     return currentMembership?.membership_plan_id === plan.id;
   };
 
+  const handleCancelMembership = async () => {
+    setCancelLoading(true);
+    
+    const { data, error } = await supabase.functions.invoke("cancel-membership");
+
+    if (error || data?.error) {
+      console.error("Cancel error:", error || data?.error);
+      toast.error(data?.error || "Error cancelling membership");
+      setCancelLoading(false);
+      setCancelDialogOpen(false);
+      return;
+    }
+
+    toast.success("Membership scheduled for cancellation");
+    setCancelLoading(false);
+    setCancelDialogOpen(false);
+    loadData(); // Reload to reflect changes
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return null;
+    return new Date(dateString).toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const isCancellationRequested = () => {
+    return currentMembership?.membership_data?.cancellation_requested_at;
+  };
+
   const getProductImages = (product: ProductWithImages): string[] => {
     const images: string[] = [];
     
@@ -298,12 +332,41 @@ export default function Shop() {
         {/* Current Membership Badge */}
         {currentMembership && (
           <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="p-4 flex items-center gap-3">
-              <CreditCard className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-sm text-muted-foreground">Current Membership</p>
-                <p className="font-semibold">{currentMembership.membership_plans_v2?.name}</p>
+            <CardContent className="p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <CreditCard className="h-5 w-5 text-primary" />
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground">Current Membership</p>
+                  <p className="font-semibold">{currentMembership.membership_plans_v2?.name}</p>
+                </div>
               </div>
+              
+              {/* Duration info */}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                <span>
+                  {formatDate(currentMembership.start_date)}
+                  {currentMembership.end_date && ` - ${formatDate(currentMembership.end_date)}`}
+                </span>
+              </div>
+
+              {/* Cancellation status or button */}
+              {isCancellationRequested() ? (
+                <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-500/10 p-2 rounded">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span>Kündigung angefragt - endet am {formatDate(currentMembership.end_date)}</span>
+                </div>
+              ) : currentMembership.membership_plans_v2?.cancellation_allowed ? (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full text-destructive border-destructive/30 hover:bg-destructive/10"
+                  onClick={() => setCancelDialogOpen(true)}
+                >
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Membership kündigen
+                </Button>
+              ) : null}
             </CardContent>
           </Card>
         )}
@@ -545,6 +608,39 @@ export default function Shop() {
             </Button>
             <Button onClick={() => upgradeDialogPlan && processCheckout(upgradeDialogPlan)}>
               Confirm Upgrade
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Cancellation Confirmation Dialog */}
+      <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Membership kündigen</DialogTitle>
+            <DialogDescription>
+              Möchtest du deine <strong>{currentMembership?.membership_plans_v2?.name}</strong> Membership wirklich kündigen?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Deine Membership bleibt bis zum Ende der Laufzeit aktiv:
+            </p>
+            <p className="font-semibold">
+              Endet am: {formatDate(currentMembership?.end_date)}
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCancelDialogOpen(false)} disabled={cancelLoading}>
+              Abbrechen
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleCancelMembership}
+              disabled={cancelLoading}
+            >
+              {cancelLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              Jetzt kündigen
             </Button>
           </DialogFooter>
         </DialogContent>
