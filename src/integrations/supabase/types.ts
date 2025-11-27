@@ -312,6 +312,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          subject: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          subject: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          subject?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       gym_settings: {
         Row: {
           address: string | null
@@ -328,8 +358,10 @@ export type Database = {
           stripe_webhook_endpoint: string | null
           theme_mode: string
           updated_at: string
+          webhook_email_url: string | null
           webhook_invitation_url: string | null
           webhook_member_url: string | null
+          webhook_news_url: string | null
           webhook_reactivation_url: string | null
           webhook_waitlist_url: string | null
           whatsapp_number: string | null
@@ -349,8 +381,10 @@ export type Database = {
           stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
+          webhook_email_url?: string | null
           webhook_invitation_url?: string | null
           webhook_member_url?: string | null
+          webhook_news_url?: string | null
           webhook_reactivation_url?: string | null
           webhook_waitlist_url?: string | null
           whatsapp_number?: string | null
@@ -370,8 +404,10 @@ export type Database = {
           stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
+          webhook_email_url?: string | null
           webhook_invitation_url?: string | null
           webhook_member_url?: string | null
+          webhook_news_url?: string | null
           webhook_reactivation_url?: string | null
           webhook_waitlist_url?: string | null
           whatsapp_number?: string | null
@@ -557,6 +593,7 @@ export type Database = {
           author_id: string | null
           content: string
           created_at: string
+          email_sent_at: string | null
           id: string
           is_published: boolean | null
           link_url: string | null
@@ -568,6 +605,7 @@ export type Database = {
           author_id?: string | null
           content: string
           created_at?: string
+          email_sent_at?: string | null
           id?: string
           is_published?: boolean | null
           link_url?: string | null
@@ -579,6 +617,7 @@ export type Database = {
           author_id?: string | null
           content?: string
           created_at?: string
+          email_sent_at?: string | null
           id?: string
           is_published?: boolean | null
           link_url?: string | null

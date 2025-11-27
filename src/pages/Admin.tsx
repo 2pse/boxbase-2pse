@@ -18,6 +18,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CourseTemplateManager from "@/components/CourseTemplateManager";
 import NewsManager from "@/components/NewsManager";
+import AdminEmailManager from "@/components/AdminEmailManager";
 
 import { CourseParticipants } from "@/components/CourseParticipants";
 import { MembershipBadge } from "@/components/MembershipBadge";
@@ -110,7 +111,7 @@ export default function Admin() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
-  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export' | 'shop'>('home');
+  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'email' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export' | 'shop'>('home');
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalMembers, setTotalMembers] = useState(0);
@@ -1502,6 +1503,7 @@ export default function Admin() {
         )}
         {activePage === 'templates' && <CourseTemplateManager />}
         {activePage === 'news' && <NewsManager />}
+        {activePage === 'email' && <AdminEmailManager />}
         
         {activePage === 'workouts' && <WorkoutManagement hideHeader={true} />}
         {activePage === 'challenges' && <AdminChallengeManager />}
