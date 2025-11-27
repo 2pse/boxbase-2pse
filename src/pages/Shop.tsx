@@ -60,6 +60,7 @@ export default function Shop() {
   const [upgradeDialogPlan, setUpgradeDialogPlan] = useState<MembershipPlanV2Extended | null>(null);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [membershipDetailOpen, setMembershipDetailOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -126,7 +127,7 @@ export default function Shop() {
 
   const canUpgrade = (plan: MembershipPlanV2Extended) => {
     if (!currentMembership) return true;
-    if (pendingUpgrade) return false; // Already has pending upgrade
+    // Allow upgrade even with pending - user can change their mind
 
     const currentPriority = currentMembership.membership_plans_v2?.upgrade_priority || 0;
     const currentPrice = currentMembership.membership_plans_v2?.price_monthly || 0;
@@ -228,7 +229,15 @@ export default function Shop() {
   const getMembershipButtonText = (plan: MembershipPlanV2Extended) => {
     if (!currentMembership) return "Buy Now";
     
-    if (pendingUpgrade) return "Upgrade Pending";
+    // Check if this plan IS the pending upgrade
+    if (pendingUpgrade && pendingUpgrade.membership_plan_id === plan.id) {
+      return "Upgrade Pending";
+    }
+    
+    // If different plan and has pending upgrade, show "Change Upgrade"
+    if (pendingUpgrade && canUpgrade(plan)) {
+      return "Upgrade ändern";
+    }
     
     const currentType = currentMembership.membership_plans_v2?.booking_rules?.type;
     const planType = plan.booking_rules?.type;
@@ -329,44 +338,33 @@ export default function Shop() {
           <p className="text-muted-foreground">Memberships & Products</p>
         </div>
 
-        {/* Current Membership Badge */}
+        {/* Current Membership Badge - clickable for details */}
         {currentMembership && (
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="p-4 space-y-3">
+          <Card 
+            className="border-primary/20 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-colors"
+            onClick={() => setMembershipDetailOpen(true)}
+          >
+            <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <CreditCard className="h-5 w-5 text-primary" />
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Current Membership</p>
                   <p className="font-semibold">{currentMembership.membership_plans_v2?.name}</p>
                 </div>
-              </div>
-              
-              {/* Duration info */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>
-                  {formatDate(currentMembership.start_date)}
-                  {currentMembership.end_date && ` - ${formatDate(currentMembership.end_date)}`}
-                </span>
-              </div>
-
-              {/* Cancellation status or button */}
-              {isCancellationRequested() ? (
-                <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-500/10 p-2 rounded">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span>Kündigung angefragt - endet am {formatDate(currentMembership.end_date)}</span>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4" />
+                  <span>
+                    {formatDate(currentMembership.start_date)}
+                    {currentMembership.end_date && ` - ${formatDate(currentMembership.end_date)}`}
+                  </span>
                 </div>
-              ) : currentMembership.membership_plans_v2?.cancellation_allowed ? (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full text-destructive border-destructive/30 hover:bg-destructive/10"
-                  onClick={() => setCancelDialogOpen(true)}
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Membership kündigen
-                </Button>
-              ) : null}
+              </div>
+              {isCancellationRequested() && (
+                <div className="flex items-center gap-2 text-sm text-yellow-600 mt-2">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span>Kündigung angefragt</span>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
@@ -479,7 +477,7 @@ export default function Shop() {
                       disabled={
                         checkoutLoading === plan.id || 
                         (isCurrentPlan(plan) && plan.booking_rules?.type !== 'credits') ||
-                        (!!pendingUpgrade) ||
+                        (pendingUpgrade && pendingUpgrade.membership_plan_id === plan.id) ||
                         (!isCurrentPlan(plan) && !canUpgrade(plan))
                       }
                     >
@@ -586,15 +584,109 @@ export default function Shop() {
         </Tabs>
       </main>
 
+      {/* Membership Detail Dialog */}
+      <Dialog open={membershipDetailOpen} onOpenChange={setMembershipDetailOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Deine Membership</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Plan Name with Badge */}
+            <div className="flex items-center gap-3">
+              <Badge 
+                style={{ backgroundColor: currentMembership?.membership_plans_v2?.color || undefined }}
+                className="text-white"
+              >
+                {currentMembership?.membership_plans_v2?.name}
+              </Badge>
+            </div>
+
+            {/* Duration Details */}
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Start:</span>
+                <span className="font-medium">{formatDate(currentMembership?.start_date)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Ende:</span>
+                <span className="font-medium">{formatDate(currentMembership?.end_date) || "Unbegrenzt"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Status:</span>
+                <span className="font-medium">
+                  {isCancellationRequested() ? "Kündigung angefragt" : "Aktiv"}
+                </span>
+              </div>
+            </div>
+
+            {/* Booking Type Info */}
+            <div className="border-t pt-4">
+              <div className="flex items-center gap-2 text-sm">
+                <BookingTypeIcon type={currentMembership?.membership_plans_v2?.booking_rules?.type || ''} />
+                <span>{getBookingTypeLabel(currentMembership?.membership_plans_v2?.booking_rules?.type || '')}</span>
+                {currentMembership?.membership_plans_v2?.booking_rules?.type === 'limited' && 
+                  currentMembership?.membership_plans_v2?.booking_rules?.limit && (
+                    <span className="text-muted-foreground">
+                      ({currentMembership.membership_plans_v2.booking_rules.limit.count}x / {currentMembership.membership_plans_v2.booking_rules.limit.period})
+                    </span>
+                  )}
+                {currentMembership?.membership_plans_v2?.booking_rules?.type === 'credits' && 
+                  currentMembership?.membership_data?.remaining_credits !== undefined && (
+                    <span className="text-muted-foreground">
+                      ({currentMembership.membership_data.remaining_credits} Credits übrig)
+                    </span>
+                  )}
+              </div>
+            </div>
+
+            {/* Cancellation Section */}
+            {currentMembership?.membership_plans_v2?.cancellation_allowed && (
+              <div className="border-t pt-4">
+                {isCancellationRequested() ? (
+                  <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-500/10 p-3 rounded">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span>Kündigung angefragt - endet am {formatDate(currentMembership?.end_date)}</span>
+                  </div>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="w-full text-destructive border-destructive/30 hover:bg-destructive/10"
+                    onClick={() => {
+                      setMembershipDetailOpen(false);
+                      setCancelDialogOpen(true);
+                    }}
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Membership kündigen
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Upgrade Confirmation Dialog */}
       <Dialog open={!!upgradeDialogPlan} onOpenChange={() => setUpgradeDialogPlan(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Upgrade</DialogTitle>
+            <DialogTitle>{pendingUpgrade ? "Upgrade ändern" : "Confirm Upgrade"}</DialogTitle>
             <DialogDescription>
-              You are about to upgrade from{" "}
-              <strong>{currentMembership?.membership_plans_v2?.name}</strong> to{" "}
-              <strong>{upgradeDialogPlan?.name}</strong>.
+              {pendingUpgrade ? (
+                <>
+                  Du hast bereits ein Upgrade zu <strong>{pendingUpgrade.membership_plans_v2?.name}</strong> gebucht.
+                  <br /><br />
+                  Möchtest du stattdessen zu <strong>{upgradeDialogPlan?.name}</strong> wechseln?
+                  Das vorherige Upgrade wird storniert.
+                </>
+              ) : (
+                <>
+                  You are about to upgrade from{" "}
+                  <strong>{currentMembership?.membership_plans_v2?.name}</strong> to{" "}
+                  <strong>{upgradeDialogPlan?.name}</strong>.
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -604,10 +696,10 @@ export default function Shop() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setUpgradeDialogPlan(null)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button onClick={() => upgradeDialogPlan && processCheckout(upgradeDialogPlan)}>
-              Confirm Upgrade
+              {pendingUpgrade ? "Upgrade ändern" : "Bestätigen"}
             </Button>
           </DialogFooter>
         </DialogContent>
