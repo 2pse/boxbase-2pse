@@ -34,6 +34,7 @@ interface Course {
   waitlist_count: number
   is_registered: boolean
   is_waitlisted: boolean
+  waitlist_position?: number // Position on waitlist (1-based)
   duration_minutes: number
   color?: string
 }
@@ -190,12 +191,18 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
 
       const coursesWithCounts = await Promise.all(
         filteredCourses.map(async (course) => {
-          const [registrationsResult, userRegistrationResult] = await Promise.all([
+          const [registrationsResult, waitlistResult, userRegistrationResult] = await Promise.all([
             supabase
               .from('course_registrations')
               .select('user_id')
               .eq('course_id', course.id)
               .eq('status', 'registered'),
+            supabase
+              .from('course_registrations')
+              .select('user_id, registered_at')
+              .eq('course_id', course.id)
+              .eq('status', 'waitlist')
+              .order('registered_at', { ascending: true }),
             supabase
               .from('course_registrations')
               .select('status')
@@ -206,14 +213,24 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
           ])
 
           const userReg = userRegistrationResult.data
+          const waitlistData = waitlistResult.data || []
+          
+          // Calculate waitlist position if user is on waitlist
+          let waitlistPosition: number | undefined
+          if (userReg?.status === 'waitlist') {
+            const positionIndex = waitlistData.findIndex(w => w.user_id === user.id)
+            waitlistPosition = positionIndex >= 0 ? positionIndex + 1 : undefined
+          }
+
           return {
             ...course,
             registration_count: registrationsResult.data?.length || 0,
             registered_count: registrationsResult.data?.length || 0,
-            waitlist_count: 0, // Add waitlist logic if needed
+            waitlist_count: waitlistData.length,
             user_registered: (userReg?.status === 'registered' || userReg?.status === 'waitlist') || false,
             is_registered: userReg?.status === 'registered' || false,
-            is_waitlisted: userReg?.status === 'waitlist' || false
+            is_waitlisted: userReg?.status === 'waitlist' || false,
+            waitlist_position: waitlistPosition
           }
         })
       )
@@ -760,8 +777,13 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                           <Badge className={`text-white ${badgeColor} shadow-sm`}>
                             {course.registered_count}/{course.max_participants}
                           </Badge>
-                          {course.waitlist_count > 0 && (
+                          {course.is_waitlisted && course.waitlist_position && (
                             <Badge className="text-white bg-yellow-500 shadow-sm">
+                              Position {course.waitlist_position}
+                            </Badge>
+                          )}
+                          {!course.is_waitlisted && course.waitlist_count > 0 && (
+                            <Badge variant="outline" className="text-yellow-600 border-yellow-500">
                               WL: {course.waitlist_count}
                             </Badge>
                           )}
@@ -884,11 +906,23 @@ export const DayCourseDialog: React.FC<DayCourseDialogProps> = ({
                      <h5 className="font-medium text-sm text-muted-foreground">
                        Waitlist ({selectedCourse.waitlist_count})
                      </h5>
-                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                       <p className="text-sm text-yellow-800">
-                         {selectedCourse.waitlist_count} person(s) on the waitlist
-                       </p>
-                    </div>
+                    {selectedCourse.is_waitlisted && selectedCourse.waitlist_position && (
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-950 border border-yellow-300 dark:border-yellow-700 rounded-lg">
+                        <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                          Your position: {selectedCourse.waitlist_position} of {selectedCourse.waitlist_count}
+                        </p>
+                        <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                          You will be automatically notified when a spot becomes available.
+                        </p>
+                      </div>
+                    )}
+                    {!selectedCourse.is_waitlisted && (
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                          {selectedCourse.waitlist_count} person(s) on the waitlist
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
