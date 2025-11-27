@@ -31,6 +31,7 @@ import { FinanceReport } from "@/components/FinanceReport";
 import { GymSettings } from "@/components/GymSettings";
 import { DataExport } from "@/components/DataExport";
 import { ProductManager } from "@/components/ProductManager";
+import { AdminPurchaseHistory } from "@/components/AdminPurchaseHistory";
 
 
 import { useToast } from "@/hooks/use-toast";
@@ -1510,7 +1511,12 @@ export default function Admin() {
         {activePage === 'memberships' && <MembershipPlanManagerV2 />}
         
         {activePage === 'finance' && <FinanceReport />}
-        {activePage === 'shop' && <ProductManager />}
+        {activePage === 'shop' && (
+          <div className="space-y-8">
+            <ProductManager />
+            <AdminPurchaseHistory />
+          </div>
+        )}
         {activePage === 'settings' && <GymSettings />}
         {activePage === 'export' && <DataExport />}
       </div>
