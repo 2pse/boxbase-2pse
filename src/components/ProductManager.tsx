@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,13 +10,14 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Package, AlertCircle, Loader2, Link as LinkIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, Loader2, Link as LinkIcon, ExternalLink } from "lucide-react";
 import { ShopProduct } from "@/types/shop";
 import { Badge } from "@/components/ui/badge";
 
 const CATEGORIES = ["Bekleidung", "Equipment", "Supplements", "Accessoires", "Sonstiges"];
 
 export const ProductManager = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -192,15 +194,21 @@ export const ProductManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold">Shop Produkte</h2>
           <p className="text-muted-foreground">Verwalte deine Shop-Produkte</p>
         </div>
-        <Button onClick={openCreateDialog}>
-          <Plus className="h-4 w-4 mr-2" />
-          Neues Produkt
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={openCreateDialog}>
+            <Plus className="h-4 w-4 mr-2" />
+            Neues Produkt
+          </Button>
+          <Button variant="outline" onClick={() => navigate("/shop")}>
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Shop öffnen
+          </Button>
+        </div>
       </div>
 
       {products.length === 0 ? (
