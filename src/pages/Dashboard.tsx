@@ -32,7 +32,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useNewsNotification } from "@/hooks/useNewsNotification"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { timezone } from "@/lib/timezone"
 import { format } from "date-fns"
 import { PercentageCalculator } from "@/components/PercentageCalculator"
@@ -62,7 +62,18 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<DashboardTabType>('home')
+  const [searchParams, setSearchParams] = useSearchParams()
+  
+  // Read initial tab from URL query parameter
+  const initialTab = (searchParams.get('tab') as DashboardTabType) || 'home'
+  const [activeTab, setActiveTab] = useState<DashboardTabType>(initialTab)
+  
+  // Clear tab param after reading it
+  useEffect(() => {
+    if (searchParams.get('tab')) {
+      setSearchParams({}, { replace: true })
+    }
+  }, [])
   const [trainingDays, setTrainingDays] = useState<TrainingDay[]>([])
   const [trainingCount, setTrainingCount] = useState(0)
   const [showProfile, setShowProfile] = useState(false)

@@ -479,7 +479,7 @@ export const CourseInvitationsPanel: React.FC<CourseInvitationsPanelProps> = ({
                 className="w-full mt-4"
                 onClick={() => {
                   onOpenChange(false)
-                  navigate('/pro')
+                  navigate('/pro?tab=courses')
                 }}
               >
                 <UserPlus className="h-4 w-4 mr-2" />
