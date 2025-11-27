@@ -106,7 +106,7 @@ serve(async (req) => {
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       payment_method_types: ["card"],
-      mode: targetPlan.payment_type === "subscription" ? "subscription" : "payment",
+      mode: targetPlan.payment_frequency === "monthly" ? "subscription" : "payment",
       line_items: [{ price: targetPlan.stripe_price_id, quantity: 1 }],
       success_url: `${success_url}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancel_url,
@@ -121,7 +121,7 @@ serve(async (req) => {
     };
 
     // Add subscription cancel_at if duration is specified
-    if (targetPlan.payment_type === "subscription" && targetPlan.duration_months > 0) {
+    if (targetPlan.payment_frequency === "monthly" && targetPlan.duration_months > 0) {
       const cancelAt = new Date();
       cancelAt.setMonth(cancelAt.getMonth() + targetPlan.duration_months);
       sessionParams.subscription_data = {
