@@ -65,15 +65,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   
   // Read initial tab from URL query parameter
-  const initialTab = (searchParams.get('tab') as DashboardTabType) || 'home'
-  const [activeTab, setActiveTab] = useState<DashboardTabType>(initialTab)
+  const tabParam = searchParams.get('tab') as DashboardTabType | null
+  const [activeTab, setActiveTab] = useState<DashboardTabType>(tabParam || 'home')
   
-  // Clear tab param after reading it
+  // Handle tab param changes (when navigating with ?tab=courses)
   useEffect(() => {
-    if (searchParams.get('tab')) {
+    const tab = searchParams.get('tab') as DashboardTabType | null
+    if (tab && ['home', 'wod', 'courses', 'leaderboard', 'news'].includes(tab)) {
+      setActiveTab(tab)
+      // Clear tab param after applying it
       setSearchParams({}, { replace: true })
     }
-  }, [])
+  }, [searchParams])
   const [trainingDays, setTrainingDays] = useState<TrainingDay[]>([])
   const [trainingCount, setTrainingCount] = useState(0)
   const [showProfile, setShowProfile] = useState(false)
