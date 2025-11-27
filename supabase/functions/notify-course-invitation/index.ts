@@ -47,6 +47,15 @@ Deno.serve(async (req) => {
       .eq('user_id', invitation.recipient_id)
       .single()
 
+    // Load recipient email from auth.users using admin API
+    const { data: { user: recipientUser }, error: userError } = await supabase.auth.admin.getUserById(
+      invitation.recipient_id
+    )
+
+    if (userError) {
+      console.error('Error fetching recipient user:', userError)
+    }
+
     // Load webhook URL from gym_settings
     const { data: settings } = await supabase
       .from('gym_settings')
@@ -61,12 +70,7 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Helper function for name resolution
-    const getName = (profile: any) => 
-      profile?.display_name || profile?.nickname || 
-      `${profile?.first_name || ''} ${profile?.last_name || ''}`.trim() || 'Unknown'
-
-    // Prepare webhook payload
+    // Prepare webhook payload with separate name fields
     const webhookPayload = {
       invitation_id: invitation.id,
       course: {
@@ -78,15 +82,24 @@ Deno.serve(async (req) => {
       },
       sender: {
         id: invitation.sender_id,
-        name: getName(senderProfile)
+        first_name: senderProfile?.first_name || null,
+        last_name: senderProfile?.last_name || null,
+        nickname: senderProfile?.nickname || null,
+        display_name: senderProfile?.display_name || null
       },
       recipient: {
         id: invitation.recipient_id,
-        name: getName(recipientProfile)
+        first_name: recipientProfile?.first_name || null,
+        last_name: recipientProfile?.last_name || null,
+        nickname: recipientProfile?.nickname || null,
+        display_name: recipientProfile?.display_name || null,
+        email: recipientUser?.email || null
       },
       message: invitation.message,
       created_at: invitation.created_at
     }
+
+    console.log('Sending webhook payload:', JSON.stringify(webhookPayload, null, 2))
 
     // Send to external webhook (e.g., Make.com)
     const webhookResponse = await fetch(settings.webhook_invitation_url, {
