@@ -130,8 +130,8 @@ export default function Shop() {
     const currentPrice = currentMembership.membership_plans_v2?.price_monthly || 0;
     const planPrice = plan.price_monthly || 0;
 
-    // Can upgrade if: higher priority OR (same priority AND higher price)
-    return (plan.upgrade_priority > currentPriority) || 
+    // Can upgrade if: better priority (lower number = better) OR (same priority AND higher price)
+    return (plan.upgrade_priority < currentPriority) || 
            (plan.upgrade_priority === currentPriority && planPrice > currentPrice);
   };
 
