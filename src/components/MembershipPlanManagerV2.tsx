@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2, ArrowUp } from "lucide-react";
+import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2, ArrowUp, AlertTriangle } from "lucide-react";
 import { MembershipPlanWizardV2, BookingRules } from "./MembershipPlanWizardV2";
 import { invalidateMembershipColorCache } from "@/lib/membershipColors";
 import {
@@ -77,6 +77,9 @@ export const MembershipPlanManagerV2: React.FC = () => {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<MembershipPlanV2 | null>(null);
   const [linkingStripe, setLinkingStripe] = useState<string | null>(null);
+  const [deletingPlan, setDeletingPlan] = useState<string | null>(null);
+  const [affectedMembersCount, setAffectedMembersCount] = useState<number>(0);
+  const [planToDelete, setPlanToDelete] = useState<MembershipPlanV2 | null>(null);
 
   const loadPlans = async () => {
     setLoading(true);
@@ -114,20 +117,51 @@ export const MembershipPlanManagerV2: React.FC = () => {
     setIsWizardOpen(true);
   };
 
-  const handleDelete = async (planId: string) => {
-    try {
-      const { error } = await supabase
-        .from('membership_plans_v2')
-        .delete()
-        .eq('id', planId);
+  const checkAffectedMembers = async (planId: string) => {
+    const { count } = await supabase
+      .from('user_memberships_v2')
+      .select('*', { count: 'exact', head: true })
+      .eq('membership_plan_id', planId)
+      .in('status', ['active', 'pending_activation']);
+    
+    return count || 0;
+  };
 
-      if (error) throw error;
-      
-      toast.success('Plan successfully deleted');
+  const handleDeleteClick = async (plan: MembershipPlanV2) => {
+    const count = await checkAffectedMembers(plan.id);
+    setAffectedMembersCount(count);
+    setPlanToDelete(plan);
+  };
+
+  const handleDelete = async () => {
+    if (!planToDelete) return;
+    
+    setDeletingPlan(planToDelete.id);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('delete-membership-plan', {
+        body: { plan_id: planToDelete.id }
+      });
+
+      if (error) {
+        console.error('Delete error:', error);
+        toast.error('Fehler beim Löschen: ' + error.message);
+        return;
+      }
+
+      if (data?.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      toast.success(`Plan "${planToDelete.name}" gelöscht. ${data.cancelled_subscriptions || 0} Subscriptions gekündigt.`);
       invalidateMembershipColorCache();
       loadPlans();
     } catch (error: any) {
       toast.error('Error deleting: ' + error.message);
+    } finally {
+      setDeletingPlan(null);
+      setPlanToDelete(null);
     }
   };
 
@@ -284,35 +318,19 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     Edit
                   </Button>
                   
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Plan</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete plan "{plan.name}"? 
-                          This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(plan.id)}
-                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-destructive hover:bg-destructive/10"
+                    onClick={() => handleDeleteClick(plan)}
+                    disabled={deletingPlan === plan.id}
+                  >
+                    {deletingPlan === plan.id ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-3 w-3" />
+                    )}
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -336,6 +354,55 @@ export const MembershipPlanManagerV2: React.FC = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!planToDelete} onOpenChange={(open) => !open && setPlanToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              Plan löschen
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3">
+              <p>
+                Bist du sicher, dass du den Plan <strong>"{planToDelete?.name}"</strong> löschen möchtest?
+              </p>
+              
+              {affectedMembersCount > 0 && (
+                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                  <p className="font-medium text-destructive">
+                    ⚠️ {affectedMembersCount} aktive Mitglieder haben diesen Plan!
+                  </p>
+                  <p className="text-sm mt-1">
+                    Alle Stripe-Subscriptions werden <strong>sofort gekündigt</strong> und die Mitgliedschaften auf "cancelled" gesetzt.
+                  </p>
+                </div>
+              )}
+              
+              {planToDelete?.stripe_product_id && (
+                <p className="text-sm text-muted-foreground">
+                  Das Stripe-Produkt wird archiviert (nicht gelöscht).
+                </p>
+              )}
+              
+              <p className="text-sm text-muted-foreground">
+                Diese Aktion kann nicht rückgängig gemacht werden.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {affectedMembersCount > 0 
+                ? `${affectedMembersCount} Subscriptions kündigen & Plan löschen` 
+                : 'Plan löschen'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <MembershipPlanWizardV2
         isOpen={isWizardOpen}

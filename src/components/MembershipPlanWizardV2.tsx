@@ -208,6 +208,9 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
     console.log('Submitting form data:', formData);
     console.log('Current booking rules:', formData.booking_rules);
     
+    // Store old price for Stripe update comparison
+    const oldPrice = editingPlan?.price_monthly;
+    
     try {
       const planData = {
         name: formData.name,
@@ -234,7 +237,34 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
 
         if (error) throw error;
         console.log('Plan successfully updated');
-        toast.success('Plan successfully updated');
+        
+        // If plan has Stripe linked, update Stripe product/price
+        if ((editingPlan as any).stripe_product_id) {
+          console.log('Updating Stripe product...');
+          try {
+            const { data: stripeData, error: stripeError } = await supabase.functions.invoke('update-stripe-product', {
+              body: { 
+                plan_id: editingPlan.id,
+                old_price: oldPrice 
+              }
+            });
+            
+            if (stripeError) {
+              console.error('Stripe update error:', stripeError);
+              toast.warning('Plan gespeichert, aber Stripe-Aktualisierung fehlgeschlagen');
+            } else if (stripeData?.new_price_id) {
+              toast.success('Plan und Stripe-Preis aktualisiert');
+            } else {
+              toast.success('Plan erfolgreich aktualisiert');
+            }
+          } catch (stripeErr) {
+            console.error('Stripe update exception:', stripeErr);
+            toast.warning('Plan gespeichert, Stripe-Sync fehlgeschlagen');
+          }
+        } else {
+          toast.success('Plan successfully updated');
+        }
+        
         invalidateMembershipColorCache();
       } else {
         const { error } = await supabase

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import Stripe from 'https://esm.sh/stripe@14.21.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -58,6 +59,48 @@ serve(async (req) => {
     }
 
     console.log(`Attempting to delete user: ${userId}`)
+
+    // ========== NEW: Cancel all Stripe subscriptions before deleting ==========
+    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
+    if (stripeKey) {
+      const stripe = new Stripe(stripeKey, {
+        apiVersion: '2023-10-16',
+      })
+
+      // Get all memberships with Stripe subscriptions
+      const { data: memberships } = await supabaseClient
+        .from('user_memberships_v2')
+        .select('stripe_subscription_id, stripe_customer_id')
+        .eq('user_id', userId)
+        .not('stripe_subscription_id', 'is', null)
+
+      console.log(`Found ${memberships?.length || 0} memberships with Stripe subscriptions`)
+
+      // Cancel all active Stripe subscriptions
+      for (const membership of memberships || []) {
+        if (membership.stripe_subscription_id) {
+          try {
+            await stripe.subscriptions.cancel(membership.stripe_subscription_id)
+            console.log(`Cancelled Stripe subscription: ${membership.stripe_subscription_id}`)
+          } catch (stripeError: any) {
+            // Subscription might already be cancelled or not exist
+            console.warn(`Could not cancel subscription ${membership.stripe_subscription_id}: ${stripeError.message}`)
+          }
+        }
+      }
+    } else {
+      console.log('No STRIPE_SECRET_KEY configured, skipping subscription cancellation')
+    }
+
+    // Delete user_memberships_v2
+    const { error: membershipsError } = await supabaseClient
+      .from('user_memberships_v2')
+      .delete()
+      .eq('user_id', userId)
+
+    if (membershipsError) {
+      console.error('Error deleting user memberships:', membershipsError)
+    }
 
     // First, delete related data (user_roles, leaderboard_entries, training_sessions, etc.)
     const { error: userRolesError } = await supabaseClient
@@ -142,7 +185,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'User deleted successfully from both profiles and auth' 
+        message: 'User deleted successfully from both profiles and auth, Stripe subscriptions cancelled' 
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
