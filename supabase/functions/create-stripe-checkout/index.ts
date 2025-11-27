@@ -128,13 +128,10 @@ serve(async (req) => {
         },
       };
 
-      // Add subscription_data with cancel_at if duration is specified
-      if (mode === "subscription" && plan.duration_months > 0) {
-        const cancelAt = new Date();
-        cancelAt.setMonth(cancelAt.getMonth() + plan.duration_months);
+      // Add subscription_data with metadata for subscription mode
+      if (mode === "subscription") {
         sessionParams.subscription_data = {
           metadata: { user_id: user.id, plan_id: plan_id },
-          cancel_at: Math.floor(cancelAt.getTime() / 1000),
         };
       }
 
