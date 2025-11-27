@@ -53,6 +53,12 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1)
       const lastDayOfMonth = new Date(currentYear, currentMonth, 0)
       
+      // Get all active membership plans first
+      const { data: allActivePlans } = await supabase
+        .from('membership_plans_v2')
+        .select('name')
+        .eq('is_active', true)
+      
       // Get current month from leaderboard entries (this counts all completed training)
       const { data: leaderboardData } = await supabase
         .from('leaderboard_entries')
@@ -115,8 +121,11 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         }
       })
 
-      // Count all completed trainings by plan name
+      // Initialize check-ins with all active plans at 0
       const checkInsByPlan: { [key: string]: number } = {}
+      allActivePlans?.forEach(plan => {
+        checkInsByPlan[plan.name] = 0
+      })
 
       // Count completed courses
       completedCourses.forEach(registration => {
