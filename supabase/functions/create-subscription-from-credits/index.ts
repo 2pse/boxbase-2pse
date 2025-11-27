@@ -102,6 +102,14 @@ serve(async (req) => {
       customerId = customer.id;
     }
 
+    // Calculate end date for duration-based subscriptions
+    let subscriptionEndDate: string | null = null;
+    if (targetPlan.payment_frequency === "monthly" && targetPlan.duration_months > 0) {
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + targetPlan.duration_months);
+      subscriptionEndDate = endDate.toISOString().split('T')[0];
+    }
+
     // Create checkout session - immediate activation
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
@@ -117,16 +125,19 @@ serve(async (req) => {
         old_membership_id: currentMembership.id,
         billing_start_date: new Date().toISOString().split('T')[0],
         item_name: targetPlan.name,
+        subscription_end_date: subscriptionEndDate || "",
+        duration_months: String(targetPlan.duration_months || 0),
       },
     };
 
-    // Add subscription cancel_at if duration is specified
-    if (targetPlan.payment_frequency === "monthly" && targetPlan.duration_months > 0) {
-      const cancelAt = new Date();
-      cancelAt.setMonth(cancelAt.getMonth() + targetPlan.duration_months);
+    // Add subscription metadata (cancel_at will be set via webhook after subscription is created)
+    if (targetPlan.payment_frequency === "monthly") {
       sessionParams.subscription_data = {
-        metadata: { user_id: user.id, plan_id: plan_id },
-        cancel_at: Math.floor(cancelAt.getTime() / 1000),
+        metadata: { 
+          user_id: user.id, 
+          plan_id: plan_id,
+          duration_months: String(targetPlan.duration_months || 0),
+        },
       };
     }
 
