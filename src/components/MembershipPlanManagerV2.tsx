@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, CreditCard, Infinity, Calendar, Dumbbell, Link as LinkIcon, Loader2, ExternalLink } from "lucide-react";
+import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2 } from "lucide-react";
 import { MembershipPlanWizardV2, BookingRules } from "./MembershipPlanWizardV2";
-import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,43 +38,33 @@ interface MembershipPlanV2 {
   updated_at: string;
 }
 
-const getBookingTypeDisplay = (bookingRules: BookingRules) => {
-  switch (bookingRules.type) {
+const BookingTypeIcon = ({ type }: { type: string }) => {
+  switch (type) {
     case 'unlimited':
-      return {
-        label: 'Unlimited',
-        icon: Infinity,
-        description: 'Unlimited bookings',
-        color: 'bg-primary/10 text-primary'
-      };
+      return <Infinity className="h-4 w-4" />;
     case 'limited':
-      return {
-        label: `${bookingRules.limit?.count} per month`,
-        icon: Calendar,
-        description: 'Limited bookings',
-        color: 'bg-blue-100 text-blue-800'
-      };
+      return <CalendarDays className="h-4 w-4" />;
     case 'credits':
-      return {
-        label: `${bookingRules.credits?.initial_amount} Credits`,
-        icon: CreditCard,
-        description: 'Credit-based',
-        color: 'bg-purple-100 text-purple-800'
-      };
+      return <Coins className="h-4 w-4" />;
     case 'open_gym_only':
-      return {
-        label: 'Open Gym Only',
-        icon: Dumbbell,
-        description: 'Open Gym access only',
-        color: 'bg-orange-100 text-orange-800'
-      };
+      return <Building className="h-4 w-4" />;
     default:
-      return {
-        label: 'Unknown',
-        icon: Calendar,
-        description: 'Unknown type',
-        color: 'bg-gray-100 text-gray-800'
-      };
+      return <Coins className="h-4 w-4" />;
+  }
+};
+
+const getBookingTypeLabel = (type: string) => {
+  switch (type) {
+    case 'unlimited':
+      return 'Unbegrenzt';
+    case 'limited':
+      return 'Limitiert';
+    case 'credits':
+      return 'Credits';
+    case 'open_gym_only':
+      return 'Open Gym';
+    default:
+      return type;
   }
 };
 
@@ -85,7 +74,6 @@ export const MembershipPlanManagerV2: React.FC = () => {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<MembershipPlanV2 | null>(null);
   const [linkingStripe, setLinkingStripe] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const loadPlans = async () => {
     setLoading(true);
@@ -182,93 +170,75 @@ export const MembershipPlanManagerV2: React.FC = () => {
           <h2 className="text-2xl font-bold tracking-tight">Membership Plans</h2>
           <p className="text-muted-foreground">Create and manage your memberships</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={handleCreate} className="w-full sm:w-auto">
-            <Plus className="h-4 w-4 mr-2" />
-            New Plan
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/shop")} className="w-full sm:w-auto">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Shop öffnen
-          </Button>
-        </div>
+        <Button onClick={handleCreate} className="w-full sm:w-auto">
+          <Plus className="h-4 w-4 mr-2" />
+          New Plan
+        </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {plans.map((plan) => {
-          const bookingDisplay = getBookingTypeDisplay(plan.booking_rules);
-          const Icon = bookingDisplay.icon;
-
-          return (
-            <Card key={plan.id} className="relative shadow-none">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">{plan.name}</CardTitle>
-                  <Badge 
-                    variant={plan.is_active ? "default" : "secondary"}
-                    className={plan.is_active ? "bg-green-100 text-green-800" : ""}
-                  >
-                    {plan.is_active ? 'Active' : 'Inactive'}
+      <div className="space-y-4">
+        {plans.map((plan) => (
+          <Card 
+            key={plan.id} 
+            className="transition-all"
+            style={{ borderLeftColor: plan.color || '#52a7b4', borderLeftWidth: '4px' }}
+          >
+            <CardHeader className="pb-2">
+              <div className="flex items-start justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    {plan.name}
+                    <Badge 
+                      variant={plan.is_active ? "default" : "secondary"}
+                      className={plan.is_active ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
+                    >
+                      {plan.is_active ? 'Aktiv' : 'Inaktiv'}
+                    </Badge>
+                  </CardTitle>
+                  {plan.description && (
+                    <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold">{plan.price_monthly?.toFixed(2) || '0.00'} €</p>
+                  <p className="text-xs text-muted-foreground">
+                    {plan.payment_frequency === 'monthly' ? '/ Monat' : 'einmalig'}
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <BookingTypeIcon type={plan.booking_rules?.type || ''} />
+                  {getBookingTypeLabel(plan.booking_rules?.type || '')}
+                </Badge>
+                {plan.booking_rules?.type === 'limited' && plan.booking_rules.limit && (
+                  <Badge variant="outline">
+                    {plan.booking_rules.limit.count}x / Monat
                   </Badge>
-                </div>
-                {plan.description && (
-                  <CardDescription>{plan.description}</CardDescription>
                 )}
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                {/* Pricing */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Price:</span>
-                  <span className="font-medium">
-                    {plan.price_monthly 
-                      ? `${plan.price_monthly}€ ${plan.payment_frequency === 'monthly' ? '/month' : 'one-time'}`
-                      : 'Free'
-                    }
-                  </span>
-                </div>
-
-                {/* Duration */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Duration:</span>
-                  <span className="font-medium">{plan.duration_months} months</span>
-                </div>
-
-                {/* Booking Type */}
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Icon className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">{bookingDisplay.label}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">{bookingDisplay.description}</p>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-1">
-                  {plan.includes_open_gym && (
-                    <Badge variant="outline" className="text-xs">
-                      Open Gym inclusive
-                    </Badge>
-                  )}
-                  {plan.auto_renewal && (
-                    <Badge variant="outline" className="text-xs ml-2">
-                      Auto-renewal
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Booking Rules Details */}
-                {plan.booking_rules.type === 'credits' && plan.booking_rules.credits && (
-                  <div className="text-xs text-muted-foreground">
-                    Credits: {plan.booking_rules.credits.initial_amount} initial
-                    {plan.booking_rules.credits.refill_schedule === 'monthly' && ', monthly refill'}
-                  </div>
+                {plan.booking_rules?.type === 'credits' && plan.booking_rules.credits && (
+                  <Badge variant="outline">
+                    {plan.booking_rules.credits.initial_amount} Credits
+                  </Badge>
                 )}
+                {plan.duration_months > 1 && (
+                  <Badge variant="outline">{plan.duration_months} Monate</Badge>
+                )}
+                {plan.includes_open_gym && (
+                  <Badge variant="outline">Open Gym inkl.</Badge>
+                )}
+                {plan.auto_renewal && (
+                  <Badge variant="outline">Auto-Verlängerung</Badge>
+                )}
+              </div>
 
-                {/* Stripe Status */}
-                <div className="pt-2 border-t">
+              {/* Stripe Status */}
+              <div className="flex items-center justify-between pt-2 border-t">
+                <div>
                   {plan.stripe_price_id ? (
-                    <Badge variant="outline" className="text-xs text-green-600 border-green-200 bg-green-50">
+                    <Badge variant="outline" className="text-xs text-green-600 border-green-200 bg-green-50 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
                       <LinkIcon className="h-3 w-3 mr-1" />
                       Stripe verknüpft
                     </Badge>
@@ -278,7 +248,6 @@ export const MembershipPlanManagerV2: React.FC = () => {
                       size="sm"
                       onClick={() => handleLinkToStripe(plan.id)}
                       disabled={linkingStripe === plan.id}
-                      className="w-full"
                     >
                       {linkingStripe === plan.id ? (
                         <Loader2 className="h-3 w-3 mr-1 animate-spin" />
@@ -291,15 +260,14 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex space-x-2 pt-2">
+                <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleEdit(plan)}
-                    className="flex-1"
                   >
                     <Edit className="h-3 w-3 mr-1" />
-                    Edit
+                    Bearbeiten
                   </Button>
                   
                   <AlertDialog>
@@ -314,28 +282,28 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Plan</AlertDialogTitle>
+                        <AlertDialogTitle>Plan löschen</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to delete plan "{plan.name}"? 
-                          This action cannot be undone.
+                          Bist du sicher, dass du den Plan "{plan.name}" löschen möchtest? 
+                          Diese Aktion kann nicht rückgängig gemacht werden.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(plan.id)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Delete
+                          Löschen
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {plans.length === 0 && (
