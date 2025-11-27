@@ -366,43 +366,27 @@ export default function Admin() {
   const handleCreateMember = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!newMemberFirstName || !newMemberEmail || !newMemberCode || !selectedMembershipPlan) {
+    // Membership is now optional - members can purchase their own in the app
+    if (!newMemberFirstName || !newMemberEmail || !newMemberCode) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields (First name, Email, Access code, Membership plan)",
+        description: "Please fill in all required fields (First name, Email, Access code)",
         variant: "destructive",
       });
       return;
     }
 
-    // Find the selected plan
-    const selectedPlan = availablePlans.find(plan => plan.id === selectedMembershipPlan);
-    if (!selectedPlan) {
-      toast({
-        title: "Error",
-        description: "Please select a valid membership plan",
-        variant: "destructive",
-      });
-      return;
-    }
+    // Find the selected plan (optional - may be null if "none" or empty)
+    const selectedPlan = selectedMembershipPlan && selectedMembershipPlan !== "none" 
+      ? availablePlans.find(plan => plan.id === selectedMembershipPlan) 
+      : null;
 
     try {
       // Note: Access codes can now be shared by multiple users
       // Email uniqueness is enforced by Supabase Auth
 
-      // Get the selected membership plan
-      const selectedPlan = availablePlans.find(p => p.id === selectedMembershipPlan);
-      if (!selectedPlan) {
-        toast({
-          title: "Error",
-          description: "Invalid membership plan selected",
-          variant: "destructive",
-        });
-        return;
-      }
-
       // Determine user role - trainer plans get trainer role, others get member role
-      const isTrainer = selectedPlan.booking_rules?.type === 'unlimited' && selectedPlan.name.toLowerCase().includes('trainer');
+      const isTrainer = selectedPlan?.booking_rules?.type === 'unlimited' && selectedPlan?.name.toLowerCase().includes('trainer');
       const userRole = isTrainer ? 'trainer' : 'member';
       
       // Create display_name from first_name and last_name
@@ -435,51 +419,60 @@ export default function Admin() {
         return;
       }
 
-      // Create user membership using V2 system
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setMonth(endDate.getMonth() + selectedPlan.duration_months);
+      // Only create membership if a plan was selected
+      if (selectedPlan) {
+        const startDate = new Date();
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + selectedPlan.duration_months);
 
-      // Prepare initial membership data based on plan type
-      let initialMembershipData = {};
-      if (selectedPlan.booking_rules?.type === 'credits') {
-        initialMembershipData = {
-          remaining_credits: selectedPlan.booking_rules.credits?.initial_amount || 10
-        };
-      }
-      // Limited memberships don't use remaining_credits
-      // They calculate availability dynamically based on period
+        // Prepare initial membership data based on plan type
+        let initialMembershipData = {};
+        if (selectedPlan.booking_rules?.type === 'credits') {
+          initialMembershipData = {
+            remaining_credits: selectedPlan.booking_rules.credits?.initial_amount || 10
+          };
+        }
+        // Limited memberships don't use remaining_credits
+        // They calculate availability dynamically based on period
 
-      const { error: membershipError } = await supabase
-        .from('user_memberships_v2')
-        .insert({
-          user_id: result.user.id,
-          membership_plan_id: selectedPlan.id,
-          start_date: startDate.toISOString().split('T')[0],
-          end_date: endDate.toISOString().split('T')[0],
-          status: 'active',
-          auto_renewal: selectedPlan.auto_renewal || false,
-          membership_data: initialMembershipData
-        });
+        const { error: membershipError } = await supabase
+          .from('user_memberships_v2')
+          .insert({
+            user_id: result.user.id,
+            membership_plan_id: selectedPlan.id,
+            start_date: startDate.toISOString().split('T')[0],
+            end_date: endDate.toISOString().split('T')[0],
+            status: 'active',
+            auto_renewal: selectedPlan.auto_renewal || false,
+            membership_data: initialMembershipData
+          });
 
-      if (membershipError) {
-        console.error('Error creating user membership:', membershipError);
-        toast({
-          title: "Warning",
-          description: "Member created, but membership could not be assigned",
-          variant: "destructive",
-        });
+        if (membershipError) {
+          console.error('Error creating user membership:', membershipError);
+          toast({
+            title: "Warning",
+            description: "Mitglied erstellt, aber Mitgliedschaft konnte nicht zugewiesen werden",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Erfolg",
+            description: "Mitglied mit Mitgliedschaft erstellt",
+            variant: "default",
+          });
+          
+          // Dispatch event for real-time updates in frontend
+          window.dispatchEvent(new CustomEvent('membershipUpdated', { 
+            detail: { userId: result?.data?.user_id } 
+          }));
+        }
       } else {
+        // No membership selected - member can purchase in app
         toast({
-          title: "Success",
-          description: "Member successfully created",
+          title: "Erfolg",
+          description: "Mitglied erstellt (ohne Mitgliedschaft - kann selbst in App kaufen)",
           variant: "default",
         });
-        
-        // Dispatch event for real-time updates in frontend
-        window.dispatchEvent(new CustomEvent('membershipUpdated', { 
-          detail: { userId: result?.data?.user_id } 
-        }));
       }
 
       // Reset form
@@ -1227,18 +1220,22 @@ export default function Admin() {
                     
                     {/* V2 Simplified Membership Selection */}
                     <div className="space-y-4 border-t pt-4">
-                      <h3 className="text-lg font-semibold">Membership Selection</h3>
+                      <h3 className="text-lg font-semibold">Mitgliedschaft (optional)</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Mitglieder können ihre Mitgliedschaft auch selbst in der App kaufen.
+                      </p>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Membership Plan *</label>
+                        <label className="text-sm font-medium">Mitgliedschaftsplan</label>
                         <Select 
                           value={selectedMembershipPlan} 
                           onValueChange={setSelectedMembershipPlan}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select membership plan" />
+                            <SelectValue placeholder="Keine Mitgliedschaft zuweisen" />
                           </SelectTrigger>
                           <SelectContent>
+                            <SelectItem value="none">Keine Mitgliedschaft</SelectItem>
                             {availablePlans.map((plan) => (
                               <SelectItem key={plan.id} value={plan.id}>
                                 {plan.name} - €{plan.price_monthly}/{plan.duration_months}M
