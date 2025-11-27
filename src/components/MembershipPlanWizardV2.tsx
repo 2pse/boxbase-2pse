@@ -34,6 +34,7 @@ interface MembershipPlanV2 {
   is_active: boolean;
   payment_frequency: 'monthly' | 'one_time';
   booking_rules: BookingRules;
+  upgrade_priority?: number;
 }
 
 interface MembershipPlanWizardV2Props {
@@ -87,7 +88,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
     includes_open_gym: false,
     is_active: true,
     payment_frequency: 'monthly',
-    booking_rules: { type: 'unlimited' }
+    booking_rules: { type: 'unlimited' },
+    upgrade_priority: 0
   });
 
   // Reset form when editing plan changes
@@ -111,7 +113,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         includes_open_gym: false,
         is_active: true,
         payment_frequency: 'monthly',
-        booking_rules: { type: 'unlimited' }
+        booking_rules: { type: 'unlimited' },
+        upgrade_priority: 0
       });
       setCurrentStep(1);
     }
@@ -201,7 +204,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         includes_open_gym: formData.includes_open_gym,
         is_active: formData.is_active,
         payment_frequency: formData.payment_frequency,
-        booking_rules: formData.booking_rules as any
+        booking_rules: formData.booking_rules as any,
+        upgrade_priority: formData.upgrade_priority || 0
       };
 
       console.log('Data being sent to database:', planData);
@@ -490,6 +494,23 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   checked={formData.includes_open_gym}
                   onCheckedChange={(checked) => setFormData(prev => ({ ...prev, includes_open_gym: checked }))}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="upgrade-priority">Upgrade Priority</Label>
+                <Input
+                  id="upgrade-priority"
+                  type="number"
+                  min="0"
+                  value={formData.upgrade_priority ?? 0}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    upgrade_priority: parseInt(e.target.value) || 0 
+                  }))}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Lower number = higher priority (1 = highest). Used for membership upgrades.
+                </p>
               </div>
               
               <div className="flex items-center justify-between">

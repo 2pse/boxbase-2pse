@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2, ArrowUp } from "lucide-react";
 import { MembershipPlanWizardV2, BookingRules } from "./MembershipPlanWizardV2";
 import {
   AlertDialog,
@@ -34,6 +34,7 @@ interface MembershipPlanV2 {
   stripe_product_id?: string;
   stripe_price_id?: string;
   color?: string;
+  upgrade_priority?: number;
   created_at: string;
   updated_at: string;
 }
@@ -231,6 +232,12 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 )}
                 {plan.auto_renewal && (
                   <Badge variant="outline">Auto-renewal</Badge>
+                )}
+                {plan.upgrade_priority !== undefined && plan.upgrade_priority > 0 && (
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <ArrowUp className="h-3 w-3" />
+                    Priority {plan.upgrade_priority}
+                  </Badge>
                 )}
               </div>
 

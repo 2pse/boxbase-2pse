@@ -375,8 +375,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           primaryColor={primaryColor}
         />
 
-        {/* Navigation to Strength Values, Exercises and Shop */}
-        <div className="grid grid-cols-3 gap-3 md:gap-4 mb-3 md:mb-4">
+        {/* Navigation to Strength Values and Exercises */}
+        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
             <div className="flex flex-col items-center justify-center text-center">
               <Dumbbell className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
@@ -392,12 +392,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               <p className="text-xs md:text-sm text-muted-foreground">Preferences</p>
             </div>
           </div>
+        </div>
 
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToShop}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <ShoppingBag className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
-              <h3 className="font-semibold text-sm md:text-lg text-foreground">Shop</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">Products</p>
+        {/* Shop - Wide Tile */}
+        <div 
+          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] mb-3 md:mb-4" 
+          onClick={navigateToShop}
+        >
+          <div className="flex items-center gap-4">
+            <ShoppingBag className="h-8 w-8 md:h-12 md:w-12 text-primary" />
+            <div>
+              <h3 className="font-semibold text-base md:text-xl text-foreground">Shop</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">Products & Memberships</p>
             </div>
           </div>
         </div>
