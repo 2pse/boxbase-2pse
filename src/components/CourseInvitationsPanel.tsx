@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, Clock, Check, X, MapPin } from "lucide-react"
+import { Calendar, Clock, Check, X, MapPin, UserPlus } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { useToast } from "@/hooks/use-toast"
@@ -64,6 +65,7 @@ export const CourseInvitationsPanel: React.FC<CourseInvitationsPanelProps> = ({
   const [sentInvitations, setSentInvitations] = useState<Invitation[]>([])
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (open) {
@@ -468,6 +470,21 @@ export const CourseInvitationsPanel: React.FC<CourseInvitationsPanelProps> = ({
               currentInvitations.map(invitation => 
                 renderInvitationCard(invitation, activeTab)
               )
+            )}
+            
+            {/* Send another invitation button - only in sent tab */}
+            {activeTab === 'sent' && (
+              <Button
+                variant="outline"
+                className="w-full mt-4"
+                onClick={() => {
+                  onOpenChange(false)
+                  navigate('/pro')
+                }}
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Send another invitation
+              </Button>
             )}
           </div>
         </ScrollArea>

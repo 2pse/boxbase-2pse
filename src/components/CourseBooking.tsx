@@ -4,12 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Calendar, ChevronLeft, ChevronRight, Clock, Users, MapPin, List } from "lucide-react"
+import { Calendar, ChevronLeft, ChevronRight, Clock, Users, MapPin, List, UserPlus } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { MembershipBadge } from "@/components/MembershipBadge"
 import { MembershipLimitDisplay } from "@/components/MembershipLimitDisplay"
 import { ProfileImageViewer } from "@/components/ProfileImageViewer"
 import { CourseCalendar } from "@/components/CourseCalendar"
+import { CourseInvitationButton } from "@/components/CourseInvitationButton"
 import { toast } from "sonner"
 import { format, startOfWeek, endOfWeek, addWeeks, subWeeks, isSameDay, parseISO } from "date-fns"
 import { enUS } from "date-fns/locale"
@@ -724,24 +725,33 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          {(() => {
-                            const percentage = (course.registered_count / course.max_participants) * 100;
-                            let badgeColor = "bg-green-500";
-                            if (percentage >= 100) badgeColor = "bg-red-500";
-                            else if (percentage >= 75) badgeColor = "bg-[#edb408]";
-                            
-                            return (
-                              <Badge className={`text-xs md:text-base text-white ${badgeColor} shadow-sm`}>
-                                {course.registered_count}/{course.max_participants}
+                        <div className="flex items-center gap-2">
+                          <CourseInvitationButton
+                            courseId={course.id}
+                            courseName={course.title}
+                            courseDate={course.course_date}
+                            courseTime={course.start_time.slice(0, 5)}
+                            user={user}
+                          />
+                          <div className="flex flex-col items-end gap-1">
+                            {(() => {
+                              const percentage = (course.registered_count / course.max_participants) * 100;
+                              let badgeColor = "bg-green-500";
+                              if (percentage >= 100) badgeColor = "bg-red-500";
+                              else if (percentage >= 75) badgeColor = "bg-[#edb408]";
+                              
+                              return (
+                                <Badge className={`text-xs md:text-base text-white ${badgeColor} shadow-sm`}>
+                                  {course.registered_count}/{course.max_participants}
+                                </Badge>
+                              );
+                            })()}
+                            {course.waitlist_count > 0 && (
+                              <Badge className="text-xs md:text-base text-white bg-yellow-500 shadow-sm">
+                                WL: {course.waitlist_count}
                               </Badge>
-                            );
-                          })()}
-                           {course.waitlist_count > 0 && (
-                             <Badge className="text-xs md:text-base text-white bg-yellow-500 shadow-sm">
-                               WL: {course.waitlist_count}
-                             </Badge>
-                           )}
+                            )}
+                          </div>
                         </div>
                       </div>
                   </div>
