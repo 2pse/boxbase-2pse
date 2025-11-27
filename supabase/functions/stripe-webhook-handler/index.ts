@@ -152,7 +152,7 @@ async function handleCheckoutCompleted(supabase: any, stripe: Stripe, session: S
 
   // Handle regular membership purchase or credit top-up
   if (purchaseType === "membership" || purchaseType === "credit_topup") {
-    await handleMembershipPurchase(supabase, session, metadata, purchaseType);
+    await handleMembershipPurchase(supabase, stripe, session, metadata, purchaseType);
     return;
   }
 
@@ -317,7 +317,7 @@ async function handleMembershipUpgrade(supabase: any, stripe: Stripe, session: S
   console.log(`Created new membership (upgrade, status: ${isImmediateUpgrade ? 'active' : 'pending_activation'}) for user:`, userId);
 }
 
-async function handleMembershipPurchase(supabase: any, session: Stripe.Checkout.Session, metadata: any, purchaseType: string) {
+async function handleMembershipPurchase(supabase: any, stripe: Stripe, session: Stripe.Checkout.Session, metadata: any, purchaseType: string) {
   const userId = metadata.user_id;
   const planId = metadata.plan_id;
   const existingMembershipId = metadata.existing_membership_id;
@@ -332,6 +332,22 @@ async function handleMembershipPurchase(supabase: any, session: Stripe.Checkout.
   if (!plan) {
     console.error("Plan not found:", planId);
     return;
+  }
+
+  // Set cancel_at on subscription if duration_months is specified
+  if (session.subscription && plan.duration_months && plan.duration_months > 0) {
+    try {
+      const cancelDate = new Date();
+      cancelDate.setMonth(cancelDate.getMonth() + plan.duration_months);
+      
+      await stripe.subscriptions.update(session.subscription as string, {
+        cancel_at: Math.floor(cancelDate.getTime() / 1000),
+      });
+      
+      console.log(`Set subscription cancel_at to: ${cancelDate.toISOString()} (${plan.duration_months} months)`);
+    } catch (err) {
+      console.error("Failed to set cancel_at on subscription:", err);
+    }
   }
 
   if (purchaseType === "credit_topup" && existingMembershipId) {
