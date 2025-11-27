@@ -99,7 +99,8 @@ serve(async (req) => {
       currency: "eur",
     };
 
-    if (plan.payment_type === "subscription") {
+    // Create recurring price if payment_frequency is monthly or yearly
+    if (plan.payment_frequency === "monthly" || plan.payment_frequency === "yearly") {
       priceParams.recurring = {
         interval: plan.payment_frequency === "yearly" ? "year" : "month",
         interval_count: 1,
