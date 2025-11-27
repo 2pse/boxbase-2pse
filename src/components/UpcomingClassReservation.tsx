@@ -28,6 +28,8 @@ interface UpcomingReservation {
     max_participants: number
   }
   registrationCount: number
+  status: 'registered' | 'waitlist'
+  waitlistPosition?: number
 }
 
 export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> = ({ user }) => {
@@ -179,7 +181,7 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
       console.log('Loading upcoming reservation for user:', user.id)
       
-      // Get all upcoming course registrations (today and future)
+      // Get all upcoming course registrations (registered AND waitlist)
       const { data: coursesData, error } = await supabase
         .from('courses')
         .select(`
@@ -193,11 +195,12 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
           course_registrations!inner (
             id,
             user_id,
-            status
+            status,
+            registered_at
           )
         `)
         .eq('course_registrations.user_id', user.id)
-        .eq('course_registrations.status', 'registered')
+        .in('course_registrations.status', ['registered', 'waitlist'])
         .gte('course_date', new Date().toISOString().split('T')[0])
         .order('course_date', { ascending: true })
         .order('start_time', { ascending: true })
@@ -219,7 +222,8 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
       if (upcomingCourses.length > 0) {
         const course = upcomingCourses[0]
         const registration = course.course_registrations[0]
-        console.log('Found upcoming registration:', { course, registration })
+        const isWaitlisted = registration.status === 'waitlist'
+        console.log('Found upcoming registration:', { course, registration, isWaitlisted })
         
         // Get registration count for this course
         const { data: regCount, error: countError } = await supabase
@@ -230,6 +234,22 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
         if (countError) {
           console.error('Error loading registration count:', countError)
+        }
+
+        // If waitlisted, calculate position
+        let waitlistPosition: number | undefined
+        if (isWaitlisted) {
+          const { data: waitlistData } = await supabase
+            .from('course_registrations')
+            .select('user_id, registered_at')
+            .eq('course_id', course.id)
+            .eq('status', 'waitlist')
+            .order('registered_at', { ascending: true })
+          
+          if (waitlistData) {
+            const positionIndex = waitlistData.findIndex(w => w.user_id === user.id)
+            waitlistPosition = positionIndex >= 0 ? positionIndex + 1 : undefined
+          }
         }
 
         setUpcomingReservation({
@@ -243,7 +263,9 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
             trainer: course.trainer,
             max_participants: course.max_participants
           },
-          registrationCount: regCount?.length || 0
+          registrationCount: regCount?.length || 0,
+          status: registration.status as 'registered' | 'waitlist',
+          waitlistPosition
         })
       } else {
         console.log('No upcoming registrations found')
@@ -283,24 +305,37 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
     )
   }
 
-  const { course, registrationCount } = upcomingReservation
+  const { course, registrationCount, status, waitlistPosition } = upcomingReservation
   const courseDate = new Date(course.course_date)
   const formattedDate = format(courseDate, 'EEEE, dd.MM.yyyy', { locale: enUS })
   const timeRange = `${course.start_time.slice(0, 5)} - ${course.end_time.slice(0, 5)}`
+  const isWaitlisted = status === 'waitlist'
 
   return (
     <>
       <Card 
-        className="w-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-[155px]" 
+        className={`w-full cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] rounded-2xl relative h-24 md:h-[155px] ${
+          isWaitlisted 
+            ? 'bg-yellow-50 dark:bg-yellow-950 border-2 border-yellow-400 dark:border-yellow-600' 
+            : 'bg-gray-100 dark:bg-gray-800'
+        }`}
         onClick={handleCardClick}
       >
         <CardContent className="p-4 md:p-8 h-full flex items-center justify-center">
           <div className="absolute top-3 md:top-5 right-3 md:right-5">
-            <Calendar className="h-4 md:h-8 w-4 md:w-8 text-gray-600 dark:text-gray-400" />
+            {isWaitlisted ? (
+              <Badge className="bg-yellow-500 text-white">
+                Position {waitlistPosition}
+              </Badge>
+            ) : (
+              <Calendar className="h-4 md:h-8 w-4 md:w-8 text-gray-600 dark:text-gray-400" />
+            )}
           </div>
           
           <div className="space-y-2 text-center">
-            <h3 className="font-medium text-sm md:text-lg text-muted-foreground">Next Reservation</h3>
+            <h3 className="font-medium text-sm md:text-lg text-muted-foreground">
+              {isWaitlisted ? 'On Waitlist' : 'Next Reservation'}
+            </h3>
             <h4 className="font-semibold text-base md:text-3xl">{course.title}</h4>
             
             <div className="flex items-center justify-center gap-1 text-sm md:text-base text-muted-foreground">
@@ -318,6 +353,18 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
           </DialogHeader>
           
           <div className="space-y-4">
+            {/* Waitlist Position Banner */}
+            {isWaitlisted && waitlistPosition && (
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-300 dark:border-yellow-700 rounded-lg">
+                <p className="text-lg font-bold text-yellow-800 dark:text-yellow-200 text-center">
+                  Waitlist Position: {waitlistPosition}
+                </p>
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center mt-1">
+                  You will be automatically notified when a spot becomes available.
+                </p>
+              </div>
+            )}
+
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="h-4 w-4" />
@@ -382,9 +429,11 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
               onClick={handleCancelRegistration}
               disabled={!canCancelCourse(course)}
               className="w-full"
-              variant="default"
+              variant={isWaitlisted ? "outline" : "default"}
             >
-              {canCancelCourse(course) ? 'Cancel Registration' : 'Cancellation deadline expired'}
+              {canCancelCourse(course) 
+                ? (isWaitlisted ? 'Remove from Waitlist' : 'Cancel Registration') 
+                : 'Cancellation deadline expired'}
             </Button>
           </div>
         </DialogContent>
