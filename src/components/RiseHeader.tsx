@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { MoreVertical, Home, Users, Calendar, Newspaper, Dumbbell, LogOut, Moon, Sun, Trophy, DollarSign, Settings, CreditCard, Download } from "lucide-react"
+import { MoreVertical, Home, Users, Calendar, Newspaper, Dumbbell, LogOut, Moon, Sun, Trophy, DollarSign, Settings, CreditCard, Download, ShoppingBag } from "lucide-react"
 import { useTheme } from "next-themes"
 import { supabase } from "@/integrations/supabase/client"
 import { Logo } from "@/components/Logo"
@@ -244,6 +244,16 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
             </div>
             
             {/* Fourth row */}
+            <div 
+              onClick={() => {
+                onPageChange?.('shop');
+                setDropdownOpen(false);
+              }}
+              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'shop' ? 'bg-primary/10 text-primary' : ''}`}
+            >
+              <ShoppingBag className="h-8 w-8 mb-2" />
+              <span className="text-sm font-medium">Shop</span>
+            </div>
             <div 
               onClick={() => {
                 onPageChange?.('export');

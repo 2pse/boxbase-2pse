@@ -11,6 +11,8 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import News from "./pages/News";
 import NotFound from "./pages/NotFound";
+import Shop from "./pages/Shop";
+import ShopSuccess from "./pages/ShopSuccess";
 import { StrengthValues } from "@/components/StrengthValues";
 import { ExerciseSelection } from "@/components/ExerciseSelection";
 import WorkoutManagement from "./pages/WorkoutManagement";
@@ -48,6 +50,8 @@ function App() {
                 <Route path="/workout-timer/start" element={<WorkoutStart />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/workouts" element={<WorkoutManagement />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/shop/success" element={<ShopSuccess />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

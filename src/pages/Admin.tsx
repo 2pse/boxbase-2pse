@@ -30,6 +30,7 @@ import { MembershipPlanManagerV2 } from "@/components/MembershipPlanManagerV2";
 import { FinanceReport } from "@/components/FinanceReport";
 import { GymSettings } from "@/components/GymSettings";
 import { DataExport } from "@/components/DataExport";
+import { ProductManager } from "@/components/ProductManager";
 
 
 import { useToast } from "@/hooks/use-toast";
@@ -108,7 +109,7 @@ export default function Admin() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
-  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export'>('home');
+  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export' | 'shop'>('home');
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalMembers, setTotalMembers] = useState(0);
@@ -1509,6 +1510,7 @@ export default function Admin() {
         {activePage === 'memberships' && <MembershipPlanManagerV2 />}
         
         {activePage === 'finance' && <FinanceReport />}
+        {activePage === 'shop' && <ProductManager />}
         {activePage === 'settings' && <GymSettings />}
         {activePage === 'export' && <DataExport />}
       </div>
