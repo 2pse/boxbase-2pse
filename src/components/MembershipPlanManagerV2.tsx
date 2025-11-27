@@ -25,7 +25,8 @@ interface MembershipPlanV2 {
   description?: string;
   price_monthly?: number;
   duration_months: number;
-  auto_renewal: boolean;
+  cancellation_allowed?: boolean;
+  cancellation_deadline_days?: number;
   includes_open_gym: boolean;
   is_active: boolean;
   is_public: boolean;
@@ -232,8 +233,12 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 {plan.includes_open_gym && (
                   <Badge variant="outline">Open Gym incl.</Badge>
                 )}
-                {plan.auto_renewal && (
-                  <Badge variant="outline">Auto-renewal</Badge>
+                {plan.cancellation_allowed && (
+                  <Badge variant="outline">
+                    Kündbar {plan.cancellation_deadline_days && plan.cancellation_deadline_days > 0 
+                      ? `(${Math.round(plan.cancellation_deadline_days / 30)} Mon. Frist)` 
+                      : '(sofort)'}
+                  </Badge>
                 )}
                 {plan.upgrade_priority !== undefined && plan.upgrade_priority > 0 && (
                   <Badge variant="outline" className="flex items-center gap-1">

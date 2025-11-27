@@ -31,7 +31,9 @@ interface MembershipPlanV2 {
   description?: string;
   price_monthly?: number;
   duration_months: number;
-  auto_renewal: boolean;
+  cancellation_allowed?: boolean;
+  cancellation_deadline_months?: number;
+  cancellation_deadline_days?: number; // From DB
   includes_open_gym: boolean;
   is_active: boolean;
   payment_frequency: 'monthly' | 'one_time';
@@ -87,7 +89,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
     description: '',
     price_monthly: undefined,
     duration_months: 1,
-    auto_renewal: false,
+    cancellation_allowed: false,
+    cancellation_deadline_months: 0,
     includes_open_gym: false,
     is_active: true,
     payment_frequency: 'monthly',
@@ -100,7 +103,12 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
   React.useEffect(() => {
     if (editingPlan) {
       console.log('Loading plan data for editing:', editingPlan);
-      setFormData(editingPlan);
+      // Convert cancellation_deadline_days from DB to months for form
+      const planWithMonths = {
+        ...editingPlan,
+        cancellation_deadline_months: Math.round(((editingPlan as any).cancellation_deadline_days || 0) / 30)
+      };
+      setFormData(planWithMonths);
       setCurrentStep(1);
     }
   }, [editingPlan]);
@@ -113,7 +121,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         description: '',
         price_monthly: undefined,
         duration_months: 1,
-        auto_renewal: false,
+        cancellation_allowed: false,
+        cancellation_deadline_months: 0,
         includes_open_gym: false,
         is_active: true,
         payment_frequency: 'monthly',
@@ -205,7 +214,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         description: formData.description || null,
         price_monthly: formData.price_monthly || null,
         duration_months: formData.duration_months,
-        auto_renewal: formData.auto_renewal,
+        cancellation_allowed: formData.cancellation_allowed,
+        cancellation_deadline_days: (formData.cancellation_deadline_months || 0) * 30,
         includes_open_gym: formData.includes_open_gym,
         is_active: formData.is_active,
         payment_frequency: formData.payment_frequency,
@@ -511,17 +521,39 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
             <h3 className="text-lg font-medium">General Settings</h3>
             
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Auto-renewal</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Plan will be automatically extended
-                  </p>
+              {/* Cancellation Settings */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Kündigung möglich</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Mitglieder können ihre Mitgliedschaft selbst kündigen
+                    </p>
+                  </div>
+                  <Switch
+                    checked={formData.cancellation_allowed}
+                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, cancellation_allowed: checked }))}
+                  />
                 </div>
-                <Switch
-                  checked={formData.auto_renewal}
-                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, auto_renewal: checked }))}
-                />
+                
+                {formData.cancellation_allowed && (
+                  <div className="space-y-2 pl-4 border-l-2 border-muted">
+                    <Label htmlFor="cancellation-deadline">Kündigungsfrist (Monate)</Label>
+                    <Input
+                      id="cancellation-deadline"
+                      type="number"
+                      min="0"
+                      value={formData.cancellation_deadline_months || 0}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        cancellation_deadline_months: parseInt(e.target.value) || 0 
+                      }))}
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Nach Kündigung läuft der Vertrag noch X Monate weiter. 0 = sofortige Kündigung möglich.
+                    </p>
+                  </div>
+                )}
               </div>
               
               <div className="flex items-center justify-between">
@@ -589,8 +621,19 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Payment frequency:</span>
-                  <span>{formData.payment_frequency === 'monthly' ? 'Monthly' : 'One-time'}</span>
+                  <span className="font-medium">Duration:</span>
+                  <span>{formData.duration_months} {formData.duration_months === 1 ? 'Monat' : 'Monate'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Kündigung:</span>
+                  <span>
+                    {formData.cancellation_allowed 
+                      ? formData.cancellation_deadline_months > 0 
+                        ? `Möglich mit ${formData.cancellation_deadline_months} Mon. Frist`
+                        : 'Sofort möglich'
+                      : 'Nicht möglich'
+                    }
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Booking type:</span>
