@@ -128,11 +128,21 @@ serve(async (req) => {
         },
       };
 
-      // Add subscription_data with metadata for subscription mode
+      // Add subscription_data with metadata and cancel_at for subscription mode
       if (mode === "subscription") {
-        sessionParams.subscription_data = {
+        const subscriptionData: any = {
           metadata: { user_id: user.id, plan_id: plan_id },
         };
+        
+        // Set cancel_at if duration_months is specified (contract duration)
+        if (plan.duration_months && plan.duration_months > 0) {
+          const cancelDate = new Date();
+          cancelDate.setMonth(cancelDate.getMonth() + plan.duration_months);
+          subscriptionData.cancel_at = Math.floor(cancelDate.getTime() / 1000);
+          console.log(`Subscription will auto-cancel at: ${cancelDate.toISOString()} (${plan.duration_months} months)`);
+        }
+        
+        sessionParams.subscription_data = subscriptionData;
       }
 
       const session = await stripe.checkout.sessions.create(sessionParams);

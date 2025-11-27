@@ -95,7 +95,6 @@ serve(async (req) => {
 
       // ========== CENTRAL EXPIRATION CHECK FOR ALL MEMBERSHIP TYPES ==========
       // Check if membership is still valid at course date
-      // EXCEPTION: With auto_renewal, membership is always valid
       if (membershipV2.end_date !== null) {
         // Get course date
         const { data: courseData } = await supabase
@@ -107,10 +106,9 @@ serve(async (req) => {
         if (courseData) {
           const endDate = new Date(membershipV2.end_date);
           const courseDate = new Date(courseData.course_date);
-          const autoRenewal = membershipV2.auto_renewal || false;
           
-          if (endDate < courseDate && !autoRenewal) {
-            console.log(`Membership expired for user ${user_id}: end_date=${membershipV2.end_date}, course_date=${courseData.course_date}, auto_renewal=${autoRenewal}`);
+          if (endDate < courseDate) {
+            console.log(`Membership expired for user ${user_id}: end_date=${membershipV2.end_date}, course_date=${courseData.course_date}`);
             return new Response(
               JSON.stringify({ 
                 canRegister: false, 
