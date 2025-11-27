@@ -50,3 +50,12 @@ verify_jwt = false
 
 [functions.get-stripe-reporting-data]
 verify_jwt = false
+
+[functions.create-upgrade-checkout]
+verify_jwt = true
+
+[functions.create-subscription-from-credits]
+verify_jwt = true
+
+[functions.verify-checkout-session]
+verify_jwt = true
