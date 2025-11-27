@@ -284,6 +284,7 @@ export type Database = {
           primary_color: string
           show_bodybuilding_workouts: boolean
           show_functional_fitness_workouts: boolean
+          stripe_webhook_endpoint: string | null
           theme_mode: string
           updated_at: string
           webhook_member_url: string | null
@@ -303,6 +304,7 @@ export type Database = {
           primary_color?: string
           show_bodybuilding_workouts?: boolean
           show_functional_fitness_workouts?: boolean
+          stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
           webhook_member_url?: string | null
@@ -322,6 +324,7 @@ export type Database = {
           primary_color?: string
           show_bodybuilding_workouts?: boolean
           show_functional_fitness_workouts?: boolean
+          stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
           webhook_member_url?: string | null
@@ -368,44 +371,68 @@ export type Database = {
         Row: {
           auto_renewal: boolean | null
           booking_rules: Json
+          cancellation_allowed: boolean | null
+          cancellation_deadline_days: number | null
+          color: string | null
           created_at: string
           description: string | null
           duration_months: number
           id: string
           includes_open_gym: boolean | null
           is_active: boolean | null
+          is_public: boolean | null
           name: string
           payment_frequency: string
+          payment_type: string | null
           price_monthly: number | null
+          stripe_price_id: string | null
+          stripe_product_id: string | null
           updated_at: string
+          upgrade_priority: number | null
         }
         Insert: {
           auto_renewal?: boolean | null
           booking_rules?: Json
+          cancellation_allowed?: boolean | null
+          cancellation_deadline_days?: number | null
+          color?: string | null
           created_at?: string
           description?: string | null
           duration_months?: number
           id?: string
           includes_open_gym?: boolean | null
           is_active?: boolean | null
+          is_public?: boolean | null
           name: string
           payment_frequency?: string
+          payment_type?: string | null
           price_monthly?: number | null
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
           updated_at?: string
+          upgrade_priority?: number | null
         }
         Update: {
           auto_renewal?: boolean | null
           booking_rules?: Json
+          cancellation_allowed?: boolean | null
+          cancellation_deadline_days?: number | null
+          color?: string | null
           created_at?: string
           description?: string | null
           duration_months?: number
           id?: string
           includes_open_gym?: boolean | null
           is_active?: boolean | null
+          is_public?: boolean | null
           name?: string
           payment_frequency?: string
+          payment_type?: string | null
           price_monthly?: number | null
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
           updated_at?: string
+          upgrade_priority?: number | null
         }
         Relationships: []
       }
@@ -493,6 +520,36 @@ export type Database = {
           published_at?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      processed_stripe_events: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          processed_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          processed_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          processed_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -586,6 +643,51 @@ export type Database = {
         }
         Relationships: []
       }
+      purchase_history: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          id: string
+          item_id: string
+          item_name: string
+          item_type: string
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          item_id: string
+          item_name: string
+          item_type: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          item_id?: string
+          item_name?: string
+          item_type?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       reactivation_webhook_events: {
         Row: {
           created_at: string
@@ -655,6 +757,83 @@ export type Database = {
           period_end?: string
           period_start?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      shop_product_images: {
+        Row: {
+          created_at: string | null
+          id: string
+          image_url: string
+          product_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          image_url: string
+          product_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          product_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shop_products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          price: number
+          stock_quantity: number
+          stripe_price_id: string | null
+          stripe_product_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          price: number
+          stock_quantity?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          price?: number
+          stock_quantity?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -775,6 +954,8 @@ export type Database = {
           membership_plan_id: string
           start_date: string
           status: Database["public"]["Enums"]["membership_status"]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           updated_at: string
           user_id: string
         }
@@ -787,6 +968,8 @@ export type Database = {
           membership_plan_id: string
           start_date: string
           status?: Database["public"]["Enums"]["membership_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -799,6 +982,8 @@ export type Database = {
           membership_plan_id?: string
           start_date?: string
           status?: Database["public"]["Enums"]["membership_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -990,7 +1175,15 @@ export type Database = {
         | "open_gym_only"
         | "credits"
       course_status: "active" | "cancelled" | "completed"
-      membership_status: "active" | "expired" | "cancelled" | "paused"
+      membership_status:
+        | "active"
+        | "expired"
+        | "cancelled"
+        | "paused"
+        | "pending_activation"
+        | "payment_failed"
+        | "superseded"
+        | "upgraded"
       membership_type: "unlimited" | "limited"
       period_type: "week" | "month"
       registration_status: "registered" | "waitlist" | "cancelled"
@@ -1137,7 +1330,16 @@ export const Constants = {
         "credits",
       ],
       course_status: ["active", "cancelled", "completed"],
-      membership_status: ["active", "expired", "cancelled", "paused"],
+      membership_status: [
+        "active",
+        "expired",
+        "cancelled",
+        "paused",
+        "pending_activation",
+        "payment_failed",
+        "superseded",
+        "upgraded",
+      ],
       membership_type: ["unlimited", "limited"],
       period_type: ["week", "month"],
       registration_status: ["registered", "waitlist", "cancelled"],

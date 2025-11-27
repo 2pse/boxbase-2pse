@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Upload, Image as ImageIcon, Palette, Settings, Save, X, User, Lock, Webhook, ExternalLink, ChevronDown } from "lucide-react"
+import { Upload, Image as ImageIcon, Palette, Settings, Save, X, User, Lock, Webhook, ExternalLink, ChevronDown, CreditCard, Copy } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
@@ -24,6 +24,7 @@ interface GymSettingsData {
   webhook_member_url: string | null
   webhook_waitlist_url: string | null
   webhook_reactivation_url: string | null
+  stripe_webhook_endpoint: string | null
   show_functional_fitness_workouts: boolean
   show_bodybuilding_workouts: boolean
 }
@@ -39,6 +40,7 @@ export const GymSettings = () => {
   const [adminProfileOpen, setAdminProfileOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
   const [webhooksOpen, setWebhooksOpen] = useState(false)
+  const [stripeOpen, setStripeOpen] = useState(false)
   
   // Admin profile state
   const [adminEmail, setAdminEmail] = useState("")
@@ -762,6 +764,54 @@ export const GymSettings = () => {
                     </Button>
                   )}
                 </div>
+              </div>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
+
+      {/* Stripe Integration */}
+      <Collapsible open={stripeOpen} onOpenChange={setStripeOpen}>
+        <Card>
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5" />
+                  Stripe Integration
+                </div>
+                <ChevronDown className={`h-4 w-4 transition-transform ${stripeOpen ? 'transform rotate-180' : ''}`} />
+              </CardTitle>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="space-y-6">
+              <div>
+                <Label>Stripe Webhook URL</Label>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Kopiere diese URL in dein Stripe Dashboard unter Developers → Webhooks
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    readOnly
+                    value="https://tuktvbawwyffuqeorjix.supabase.co/functions/v1/stripe-webhook-handler"
+                    className="font-mono text-xs"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText("https://tuktvbawwyffuqeorjix.supabase.co/functions/v1/stripe-webhook-handler")
+                      toast({ title: "Kopiert!", description: "Webhook URL in Zwischenablage kopiert" })
+                    }}
+                    title="URL kopieren"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Events: checkout.session.completed, customer.subscription.updated, customer.subscription.deleted, invoice.payment_failed, invoice.payment_succeeded
+                </p>
               </div>
             </CardContent>
           </CollapsibleContent>
