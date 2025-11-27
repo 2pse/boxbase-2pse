@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.data-export]
 verify_jwt = false
+
+[functions.get-stripe-reporting-data]
+verify_jwt = false
