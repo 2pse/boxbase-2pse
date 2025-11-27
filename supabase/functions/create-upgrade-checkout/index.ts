@@ -69,6 +69,34 @@ serve(async (req) => {
       );
     }
 
+    // Check for existing pending upgrade and cancel it first
+    const { data: pendingMembership } = await supabase
+      .from("user_memberships_v2")
+      .select("*, membership_plans_v2(*)")
+      .eq("user_id", user.id)
+      .eq("status", "pending_activation")
+      .single();
+
+    if (pendingMembership?.stripe_subscription_id) {
+      console.log("Cancelling previous pending upgrade:", pendingMembership.stripe_subscription_id);
+      
+      // Cancel the pending Stripe subscription
+      await stripe.subscriptions.cancel(pendingMembership.stripe_subscription_id);
+      
+      // Update the membership status to "cancelled"
+      await supabase
+        .from("user_memberships_v2")
+        .update({ 
+          status: "cancelled",
+          membership_data: {
+            ...((pendingMembership.membership_data as object) || {}),
+            cancelled_reason: "replaced_by_new_upgrade",
+            cancelled_at: new Date().toISOString()
+          }
+        })
+        .eq("id", pendingMembership.id);
+    }
+
     // Get current active membership with subscription
     const { data: currentMembership } = await supabase
       .from("user_memberships_v2")
