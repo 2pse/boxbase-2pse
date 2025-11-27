@@ -303,10 +303,10 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
           )}
           {(membershipInfo.type === 'monthly_limit' || membershipInfo.type === 'weekly_limit') && (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || (membershipInfo.limitPeriod === 'week' ? 'Wöchentliches Limit' : 'Monatliches Limit')}</p>
-               <p className="text-sm">{membershipInfo.limitPeriod === 'week' ? 'Wöchentliches' : 'Monatliches'} Limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
-               <p className="text-sm">Verbraucht {membershipInfo.limitPeriod === 'week' ? 'diese Woche' : 'diesen Monat'}: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
-               <p className="text-sm">Verbleibend: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
+              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || (membershipInfo.limitPeriod === 'week' ? 'Weekly Limit' : 'Monthly Limit')}</p>
+               <p className="text-sm">{membershipInfo.limitPeriod === 'week' ? 'Weekly' : 'Monthly'} Limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
+               <p className="text-sm">Used {membershipInfo.limitPeriod === 'week' ? 'this week' : 'this month'}: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
+               <p className="text-sm">Remaining: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
             </div>
           )}
           {membershipInfo.type === 'open_gym_only' && (

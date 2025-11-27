@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, Infinity, CalendarDays, Coins, Building, Link as LinkIcon, Loader2, ArrowUp } from "lucide-react";
 import { MembershipPlanWizardV2, BookingRules } from "./MembershipPlanWizardV2";
+import { invalidateMembershipColorCache } from "@/lib/membershipColors";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -122,6 +123,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
       if (error) throw error;
       
       toast.success('Plan successfully deleted');
+      invalidateMembershipColorCache();
       loadPlans();
     } catch (error: any) {
       toast.error('Error deleting: ' + error.message);

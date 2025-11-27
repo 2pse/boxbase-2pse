@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChevronLeft, ChevronRight, Check, CreditCard, Infinity, Calendar, Dumbbell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { MembershipBadge } from "@/components/MembershipBadge";
+import { invalidateMembershipColorCache } from "@/lib/membershipColors";
 
 export interface BookingRules {
   type: 'unlimited' | 'limited' | 'credits' | 'open_gym_only';
@@ -35,6 +37,7 @@ interface MembershipPlanV2 {
   payment_frequency: 'monthly' | 'one_time';
   booking_rules: BookingRules;
   upgrade_priority?: number;
+  color?: string;
 }
 
 interface MembershipPlanWizardV2Props {
@@ -89,7 +92,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
     is_active: true,
     payment_frequency: 'monthly',
     booking_rules: { type: 'unlimited' },
-    upgrade_priority: 0
+    upgrade_priority: 0,
+    color: '#52a7b4'
   });
 
   // Reset form when editing plan changes
@@ -114,7 +118,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         is_active: true,
         payment_frequency: 'monthly',
         booking_rules: { type: 'unlimited' },
-        upgrade_priority: 0
+        upgrade_priority: 0,
+        color: '#52a7b4'
       });
       setCurrentStep(1);
     }
@@ -205,7 +210,8 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         is_active: formData.is_active,
         payment_frequency: formData.payment_frequency,
         booking_rules: formData.booking_rules as any,
-        upgrade_priority: formData.upgrade_priority || 0
+        upgrade_priority: formData.upgrade_priority || 0,
+        color: formData.color || '#52a7b4'
       };
 
       console.log('Data being sent to database:', planData);
@@ -219,6 +225,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         if (error) throw error;
         console.log('Plan successfully updated');
         toast.success('Plan successfully updated');
+        invalidateMembershipColorCache();
       } else {
         const { error } = await supabase
           .from('membership_plans_v2')
@@ -227,6 +234,7 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
         if (error) throw error;
         console.log('Plan successfully created');
         toast.success('Plan successfully created');
+        invalidateMembershipColorCache();
       }
 
       onSave();
@@ -320,6 +328,39 @@ export const MembershipPlanWizardV2: React.FC<MembershipPlanWizardV2Props> = ({
                   With one-time payment, credits can be used over multiple months.
                 </p>
               )}
+            </div>
+
+            {/* Color Picker */}
+            <div className="space-y-2">
+              <Label htmlFor="color">Plan Color</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="color"
+                  type="color"
+                  value={formData.color || '#52a7b4'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                  className="w-20 h-10 cursor-pointer p-1"
+                />
+                <Input
+                  type="text"
+                  value={formData.color || '#52a7b4'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                  placeholder="#52a7b4"
+                  className="flex-1"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Color for visual display in statistics and badges
+              </p>
+            </div>
+
+            {/* Live Preview */}
+            <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
+              <span className="text-sm text-muted-foreground">Preview:</span>
+              <MembershipBadge 
+                type={formData.name || 'Example'} 
+                color={formData.color || '#52a7b4'}
+              />
             </div>
           </div>
         );

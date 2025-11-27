@@ -2,14 +2,14 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Users } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
 import { supabase } from "@/integrations/supabase/client"
-import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipUtils"
 import { CourseUtilizationCard } from "./CourseUtilizationCard"
 import { PopularCoursesCard } from "./PopularCoursesCard"
 import { CancellationRateCard } from "./CancellationRateCard"
 import { BookingPatternsCard } from "./BookingPatternsCard"
 import { InactiveMembersCard } from "./InactiveMembersCard"
+import { loadMembershipPlanColors, getMembershipColor } from "@/lib/membershipColors"
 
 interface AdminStatsProps {
   onStatsLoad?: (stats: any) => void
@@ -21,12 +21,9 @@ interface LeaderboardStats {
     [key: string]: number
   }
   currentMonthEntries: number
-        registrationsByType: {
-        'Unlimited': number
-        'Limited': number
-        'Credits': number
-        'Open Gym': number
-      }
+  checkInsByPlan: {
+    [key: string]: number
+  }
 }
 
 export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
@@ -34,42 +31,15 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
     totalEntries: 0,
     memberStats: {},
     currentMonthEntries: 0,
-    registrationsByType: {
-      'Unlimited': 0,
-      'Limited': 0,
-      'Credits': 0,
-      'Open Gym': 0
-    }
+    checkInsByPlan: {}
   })
   const [loading, setLoading] = useState(true)
+  const [planColors, setPlanColors] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
     loadStats()
+    loadMembershipPlanColors().then(setPlanColors)
   }, [])
-
-  // Helper function to map booking types to display categories
-  const mapBookingTypeToCategory = (bookingType: string | undefined): string => {
-    console.log('Mapping booking type:', bookingType)
-    switch (bookingType) {
-      case 'unlimited':
-        console.log('Mapped to: Unlimited')
-        return 'Unlimited'
-      case 'limited':
-      case 'weekly_limit':
-      case 'monthly_limit':
-        console.log('Mapped to: Limited')
-        return 'Limited'
-      case 'credits':
-        console.log('Mapped to: Credits')
-        return 'Credits'
-      case 'open_gym_only':
-        console.log('Mapped to: Open Gym')
-        return 'Open Gym'
-      default:
-        console.log('Mapped to: Unlimited (default)')
-        return 'Unlimited'
-    }
-  }
 
   const loadStats = async () => {
     try {
@@ -114,8 +84,6 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         return courseEndTime <= now
       }) || []
 
-      console.log('Completed Course Registrations:', completedCourses.length)
-
       // Get Open Gym check-ins for current month
       const { data: openGymSessions } = await supabase
         .from('training_sessions')
@@ -124,9 +92,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .gte('session_date', firstDayOfMonth.toISOString().split('T')[0])
         .lte('session_date', lastDayOfMonth.toISOString().split('T')[0])
 
-      console.log('Open Gym Check-ins:', openGymSessions?.length || 0)
-
-      // Get all active memberships V2 to map users to membership types
+      // Get all active memberships V2 to map users to membership plan names
       const { data: allMembershipsV2 } = await supabase
         .from('user_memberships_v2')
         .select(`
@@ -140,52 +106,40 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .eq('status', 'active')
         .eq('membership_plans_v2.is_active', true)
 
-      // Create a map of user_id to membership type
-      const userMembershipMap = new Map()
+      // Create a map of user_id to membership plan name
+      const userMembershipMap = new Map<string, string>()
       allMembershipsV2?.forEach(membership => {
         const plan = membership.membership_plans_v2
         if (plan?.is_active) {
-          const bookingRules = plan.booking_rules as any
-          userMembershipMap.set(membership.user_id, {
-            type: bookingRules?.type || 'unknown',
-            name: plan.name
-          })
+          userMembershipMap.set(membership.user_id, plan.name)
         }
       })
 
-      // Count all completed trainings by membership type
-      const trainingCounts = {
-        'Unlimited': 0,
-        'Limited': 0, 
-        'Credits': 0,
-        'Open Gym': 0
-      }
+      // Count all completed trainings by plan name
+      const checkInsByPlan: { [key: string]: number } = {}
 
       // Count completed courses
       completedCourses.forEach(registration => {
-        const membershipInfo = userMembershipMap.get(registration.user_id)
-        if (membershipInfo) {
-          const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
-          trainingCounts[membershipCategory as keyof typeof trainingCounts] += 1
+        const planName = userMembershipMap.get(registration.user_id)
+        if (planName) {
+          checkInsByPlan[planName] = (checkInsByPlan[planName] || 0) + 1
         } else {
-          trainingCounts['Unlimited'] += 1 // Default for admins/trainers
+          // Default for admins/trainers without membership
+          checkInsByPlan['Staff'] = (checkInsByPlan['Staff'] || 0) + 1
         }
       })
 
       // Count Open Gym check-ins
       openGymSessions?.forEach(session => {
-        const membershipInfo = userMembershipMap.get(session.user_id)
-        if (membershipInfo) {
-          const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
-          trainingCounts[membershipCategory as keyof typeof trainingCounts] += 1
+        const planName = userMembershipMap.get(session.user_id)
+        if (planName) {
+          checkInsByPlan[planName] = (checkInsByPlan[planName] || 0) + 1
         } else {
-          trainingCounts['Unlimited'] += 1 // Default for admins/trainers
+          checkInsByPlan['Staff'] = (checkInsByPlan['Staff'] || 0) + 1
         }
       })
 
       const totalRegistrations = completedCourses.length + (openGymSessions?.length || 0)
-      console.log('Total Registrations (Courses + Open Gym):', totalRegistrations)
-      console.log('Registrations by Type:', trainingCounts)
 
       // Calculate total training sessions from leaderboard
       const totalCurrentMonth = leaderboardData?.reduce((sum, entry) => sum + entry.training_count, 0) || 0
@@ -202,36 +156,24 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .from('profiles')
         .select('user_id')
 
-      // Count memberships by type based on profiles, excluding admins/trainers
-      const membershipCounts = {
-        'Unlimited': 0,
-        'Limited': 0, 
-        'Credits': 0,
-        'Open Gym': 0
-      }
-
-      let totalActiveMembers = 0
+      // Count memberships by plan name based on profiles, excluding admins/trainers
+      const membershipCounts: { [key: string]: number } = {}
       
       allProfiles?.forEach(profile => {
         // Skip admin/trainer profiles
         if (!adminTrainerUserIds.has(profile.user_id)) {
-          totalActiveMembers++
-          const membershipInfo = userMembershipMap.get(profile.user_id)
-          if (membershipInfo) {
-            const membershipCategory = mapBookingTypeToCategory(membershipInfo.type)
-            membershipCounts[membershipCategory as keyof typeof membershipCounts] += 1
+          const planName = userMembershipMap.get(profile.user_id)
+          if (planName) {
+            membershipCounts[planName] = (membershipCounts[planName] || 0) + 1
           }
         }
       })
-
-      console.log('Total Active Members:', totalActiveMembers)
-      console.log('Membership Counts:', membershipCounts)
 
       const statsData = {
         totalEntries: totalCurrentMonth,
         memberStats: membershipCounts,
         currentMonthEntries: totalRegistrations,
-        registrationsByType: trainingCounts
+        checkInsByPlan: checkInsByPlan
       }
 
       setStats(statsData)
@@ -247,21 +189,15 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
     return null
   }
 
-  // Get colors for membership types
-  const getMembershipColor = (type: string) => {
-    // All membership types now use gray color
-    return 'hsl(0, 0%, 65%)' // Gray for all membership types
-  }
-
-  const chartData = [
-    { name: 'Unlimited', value: stats.registrationsByType?.['Unlimited'] || 0, fill: getMembershipColor('Unlimited') },
-    { name: 'Limited', value: stats.registrationsByType?.['Limited'] || 0, fill: getMembershipColor('Limited') },
-    { name: 'Credits', value: stats.registrationsByType?.['Credits'] || 0, fill: getMembershipColor('Credits') },
-    { name: 'Open Gym', value: stats.registrationsByType?.['Open Gym'] || 0, fill: getMembershipColor('Open Gym') }
-  ]
+  // Prepare chart data with plan colors
+  const chartData = Object.entries(stats.checkInsByPlan || {}).map(([planName, count]) => ({
+    name: planName,
+    value: count,
+    fill: planName === 'Staff' ? '#6b7280' : getMembershipColor(planName, planColors)
+  }))
 
   // Calculate dynamic scale based on data
-  const maxValue = Math.max(...chartData.map(item => item.value))
+  const maxValue = Math.max(...chartData.map(item => item.value), 1)
   const scaleMax = Math.max(maxValue * 1.2, 50) // At least 50, or 20% above max value
 
   return (
@@ -289,7 +225,7 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Completed trainings by membership type</CardTitle>
+          <CardTitle>Completed trainings by membership plan</CardTitle>
           <p className="text-xs text-muted-foreground">This month</p>
         </CardHeader>
         <CardContent>
@@ -314,7 +250,11 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
                   dataKey="value" 
                   minPointSize={2}
                   radius={[4, 4, 0, 0]}
-                />
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -327,16 +267,28 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
           <div className="flex items-center mb-4">
             <Users className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-lg font-medium text-foreground">Number of memberships by category</p>
+              <p className="text-lg font-medium text-foreground">Number of memberships by plan</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {Object.entries(stats.memberStats).map(([type, count]) => (
-              <div key={type} className="text-center">
-                <Badge variant="secondary" className="text-sm mb-2">{type}</Badge>
-                <p className="text-xl font-bold">{count}</p>
-              </div>
-            ))}
+            {Object.entries(stats.memberStats).map(([planName, count]) => {
+              const planColor = getMembershipColor(planName, planColors)
+              return (
+                <div key={planName} className="text-center">
+                  <Badge 
+                    className="text-sm mb-2"
+                    style={{
+                      backgroundColor: planColor,
+                      color: '#ffffff',
+                      border: 'none'
+                    }}
+                  >
+                    {planName}
+                  </Badge>
+                  <p className="text-xl font-bold">{count}</p>
+                </div>
+              )
+            })}
           </div>
         </CardContent>
       </Card>
