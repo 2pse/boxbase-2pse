@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Calendar as CalendarIcon, DollarSign, TrendingUp, Users, Download } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Cell } from "recharts"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
-import { getPriorizedMembership, getMembershipTypeName } from "@/lib/membershipUtils"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
 import { enUS } from "date-fns/locale"
 import { cn } from "@/lib/utils"
+import { loadMembershipPlanColors, getMembershipColor as getMembershipPlanColor } from "@/lib/membershipColors"
 
 interface RevenueData {
   month: string
@@ -41,10 +41,12 @@ export const FinanceReport = () => {
   const [exportStartDate, setExportStartDate] = useState('')
   const [exportEndDate, setExportEndDate] = useState('')
   const [exporting, setExporting] = useState(false)
+  const [planColors, setPlanColors] = useState<Map<string, string>>(new Map())
   const { toast } = useToast()
 
   useEffect(() => {
     loadFinancialData()
+    loadMembershipPlanColors().then(setPlanColors)
   }, [])
 
   // Helper function to map booking types to display categories
@@ -301,20 +303,26 @@ export const FinanceReport = () => {
     }
   }
 
+  // Get color for a plan name from the color map, with fallback
+  const getColorForPlan = (planName: string) => {
+    return getMembershipPlanColor(planName, planColors)
+  }
+
+  // Legacy function for backward compatibility with booking types
   const getMembershipColor = (type: string) => {
     switch (type) {
       case 'unlimited':
-        return 'hsl(220, 15%, 45%)' // Professional dark blue-gray
+        return 'hsl(220, 15%, 45%)'
       case 'limited':
       case 'monthly_limit':
       case 'weekly_limit':
-        return 'hsl(200, 18%, 55%)' // Muted steel blue
+        return 'hsl(200, 18%, 55%)'
       case 'credits':
-        return 'hsl(150, 12%, 48%)' // Subtle sage green
+        return 'hsl(150, 12%, 48%)'
       case 'open_gym_only':
-        return 'hsl(25, 20%, 52%)' // Warm neutral brown
+        return 'hsl(25, 20%, 52%)'
       default:
-        return 'hsl(220, 15%, 45%)' // Default to professional dark blue-gray
+        return 'hsl(220, 15%, 45%)'
     }
   }
 

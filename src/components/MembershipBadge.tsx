@@ -7,17 +7,28 @@ interface MembershipBadgeProps {
   type: MembershipType | string | null | undefined
   className?: string
   forceBlack?: boolean
+  forceRed?: boolean
   noShadow?: boolean
+  color?: string // Hex color from membership plan
 }
 
-const getMembershipColor = (type: MembershipType | string | null | undefined) => {
-  // All membership types now use gray color
-  return 'hsl(0, 0%, 65%)' // Gray for all membership types
+const getMembershipColor = (type: MembershipType | string | null | undefined, providedColor?: string) => {
+  // Special Cases: "No Membership" and "Administrator" ALWAYS light gray
+  if (!type || type === 'No Membership' || type === 'Administrator') {
+    return 'hsl(0, 0%, 85%)'
+  }
+  // If color provided from plan, use it
+  if (providedColor) return providedColor
+  // Fallback to gray
+  return 'hsl(0, 0%, 65%)'
 }
 
-const getTextColor = (type: MembershipType | string | null | undefined, forceBlack?: boolean) => {
-  if (forceBlack) return 'hsl(0, 0%, 100%)'
-  // Use white text for all badges consistently
+const getTextColor = (type: MembershipType | string | null | undefined, forceBlack?: boolean, forceRed?: boolean) => {
+  // Special cases get dark gray text
+  if (!type || type === 'No Membership' || type === 'Administrator') {
+    return 'hsl(0, 0%, 40%)'
+  }
+  // All other cases use white text
   return 'hsl(0, 0%, 100%)'
 }
 
@@ -28,7 +39,32 @@ const getDisplayText = (type: MembershipType | string | null | undefined): strin
   return type
 }
 
-export const MembershipBadge: React.FC<MembershipBadgeProps> = ({ type, className, forceBlack, noShadow }) => {
+export const MembershipBadge: React.FC<MembershipBadgeProps> = ({ 
+  type, 
+  className, 
+  forceBlack, 
+  forceRed,
+  noShadow,
+  color 
+}) => {
+  // Determine background color based on hierarchy
+  const getBackgroundColor = () => {
+    // Special cases always light gray
+    if (!type || type === 'No Membership' || type === 'Administrator') {
+      return 'hsl(0, 0%, 85%)'
+    }
+    // forceRed for inactive status
+    if (forceRed) {
+      return 'hsl(0, 84%, 60%)'
+    }
+    // forceBlack
+    if (forceBlack) {
+      return 'hsl(0, 0%, 0%)'
+    }
+    // Use provided color or fallback
+    return getMembershipColor(type, color)
+  }
+
   return (
     <Badge
       variant="outline"
@@ -38,8 +74,8 @@ export const MembershipBadge: React.FC<MembershipBadgeProps> = ({ type, classNam
         className
       )}
       style={{
-        backgroundColor: forceBlack ? 'hsl(0, 0%, 0%)' : getMembershipColor(type),
-        color: getTextColor(type, forceBlack)
+        backgroundColor: getBackgroundColor(),
+        color: getTextColor(type, forceBlack, forceRed)
       }}
     >
       {getDisplayText(type)}

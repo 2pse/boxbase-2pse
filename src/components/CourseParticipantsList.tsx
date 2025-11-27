@@ -10,6 +10,7 @@ import { AdminParticipantManager } from "@/components/AdminParticipantManager"
 import { ProfileImageViewer } from "@/components/ProfileImageViewer"
 import { getDisplayName } from "@/lib/nameUtils"
 import { Database } from "@/integrations/supabase/types"
+import { loadMembershipPlanColors, getMembershipColor } from "@/lib/membershipColors"
 
 interface Course {
   id: string
@@ -29,7 +30,7 @@ interface Participant {
   status: string
   registered_at: string
   display_name: string
-  membership_type: string
+  membership_type: string | null
   avatar_url?: string
   nickname?: string
 }
@@ -50,9 +51,11 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState<{ imageUrl: string | null; displayName: string } | null>(null)
   const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'trainer' | 'member' | null>(null)
+  const [planColors, setPlanColors] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
     loadCurrentUserRole()
+    loadMembershipPlanColors().then(setPlanColors)
   }, [course.id])
 
   useEffect(() => {
@@ -105,8 +108,6 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
     }
   }
 
-  // Removed: Waitlist processing is now handled by database trigger automatically
-
   const loadParticipants = async () => {
     try {
       setLoading(true)
@@ -134,6 +135,25 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
 
       if (profileError) throw profileError
 
+      // Get memberships for these users (admin only)
+      let userMembershipMap = new Map<string, string | null>()
+      if (isAdmin || currentUserRole === 'admin' || currentUserRole === 'trainer') {
+        const { data: memberships } = await supabase
+          .from('user_memberships_v2')
+          .select(`
+            user_id,
+            membership_plans_v2(
+              name
+            )
+          `)
+          .in('user_id', userIds)
+          .eq('status', 'active')
+
+        memberships?.forEach(m => {
+          userMembershipMap.set(m.user_id, m.membership_plans_v2?.name || null)
+        })
+      }
+
       // Combine data
       const participantsData = registrations.map(reg => {
         const profile = profiles?.find(p => p.user_id === reg.user_id)
@@ -144,11 +164,11 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
           registered_at: reg.registered_at,
           display_name: profile ? getDisplayName({
             first_name: profile.first_name,
-            last_name: profile.last_name, // Show last_name for admin users
+            last_name: profile.last_name,
             nickname: profile.nickname,
             display_name: profile.display_name
           }, currentUserRole) : 'Unknown',
-          membership_type: 'Member', // Default since membership_type is not available for other users
+          membership_type: userMembershipMap.get(reg.user_id) || null,
           avatar_url: profile?.avatar_url,
           nickname: profile?.nickname
         }
@@ -206,8 +226,6 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
         toast.warning('Notification could not be sent')
       }
 
-      // Removed: Waitlist processing is now handled by database trigger automatically
-
       await loadParticipants()
     } catch (error) {
       console.error('Error promoting participant:', error)
@@ -257,7 +275,7 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                 const percentage = (registeredParticipants.length / course.max_participants) * 100;
                 let badgeColor = "bg-green-500";
                 if (percentage >= 100) badgeColor = "bg-red-500";
-                else if (percentage >= 75) badgeColor = "bg-[#edb408]"; // Orange
+                else if (percentage >= 75) badgeColor = "bg-[#edb408]";
                 
                 return (
                   <Badge variant="secondary" className={`text-white ${badgeColor}`}>
@@ -303,7 +321,14 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {(isAdmin || currentUserRole === 'admin' || currentUserRole === 'trainer') && (
+                        <MembershipBadge 
+                          type={participant.membership_type}
+                          color={getMembershipColor(participant.membership_type, planColors)}
+                          noShadow
+                        />
+                      )}
                       {isAdmin && (
                         <Button
                           variant="ghost"
@@ -347,7 +372,14 @@ export const CourseParticipantsList: React.FC<CourseParticipantsListProps> = ({
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 flex-shrink-0">
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {(isAdmin || currentUserRole === 'admin' || currentUserRole === 'trainer') && (
+                          <MembershipBadge 
+                            type={participant.membership_type}
+                            color={getMembershipColor(participant.membership_type, planColors)}
+                            noShadow
+                          />
+                        )}
                         <Button
                           variant="default"
                           size="sm"
