@@ -59,3 +59,6 @@ verify_jwt = true
 
 [functions.verify-checkout-session]
 verify_jwt = true
+
+[functions.stripe-webhook-handler]
+verify_jwt = false
