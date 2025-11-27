@@ -155,13 +155,18 @@ export default function Shop() {
     setUpgradeDialogPlan(null);
 
     const currentBookingType = currentMembership?.membership_plans_v2?.booking_rules?.type;
+    const currentPaymentFrequency = currentMembership?.membership_plans_v2?.payment_frequency;
     const isCreditsBasedUpgrade = currentBookingType === "credits" && plan.booking_rules?.type !== "credits";
-    const isSubscriptionUpgrade = currentMembership?.stripe_subscription_id && !isCreditsBasedUpgrade;
+    
+    // Check if this is a subscription upgrade: either has stripe_subscription_id OR has monthly payment frequency
+    const isMonthlySubscription = currentPaymentFrequency === "monthly";
+    const hasExistingSubscription = currentMembership?.stripe_subscription_id || isMonthlySubscription;
+    const isSubscriptionUpgrade = hasExistingSubscription && !isCreditsBasedUpgrade && currentMembership.membership_plan_id !== plan.id;
 
     let endpoint = "create-stripe-checkout";
     if (isCreditsBasedUpgrade) {
       endpoint = "create-subscription-from-credits";
-    } else if (isSubscriptionUpgrade && currentMembership.membership_plan_id !== plan.id) {
+    } else if (isSubscriptionUpgrade) {
       endpoint = "create-upgrade-checkout";
     }
 
