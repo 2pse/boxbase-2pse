@@ -3,7 +3,9 @@ import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Clock, MapPin } from "lucide-react"
+import { Clock, MapPin, UserPlus } from "lucide-react"
+import { User } from "@supabase/supabase-js"
+import { CourseInvitationButton } from "./CourseInvitationButton"
 import { format, parseISO, isSameDay } from "date-fns"
 import { enUS } from "date-fns/locale"
 import { timezone } from "@/lib/timezone"
@@ -37,6 +39,7 @@ interface CourseCalendarProps {
   canCancelCourse: (course: Course) => boolean
   userMembershipType: string
   primaryColor: string
+  user: User
 }
 
 export const CourseCalendar = ({ 
@@ -46,7 +49,8 @@ export const CourseCalendar = ({
   onCancel, 
   canCancelCourse,
   userMembershipType,
-  primaryColor
+  primaryColor,
+  user
 }: CourseCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
 
@@ -174,24 +178,33 @@ export const CourseCalendar = ({
                             </Badge>
                           )}
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          {(() => {
-                            const percentage = (course.registered_count / course.max_participants) * 100;
-                            let badgeColor = "bg-green-500";
-                            if (percentage >= 100) badgeColor = "bg-red-500";
-                            else if (percentage >= 75) badgeColor = "bg-[#edb408]";
-                            
-                            return (
-                              <Badge className={`text-white ${badgeColor} shadow-sm`}>
-                                {course.registered_count}/{course.max_participants}
+                        <div className="flex items-center gap-2">
+                          <CourseInvitationButton
+                            courseId={course.id}
+                            courseName={course.title}
+                            courseDate={course.course_date}
+                            courseTime={course.start_time.slice(0, 5)}
+                            user={user}
+                          />
+                          <div className="flex flex-col items-end gap-1">
+                            {(() => {
+                              const percentage = (course.registered_count / course.max_participants) * 100;
+                              let badgeColor = "bg-green-500";
+                              if (percentage >= 100) badgeColor = "bg-red-500";
+                              else if (percentage >= 75) badgeColor = "bg-[#edb408]";
+                              
+                              return (
+                                <Badge className={`text-white ${badgeColor} shadow-sm`}>
+                                  {course.registered_count}/{course.max_participants}
+                                </Badge>
+                              );
+                            })()}
+                            {course.waitlist_count > 0 && (
+                              <Badge className="text-white bg-yellow-500 shadow-sm">
+                                WL: {course.waitlist_count}
                               </Badge>
-                            );
-                          })()}
-                          {course.waitlist_count > 0 && (
-                            <Badge className="text-white bg-yellow-500 shadow-sm">
-                              WL: {course.waitlist_count}
-                            </Badge>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                 </div>

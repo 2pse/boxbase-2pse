@@ -764,6 +764,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
           canCancelCourse={canCancelCourse}
           userMembershipType={userMembershipType}
           primaryColor={primaryColor}
+          user={user}
         />
       )}
 
