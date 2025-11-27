@@ -24,6 +24,7 @@ interface GymSettingsData {
   webhook_member_url: string | null
   webhook_waitlist_url: string | null
   webhook_reactivation_url: string | null
+  webhook_invitation_url: string | null
   stripe_webhook_endpoint: string | null
   show_functional_fitness_workouts: boolean
   show_bodybuilding_workouts: boolean
@@ -241,6 +242,7 @@ export const GymSettings = () => {
           webhook_member_url: settings.webhook_member_url,
           webhook_waitlist_url: settings.webhook_waitlist_url,
           webhook_reactivation_url: settings.webhook_reactivation_url,
+          webhook_invitation_url: settings.webhook_invitation_url,
           show_functional_fitness_workouts: settings.show_functional_fitness_workouts,
           show_bodybuilding_workouts: settings.show_bodybuilding_workouts,
         })
@@ -758,6 +760,31 @@ export const GymSettings = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => window.open(settings.webhook_reactivation_url!, '_blank')}
+                      title="Test webhook"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="webhook_invitation_url">Course Invitation Webhook URL</Label>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Triggered when a member invites another member to a course
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    id="webhook_invitation_url"
+                    value={settings.webhook_invitation_url || ''}
+                    onChange={(e) => setSettings({ ...settings, webhook_invitation_url: e.target.value })}
+                    placeholder="https://hook.eu2.make.com/..."
+                  />
+                  {settings.webhook_invitation_url && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(settings.webhook_invitation_url!, '_blank')}
                       title="Test webhook"
                     >
                       <ExternalLink className="h-4 w-4" />
