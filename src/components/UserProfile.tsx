@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LogOut, Dumbbell, Target, Moon, Sun, RotateCcw, Eye, EyeOff, Trophy } from "lucide-react"
+import { LogOut, Dumbbell, Target, Moon, Sun, RotateCcw, Eye, EyeOff, Trophy, ShoppingBag } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { supabase } from "@/integrations/supabase/client"
 import { useNavigate } from "react-router-dom"
@@ -263,6 +263,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     navigate('/pro/exercises')
   }
 
+  const navigateToShop = () => {
+    navigate('/shop')
+  }
+
   const handleRefresh = () => {
     window.location.reload()
   }
@@ -371,13 +375,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           primaryColor={primaryColor}
         />
 
-        {/* Navigation to Strength Values and Exercises */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
+        {/* Navigation to Strength Values, Exercises and Shop */}
+        <div className="grid grid-cols-3 gap-3 md:gap-4 mb-3 md:mb-4">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
             <div className="flex flex-col items-center justify-center text-center">
               <Dumbbell className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
               <h3 className="font-semibold text-sm md:text-lg text-foreground">Strength Values</h3>
-              <p className="text-xs md:text-base text-muted-foreground">Manage 1RM values</p>
+              <p className="text-xs md:text-sm text-muted-foreground">Manage 1RM</p>
             </div>
           </div>
           
@@ -385,7 +389,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             <div className="flex flex-col items-center justify-center text-center">
               <Target className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
               <h3 className="font-semibold text-sm md:text-lg text-foreground">Exercises</h3>
-              <p className="text-xs md:text-base text-muted-foreground">Edit preferences</p>
+              <p className="text-xs md:text-sm text-muted-foreground">Preferences</p>
+            </div>
+          </div>
+
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToShop}>
+            <div className="flex flex-col items-center justify-center text-center">
+              <ShoppingBag className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
+              <h3 className="font-semibold text-sm md:text-lg text-foreground">Shop</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">Products</p>
             </div>
           </div>
         </div>

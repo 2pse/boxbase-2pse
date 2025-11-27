@@ -45,7 +45,7 @@ export const ProductManager = () => {
 
     if (error) {
       console.error("Error loading products:", error);
-      toast.error("Fehler beim Laden der Produkte");
+      toast.error("Error loading products");
     } else {
       setProducts(data || []);
     }
@@ -85,13 +85,13 @@ export const ProductManager = () => {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toast.error("Bitte nur Bilder hochladen");
+      toast.error("Please upload an image file");
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Bild darf maximal 5MB groß sein");
+      toast.error("Image must be smaller than 5MB");
       return;
     }
 
@@ -108,7 +108,7 @@ export const ProductManager = () => {
 
       if (uploadError) {
         console.error("Upload error:", uploadError);
-        toast.error("Fehler beim Hochladen");
+        toast.error("Error uploading image");
         return;
       }
 
@@ -117,10 +117,10 @@ export const ProductManager = () => {
         .getPublicUrl(filePath);
 
       setFormData({ ...formData, image_url: publicUrl });
-      toast.success("Bild hochgeladen");
+      toast.success("Image uploaded");
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Fehler beim Hochladen");
+      toast.error("Error uploading image");
     } finally {
       setUploading(false);
     }
@@ -132,7 +132,7 @@ export const ProductManager = () => {
 
   const handleSave = async () => {
     if (!formData.name || !formData.price) {
-      toast.error("Name und Preis sind erforderlich");
+      toast.error("Name and price are required");
       return;
     }
 
@@ -156,9 +156,9 @@ export const ProductManager = () => {
 
       if (error) {
         console.error("Error updating product:", error);
-        toast.error("Fehler beim Aktualisieren");
+        toast.error("Error updating product");
       } else {
-        toast.success("Produkt aktualisiert");
+        toast.success("Product updated");
         setDialogOpen(false);
         loadProducts();
       }
@@ -171,9 +171,9 @@ export const ProductManager = () => {
 
       if (error) {
         console.error("Error creating product:", error);
-        toast.error("Fehler beim Erstellen");
+        toast.error("Error creating product");
       } else {
-        toast.success("Produkt erstellt");
+        toast.success("Product created");
         setDialogOpen(false);
         loadProducts();
 
@@ -188,7 +188,7 @@ export const ProductManager = () => {
   };
 
   const handleDelete = async (product: ShopProduct) => {
-    if (!confirm(`Möchtest du "${product.name}" wirklich löschen?`)) return;
+    if (!confirm(`Do you really want to delete "${product.name}"?`)) return;
 
     const { error } = await supabase
       .from("shop_products")
@@ -197,9 +197,9 @@ export const ProductManager = () => {
 
     if (error) {
       console.error("Error deleting product:", error);
-      toast.error("Fehler beim Löschen");
+      toast.error("Error deleting product");
     } else {
-      toast.success("Produkt gelöscht");
+      toast.success("Product deleted");
       loadProducts();
     }
   };
@@ -209,7 +209,7 @@ export const ProductManager = () => {
     
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      toast.error("Nicht angemeldet");
+      toast.error("Not logged in");
       setLinkingStripe(false);
       return;
     }
@@ -220,11 +220,11 @@ export const ProductManager = () => {
 
     if (error) {
       console.error("Stripe linking error:", error);
-      toast.error("Stripe-Verknüpfung fehlgeschlagen");
+      toast.error("Stripe linking failed");
     } else if (data?.error) {
       toast.error(data.error);
     } else {
-      toast.success("Mit Stripe verknüpft");
+      toast.success("Linked to Stripe");
       loadProducts();
     }
 
@@ -243,12 +243,12 @@ export const ProductManager = () => {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Shop Produkte</h2>
-          <p className="text-muted-foreground">Verwalte deine Shop-Produkte</p>
+          <h2 className="text-2xl font-bold">Shop Products</h2>
+          <p className="text-muted-foreground">Manage your shop products</p>
         </div>
         <Button onClick={openCreateDialog}>
           <Plus className="h-4 w-4 mr-2" />
-          Neues Produkt
+          New Product
         </Button>
       </div>
 
@@ -256,9 +256,9 @@ export const ProductManager = () => {
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Noch keine Produkte vorhanden</p>
+            <p className="text-muted-foreground">No products yet</p>
             <Button variant="outline" className="mt-4" onClick={openCreateDialog}>
-              Erstes Produkt erstellen
+              Create first product
             </Button>
           </CardContent>
         </Card>
@@ -273,7 +273,7 @@ export const ProductManager = () => {
                       {product.name}
                       {product.stock_quantity === 0 && (
                         <Badge variant="destructive" className="text-xs">
-                          Ausverkauft
+                          Sold Out
                         </Badge>
                       )}
                     </CardTitle>
@@ -311,7 +311,7 @@ export const ProductManager = () => {
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-semibold text-lg">{product.price.toFixed(2)} €</span>
                   <span className="text-muted-foreground">
-                    Bestand: {product.stock_quantity}
+                    Stock: {product.stock_quantity}
                   </span>
                 </div>
 
@@ -319,7 +319,7 @@ export const ProductManager = () => {
                   {product.stripe_product_id ? (
                     <Badge variant="outline" className="text-xs">
                       <LinkIcon className="h-3 w-3 mr-1" />
-                      Stripe verknüpft
+                      Stripe linked
                     </Badge>
                   ) : (
                     <Button
@@ -333,13 +333,13 @@ export const ProductManager = () => {
                       ) : (
                         <LinkIcon className="h-3 w-3 mr-1" />
                       )}
-                      Mit Stripe verknüpfen
+                      Link to Stripe
                     </Button>
                   )}
                   
                   {!product.is_active && (
                     <Badge variant="secondary" className="text-xs">
-                      Inaktiv
+                      Inactive
                     </Badge>
                   )}
                 </div>
@@ -353,7 +353,7 @@ export const ProductManager = () => {
         <DialogContent className="max-w-md max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>
-              {editingProduct ? "Produkt bearbeiten" : "Neues Produkt"}
+              {editingProduct ? "Edit Product" : "New Product"}
             </DialogTitle>
           </DialogHeader>
 
@@ -364,24 +364,24 @@ export const ProductManager = () => {
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Produktname"
+                placeholder="Product name"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Beschreibung</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Produktbeschreibung"
+                placeholder="Product description"
                 rows={3}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="price">Preis (€) *</Label>
+                <Label htmlFor="price">Price (€) *</Label>
                 <Input
                   id="price"
                   type="number"
@@ -393,7 +393,7 @@ export const ProductManager = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="stock">Bestand</Label>
+                <Label htmlFor="stock">Stock</Label>
                 <Input
                   id="stock"
                   type="number"
@@ -405,23 +405,23 @@ export const ProductManager = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Kategorie</Label>
+              <Label htmlFor="category">Category</Label>
               <Input
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                placeholder="z.B. Bekleidung, Equipment, Supplements..."
+                placeholder="e.g. Apparel, Equipment, Supplements..."
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Produktbild</Label>
+              <Label>Product Image</Label>
               {formData.image_url ? (
                 <div className="relative">
                   <div className="aspect-video rounded-lg overflow-hidden bg-muted">
                     <img
                       src={formData.image_url}
-                      alt="Produktbild"
+                      alt="Product image"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -445,10 +445,10 @@ export const ProductManager = () => {
                     <>
                       <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                       <p className="text-sm text-muted-foreground">
-                        Klicke zum Hochladen
+                        Click to upload
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        PNG, JPG bis 5MB
+                        PNG, JPG up to 5MB
                       </p>
                     </>
                   )}
@@ -467,7 +467,7 @@ export const ProductManager = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label htmlFor="active">Aktiv (im Shop sichtbar)</Label>
+              <Label htmlFor="active">Active (visible in shop)</Label>
               <Switch
                 id="active"
                 checked={formData.is_active}
@@ -478,11 +478,11 @@ export const ProductManager = () => {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              Abbrechen
+              Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving || uploading}>
               {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              {editingProduct ? "Speichern" : "Erstellen"}
+              {editingProduct ? "Save" : "Create"}
             </Button>
           </DialogFooter>
         </DialogContent>

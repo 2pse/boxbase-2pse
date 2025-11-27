@@ -28,9 +28,9 @@ const BookingTypeIcon = ({ type }: { type: string }) => {
 const getBookingTypeLabel = (type: string) => {
   switch (type) {
     case 'unlimited':
-      return 'Unbegrenzt';
+      return 'Unlimited';
     case 'limited':
-      return 'Limitiert';
+      return 'Limited';
     case 'credits':
       return 'Credits';
     case 'open_gym_only':
@@ -75,11 +75,12 @@ export default function Shop() {
 
     setPlans((plansData as unknown as MembershipPlanV2Extended[]) || []);
 
-    // Load shop products
+    // Load shop products (only show products with stock > 0)
     const { data: productsData } = await supabase
       .from("shop_products")
       .select("*")
       .eq("is_active", true)
+      .gt("stock_quantity", 0)
       .order("name");
 
     setProducts((productsData as unknown as ShopProduct[]) || []);
@@ -98,7 +99,7 @@ export default function Shop() {
 
   const handleMembershipCheckout = async (plan: MembershipPlanV2Extended) => {
     if (!plan.stripe_price_id) {
-      toast.error("Dieser Plan ist nicht für Online-Kauf verfügbar. Bitte kontaktiere uns.");
+      toast.error("This plan is not available for online purchase. Please contact us.");
       return;
     }
 
@@ -114,7 +115,7 @@ export default function Shop() {
 
     if (error || data?.error) {
       console.error("Checkout error:", error || data?.error);
-      toast.error(data?.error || "Fehler beim Erstellen der Checkout-Session");
+      toast.error(data?.error || "Error creating checkout session");
       setCheckoutLoading(null);
       return;
     }
@@ -126,12 +127,12 @@ export default function Shop() {
 
   const handleProductCheckout = async (product: ShopProduct) => {
     if (!product.stripe_price_id) {
-      toast.error("Dieses Produkt ist nicht für Online-Kauf verfügbar.");
+      toast.error("This product is not available for online purchase.");
       return;
     }
 
     if (product.stock_quantity <= 0) {
-      toast.error("Dieses Produkt ist ausverkauft.");
+      toast.error("This product is sold out.");
       return;
     }
 
@@ -147,7 +148,7 @@ export default function Shop() {
 
     if (error || data?.error) {
       console.error("Checkout error:", error || data?.error);
-      toast.error(data?.error || "Fehler beim Erstellen der Checkout-Session");
+      toast.error(data?.error || "Error creating checkout session");
       setCheckoutLoading(null);
       return;
     }
@@ -158,18 +159,18 @@ export default function Shop() {
   };
 
   const getMembershipButtonText = (plan: MembershipPlanV2Extended) => {
-    if (!currentMembership) return "Jetzt kaufen";
+    if (!currentMembership) return "Buy Now";
     
     const currentType = currentMembership.membership_plans_v2?.booking_rules?.type;
     const planType = plan.booking_rules?.type;
     
     // Credit top-up logic
     if (currentType === "credits" && planType === "credits") {
-      return "Credits aufladen";
+      return "Top Up Credits";
     }
     
     if (currentMembership.membership_plan_id === plan.id) {
-      return "Aktueller Plan";
+      return "Current Plan";
     }
     
     return "Upgrade";
@@ -203,7 +204,7 @@ export default function Shop() {
       <main className="max-w-4xl mx-auto p-4 pb-20 space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Shop</h1>
-          <p className="text-muted-foreground">Mitgliedschaften & Produkte</p>
+          <p className="text-muted-foreground">Memberships & Products</p>
         </div>
 
         {/* Current Membership Badge */}
@@ -212,7 +213,7 @@ export default function Shop() {
             <CardContent className="p-4 flex items-center gap-3">
               <CreditCard className="h-5 w-5 text-primary" />
               <div>
-                <p className="text-sm text-muted-foreground">Aktuelle Mitgliedschaft</p>
+                <p className="text-sm text-muted-foreground">Current Membership</p>
                 <p className="font-semibold">{currentMembership.membership_plans_v2?.name}</p>
               </div>
             </CardContent>
@@ -223,11 +224,11 @@ export default function Shop() {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="memberships" className="flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
-              Mitgliedschaften
+              Memberships
             </TabsTrigger>
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
-              Produkte
+              Products
             </TabsTrigger>
           </TabsList>
 
@@ -236,7 +237,7 @@ export default function Shop() {
               <Card className="border-dashed">
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <CreditCard className="h-12 w-12 text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Keine Mitgliedschaften verfügbar</p>
+                  <p className="text-muted-foreground">No memberships available</p>
                 </CardContent>
               </Card>
             ) : (
@@ -252,7 +253,7 @@ export default function Shop() {
                         <CardTitle className="flex items-center gap-2">
                           {plan.name}
                           {isCurrentPlan(plan) && (
-                            <Badge variant="secondary" className="text-xs">Aktuell</Badge>
+                            <Badge variant="secondary" className="text-xs">Current</Badge>
                           )}
                         </CardTitle>
                         {plan.description && (
@@ -262,7 +263,7 @@ export default function Shop() {
                       <div className="text-right">
                         <p className="text-2xl font-bold">{plan.price_monthly?.toFixed(2)} €</p>
                         <p className="text-xs text-muted-foreground">
-                          {plan.payment_type === 'subscription' ? '/ Monat' : 'einmalig'}
+                          {plan.payment_type === 'subscription' ? '/ month' : 'one-time'}
                         </p>
                       </div>
                     </div>
@@ -275,7 +276,7 @@ export default function Shop() {
                       </Badge>
                       {plan.booking_rules?.type === 'limited' && plan.booking_rules.limit && (
                         <Badge variant="outline">
-                          {plan.booking_rules.limit.count}x / {plan.booking_rules.limit.period === 'week' ? 'Woche' : 'Monat'}
+                          {plan.booking_rules.limit.count}x / month
                         </Badge>
                       )}
                       {plan.booking_rules?.type === 'credits' && plan.booking_rules.limit && (
@@ -284,7 +285,7 @@ export default function Shop() {
                         </Badge>
                       )}
                       {plan.duration_months > 1 && (
-                        <Badge variant="outline">{plan.duration_months} Monate</Badge>
+                        <Badge variant="outline">{plan.duration_months} months</Badge>
                       )}
                     </div>
 
@@ -303,7 +304,7 @@ export default function Shop() {
                     
                     {!plan.stripe_price_id && (
                       <p className="text-xs text-center text-muted-foreground">
-                        Kontaktiere uns für diesen Plan
+                        Contact us for this plan
                       </p>
                     )}
                   </CardContent>
@@ -317,16 +318,13 @@ export default function Shop() {
               <Card className="border-dashed">
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <Package className="h-12 w-12 text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Keine Produkte verfügbar</p>
+                  <p className="text-muted-foreground">No products available</p>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
                 {products.map((product) => (
-                  <Card 
-                    key={product.id} 
-                    className={product.stock_quantity === 0 ? "opacity-60" : ""}
-                  >
+                  <Card key={product.id}>
                     {product.image_url && (
                       <div className="aspect-video rounded-t-lg overflow-hidden bg-muted">
                         <img
@@ -339,12 +337,7 @@ export default function Shop() {
                     <CardHeader className="pb-2">
                       <div className="flex items-start justify-between">
                         <div>
-                          <CardTitle className="text-lg flex items-center gap-2">
-                            {product.name}
-                            {product.stock_quantity === 0 && (
-                              <Badge variant="destructive" className="text-xs">Ausverkauft</Badge>
-                            )}
-                          </CardTitle>
+                          <CardTitle className="text-lg">{product.name}</CardTitle>
                           {product.category && (
                             <p className="text-xs text-muted-foreground">{product.category}</p>
                           )}
@@ -361,14 +354,14 @@ export default function Shop() {
                       <Button
                         className="w-full"
                         onClick={() => handleProductCheckout(product)}
-                        disabled={checkoutLoading === product.id || product.stock_quantity === 0 || !product.stripe_price_id}
+                        disabled={checkoutLoading === product.id || !product.stripe_price_id}
                       >
                         {checkoutLoading === product.id ? (
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                         ) : (
                           <ShoppingBag className="h-4 w-4 mr-2" />
                         )}
-                        {product.stock_quantity === 0 ? "Ausverkauft" : "Kaufen"}
+                        Buy Now
                       </Button>
                     </CardContent>
                   </Card>
