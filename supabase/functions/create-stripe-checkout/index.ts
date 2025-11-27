@@ -109,7 +109,8 @@ serve(async (req) => {
       const isCreditsTopUp = activeMembership?.membership_plans_v2?.booking_rules?.type === "credits" 
         && plan.booking_rules?.type === "credits";
 
-      const mode = plan.payment_type === "subscription" ? "subscription" : "payment";
+      // Use payment_frequency to determine mode: monthly = subscription, one_time = payment
+      const mode = plan.payment_frequency === "monthly" ? "subscription" : "payment";
 
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
         customer: customerId,
