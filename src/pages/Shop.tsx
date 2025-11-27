@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, CreditCard, Package, Loader2, ShoppingBag, Infinity, CalendarDays, Coins, Building } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { ArrowLeft, CreditCard, Package, Loader2, ShoppingBag, Infinity, CalendarDays, Coins, Building, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { ShopProduct, MembershipPlanV2Extended } from "@/types/shop";
 import { Logo } from "@/components/Logo";
+import { UserPurchaseHistory } from "@/components/UserPurchaseHistory";
 
 const BookingTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -40,15 +43,21 @@ const getBookingTypeLabel = (type: string) => {
   }
 };
 
+interface ProductWithImages extends ShopProduct {
+  shop_product_images?: { image_url: string; sort_order: number }[];
+}
+
 export default function Shop() {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [plans, setPlans] = useState<MembershipPlanV2Extended[]>([]);
-  const [products, setProducts] = useState<ShopProduct[]>([]);
+  const [products, setProducts] = useState<ProductWithImages[]>([]);
   const [currentMembership, setCurrentMembership] = useState<any>(null);
+  const [pendingUpgrade, setPendingUpgrade] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("memberships");
+  const [upgradeDialogPlan, setUpgradeDialogPlan] = useState<MembershipPlanV2Extended | null>(null);
 
   useEffect(() => {
     loadData();
@@ -75,26 +84,55 @@ export default function Shop() {
 
     setPlans((plansData as unknown as MembershipPlanV2Extended[]) || []);
 
-    // Load shop products (only show products with stock > 0)
+    // Load shop products with images (only show products with stock > 0)
     const { data: productsData } = await supabase
       .from("shop_products")
-      .select("*")
+      .select("*, shop_product_images(image_url, sort_order)")
       .eq("is_active", true)
       .gt("stock_quantity", 0)
       .order("name");
 
-    setProducts((productsData as unknown as ShopProduct[]) || []);
+    setProducts((productsData as unknown as ProductWithImages[]) || []);
 
-    // Load current membership
-    const { data: membershipData } = await supabase
+    // Load all user memberships to detect pending upgrades
+    const { data: membershipsList } = await supabase
       .from("user_memberships_v2")
       .select("*, membership_plans_v2(*)")
       .eq("user_id", user.id)
-      .eq("status", "active")
-      .single();
+      .in("status", ["active", "pending_activation"])
+      .order("start_date", { ascending: true });
 
-    setCurrentMembership(membershipData);
+    if (membershipsList && membershipsList.length > 0) {
+      // Current membership: active and start_date <= today
+      const today = new Date().toISOString().split("T")[0];
+      const current = membershipsList.find((m: any) => 
+        m.status === "active" && 
+        (!m.start_date || m.start_date <= today)
+      );
+      setCurrentMembership(current || null);
+
+      // Pending upgrade: pending_activation OR active with future start_date
+      const pending = membershipsList.find((m: any) =>
+        m.status === "pending_activation" ||
+        (m.status === "active" && m.start_date && m.start_date > today)
+      );
+      setPendingUpgrade(pending || null);
+    }
+
     setLoading(false);
+  };
+
+  const canUpgrade = (plan: MembershipPlanV2Extended) => {
+    if (!currentMembership) return true;
+    if (pendingUpgrade) return false; // Already has pending upgrade
+
+    const currentPriority = currentMembership.membership_plans_v2?.upgrade_priority || 0;
+    const currentPrice = currentMembership.membership_plans_v2?.price_monthly || 0;
+    const planPrice = plan.price_monthly || 0;
+
+    // Can upgrade if: higher priority OR (same priority AND higher price)
+    return (plan.upgrade_priority > currentPriority) || 
+           (plan.upgrade_priority === currentPriority && planPrice > currentPrice);
   };
 
   const handleMembershipCheckout = async (plan: MembershipPlanV2Extended) => {
@@ -103,9 +141,31 @@ export default function Shop() {
       return;
     }
 
-    setCheckoutLoading(plan.id);
+    // Check if upgrade dialog should be shown
+    if (currentMembership && currentMembership.membership_plan_id !== plan.id) {
+      setUpgradeDialogPlan(plan);
+      return;
+    }
 
-    const { data, error } = await supabase.functions.invoke("create-stripe-checkout", {
+    await processCheckout(plan);
+  };
+
+  const processCheckout = async (plan: MembershipPlanV2Extended) => {
+    setCheckoutLoading(plan.id);
+    setUpgradeDialogPlan(null);
+
+    const currentBookingType = currentMembership?.membership_plans_v2?.booking_rules?.type;
+    const isCreditsBasedUpgrade = currentBookingType === "credits" && plan.booking_rules?.type !== "credits";
+    const isSubscriptionUpgrade = currentMembership?.stripe_subscription_id && !isCreditsBasedUpgrade;
+
+    let endpoint = "create-stripe-checkout";
+    if (isCreditsBasedUpgrade) {
+      endpoint = "create-subscription-from-credits";
+    } else if (isSubscriptionUpgrade && currentMembership.membership_plan_id !== plan.id) {
+      endpoint = "create-upgrade-checkout";
+    }
+
+    const { data, error } = await supabase.functions.invoke(endpoint, {
       body: {
         plan_id: plan.id,
         success_url: `${window.location.origin}/shop/success?type=membership`,
@@ -161,16 +221,22 @@ export default function Shop() {
   const getMembershipButtonText = (plan: MembershipPlanV2Extended) => {
     if (!currentMembership) return "Buy Now";
     
+    if (pendingUpgrade) return "Upgrade Pending";
+    
     const currentType = currentMembership.membership_plans_v2?.booking_rules?.type;
     const planType = plan.booking_rules?.type;
     
     // Credit top-up logic
-    if (currentType === "credits" && planType === "credits") {
+    if (currentType === "credits" && planType === "credits" && currentMembership.membership_plan_id === plan.id) {
       return "Top Up Credits";
     }
     
     if (currentMembership.membership_plan_id === plan.id) {
       return "Current Plan";
+    }
+
+    if (!canUpgrade(plan)) {
+      return "Not Available";
     }
     
     return "Upgrade";
@@ -178,6 +244,23 @@ export default function Shop() {
 
   const isCurrentPlan = (plan: MembershipPlanV2Extended) => {
     return currentMembership?.membership_plan_id === plan.id;
+  };
+
+  const getProductImages = (product: ProductWithImages): string[] => {
+    const images: string[] = [];
+    
+    // Add images from shop_product_images
+    if (product.shop_product_images && product.shop_product_images.length > 0) {
+      const sorted = [...product.shop_product_images].sort((a, b) => a.sort_order - b.sort_order);
+      images.push(...sorted.map(img => img.image_url));
+    }
+    
+    // Add main image_url if exists and not already included
+    if (product.image_url && !images.includes(product.image_url)) {
+      images.unshift(product.image_url);
+    }
+    
+    return images;
   };
 
   if (loading) {
@@ -215,6 +298,21 @@ export default function Shop() {
               <div>
                 <p className="text-sm text-muted-foreground">Current Membership</p>
                 <p className="font-semibold">{currentMembership.membership_plans_v2?.name}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Pending Upgrade Badge */}
+        {pendingUpgrade && (
+          <Card className="border-yellow-500/20 bg-yellow-500/5">
+            <CardContent className="p-4 flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-yellow-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Pending Upgrade</p>
+                <p className="font-semibold">
+                  {pendingUpgrade.membership_plans_v2?.name} starts {pendingUpgrade.start_date}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -281,7 +379,7 @@ export default function Shop() {
                       <div className="text-right">
                         <p className="text-2xl font-bold">{plan.price_monthly?.toFixed(2)} €</p>
                         <p className="text-xs text-muted-foreground">
-                          {plan.payment_type === 'subscription' ? '/ month' : 'one-time'}
+                          {plan.payment_frequency === 'one_time' ? 'one-time' : '/ month'}
                         </p>
                       </div>
                     </div>
@@ -294,7 +392,7 @@ export default function Shop() {
                       </Badge>
                       {plan.booking_rules?.type === 'limited' && plan.booking_rules.limit && (
                         <Badge variant="outline">
-                          {plan.booking_rules.limit.count}x / month
+                          {plan.booking_rules.limit.count}x / {plan.booking_rules.limit.period}
                         </Badge>
                       )}
                       {plan.booking_rules?.type === 'credits' && plan.booking_rules.limit && (
@@ -310,7 +408,12 @@ export default function Shop() {
                     <Button
                       className="w-full"
                       onClick={() => handleMembershipCheckout(plan)}
-                      disabled={checkoutLoading === plan.id || (isCurrentPlan(plan) && plan.booking_rules?.type !== 'credits')}
+                      disabled={
+                        checkoutLoading === plan.id || 
+                        (isCurrentPlan(plan) && plan.booking_rules?.type !== 'credits') ||
+                        (!!pendingUpgrade) ||
+                        (!isCurrentPlan(plan) && !canUpgrade(plan))
+                      }
                     >
                       {checkoutLoading === plan.id ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -341,54 +444,106 @@ export default function Shop() {
               </Card>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
-                {products.map((product) => (
-                  <Card key={product.id}>
-                    {product.image_url && (
-                      <div className="aspect-video rounded-t-lg overflow-hidden bg-muted">
-                        <img
-                          src={product.image_url}
-                          alt={product.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{product.name}</CardTitle>
-                          {product.category && (
-                            <p className="text-xs text-muted-foreground">{product.category}</p>
-                          )}
+                {products.map((product) => {
+                  const images = getProductImages(product);
+                  
+                  return (
+                    <Card key={product.id}>
+                      {images.length > 1 ? (
+                        <Carousel className="w-full">
+                          <CarouselContent>
+                            {images.map((url, idx) => (
+                              <CarouselItem key={idx}>
+                                <div className="aspect-video rounded-t-lg overflow-hidden bg-muted">
+                                  <img
+                                    src={url}
+                                    alt={`${product.name} ${idx + 1}`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                          <CarouselPrevious className="left-2" />
+                          <CarouselNext className="right-2" />
+                        </Carousel>
+                      ) : images.length === 1 ? (
+                        <div className="aspect-video rounded-t-lg overflow-hidden bg-muted">
+                          <img
+                            src={images[0]}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <p className="text-xl font-bold">{product.price.toFixed(2)} €</p>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {product.description && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {product.description}
-                        </p>
-                      )}
-                      <Button
-                        className="w-full"
-                        onClick={() => handleProductCheckout(product)}
-                        disabled={checkoutLoading === product.id || !product.stripe_price_id}
-                      >
-                        {checkoutLoading === product.id ? (
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        ) : (
-                          <ShoppingBag className="h-4 w-4 mr-2" />
+                      ) : null}
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-lg">{product.name}</CardTitle>
+                            {product.category && (
+                              <p className="text-xs text-muted-foreground">{product.category}</p>
+                            )}
+                          </div>
+                          <p className="text-xl font-bold">{product.price.toFixed(2)} €</p>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        {product.description && (
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {product.description}
+                          </p>
                         )}
-                        Buy Now
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <Button
+                          className="w-full"
+                          onClick={() => handleProductCheckout(product)}
+                          disabled={checkoutLoading === product.id || !product.stripe_price_id}
+                        >
+                          {checkoutLoading === product.id ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          ) : (
+                            <ShoppingBag className="h-4 w-4 mr-2" />
+                          )}
+                          Buy Now
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
+
+            {/* Purchase History */}
+            {user && <UserPurchaseHistory userId={user.id} />}
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Upgrade Confirmation Dialog */}
+      <Dialog open={!!upgradeDialogPlan} onOpenChange={() => setUpgradeDialogPlan(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Upgrade</DialogTitle>
+            <DialogDescription>
+              You are about to upgrade from{" "}
+              <strong>{currentMembership?.membership_plans_v2?.name}</strong> to{" "}
+              <strong>{upgradeDialogPlan?.name}</strong>.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              Your new membership will begin at the end of your current billing cycle.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUpgradeDialogPlan(null)}>
+              Cancel
+            </Button>
+            <Button onClick={() => upgradeDialogPlan && processCheckout(upgradeDialogPlan)}>
+              Confirm Upgrade
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

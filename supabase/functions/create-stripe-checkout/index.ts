@@ -116,15 +116,26 @@ serve(async (req) => {
         payment_method_types: ["card"],
         mode: mode as Stripe.Checkout.SessionCreateParams.Mode,
         line_items: [{ price: plan.stripe_price_id, quantity: 1 }],
-        success_url: success_url,
+        success_url: `${success_url}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: cancel_url,
         metadata: {
           user_id: user.id,
           plan_id: plan_id,
           purchase_type: isCreditsTopUp ? "credit_topup" : "membership",
           existing_membership_id: activeMembership?.id || "",
+          item_name: plan.name,
         },
       };
+
+      // Add subscription_data with cancel_at if duration is specified
+      if (mode === "subscription" && plan.duration_months > 0) {
+        const cancelAt = new Date();
+        cancelAt.setMonth(cancelAt.getMonth() + plan.duration_months);
+        sessionParams.subscription_data = {
+          metadata: { user_id: user.id, plan_id: plan_id },
+          cancel_at: Math.floor(cancelAt.getTime() / 1000),
+        };
+      }
 
       const session = await stripe.checkout.sessions.create(sessionParams);
       console.log("Created checkout session:", session.id);
@@ -182,12 +193,13 @@ serve(async (req) => {
         payment_method_types: ["card"],
         mode: "payment",
         line_items: [{ price: product.stripe_price_id, quantity: 1 }],
-        success_url: success_url,
+        success_url: `${success_url}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: cancel_url,
         metadata: {
           user_id: user.id,
           product_id: product_id,
           purchase_type: "product",
+          item_name: product.name,
         },
       });
 
