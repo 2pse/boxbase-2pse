@@ -324,13 +324,6 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
       >
         <CardContent className="p-4 md:p-8 h-full flex items-center justify-center">
           <div className="absolute top-3 md:top-5 right-3 md:right-5 flex items-center gap-2">
-            <CourseInvitationButton
-              courseId={course.id}
-              courseName={course.title}
-              courseDate={course.course_date}
-              courseTime={course.start_time.slice(0, 5)}
-              user={user}
-            />
             {isWaitlisted ? (
               <Badge className="bg-yellow-500 text-white">
                 Position {waitlistPosition}
@@ -390,9 +383,18 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
 
             {/* Participants */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">
-                Participants ({registrationCount}/{course.max_participants})
-              </h4>
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium text-sm text-muted-foreground">
+                  Participants ({registrationCount}/{course.max_participants})
+                </h4>
+                <CourseInvitationButton
+                  courseId={course.id}
+                  courseName={course.title}
+                  courseDate={course.course_date}
+                  courseTime={`${course.start_time.slice(0, 5)} - ${course.end_time.slice(0, 5)}`}
+                  user={user}
+                />
+              </div>
               <div className="max-h-64 overflow-y-auto">
                 {participants.length === 0 ? (
                   <Card>
