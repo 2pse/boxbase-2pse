@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Calendar, Clock, ChevronRight, Users, User as UserIcon, X } from "lucide-react"
+import { Calendar, Clock, ChevronRight, Users, User as UserIcon, X, UserPlus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -11,6 +11,7 @@ import { enUS } from "date-fns/locale"
 import { useToast } from "@/hooks/use-toast"
 import { getDisplayName } from "@/lib/nameUtils"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
+import { CourseInvitationButton } from "./CourseInvitationButton"
 
 interface UpcomingClassReservationProps {
   user: User
@@ -322,7 +323,14 @@ export const UpcomingClassReservation: React.FC<UpcomingClassReservationProps> =
         onClick={handleCardClick}
       >
         <CardContent className="p-4 md:p-8 h-full flex items-center justify-center">
-          <div className="absolute top-3 md:top-5 right-3 md:right-5">
+          <div className="absolute top-3 md:top-5 right-3 md:right-5 flex items-center gap-2">
+            <CourseInvitationButton
+              courseId={course.id}
+              courseName={course.title}
+              courseDate={course.course_date}
+              courseTime={course.start_time.slice(0, 5)}
+              user={user}
+            />
             {isWaitlisted ? (
               <Badge className="bg-yellow-500 text-white">
                 Position {waitlistPosition}
