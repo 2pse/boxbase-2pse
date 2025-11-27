@@ -71,3 +71,6 @@ verify_jwt = false
 
 [functions.delete-membership-plan]
 verify_jwt = false
+
+[functions.notify-course-invitation]
+verify_jwt = false

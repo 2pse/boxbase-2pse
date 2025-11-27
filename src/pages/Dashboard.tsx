@@ -18,6 +18,7 @@ import { EmomTimer } from "@/components/EmomTimer"
 import { TabataTimer } from "@/components/TabataTimer"
 import { CourseBooking } from "@/components/CourseBooking"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
+import { CourseInvitationsPanel } from "@/components/CourseInvitationsPanel"
 
 import { LeaderboardPosition } from "@/components/LeaderboardPosition"
 import ChallengeCard from "@/components/ChallengeCard"
@@ -33,6 +34,7 @@ import { useRealtimeSync } from "@/hooks/useRealtimeSync"
 
 import { useNavigate } from "react-router-dom"
 import { timezone } from "@/lib/timezone"
+import { format } from "date-fns"
 import { PercentageCalculator } from "@/components/PercentageCalculator"
 import { getPriorizedMembership } from "@/lib/membershipUtils"
 import { UpcomingClassReservation } from "@/components/UpcomingClassReservation"
@@ -70,6 +72,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
   const [wodStep, setWodStep] = useState<WodStepType>('selection')
   const [userMembershipType, setUserMembershipType] = useState<string | null>(null)
   const [showFirstLoginDialog, setShowFirstLoginDialog] = useState(false)
+  const [showInvitations, setShowInvitations] = useState(false)
+  const [invitationCount, setInvitationCount] = useState(0)
   const { toast } = useToast()
   const { hasUnreadNews, markNewsAsRead } = useNewsNotification(user)
   const { settings } = useGymSettings()
@@ -94,14 +98,75 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       setTimeout(() => generateTrainingDays(), 0)
     }
 
+    const handleInvitationCountChanged = () => {
+      loadInvitationCount()
+    }
+
     window.addEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
     window.addEventListener('creditsUpdated', handleCourseRegistrationChanged)
+    window.addEventListener('invitationCountChanged', handleInvitationCountChanged)
     
     return () => {
       window.removeEventListener('courseRegistrationChanged', handleCourseRegistrationChanged)
       window.removeEventListener('creditsUpdated', handleCourseRegistrationChanged)
+      window.removeEventListener('invitationCountChanged', handleInvitationCountChanged)
     }
   }, [])
+
+  // Load invitation count
+  const loadInvitationCount = async () => {
+    try {
+      const nowInBerlin = timezone.nowInBerlin()
+      const todayStr = format(nowInBerlin, 'yyyy-MM-dd')
+      const nowTime = format(nowInBerlin, 'HH:mm:ss')
+
+      // Count only non-expired pending invitations
+      const { count } = await supabase
+        .from('course_invitations')
+        .select('*, courses!inner(course_date, end_time)', { count: 'exact', head: true })
+        .eq('recipient_id', user.id)
+        .eq('status', 'pending')
+        .or(`course_date.gt.${todayStr},and(course_date.eq.${todayStr},end_time.gt.${nowTime})`, 
+            { foreignTable: 'courses' })
+
+      setInvitationCount(count || 0)
+    } catch (error) {
+      console.error('Error loading invitation count:', error)
+    }
+  }
+
+  // Real-time subscription for invitations
+  useEffect(() => {
+    loadInvitationCount()
+
+    const channel = supabase
+      .channel('course_invitations_updates')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'course_invitations',
+        filter: `recipient_id=eq.${user.id}`
+      }, () => {
+        loadInvitationCount()
+        toast({
+          title: "New Course Invitation!",
+          description: "You have received a new invitation."
+        })
+      })
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'course_invitations',
+        filter: `recipient_id=eq.${user.id}`
+      }, () => {
+        loadInvitationCount()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user.id])
 
   // Generate training days for current month and load training sessions
   useEffect(() => {
@@ -572,6 +637,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
                 user={user}
                 trainingCount={trainingCount}
                 onDataChange={() => generateTrainingDays()}
+                invitationCount={invitationCount}
+                onInvitationClick={() => setShowInvitations(true)}
               />
             </div>
             {/* Week Preview */}
@@ -760,7 +827,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
           }} 
         />
 
-        {/* Credits Counter - remove from Dashboard since it's now in TrainingPath */}
+        <CourseInvitationsPanel
+          open={showInvitations}
+          onOpenChange={setShowInvitations}
+          user={user}
+          onNavigateToCourses={() => {
+            setShowInvitations(false)
+            setActiveTab('courses')
+          }}
+        />
     </div>
   )
 }

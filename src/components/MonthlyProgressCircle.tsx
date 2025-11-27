@@ -4,11 +4,14 @@ import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
 import { timezone } from "@/lib/timezone"
+import { CourseInvitationBadge } from "./CourseInvitationBadge"
 
 interface MonthlyProgressCircleProps {
   user: User
   trainingCount: number
   onDataChange?: () => void
+  invitationCount?: number
+  onInvitationClick?: () => void
 }
 
 interface DayData {
@@ -23,7 +26,9 @@ interface DayData {
 export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   user,
   trainingCount,
-  onDataChange
+  onDataChange,
+  invitationCount = 0,
+  onInvitationClick
 }) => {
   const [monthlyData, setMonthlyData] = useState<DayData[]>([])
   const [loading, setLoading] = useState(true)
@@ -138,7 +143,15 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   }
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="h-full flex items-center justify-center relative">
+      {/* Invitation Badge */}
+      {onInvitationClick && (
+        <CourseInvitationBadge 
+          invitationCount={invitationCount}
+          onClick={onInvitationClick}
+        />
+      )}
+      
       <svg 
         width="100%" 
         height="100%" 

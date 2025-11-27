@@ -58,3 +58,27 @@ export function getShortDisplayName(profile: ProfileData): string {
   }
   return 'Unbekannt';
 }
+
+export function getInitials(profile: ProfileData): string {
+  if (profile.first_name && profile.last_name) {
+    return `${profile.first_name[0]}${profile.last_name[0]}`.toUpperCase();
+  }
+  if (profile.first_name) {
+    const names = profile.first_name.split(' ');
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase();
+    }
+    return profile.first_name.substring(0, 2).toUpperCase();
+  }
+  if (profile.display_name) {
+    const names = profile.display_name.split(' ');
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase();
+    }
+    return profile.display_name.substring(0, 2).toUpperCase();
+  }
+  if (profile.nickname) {
+    return profile.nickname.substring(0, 2).toUpperCase();
+  }
+  return 'UK'; // Unknown
+}

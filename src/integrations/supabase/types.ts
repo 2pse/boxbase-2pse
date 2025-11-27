@@ -71,6 +71,47 @@ export type Database = {
         }
         Relationships: []
       }
+      course_invitations: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          message: string | null
+          recipient_id: string
+          responded_at: string | null
+          sender_id: string
+          status: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          recipient_id: string
+          responded_at?: string | null
+          sender_id: string
+          status?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          recipient_id?: string
+          responded_at?: string | null
+          sender_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_invitations_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_registrations: {
         Row: {
           course_id: string
@@ -287,6 +328,7 @@ export type Database = {
           stripe_webhook_endpoint: string | null
           theme_mode: string
           updated_at: string
+          webhook_invitation_url: string | null
           webhook_member_url: string | null
           webhook_reactivation_url: string | null
           webhook_waitlist_url: string | null
@@ -307,6 +349,7 @@ export type Database = {
           stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
+          webhook_invitation_url?: string | null
           webhook_member_url?: string | null
           webhook_reactivation_url?: string | null
           webhook_waitlist_url?: string | null
@@ -327,6 +370,7 @@ export type Database = {
           stripe_webhook_endpoint?: string | null
           theme_mode?: string
           updated_at?: string
+          webhook_invitation_url?: string | null
           webhook_member_url?: string | null
           webhook_reactivation_url?: string | null
           webhook_waitlist_url?: string | null
@@ -364,6 +408,27 @@ export type Database = {
           updated_at?: string
           user_id?: string
           year?: number
+        }
+        Relationships: []
+      }
+      member_favorites: {
+        Row: {
+          created_at: string
+          favorite_user_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          favorite_user_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          favorite_user_id?: string
+          id?: string
+          user_id?: string
         }
         Relationships: []
       }
