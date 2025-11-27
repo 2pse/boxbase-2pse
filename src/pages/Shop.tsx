@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, CreditCard, Package, Loader2, ShoppingBag, Infinity, CalendarDays, Coins, Building } from "lucide-react";
 import { toast } from "sonner";
@@ -193,7 +193,7 @@ export default function Shop() {
       {/* Header */}
       <header className="border-b border-border p-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <Button variant="ghost" size="icon" onClick={() => navigate('/pro')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <Logo className="h-8" />
@@ -221,16 +221,34 @@ export default function Shop() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="memberships" className="flex items-center gap-2">
+          <div className="flex gap-8 mb-6">
+            <button
+              onClick={() => setActiveTab('memberships')}
+              className={`
+                text-sm md:text-lg font-medium transition-all pb-1 border-b-2 flex items-center gap-2
+                ${activeTab === 'memberships' 
+                  ? 'text-primary border-primary' 
+                  : 'text-muted-foreground border-transparent hover:text-foreground'
+                }
+              `}
+            >
               <CreditCard className="h-4 w-4" />
               Memberships
-            </TabsTrigger>
-            <TabsTrigger value="products" className="flex items-center gap-2">
+            </button>
+            <button
+              onClick={() => setActiveTab('products')}
+              className={`
+                text-sm md:text-lg font-medium transition-all pb-1 border-b-2 flex items-center gap-2
+                ${activeTab === 'products' 
+                  ? 'text-primary border-primary' 
+                  : 'text-muted-foreground border-transparent hover:text-foreground'
+                }
+              `}
+            >
               <Package className="h-4 w-4" />
               Products
-            </TabsTrigger>
-          </TabsList>
+            </button>
+          </div>
 
           <TabsContent value="memberships" className="mt-6 space-y-4">
             {plans.length === 0 ? (
