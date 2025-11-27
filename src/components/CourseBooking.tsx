@@ -725,33 +725,24 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <CourseInvitationButton
-                            courseId={course.id}
-                            courseName={course.title}
-                            courseDate={course.course_date}
-                            courseTime={course.start_time.slice(0, 5)}
-                            user={user}
-                          />
-                          <div className="flex flex-col items-end gap-1">
-                            {(() => {
-                              const percentage = (course.registered_count / course.max_participants) * 100;
-                              let badgeColor = "bg-green-500";
-                              if (percentage >= 100) badgeColor = "bg-red-500";
-                              else if (percentage >= 75) badgeColor = "bg-[#edb408]";
-                              
-                              return (
-                                <Badge className={`text-xs md:text-base text-white ${badgeColor} shadow-sm`}>
-                                  {course.registered_count}/{course.max_participants}
-                                </Badge>
-                              );
-                            })()}
-                            {course.waitlist_count > 0 && (
-                              <Badge className="text-xs md:text-base text-white bg-yellow-500 shadow-sm">
-                                WL: {course.waitlist_count}
+                        <div className="flex flex-col items-end gap-1">
+                          {(() => {
+                            const percentage = (course.registered_count / course.max_participants) * 100;
+                            let badgeColor = "bg-green-500";
+                            if (percentage >= 100) badgeColor = "bg-red-500";
+                            else if (percentage >= 75) badgeColor = "bg-[#edb408]";
+                            
+                            return (
+                              <Badge className={`text-xs md:text-base text-white ${badgeColor} shadow-sm`}>
+                                {course.registered_count}/{course.max_participants}
                               </Badge>
-                            )}
-                          </div>
+                            );
+                          })()}
+                          {course.waitlist_count > 0 && (
+                            <Badge className="text-xs md:text-base text-white bg-yellow-500 shadow-sm">
+                              WL: {course.waitlist_count}
+                            </Badge>
+                          )}
                         </div>
                       </div>
                   </div>
@@ -816,9 +807,18 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
 
               {/* Participants */}
               <div className="space-y-3">
-                <h4 className="font-medium text-sm text-muted-foreground">
-                  Participants ({selectedCourse.registered_count}/{selectedCourse.max_participants})
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-sm text-muted-foreground">
+                    Participants ({selectedCourse.registered_count}/{selectedCourse.max_participants})
+                  </h4>
+                  <CourseInvitationButton
+                    courseId={selectedCourse.id}
+                    courseName={selectedCourse.title}
+                    courseDate={selectedCourse.course_date}
+                    courseTime={`${selectedCourse.start_time.slice(0, 5)} - ${selectedCourse.end_time.slice(0, 5)}`}
+                    user={user}
+                  />
+                </div>
                 <div className="max-h-64 overflow-y-auto">
                   {participants.filter(p => p.status === 'registered').length === 0 ? (
                     <div className="bg-gray-200 dark:bg-gray-700 rounded-2xl p-6 text-center">
