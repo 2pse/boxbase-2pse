@@ -22,20 +22,20 @@ export default function ShopSuccess() {
       case "membership":
         return {
           icon: CreditCard,
-          title: "Mitgliedschaft erfolgreich!",
-          description: "Deine Mitgliedschaft wurde aktiviert. Du kannst jetzt alle Vorteile nutzen.",
+          title: "Membership Activated!",
+          description: "Your membership has been activated. You can now enjoy all the benefits.",
         };
       case "product":
         return {
           icon: ShoppingBag,
-          title: "Kauf erfolgreich!",
-          description: "Vielen Dank für deinen Einkauf. Wir haben deine Bestellung erhalten.",
+          title: "Purchase Successful!",
+          description: "Thank you for your purchase. We have received your order.",
         };
       default:
         return {
           icon: CheckCircle,
-          title: "Zahlung erfolgreich!",
-          description: "Deine Zahlung wurde erfolgreich verarbeitet.",
+          title: "Payment Successful!",
+          description: "Your payment has been processed successfully.",
         };
     }
   };
@@ -69,7 +69,7 @@ export default function ShopSuccess() {
                 className="w-full" 
                 onClick={() => navigate("/pro")}
               >
-                Zum Dashboard
+                Go to Dashboard
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
               
@@ -78,7 +78,7 @@ export default function ShopSuccess() {
                 className="w-full" 
                 onClick={() => navigate("/shop")}
               >
-                Zurück zum Shop
+                Back to Shop
               </Button>
             </div>
           </CardContent>

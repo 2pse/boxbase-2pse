@@ -56,9 +56,9 @@ const BookingTypeIcon = ({ type }: { type: string }) => {
 const getBookingTypeLabel = (type: string) => {
   switch (type) {
     case 'unlimited':
-      return 'Unbegrenzt';
+      return 'Unlimited';
     case 'limited':
-      return 'Limitiert';
+      return 'Limited';
     case 'credits':
       return 'Credits';
     case 'open_gym_only':
@@ -192,7 +192,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                       variant={plan.is_active ? "default" : "secondary"}
                       className={plan.is_active ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
                     >
-                      {plan.is_active ? 'Aktiv' : 'Inaktiv'}
+                      {plan.is_active ? 'Active' : 'Inactive'}
                     </Badge>
                   </CardTitle>
                   {plan.description && (
@@ -202,7 +202,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 <div className="text-right">
                   <p className="text-2xl font-bold">{plan.price_monthly?.toFixed(2) || '0.00'} €</p>
                   <p className="text-xs text-muted-foreground">
-                    {plan.payment_frequency === 'monthly' ? '/ Monat' : 'einmalig'}
+                    {plan.payment_frequency === 'monthly' ? '/ month' : 'one-time'}
                   </p>
                 </div>
               </div>
@@ -215,7 +215,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                 </Badge>
                 {plan.booking_rules?.type === 'limited' && plan.booking_rules.limit && (
                   <Badge variant="outline">
-                    {plan.booking_rules.limit.count}x / Monat
+                    {plan.booking_rules.limit.count}x / month
                   </Badge>
                 )}
                 {plan.booking_rules?.type === 'credits' && plan.booking_rules.credits && (
@@ -224,13 +224,13 @@ export const MembershipPlanManagerV2: React.FC = () => {
                   </Badge>
                 )}
                 {plan.duration_months > 1 && (
-                  <Badge variant="outline">{plan.duration_months} Monate</Badge>
+                  <Badge variant="outline">{plan.duration_months} months</Badge>
                 )}
                 {plan.includes_open_gym && (
-                  <Badge variant="outline">Open Gym inkl.</Badge>
+                  <Badge variant="outline">Open Gym incl.</Badge>
                 )}
                 {plan.auto_renewal && (
-                  <Badge variant="outline">Auto-Verlängerung</Badge>
+                  <Badge variant="outline">Auto-renewal</Badge>
                 )}
               </div>
 
@@ -240,7 +240,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                   {plan.stripe_price_id ? (
                     <Badge variant="outline" className="text-xs text-green-600 border-green-200 bg-green-50 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
                       <LinkIcon className="h-3 w-3 mr-1" />
-                      Stripe verknüpft
+                      Stripe linked
                     </Badge>
                   ) : (
                     <Button
@@ -254,7 +254,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                       ) : (
                         <LinkIcon className="h-3 w-3 mr-1" />
                       )}
-                      Mit Stripe verknüpfen
+                      Link to Stripe
                     </Button>
                   )}
                 </div>
@@ -267,7 +267,7 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     onClick={() => handleEdit(plan)}
                   >
                     <Edit className="h-3 w-3 mr-1" />
-                    Bearbeiten
+                    Edit
                   </Button>
                   
                   <AlertDialog>
@@ -282,19 +282,19 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Plan löschen</AlertDialogTitle>
+                        <AlertDialogTitle>Delete Plan</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Bist du sicher, dass du den Plan "{plan.name}" löschen möchtest? 
-                          Diese Aktion kann nicht rückgängig gemacht werden.
+                          Are you sure you want to delete plan "{plan.name}"? 
+                          This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(plan.id)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Löschen
+                          Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
