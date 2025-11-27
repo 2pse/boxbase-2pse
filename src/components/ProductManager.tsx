@@ -350,14 +350,14 @@ export const ProductManager = () => {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>
               {editingProduct ? "Produkt bearbeiten" : "Neues Produkt"}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-y-auto flex-1 pr-2">
             <div className="space-y-2">
               <Label htmlFor="name">Name *</Label>
               <Input
