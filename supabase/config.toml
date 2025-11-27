@@ -65,3 +65,9 @@ verify_jwt = false
 
 [functions.cancel-membership]
 verify_jwt = true
+
+[functions.update-stripe-product]
+verify_jwt = false
+
+[functions.delete-membership-plan]
+verify_jwt = false
