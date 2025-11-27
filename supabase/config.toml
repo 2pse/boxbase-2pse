@@ -74,3 +74,9 @@ verify_jwt = false
 
 [functions.notify-course-invitation]
 verify_jwt = false
+
+[functions.send-bulk-emails]
+verify_jwt = true
+
+[functions.send-news-email]
+verify_jwt = true

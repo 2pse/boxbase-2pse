@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { format } from "date-fns"
 import { enUS } from "date-fns/locale"
-import { Edit, Trash2, Plus } from "lucide-react"
+import { Edit, Trash2, Plus, Mail, Users, Loader2 } from "lucide-react"
 
 interface NewsItem {
   id: string
@@ -22,7 +25,10 @@ interface NewsItem {
   created_at: string
   updated_at: string
   link_url?: string
+  email_sent_at?: string
 }
+
+type StatusFilter = 'all' | 'active' | 'inactive'
 
 export const NewsManager = () => {
   const [news, setNews] = useState<NewsItem[]>([])
@@ -37,9 +43,101 @@ export const NewsManager = () => {
     link_url: ''
   })
 
+  // Email state
+  const [sendEmail, setSendEmail] = useState(false)
+  const [emailFilters, setEmailFilters] = useState({
+    statusFilter: 'active' as StatusFilter,
+    membershipTypes: [] as string[]
+  })
+  const [availableMembershipTypes, setAvailableMembershipTypes] = useState<string[]>([])
+  const [previewRecipients, setPreviewRecipients] = useState(0)
+  const [loadingPreview, setLoadingPreview] = useState(false)
+  const [sendingEmail, setSendingEmail] = useState(false)
+
   useEffect(() => {
     loadNews()
+    loadMembershipTypes()
   }, [])
+
+  useEffect(() => {
+    if (!sendEmail) {
+      setPreviewRecipients(0)
+      return
+    }
+
+    // Debounce: 500ms after last change
+    const timer = setTimeout(() => {
+      loadPreviewRecipients()
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [sendEmail, emailFilters.statusFilter, emailFilters.membershipTypes])
+
+  const loadMembershipTypes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('membership_plans_v2')
+        .select('name')
+        .eq('is_active', true)
+      
+      if (error) throw error
+      
+      const types = data?.map(p => p.name) || []
+      setAvailableMembershipTypes(types)
+      setEmailFilters(prev => ({ ...prev, membershipTypes: types }))
+    } catch (error) {
+      console.error('Error loading membership types:', error)
+    }
+  }
+
+  const loadPreviewRecipients = async () => {
+    if (emailFilters.membershipTypes.length === 0) {
+      setPreviewRecipients(0)
+      return
+    }
+
+    setLoadingPreview(true)
+    try {
+      // Load memberships
+      const { data: memberships } = await supabase
+        .from('user_memberships_v2')
+        .select('user_id, membership_plans_v2(name)')
+        .eq('status', 'active')
+
+      const membershipMap = new Map(
+        memberships?.map(m => [
+          m.user_id,
+          (m.membership_plans_v2 as any)?.name
+        ]) || []
+      )
+
+      const userIds = Array.from(membershipMap.keys())
+
+      // Load profiles with filter
+      let query = supabase
+        .from('profiles')
+        .select('user_id')
+        .in('user_id', userIds)
+
+      if (emailFilters.statusFilter !== 'all') {
+        query = query.eq('status', emailFilters.statusFilter)
+      }
+
+      const { data: profiles } = await query
+
+      // Filter by membership types
+      const count = profiles?.filter(p => {
+        const type = membershipMap.get(p.user_id)
+        return type && emailFilters.membershipTypes.includes(type)
+      }).length || 0
+
+      setPreviewRecipients(count)
+    } catch (error) {
+      console.error('Error loading preview:', error)
+    } finally {
+      setLoadingPreview(false)
+    }
+  }
 
   const loadNews = async () => {
     try {
@@ -61,11 +159,16 @@ export const NewsManager = () => {
 
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (sendEmail) {
+      setSendingEmail(true)
+    }
+    
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      const { error } = await supabase
+      const { data: newNews, error } = await supabase
         .from('news')
         .insert({
           title: newsForm.title,
@@ -75,20 +178,54 @@ export const NewsManager = () => {
           is_published: true,
           published_at: new Date().toISOString()
         })
+        .select()
+        .single()
 
       if (error) throw error
 
-      toast.success('Message created successfully')
+      // Send email if enabled
+      if (sendEmail && newNews) {
+        try {
+          const { data: emailResponse, error: emailError } = await supabase.functions.invoke(
+            'send-news-email',
+            {
+              body: {
+                newsId: newNews.id,
+                title: newsForm.title,
+                content: newsForm.content,
+                statusFilter: emailFilters.statusFilter,
+                membershipTypes: emailFilters.membershipTypes
+              }
+            }
+          )
+
+          if (emailError) {
+            console.error('Email error:', emailError)
+            toast.error('News erstellt, aber Email konnte nicht gesendet werden')
+          } else {
+            toast.success(`News erstellt und Email an ${emailResponse.sent} Empfänger gesendet`)
+          }
+        } catch (emailError) {
+          console.error('Email sending failed:', emailError)
+          toast.error('News erstellt, aber Email-Versand fehlgeschlagen')
+        }
+      } else {
+        toast.success('Message created successfully')
+      }
+
       setNewsForm({
         title: '',
         content: '',
         link_url: ''
       })
+      setSendEmail(false)
       setCreateDialogOpen(false)
       await loadNews()
     } catch (error) {
       console.error('Error creating news:', error)
       toast.error('Error creating message')
+    } finally {
+      setSendingEmail(false)
     }
   }
 
@@ -165,7 +302,7 @@ export const NewsManager = () => {
               New Message
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create New Message</DialogTitle>
             </DialogHeader>
@@ -202,8 +339,101 @@ export const NewsManager = () => {
                   placeholder="https://..."
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Create Message
+
+              {/* Email Option */}
+              <div className="border rounded-lg p-4 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="send-email"
+                    checked={sendEmail}
+                    onCheckedChange={(checked) => setSendEmail(!!checked)}
+                  />
+                  <Label htmlFor="send-email" className="flex items-center gap-2 cursor-pointer">
+                    <Mail className="h-4 w-4" />
+                    Als Email senden
+                  </Label>
+                </div>
+
+                {sendEmail && (
+                  <div className="space-y-4 pt-2">
+                    {/* Status Filter */}
+                    <div>
+                      <Label>Empfänger Status</Label>
+                      <Select 
+                        value={emailFilters.statusFilter} 
+                        onValueChange={(v) => setEmailFilters(prev => ({ ...prev, statusFilter: v as StatusFilter }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Alle</SelectItem>
+                          <SelectItem value="active">Aktive</SelectItem>
+                          <SelectItem value="inactive">Inaktive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Membership Type Filter */}
+                    <div>
+                      <Label>Membership-Typen</Label>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {availableMembershipTypes.map(type => (
+                          <label 
+                            key={type} 
+                            className="flex items-center gap-2 px-3 py-1.5 border rounded-md cursor-pointer hover:bg-muted/50"
+                          >
+                            <Checkbox
+                              checked={emailFilters.membershipTypes.includes(type)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setEmailFilters(prev => ({ 
+                                    ...prev, 
+                                    membershipTypes: [...prev.membershipTypes, type] 
+                                  }))
+                                } else {
+                                  setEmailFilters(prev => ({ 
+                                    ...prev, 
+                                    membershipTypes: prev.membershipTypes.filter(t => t !== type) 
+                                  }))
+                                }
+                              }}
+                            />
+                            <span className="text-sm">{type}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Recipients Preview */}
+                    <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      {loadingPreview ? (
+                        <span className="text-sm text-muted-foreground">Berechne Empfänger...</span>
+                      ) : (
+                        <span className="text-sm">
+                          <span className="font-medium">{previewRecipients}</span> Empfänger werden diese Email erhalten
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Button type="submit" className="w-full" disabled={sendingEmail}>
+                {sendingEmail ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Sende Emails...
+                  </>
+                ) : sendEmail ? (
+                  <>
+                    <Mail className="h-4 w-4 mr-2" />
+                    Erstellen & Email senden
+                  </>
+                ) : (
+                  'Create Message'
+                )}
               </Button>
             </form>
           </DialogContent>
@@ -224,6 +454,7 @@ export const NewsManager = () => {
                 <TableRow>
                   <TableHead>Title</TableHead>
                   <TableHead className="hidden sm:table-cell">Created</TableHead>
+                  <TableHead className="hidden sm:table-cell">Email</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -240,6 +471,16 @@ export const NewsManager = () => {
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       {format(new Date(item.created_at), 'dd.MM.yyyy HH:mm', { locale: enUS })}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {item.email_sent_at ? (
+                        <Badge variant="secondary" className="text-xs">
+                          <Mail className="h-3 w-3 mr-1" />
+                          Gesendet
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">—</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1">
@@ -316,4 +557,4 @@ export const NewsManager = () => {
   )
 }
 
-export default NewsManager;
+export default NewsManager
