@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, CreditCard, Infinity, Calendar, Dumbbell } from "lucide-react";
+import { Plus, Edit, Trash2, CreditCard, Infinity, Calendar, Dumbbell, Link as LinkIcon, Loader2, ExternalLink } from "lucide-react";
 import { MembershipPlanWizardV2, BookingRules } from "./MembershipPlanWizardV2";
+import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,8 +28,13 @@ interface MembershipPlanV2 {
   auto_renewal: boolean;
   includes_open_gym: boolean;
   is_active: boolean;
+  is_public: boolean;
   payment_frequency: 'monthly' | 'one_time';
+  payment_type: string;
   booking_rules: BookingRules;
+  stripe_product_id?: string;
+  stripe_price_id?: string;
+  color?: string;
   created_at: string;
   updated_at: string;
 }
@@ -78,6 +84,8 @@ export const MembershipPlanManagerV2: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<MembershipPlanV2 | null>(null);
+  const [linkingStripe, setLinkingStripe] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loadPlans = async () => {
     setLoading(true);
@@ -135,6 +143,34 @@ export const MembershipPlanManagerV2: React.FC = () => {
     loadPlans();
   };
 
+  const handleLinkToStripe = async (planId: string) => {
+    setLinkingStripe(planId);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke("create-stripe-product", {
+        body: { plan_id: planId },
+      });
+
+      if (error) {
+        console.error("Stripe linking error:", error);
+        toast.error("Stripe-Verknüpfung fehlgeschlagen");
+        return;
+      }
+
+      if (data?.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      toast.success("Mit Stripe verknüpft!");
+      loadPlans();
+    } catch (err: any) {
+      toast.error("Fehler: " + err.message);
+    } finally {
+      setLinkingStripe(null);
+    }
+  };
+
   if (loading) {
     return <div className="p-6">Loading membership plans...</div>;
   }
@@ -146,10 +182,16 @@ export const MembershipPlanManagerV2: React.FC = () => {
           <h2 className="text-2xl font-bold tracking-tight">Membership Plans</h2>
           <p className="text-muted-foreground">Create and manage your memberships</p>
         </div>
-        <Button onClick={handleCreate} className="w-full sm:w-auto">
-          <Plus className="h-4 w-4 mr-2" />
-          New Plan
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={handleCreate} className="w-full sm:w-auto">
+            <Plus className="h-4 w-4 mr-2" />
+            New Plan
+          </Button>
+          <Button variant="outline" onClick={() => navigate("/shop")} className="w-full sm:w-auto">
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Shop öffnen
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -222,6 +264,31 @@ export const MembershipPlanManagerV2: React.FC = () => {
                     {plan.booking_rules.credits.refill_schedule === 'monthly' && ', monthly refill'}
                   </div>
                 )}
+
+                {/* Stripe Status */}
+                <div className="pt-2 border-t">
+                  {plan.stripe_price_id ? (
+                    <Badge variant="outline" className="text-xs text-green-600 border-green-200 bg-green-50">
+                      <LinkIcon className="h-3 w-3 mr-1" />
+                      Stripe verknüpft
+                    </Badge>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleLinkToStripe(plan.id)}
+                      disabled={linkingStripe === plan.id}
+                      className="w-full"
+                    >
+                      {linkingStripe === plan.id ? (
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      ) : (
+                        <LinkIcon className="h-3 w-3 mr-1" />
+                      )}
+                      Mit Stripe verknüpfen
+                    </Button>
+                  )}
+                </div>
 
                 {/* Actions */}
                 <div className="flex space-x-2 pt-2">
