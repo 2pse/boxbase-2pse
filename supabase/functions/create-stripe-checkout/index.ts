@@ -109,8 +109,13 @@ serve(async (req) => {
       const isCreditsTopUp = activeMembership?.membership_plans_v2?.booking_rules?.type === "credits" 
         && plan.booking_rules?.type === "credits";
 
-      // Use payment_frequency to determine mode: monthly = subscription, one_time = payment
-      const mode = plan.payment_frequency === "monthly" ? "subscription" : "payment";
+      // Retrieve the Stripe price to determine if it's recurring or one-time
+      const stripePrice = await stripe.prices.retrieve(plan.stripe_price_id);
+      const isRecurringPrice = stripePrice.type === "recurring";
+      
+      // Use actual Stripe price type to determine checkout mode
+      const mode = isRecurringPrice ? "subscription" : "payment";
+      console.log(`Checkout mode: ${mode} (Stripe price type: ${stripePrice.type}, plan payment_frequency: ${plan.payment_frequency})`);
 
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
         customer: customerId,
