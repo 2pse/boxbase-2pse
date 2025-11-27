@@ -690,9 +690,20 @@ export default function Shop() {
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-sm text-muted-foreground">
-              Your new membership will begin at the end of your current billing cycle.
-            </p>
+            {currentMembership?.membership_plans_v2?.booking_rules?.type === 'credits' ? (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Deine neue Membership startet <strong>sofort</strong> nach der Zahlung.
+                </p>
+                <p className="text-sm text-yellow-600 dark:text-yellow-500">
+                  ⚠️ Verbleibende Credits verfallen mit dem Upgrade.
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Deine neue Membership startet am Ende deines aktuellen Abrechnungszeitraums.
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setUpgradeDialogPlan(null)}>
