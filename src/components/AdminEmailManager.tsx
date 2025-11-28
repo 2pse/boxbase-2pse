@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useSearchParams } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,6 +56,7 @@ interface EmailTemplate {
 
 export const AdminEmailManager = () => {
   const { toast } = useToast()
+  const [searchParams] = useSearchParams()
   
   // Tabs and filters
   const [activeTab, setActiveTab] = useState<'recipients' | 'compose'>('compose')
@@ -66,6 +68,7 @@ export const AdminEmailManager = () => {
   // Recipients
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [selectedMembers, setSelectedMembers] = useState<Profile[]>([])
+  const [preselectedUserIds, setPreselectedUserIds] = useState<string[]>([])
 
   // Email content
   const [subject, setSubject] = useState('')
@@ -86,6 +89,17 @@ export const AdminEmailManager = () => {
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false)
   const [previewMemberIndex, setPreviewMemberIndex] = useState(0)
 
+  // Check for userIds URL parameter (from Risk Radar)
+  useEffect(() => {
+    const userIdsParam = searchParams.get('userIds')
+    if (userIdsParam) {
+      const userIds = userIdsParam.split(',').filter(Boolean)
+      setPreselectedUserIds(userIds)
+      // Switch to recipients tab to show pre-selected users
+      setActiveTab('recipients')
+    }
+  }, [searchParams])
+
   useEffect(() => {
     loadData()
   }, [])
@@ -93,6 +107,16 @@ export const AdminEmailManager = () => {
   useEffect(() => {
     loadProfiles()
   }, [statusFilter, selectedMembershipTypes])
+
+  // Pre-select users from URL parameters (from Risk Radar)
+  useEffect(() => {
+    if (preselectedUserIds.length > 0 && profiles.length > 0 && selectedMembers.length === 0) {
+      const preselected = profiles.filter(p => p.user_id && preselectedUserIds.includes(p.user_id))
+      if (preselected.length > 0) {
+        setSelectedMembers(preselected)
+      }
+    }
+  }, [preselectedUserIds, profiles])
 
   const loadData = async () => {
     setLoading(true)
