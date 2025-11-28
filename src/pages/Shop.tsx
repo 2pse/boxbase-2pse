@@ -324,7 +324,7 @@ export default function Shop() {
       {/* Header */}
       <header className="border-b border-border p-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/pro')}>
+          <Button variant="ghost" size="icon" onClick={() => navigate('/pro?openProfile=true')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <Logo className="h-8" />
