@@ -83,8 +83,10 @@ export const NewsManager = () => {
       if (error) throw error
       
       const types = data?.map(p => p.name) || []
-      setAvailableMembershipTypes(types)
-      setEmailFilters(prev => ({ ...prev, membershipTypes: types }))
+      // Add "No Membership" option for members without active membership
+      const typesWithNoMembership = [...types, 'No Membership']
+      setAvailableMembershipTypes(typesWithNoMembership)
+      setEmailFilters(prev => ({ ...prev, membershipTypes: typesWithNoMembership }))
     } catch (error) {
       console.error('Error loading membership types:', error)
     }
@@ -107,17 +109,23 @@ export const NewsManager = () => {
       const membershipMap = new Map(
         memberships?.map(m => [
           m.user_id,
-          (m.membership_plans_v2 as any)?.name
+          (m.membership_plans_v2 as any)?.name || 'No Membership'
         ]) || []
       )
 
-      const userIds = Array.from(membershipMap.keys())
+      // Get admin user IDs to exclude
+      const { data: adminRoles } = await supabase
+        .from('user_roles')
+        .select('user_id')
+        .eq('role', 'admin')
 
-      // Load profiles with filter
+      const adminUserIds = adminRoles?.map(r => r.user_id) || []
+
+      // Load all profiles (not just those with memberships)
       let query = supabase
         .from('profiles')
         .select('user_id')
-        .in('user_id', userIds)
+        .not('user_id', 'is', null)
 
       if (emailFilters.statusFilter !== 'all') {
         query = query.eq('status', emailFilters.statusFilter)
@@ -125,10 +133,13 @@ export const NewsManager = () => {
 
       const { data: profiles } = await query
 
-      // Filter by membership types
+      // Filter by membership types (including "No Membership")
       const count = profiles?.filter(p => {
-        const type = membershipMap.get(p.user_id)
-        return type && emailFilters.membershipTypes.includes(type)
+        // Exclude admins
+        if (adminUserIds.includes(p.user_id)) return false
+        
+        const type = membershipMap.get(p.user_id) || 'No Membership'
+        return emailFilters.membershipTypes.includes(type)
       }).length || 0
 
       setPreviewRecipients(count)
@@ -201,13 +212,13 @@ export const NewsManager = () => {
 
           if (emailError) {
             console.error('Email error:', emailError)
-            toast.error('News erstellt, aber Email konnte nicht gesendet werden')
+            toast.error('News created, but email could not be sent')
           } else {
-            toast.success(`News erstellt und Email an ${emailResponse.sent} Empfänger gesendet`)
+            toast.success(`News created and email sent to ${emailResponse.sent} recipients`)
           }
         } catch (emailError) {
           console.error('Email sending failed:', emailError)
-          toast.error('News erstellt, aber Email-Versand fehlgeschlagen')
+          toast.error('News created, but email sending failed')
         }
       } else {
         toast.success('Message created successfully')
@@ -350,7 +361,7 @@ export const NewsManager = () => {
                   />
                   <Label htmlFor="send-email" className="flex items-center gap-2 cursor-pointer">
                     <Mail className="h-4 w-4" />
-                    Als Email senden
+                    Send as Email
                   </Label>
                 </div>
 
@@ -358,7 +369,7 @@ export const NewsManager = () => {
                   <div className="space-y-4 pt-2">
                     {/* Status Filter */}
                     <div>
-                      <Label>Empfänger Status</Label>
+                      <Label>Recipient Status</Label>
                       <Select 
                         value={emailFilters.statusFilter} 
                         onValueChange={(v) => setEmailFilters(prev => ({ ...prev, statusFilter: v as StatusFilter }))}
@@ -367,16 +378,16 @@ export const NewsManager = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">Alle</SelectItem>
-                          <SelectItem value="active">Aktive</SelectItem>
-                          <SelectItem value="inactive">Inaktive</SelectItem>
+                          <SelectItem value="all">All</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     {/* Membership Type Filter */}
                     <div>
-                      <Label>Membership-Typen</Label>
+                      <Label>Membership Types</Label>
                       <div className="flex flex-wrap gap-2 mt-2">
                         {availableMembershipTypes.map(type => (
                           <label 
@@ -409,10 +420,10 @@ export const NewsManager = () => {
                     <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                       <Users className="h-4 w-4 text-muted-foreground" />
                       {loadingPreview ? (
-                        <span className="text-sm text-muted-foreground">Berechne Empfänger...</span>
+                        <span className="text-sm text-muted-foreground">Calculating recipients...</span>
                       ) : (
                         <span className="text-sm">
-                          <span className="font-medium">{previewRecipients}</span> Empfänger werden diese Email erhalten
+                          <span className="font-medium">{previewRecipients}</span> recipients will receive this email
                         </span>
                       )}
                     </div>
@@ -424,12 +435,12 @@ export const NewsManager = () => {
                 {sendingEmail ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Sende Emails...
+                    Sending Emails...
                   </>
                 ) : sendEmail ? (
                   <>
                     <Mail className="h-4 w-4 mr-2" />
-                    Erstellen & Email senden
+                    Create & Send Email
                   </>
                 ) : (
                   'Create Message'
@@ -476,7 +487,7 @@ export const NewsManager = () => {
                       {item.email_sent_at ? (
                         <Badge variant="secondary" className="text-xs">
                           <Mail className="h-3 w-3 mr-1" />
-                          Gesendet
+                          Sent
                         </Badge>
                       ) : (
                         <span className="text-muted-foreground text-xs">—</span>
