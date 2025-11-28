@@ -318,99 +318,103 @@ export const ProRepsCounter = () => {
 
       {/* Tracking Mode */}
       {!isSetupMode && !showSummary && (
-        <div className="px-4 pb-24">
-          {/* Progress Header */}
-          <div className="mb-4">
-            <Progress 
-              value={currentRound ? (currentRound.completedReps / currentRound.targetReps) * 100 : 0} 
-              className="h-3" 
-            />
-          </div>
+        <>
+          <div className="px-4 pb-40">
+            {/* Progress Header */}
+            <div className="mb-4">
+              <Progress 
+                value={currentRound ? (currentRound.completedReps / currentRound.targetReps) * 100 : 0} 
+                className="h-3" 
+              />
+            </div>
 
-          {/* Main Counter Display */}
-          <Card 
-            className="relative cursor-pointer active:scale-95 transition-transform border-2 mb-4"
-            style={{ minHeight: '35vh' }}
-            onClick={handleTap}
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-7xl md:text-8xl font-bold text-primary">
-                  {currentRound?.completedReps || 0}
-                  <span className="text-4xl text-muted-foreground">
-                    /{currentRound?.targetReps || 0}
-                  </span>
-                </div>
-                <div className="text-xl text-muted-foreground mt-4">
-                  Reps
+            {/* Main Counter Display */}
+            <Card 
+              className="relative cursor-pointer active:scale-95 transition-transform border-2 mb-4"
+              style={{ minHeight: '35vh' }}
+              onClick={handleTap}
+            >
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-7xl md:text-8xl font-bold text-primary">
+                    {currentRound?.completedReps || 0}
+                    <span className="text-4xl text-muted-foreground">
+                      /{currentRound?.targetReps || 0}
+                    </span>
+                  </div>
+                  <div className="text-xl text-muted-foreground mt-4">
+                    Reps
+                  </div>
                 </div>
               </div>
+            </Card>
+
+            {/* Round Indicator Circles */}
+            <div className="flex flex-wrap gap-3 justify-center">
+              {rounds.map((round, index) => {
+                const isCompleted = round.completedReps >= round.targetReps
+                const isCurrent = index === currentRoundIndex
+                
+                return (
+                  <div
+                    key={round.id}
+                    className={`
+                      relative w-14 h-14 rounded-full flex items-center justify-center font-bold text-base
+                      transition-all duration-300
+                      ${isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
+                      ${isCurrent ? 'ring-4 ring-primary ring-offset-2 scale-110' : ''}
+                    `}
+                  >
+                    {isCompleted ? (
+                      <Check className="h-6 w-6" />
+                    ) : (
+                      <span>{round.targetReps}</span>
+                    )}
+                  </div>
+                )
+              })}
             </div>
-          </Card>
+          </div>
 
-          {/* Round Indicator Circles */}
-          <div className="flex flex-wrap gap-3 justify-center mb-4">
-            {rounds.map((round, index) => {
-              const isCompleted = round.completedReps >= round.targetReps
-              const isCurrent = index === currentRoundIndex
+          {/* Fixed Button Area - above navigation */}
+          <div className="fixed bottom-16 left-0 right-0 px-4 pb-2 bg-background z-45">
+            <div className="grid grid-cols-3 gap-3">
+              {/* Undo Button */}
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="h-16 border-2 text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleUndo()
+                }}
+                disabled={currentRoundIndex === 0 && currentRound?.completedReps === 0}
+              >
+                <Minus className="h-7 w-7" />
+              </Button>
               
-              return (
-                <div
-                  key={round.id}
-                  className={`
-                    relative w-14 h-14 rounded-full flex items-center justify-center font-bold text-base
-                    transition-all duration-300
-                    ${isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
-                    ${isCurrent ? 'ring-4 ring-primary ring-offset-2 scale-110' : ''}
-                  `}
-                >
-                  {isCompleted ? (
-                    <Check className="h-6 w-6" />
-                  ) : (
-                    <span>{round.targetReps}</span>
-                  )}
-                </div>
-              )
-            })}
+              {/* Finish Button */}
+              <Button 
+                size="lg"
+                className="col-span-2 h-16 bg-gradient-to-r from-primary to-primary/80 relative overflow-hidden"
+                onTouchStart={handleFinishStart}
+                onTouchEnd={handleFinishEnd}
+                onMouseDown={handleFinishStart}
+                onMouseUp={handleFinishEnd}
+                onMouseLeave={handleFinishEnd}
+              >
+                <div 
+                  className="absolute inset-0 bg-primary-foreground/20 transition-all duration-100 origin-left"
+                  style={{ transform: `scaleX(${holdProgress / 100})` }}
+                />
+                <CheckCircle2 className="h-6 w-6 mr-2 relative z-10" />
+                <span className="text-lg font-bold relative z-10">
+                  {isHoldingFinish ? 'Hold...' : 'Finish'}
+                </span>
+              </Button>
+            </div>
           </div>
-
-          {/* Bottom Buttons */}
-          <div className="grid grid-cols-3 gap-3">
-            {/* Undo Button */}
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="h-16 border-2 text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleUndo()
-              }}
-              disabled={currentRoundIndex === 0 && currentRound?.completedReps === 0}
-            >
-              <Minus className="h-7 w-7" />
-            </Button>
-            
-            {/* Finish Button */}
-            <Button 
-              size="lg"
-              className="col-span-2 h-16 bg-gradient-to-r from-primary to-primary/80 relative overflow-hidden"
-              onTouchStart={handleFinishStart}
-              onTouchEnd={handleFinishEnd}
-              onMouseDown={handleFinishStart}
-              onMouseUp={handleFinishEnd}
-              onMouseLeave={handleFinishEnd}
-            >
-              <div 
-                className="absolute inset-0 bg-primary-foreground/20 transition-all duration-100 origin-left"
-                style={{ transform: `scaleX(${holdProgress / 100})` }}
-              />
-              <CheckCircle2 className="h-6 w-6 mr-2 relative z-10" />
-              <span className="text-lg font-bold relative z-10">
-                {isHoldingFinish ? 'Hold...' : 'Finish'}
-              </span>
-            </Button>
-          </div>
-        </div>
+        </>
       )}
 
       {/* Summary Modal */}
