@@ -12,7 +12,7 @@ export const CourseInvitationBadge: React.FC<CourseInvitationBadgeProps> = ({
   return (
     <button
       onClick={onClick}
-      className="absolute -top-3 md:top-1/4 right-0 md:-right-20 z-10 w-10 h-10 md:w-12 md:h-12 rounded-lg border-2 border-primary bg-card flex items-center justify-center hover:scale-105 transition-transform duration-200 shadow-sm"
+      className="absolute -top-3 md:-top-4 right-0 md:-right-24 z-10 w-10 h-10 md:w-12 md:h-12 rounded-lg border-2 border-primary bg-card flex items-center justify-center hover:scale-105 transition-transform duration-200 shadow-sm"
     >
       <UserPlus className="h-5 w-5 md:h-6 md:w-6 text-primary" />
       {invitationCount > 0 && (
