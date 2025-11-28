@@ -202,9 +202,9 @@ export default function AdminChallengeManager() {
       </div>
       
       <Tabs defaultValue="challenges" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="challenges">Manage Challenges</TabsTrigger>
-          <TabsTrigger value="badges">Manage Badges</TabsTrigger>
+        <TabsList className="inline-flex h-10 items-center justify-start rounded-none bg-transparent p-0 border-b w-full">
+          <TabsTrigger value="challenges" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">Manage Challenges</TabsTrigger>
+          <TabsTrigger value="badges" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">Manage Badges</TabsTrigger>
         </TabsList>
         
         <TabsContent value="challenges" className="space-y-6">
