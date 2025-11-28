@@ -138,7 +138,9 @@ export const AdminEmailManager = () => {
       if (error) throw error
       
       const types = data?.map(p => p.name) || []
-      setMembershipTypes(types)
+      // Add "No Membership" option for members without active membership
+      const typesWithNoMembership = [...types, 'No Membership']
+      setMembershipTypes(typesWithNoMembership)
       
       // Load colors
       const colorMap = new Map<string, string>()
@@ -147,8 +149,8 @@ export const AdminEmailManager = () => {
       })
       setPlanColors(colorMap)
       
-      // Initially select all membership types
-      setSelectedMembershipTypes(types)
+      // Initially select all membership types including "No Membership"
+      setSelectedMembershipTypes(typesWithNoMembership)
     } catch (error) {
       console.error('Error loading membership types:', error)
     }
