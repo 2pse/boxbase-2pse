@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useWaitlistNotifications } from "@/hooks/useWaitlistNotifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -174,6 +174,19 @@ export default function Admin() {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Read URL params for tab navigation (e.g., from Risk Radar)
+  const [searchParams] = useSearchParams()
+  
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam) {
+      const validTabs = ['home', 'members', 'courses', 'templates', 'news', 'email', 'workouts', 'challenges', 'memberships', 'finance', 'settings', 'export', 'shop', 'risk-radar']
+      if (validTabs.includes(tabParam)) {
+        setActivePage(tabParam as typeof activePage)
+      }
+    }
+  }, [searchParams])
 
   useEffect(() => {
     loadMembershipPlans();
