@@ -33,6 +33,7 @@ import { GymSettings } from "@/components/GymSettings";
 import { DataExport } from "@/components/DataExport";
 import { ProductManager } from "@/components/ProductManager";
 import { AdminPurchaseHistory } from "@/components/AdminPurchaseHistory";
+import { AdminRiskRadar } from "@/components/AdminRiskRadar";
 
 
 import { useToast } from "@/hooks/use-toast";
@@ -111,7 +112,7 @@ export default function Admin() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
-  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'email' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export' | 'shop'>('home');
+  const [activePage, setActivePage] = useState<'home' | 'members' | 'courses' | 'templates' | 'news' | 'email' | 'workouts' | 'challenges' | 'memberships' | 'finance' | 'settings' | 'export' | 'shop' | 'risk-radar'>('home');
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalMembers, setTotalMembers] = useState(0);
@@ -1111,7 +1112,7 @@ export default function Admin() {
   }
 
   const handlePageChange = (page: string) => {
-    const validPages = ['home', 'members', 'courses', 'templates', 'news', 'email', 'workouts', 'challenges', 'memberships', 'sync', 'finance', 'shop', 'settings', 'export'] as const;
+    const validPages = ['home', 'members', 'courses', 'templates', 'news', 'email', 'workouts', 'challenges', 'memberships', 'sync', 'finance', 'shop', 'risk-radar', 'settings', 'export'] as const;
     if (validPages.includes(page as any)) {
       setActivePage(page as typeof activePage);
       // Refresh membership plans when switching to members page
@@ -1516,6 +1517,7 @@ export default function Admin() {
             <AdminPurchaseHistory />
           </div>
         )}
+        {activePage === 'risk-radar' && <AdminRiskRadar />}
         {activePage === 'settings' && <GymSettings />}
         {activePage === 'export' && <DataExport />}
       </div>
