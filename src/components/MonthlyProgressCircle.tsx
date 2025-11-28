@@ -143,7 +143,7 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
   }
 
   return (
-    <div className="h-full flex items-center justify-center relative">
+    <div className="h-full w-full flex items-center justify-center relative">
       {/* Invitation Badge */}
       {onInvitationClick && (
         <CourseInvitationBadge 
