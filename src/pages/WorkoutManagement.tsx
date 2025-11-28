@@ -518,11 +518,11 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
         </div>
 
         <Tabs defaultValue="crossfit" className="space-y-6">
-          <TabsList className={`${isMobile ? 'flex flex-col h-auto w-full' : 'grid grid-cols-2'} gap-1`}>
-            <TabsTrigger value="crossfit" className={`${isMobile ? 'w-full justify-start' : ''}`}>
+          <TabsList className="inline-flex h-10 items-center justify-start rounded-none bg-transparent p-0 border-b w-full">
+            <TabsTrigger value="crossfit" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
               Functional Fitness Workouts ({filteredCrossfitWorkouts.length})
             </TabsTrigger>
-            <TabsTrigger value="bodybuilding" className={`${isMobile ? 'w-full justify-start' : ''}`}>
+            <TabsTrigger value="bodybuilding" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
               Bodybuilding Workouts ({filteredBodybuildingWorkouts.length})
             </TabsTrigger>
           </TabsList>
