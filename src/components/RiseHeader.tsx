@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { MoreVertical, Home, Users, Calendar, Newspaper, Dumbbell, LogOut, Moon, Sun, Trophy, DollarSign, Settings, CreditCard, Download, ShoppingBag } from "lucide-react"
+import { MoreVertical, Home, Users, Calendar, Newspaper, Dumbbell, LogOut, Moon, Sun, Trophy, DollarSign, Settings, CreditCard, Download, ShoppingBag, Mail } from "lucide-react"
 import { useTheme } from "next-themes"
 import { supabase } from "@/integrations/supabase/client"
 import { Logo } from "@/components/Logo"
@@ -212,6 +212,16 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
             </div>
             
             {/* Third row */}
+            <div 
+              onClick={() => {
+                onPageChange?.('email');
+                setDropdownOpen(false);
+              }}
+              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'email' ? 'bg-primary/10 text-primary' : ''}`}
+            >
+              <Mail className="h-8 w-8 mb-2" />
+              <span className="text-sm font-medium">Email</span>
+            </div>
             <div 
               onClick={() => {
                 onPageChange?.('workouts');
