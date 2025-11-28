@@ -1,7 +1,26 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { MoreVertical, Home, Users, Calendar, Newspaper, Dumbbell, LogOut, Moon, Sun, Trophy, DollarSign, Settings, CreditCard, Download, ShoppingBag, Mail, Radar } from "lucide-react"
+import { 
+  MoreVertical, 
+  Home, 
+  Users, 
+  Calendar, 
+  Newspaper, 
+  Dumbbell, 
+  LogOut, 
+  Moon, 
+  Sun, 
+  Trophy, 
+  DollarSign, 
+  Settings, 
+  CreditCard, 
+  Download, 
+  ShoppingBag, 
+  Mail, 
+  Activity, 
+  Layers 
+} from "lucide-react"
 import { useTheme } from "next-themes"
 import { supabase } from "@/integrations/supabase/client"
 import { Logo } from "@/components/Logo"
@@ -109,8 +128,11 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
     }
   }
 
+  const navItemBaseClass = "w-full flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-300 border border-border/50 hover:bg-muted/50 hover:scale-105 hover:border-primary/30 hover:shadow-lg"
+  const navItemActiveClass = "bg-primary/10 text-primary border-primary/50 shadow-md"
+
   return (
-    <header className="flex justify-between items-center w-full p-6 border-b border-border">
+    <header className="relative z-50 flex justify-between items-center w-full p-6 border-b border-border">
       <div className="flex items-center gap-4">
         <Logo 
           className="h-12"
@@ -131,190 +153,180 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
           </Button>
         )}
         
-        
         {(showAdminAccess && isAdmin) && (
           <Button 
             variant="outline" 
             size="icon"
-            onClick={() => setDropdownOpen(true)}
+            onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <MoreVertical className="h-4 w-4" />
+            {dropdownOpen ? <span className="text-xl">×</span> : <MoreVertical className="h-4 w-4" />}
           </Button>
         )}
       </div>
       
       {/* Navigation Overlay */}
       {dropdownOpen && (showAdminAccess && isAdmin) && (
-        <div className="fixed inset-0 z-50 bg-background flex flex-col justify-center items-center p-8">
-          <div className="grid grid-cols-3 gap-4 max-w-lg w-full">
-            {/* First row */}
+        <div className="fixed inset-x-0 top-[88px] bottom-0 z-40 bg-background/95 backdrop-blur-sm flex flex-col items-center p-8 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-6 max-w-3xl w-full my-auto justify-items-center">
+            {/* Row 1: Home, Members, Memberships */}
             <div 
               onClick={() => {
                 onPageChange?.('home');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'home' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'home' ? navItemActiveClass : ''}`}
             >
-              <Home className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Home</span>
+              <Home className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Home</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('members');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'members' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'members' ? navItemActiveClass : ''}`}
             >
-              <Users className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Members</span>
+              <Users className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Members</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('memberships');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'memberships' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'memberships' ? navItemActiveClass : ''}`}
             >
-              <CreditCard className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Memberships</span>
+              <CreditCard className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold text-center leading-tight">Member-<br />ships</span>
             </div>
             
-            {/* Second row */}
+            {/* Row 2: Courses, Templates, News */}
             <div 
               onClick={() => {
                 onPageChange?.('courses');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'courses' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'courses' ? navItemActiveClass : ''}`}
             >
-              <Calendar className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Courses</span>
+              <Calendar className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Courses</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('templates');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'templates' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'templates' ? navItemActiveClass : ''}`}
             >
-              <Dumbbell className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Templates</span>
+              <Layers className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Templates</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('news');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'news' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'news' ? navItemActiveClass : ''}`}
             >
-              <Newspaper className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">News</span>
+              <Newspaper className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">News</span>
             </div>
             
-            {/* Third row */}
-            <div 
-              onClick={() => {
-                onPageChange?.('email');
-                setDropdownOpen(false);
-              }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'email' ? 'bg-primary/10 text-primary' : ''}`}
-            >
-              <Mail className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Email</span>
-            </div>
+            {/* Row 3: Workouts, Challenges, Finance */}
             <div 
               onClick={() => {
                 onPageChange?.('workouts');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'workouts' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'workouts' ? navItemActiveClass : ''}`}
             >
-              <Dumbbell className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Workouts</span>
+              <Dumbbell className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Workouts</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('challenges');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'challenges' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'challenges' ? navItemActiveClass : ''}`}
             >
-              <Trophy className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Challenges</span>
+              <Trophy className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Challenges</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('finance');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'finance' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'finance' ? navItemActiveClass : ''}`}
             >
-              <DollarSign className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Finance</span>
+              <DollarSign className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Finance</span>
             </div>
             
-            {/* Fourth row */}
+            {/* Row 4: Shop, Emails, Risk Radar */}
             <div 
               onClick={() => {
                 onPageChange?.('shop');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'shop' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'shop' ? navItemActiveClass : ''}`}
             >
-              <ShoppingBag className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Shop</span>
+              <ShoppingBag className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Shop</span>
+            </div>
+            <div 
+              onClick={() => {
+                onPageChange?.('email');
+                setDropdownOpen(false);
+              }}
+              className={`${navItemBaseClass} ${activePage === 'email' ? navItemActiveClass : ''}`}
+            >
+              <Mail className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Emails</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('risk-radar');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'risk-radar' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'risk-radar' ? navItemActiveClass : ''}`}
             >
-              <Radar className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Risk Radar</span>
+              <Activity className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Risk Radar</span>
             </div>
+            
+            {/* Row 5: Data Export, Settings, Log out */}
             <div 
               onClick={() => {
                 onPageChange?.('export');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'export' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'export' ? navItemActiveClass : ''}`}
             >
-              <Download className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Backup</span>
+              <Download className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Data Export</span>
             </div>
             <div 
               onClick={() => {
                 onPageChange?.('settings');
                 setDropdownOpen(false);
               }}
-              className={`flex flex-col items-center justify-center p-4 rounded-lg hover:bg-hover-neutral cursor-pointer transition-colors ${activePage === 'settings' ? 'bg-primary/10 text-primary' : ''}`}
+              className={`${navItemBaseClass} ${activePage === 'settings' ? navItemActiveClass : ''}`}
             >
-              <Settings className="h-8 w-8 mb-2" />
-              <span className="text-sm font-medium">Settings</span>
+              <Settings className="h-10 w-10 mb-3" />
+              <span className="text-sm font-semibold">Settings</span>
             </div>
             
             {onLogout && (
               <div 
                 onClick={handleLogout}
-                className="flex flex-col items-center justify-center p-4 rounded-lg hover:bg-destructive/10 cursor-pointer transition-colors"
+                className="w-full flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-300 border border-border/50 hover:bg-destructive/10 hover:scale-105 hover:border-destructive/30 hover:shadow-lg"
               >
-                <LogOut className="h-8 w-8 text-destructive mb-2" />
-                <span className="text-sm font-medium text-destructive">Log out</span>
+                <LogOut className="h-10 w-10 text-destructive mb-3" />
+                <span className="text-sm font-semibold text-destructive">Log out</span>
               </div>
             )}
-          </div>
-          
-          {/* Close button */}
-          <div className="absolute top-6 right-6">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setDropdownOpen(false)}
-            >
-              <span className="text-xl">×</span>
-            </Button>
           </div>
         </div>
       )}
