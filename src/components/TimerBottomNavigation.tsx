@@ -9,7 +9,7 @@ export const TimerBottomNavigation: React.FC = () => {
 
   const tabs = [
     { id: 'uebersicht', icon: Home, label: 'Overview', route: '/pro' },
-    { id: 'wod', icon: Timer, label: 'WOD', route: '/workout-timer' },
+    { id: 'wod', icon: Timer, label: 'Workout', route: '/workout-timer' },
     { id: 'courses', icon: Calendar, label: 'Courses', route: '/pro' },
     { id: 'leaderboard', icon: Trophy, label: 'Leaderboard', route: '/pro' }
   ]

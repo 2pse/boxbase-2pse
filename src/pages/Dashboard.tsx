@@ -774,7 +774,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
           {[
             { id: 'home', icon: Home, label: 'Overview' },
             ...(isOpenGym ? [] : [{ id: 'courses', icon: Calendar, label: 'Courses' }]),
-            { id: 'wod', icon: Weight, label: 'WOD' },
+            { id: 'wod', icon: Weight, label: 'Workout' },
             { id: 'leaderboard', icon: Trophy, label: 'Leaderboard' }
           ].map((tab) => {
             const Icon = tab.icon
