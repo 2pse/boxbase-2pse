@@ -1111,7 +1111,7 @@ export default function Admin() {
   }
 
   const handlePageChange = (page: string) => {
-    const validPages = ['home', 'members', 'courses', 'templates', 'news', 'workouts', 'challenges', 'memberships', 'sync', 'finance', 'shop', 'settings', 'export'] as const;
+    const validPages = ['home', 'members', 'courses', 'templates', 'news', 'email', 'workouts', 'challenges', 'memberships', 'sync', 'finance', 'shop', 'settings', 'export'] as const;
     if (validPages.includes(page as any)) {
       setActivePage(page as typeof activePage);
       // Refresh membership plans when switching to members page
