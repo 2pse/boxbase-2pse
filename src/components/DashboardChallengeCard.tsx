@@ -127,7 +127,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
             stroke="currentColor"
             strokeWidth="4"
             fill="none"
-            className="text-gray-300 dark:text-gray-600 md:[stroke-width:6]"
+            className="text-gray-300 dark:text-gray-600"
           />
           {/* Progress circle */}
           <circle
@@ -139,7 +139,7 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
             fill="none"
             strokeDasharray={strokeDasharray}
             strokeDashoffset={strokeDashoffset}
-            className="text-primary transition-all duration-300 md:[stroke-width:6]"
+            className="text-primary transition-all duration-300"
             strokeLinecap="round"
           />
         </svg>
@@ -149,18 +149,18 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading Challenge...</div>
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 h-24 md:h-[155px] flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground text-sm md:text-base">Lade Challenge...</div>
       </div>
     )
   }
 
   if (!currentChallenge) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 h-32 flex items-center justify-center">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 h-24 md:h-[155px] flex items-center justify-center">
         <div className="text-center text-muted-foreground">
-          <Award className="h-8 w-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">No challenge available</p>
+          <Award className="h-8 md:h-12 w-8 md:w-12 mx-auto mb-2 opacity-50" />
+          <p className="text-sm md:text-base">Keine Challenge verfügbar</p>
         </div>
       </div>
     )
@@ -171,13 +171,13 @@ export const DashboardChallengeCard: React.FC<DashboardChallengeCardProps> = ({
       onClick={handleClick}
       className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-8 hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] h-24 md:h-[155px] w-full text-left relative"
     >
-      <div className="absolute top-3 md:top-5 right-3 md:right-5">
+      <div className="absolute top-3 md:top-4 right-3 md:right-4">
         {renderProgressCircle()}
       </div>
       
       <div className="flex items-center justify-center h-full">
         <h3 className="text-lg md:text-4xl font-semibold text-foreground">
-          Monthly Challenge
+          Monatschallenge
         </h3>
       </div>
     </button>
