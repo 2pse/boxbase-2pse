@@ -166,8 +166,9 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
       
       {/* Navigation Overlay */}
       {dropdownOpen && (showAdminAccess && isAdmin) && (
-        <div className="fixed inset-x-0 top-[88px] bottom-0 z-40 bg-background/95 backdrop-blur-sm flex flex-col items-center p-8 overflow-y-auto">
-          <div className="grid grid-cols-3 gap-6 max-w-3xl w-full my-auto justify-items-center">
+        <div className="fixed inset-x-0 top-[88px] bottom-0 z-40 bg-background/95 backdrop-blur-sm overflow-y-auto">
+          <div className="flex flex-col items-center p-8 min-h-full">
+            <div className="grid grid-cols-3 gap-6 max-w-3xl w-full justify-items-center py-8">
             {/* Row 1: Home, Members, Memberships */}
             <div 
               onClick={() => {
@@ -328,6 +329,7 @@ export const RiseHeader: React.FC<RiseHeaderProps> = ({
               </div>
             )}
           </div>
+        </div>
         </div>
       )}
     </header>
