@@ -2,6 +2,7 @@ interface MembershipV2 {
   membership_plans_v2?: {
     booking_rules?: any;
     name?: string;
+    color?: string;
   };
   membership_data?: any;
   start_date?: string;
