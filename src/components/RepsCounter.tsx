@@ -62,12 +62,7 @@ export const RepsCounter = () => {
 
       {/* Back Button */}
       <div className="px-4 pt-4 pb-2">
-        <Button variant="ghost" onClick={() => {
-          navigate('/pro')
-          setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('changeTab', { detail: 'wod' }))
-          }, 50)
-        }} size="sm">
+        <Button variant="ghost" onClick={() => navigate('/pro?openWod=true')} size="sm">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
