@@ -349,72 +349,78 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
         </div>
       <div className="py-8">
         <div className="space-y-8">
-          {/* Step 1: Workout Type Selection */}
+          {/* Step 1: Workout Type Selection - 6 tiles in 3x2 grid */}
           {step === 1 && (
-            <div>
-              <WorkoutTypeSelector 
-                selectedType={workoutType}
-                onTypeSelect={handleWorkoutTypeSelect}
-              />
-              
-              {/* Timer Button */}
-              <div className="mt-4 md:mx-8 lg:mx-12">
-                <div
-                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
-                  onClick={() => {
-                    if (onTimerSelect) {
-                      onTimerSelect('timer-selection')
-                    } else {
-                      navigate('/workout-timer')
-                    }
-                  }}
-                >
-                  <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl md:text-3xl font-bold">Workout-Timer</h3>
-                    <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
-                      Timer for your workouts
-                    </p>
-                  </div>
+            <div className="grid grid-cols-2 gap-3 px-4 md:mx-8 lg:mx-12">
+              {/* Functional Fitness */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => handleWorkoutTypeSelect("crossfit")}
+              >
+                <Dumbbell className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Functional<br />Fitness</h3>
                 </div>
               </div>
-              
-              {/* Percentage Calculator Button */}
-              <div className="mt-4 md:mx-8 lg:mx-12">
-                <div
-                  className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-32 md:h-40 shadow-sm p-6 md:p-8 cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-[1.02]"
-                  onClick={() => setShowPercentageCalculator(true)}
-                >
-                  <div className="text-center space-y-3 flex flex-col justify-center h-full">
-                    <h3 className="text-xl md:text-3xl font-bold">Percentage Calculator</h3>
-                    <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
-                      Calculate your training weights
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Tools Grid - 2 columns */}
-              <div className="grid grid-cols-2 gap-3 mt-4 md:mx-8 lg:mx-12">
-                {/* Rep Counter Button */}
-                <div 
-                  className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
-                  onClick={() => navigate('/reps-counter')}
-                >
-                  <Hash className="absolute top-4 right-4 h-5 w-5 text-primary" />
-                  <div className="text-center flex flex-col justify-center h-full">
-                    <h3 className="text-lg font-semibold">Rep<br />Counter</h3>
-                  </div>
-                </div>
 
-                {/* Cardio Converter Button */}
-                <div 
-                  className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
-                  onClick={() => navigate('/cardio-converter')}
-                >
-                  <Activity className="absolute top-4 right-4 h-5 w-5 text-primary" />
-                  <div className="text-center flex flex-col justify-center h-full">
-                    <h3 className="text-lg font-semibold">Cardio<br />Converter</h3>
-                  </div>
+              {/* Bodybuilding */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => handleWorkoutTypeSelect("bodybuilding")}
+              >
+                <Dumbbell className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Bodybuilding</h3>
+                </div>
+              </div>
+
+              {/* Workout Timer */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => {
+                  if (onTimerSelect) {
+                    onTimerSelect('timer-selection')
+                  } else {
+                    navigate('/workout-timer')
+                  }
+                }}
+              >
+                <Clock className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Workout<br />Timer</h3>
+                </div>
+              </div>
+
+              {/* Percentage Calculator */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => setShowPercentageCalculator(true)}
+              >
+                <Calculator className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Percentage<br />Calculator</h3>
+                </div>
+              </div>
+
+              {/* Rep Counter */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => navigate('/reps-counter')}
+              >
+                <Hash className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Rep<br />Counter</h3>
+                </div>
+              </div>
+
+              {/* Cardio Converter */}
+              <div 
+                className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                onClick={() => navigate('/cardio-converter')}
+              >
+                <Activity className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                <div className="text-center flex flex-col justify-center h-full">
+                  <h3 className="text-lg font-semibold">Cardio<br />Converter</h3>
                 </div>
               </div>
             </div>
