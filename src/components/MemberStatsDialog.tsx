@@ -4,7 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { supabase } from "@/integrations/supabase/client"
-import { User, Calendar, X, Activity } from "lucide-react"
+import { User } from "lucide-react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { startOfWeek, subWeeks, format, isWithinInterval, endOfWeek } from 'date-fns'
+import { de } from 'date-fns/locale'
 
 interface MemberStatsDialogProps {
   userId: string
@@ -16,6 +19,13 @@ interface MemberStatsDialogProps {
   cancellations?: number
   isOpen: boolean
   onClose: () => void
+}
+
+interface WeeklyActivity {
+  week: string
+  weekStart: Date
+  course_bookings: number
+  open_gym: number
 }
 
 interface MemberStats {
@@ -30,6 +40,7 @@ interface MemberStats {
   preferred_training_day: string
   preferred_trainer: string
   cancellation_rate: number
+  weekly_activity: WeeklyActivity[]
 }
 
 const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
@@ -51,6 +62,10 @@ export const MemberStatsDialog = ({
   const { data: stats, isLoading } = useQuery({
     queryKey: ['member-stats', userId],
     queryFn: async (): Promise<MemberStats> => {
+      // Calculate date range for last 12 weeks
+      const now = new Date()
+      const twelveWeeksAgo = subWeeks(now, 12)
+
       // Fetch bookings with course details
       const { data: bookings } = await supabase
         .from('course_registrations')
@@ -110,6 +125,35 @@ export const MemberStatsDialog = ({
           trainingsByDay[day] = (trainingsByDay[day] || 0) + 1
         }
       })
+
+      // Calculate weekly activity for the last 12 weeks
+      const weeklyActivity: WeeklyActivity[] = []
+      for (let i = 11; i >= 0; i--) {
+        const weekStart = startOfWeek(subWeeks(now, i), { weekStartsOn: 1 }) // Monday
+        const weekEnd = endOfWeek(subWeeks(now, i), { weekStartsOn: 1 })
+        
+        // Count course bookings in this week
+        const courseCount = bookings?.filter(booking => {
+          const course = booking.courses as any
+          if (!course?.course_date) return false
+          const courseDate = new Date(course.course_date)
+          return isWithinInterval(courseDate, { start: weekStart, end: weekEnd })
+        }).length || 0
+
+        // Count open gym sessions in this week
+        const openGymCount = trainings?.filter(training => {
+          if (!training.session_date) return false
+          const sessionDate = new Date(training.session_date)
+          return isWithinInterval(sessionDate, { start: weekStart, end: weekEnd })
+        }).length || 0
+
+        weeklyActivity.push({
+          week: `KW ${format(weekStart, 'w', { locale: de })}`,
+          weekStart,
+          course_bookings: courseCount,
+          open_gym: openGymCount
+        })
+      }
 
       // Find preferred day for bookings
       let preferredDay = '-'
@@ -175,7 +219,8 @@ export const MemberStatsDialog = ({
         preferred_time: preferredTime,
         preferred_training_day: preferredTrainingDay,
         preferred_trainer: preferredTrainer,
-        cancellation_rate: cancellationRate
+        cancellation_rate: cancellationRate,
+        weekly_activity: weeklyActivity
       }
     },
     enabled: isOpen
@@ -279,6 +324,55 @@ export const MemberStatsDialog = ({
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Weekly Activity Line Chart - Last 3 Months */}
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-muted-foreground">
+                Activity (Last 3 Months)
+              </h4>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={stats.weekly_activity}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis 
+                    dataKey="week" 
+                    tick={{ fontSize: 10 }} 
+                    interval={1}
+                    className="text-muted-foreground"
+                  />
+                  <YAxis 
+                    allowDecimals={false} 
+                    tick={{ fontSize: 10 }}
+                    className="text-muted-foreground"
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="course_bookings" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={2} 
+                    name="Course Bookings"
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="open_gym" 
+                    stroke="hsl(var(--muted-foreground))" 
+                    strokeWidth={2} 
+                    name="Open Gym"
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
         ) : null}
