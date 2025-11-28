@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Weight, Infinity, Dumbbell } from "lucide-react"
+import { Infinity, Dumbbell } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { getPriorizedMembership } from "@/lib/membershipUtils"
@@ -17,6 +17,8 @@ interface MembershipInfo {
   monthlyLimit?: number
   planName?: string
   limitPeriod?: 'week' | 'month'
+  pendingPlanName?: string
+  pendingStartDate?: string
 }
 
 export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user }) => {
@@ -54,7 +56,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
 
   const loadMembershipInfo = async () => {
     try {
-      // Check v2 system first
+      // Check v2 system - include pending_activation status
       const { data: membershipV2Data } = await supabase
         .from('user_memberships_v2')
         .select(`
@@ -70,31 +72,50 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
           )
         `)
         .eq('user_id', user.id)
-        .eq('status', 'active')
+        .in('status', ['active', 'pending_activation'])
 
       if (membershipV2Data && membershipV2Data.length > 0) {
-        const prioritizedMembership = getPriorizedMembership(membershipV2Data)
+        const now = new Date()
+        
+        // Find current active membership (start_date <= now)
+        const currentMembership = membershipV2Data.find(m => 
+          m.status === 'active' && (!m.start_date || new Date(m.start_date) <= now)
+        )
+        
+        // Find pending membership (future activation)
+        const pendingMembership = membershipV2Data.find(m =>
+          m.status === 'pending_activation' || (m.start_date && new Date(m.start_date) > now)
+        )
+        
+        const prioritizedMembership = currentMembership || getPriorizedMembership(membershipV2Data)
         const bookingRules = prioritizedMembership?.membership_plans_v2?.booking_rules as any
         const membershipData = prioritizedMembership?.membership_data as any
         const planName = prioritizedMembership?.membership_plans_v2?.name
+        
+        // Get pending plan info
+        const pendingPlanName = pendingMembership?.membership_plans_v2?.name
+        const pendingStartDate = pendingMembership?.start_date
 
         if (bookingRules?.type === 'credits') {
           setMembershipInfo({
             type: 'credits',
             remainingCredits: membershipData?.remaining_credits || 0,
-            planName
+            planName,
+            pendingPlanName,
+            pendingStartDate
           })
         } else if (bookingRules?.type === 'unlimited') {
           setMembershipInfo({
             type: 'unlimited',
-            planName
+            planName,
+            pendingPlanName,
+            pendingStartDate
           })
         } else if (bookingRules?.type === 'limited') {
           // For limited memberships, dynamically calculate based on individual period
           const limitPeriod = bookingRules.limit?.period || 'month'
           const limitCount = bookingRules.limit?.count || 0
           
-          const now = new Date()
           const membershipStartDate = new Date(prioritizedMembership.start_date)
           const startDay = membershipStartDate.getDate()
           
@@ -149,12 +170,16 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
             usedThisMonth: usedThisPeriod,
             monthlyLimit: limitCount,
             planName,
-            limitPeriod: limitPeriod
+            limitPeriod: limitPeriod,
+            pendingPlanName,
+            pendingStartDate
           })
         } else if (bookingRules?.type === 'open_gym_only') {
           setMembershipInfo({
             type: 'open_gym_only',
-            planName
+            planName,
+            pendingPlanName,
+            pendingStartDate
           })
         }
       } else {
@@ -187,7 +212,7 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
     if (loading) {
       return (
         <div className="flex items-center justify-center h-full">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
+          <div className="animate-pulse text-muted-foreground text-xs md:text-sm">Lade Credits...</div>
         </div>
       )
     }
@@ -196,14 +221,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
       return (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <div className="text-4xl md:text-7xl font-bold text-muted-foreground mb-1 md:mb-2">
+            <div className="text-4xl md:text-7xl font-semibold text-foreground mb-1">
               -
             </div>
             <div className="text-sm md:text-lg text-muted-foreground">
               Credits
             </div>
           </div>
-          <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
+          <Dumbbell className="absolute top-3 md:top-4 right-3 md:right-4 h-5 md:h-8 w-5 md:w-8 text-primary" />
         </div>
       )
     }
@@ -213,14 +238,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-7xl font-bold text-primary mb-1 md:mb-2">
+              <div className="text-4xl md:text-7xl font-semibold text-foreground mb-1">
                 {membershipInfo.remainingCredits}
               </div>
               <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-4 right-3 md:right-4 h-5 md:h-8 w-5 md:w-8 text-primary" />
           </div>
         )
 
@@ -228,14 +253,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-7xl text-primary mb-1 md:mb-2 flex justify-center">
-                <Infinity className="h-10 md:h-16 w-10 md:w-16" />
+              <div className="text-4xl md:text-7xl text-foreground mb-1 flex justify-center">
+                <Infinity className="h-8 md:h-14 w-8 md:w-14" />
               </div>
               <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-4 right-3 md:right-4 h-5 md:h-8 w-5 md:w-8 text-primary" />
           </div>
         )
 
@@ -245,14 +270,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-7xl font-bold text-primary mb-1 md:mb-2">
+              <div className="text-4xl md:text-7xl font-semibold text-foreground mb-1">
                 {Math.max(0, remaining)}
               </div>
               <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-4 right-3 md:right-4 h-5 md:h-8 w-5 md:w-8 text-primary" />
           </div>
         )
 
@@ -260,14 +285,14 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
         return (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-4xl md:text-7xl text-primary mb-1 md:mb-2 flex justify-center">
-                <Infinity className="h-10 md:h-16 w-10 md:w-16" />
+              <div className="text-4xl md:text-7xl text-foreground mb-1 flex justify-center">
+                <Infinity className="h-8 md:h-14 w-8 md:w-14" />
               </div>
               <div className="text-sm md:text-lg text-muted-foreground">
                 Credits
               </div>
             </div>
-            <Dumbbell className="absolute top-3 md:top-5 right-3 md:right-5 h-5 md:h-8 w-5 md:w-8 text-muted-foreground" />
+            <Dumbbell className="absolute top-3 md:top-4 right-3 md:right-4 h-5 md:h-8 w-5 md:w-8 text-primary" />
           </div>
         )
 
@@ -288,35 +313,42 @@ export const DashboardCreditsCard: React.FC<DashboardCreditsCardProps> = ({ user
       </PopoverTrigger>
       <PopoverContent className="w-80 p-4">
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold">Membership Details</h3>
+          <h3 className="text-lg font-semibold">Mitgliedschaftsdetails</h3>
           {membershipInfo.type === 'credits' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Credits Plan'}</p>
-              <p className="text-sm">Remaining Credits: <span className="font-semibold">{membershipInfo.remainingCredits}</span></p>
+              <p className="text-sm">Verbleibende Credits: <span className="font-semibold">{membershipInfo.remainingCredits}</span></p>
             </div>
           )}
           {membershipInfo.type === 'unlimited' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Unlimited'}</p>
-              <p className="text-sm">Unlimited course bookings available</p>
+              <p className="text-sm">Unbegrenzte Kursbuchungen verfügbar</p>
             </div>
           )}
           {(membershipInfo.type === 'monthly_limit' || membershipInfo.type === 'weekly_limit') && (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || (membershipInfo.limitPeriod === 'week' ? 'Weekly Limit' : 'Monthly Limit')}</p>
-               <p className="text-sm">{membershipInfo.limitPeriod === 'week' ? 'Weekly' : 'Monthly'} Limit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
-               <p className="text-sm">Used {membershipInfo.limitPeriod === 'week' ? 'this week' : 'this month'}: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
-               <p className="text-sm">Remaining: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
+              <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || (membershipInfo.limitPeriod === 'week' ? 'Wochenlimit' : 'Monatslimit')}</p>
+              <p className="text-sm">Periodenlimit: <span className="font-semibold">{membershipInfo.monthlyLimit}</span></p>
+              <p className="text-sm">In Periode genutzt: <span className="font-semibold">{membershipInfo.usedThisMonth}</span></p>
+              <p className="text-sm">Verbleibend: <span className="font-semibold">{Math.max(0, (membershipInfo.monthlyLimit || 0) - (membershipInfo.usedThisMonth || 0))}</span></p>
             </div>
           )}
           {membershipInfo.type === 'open_gym_only' && (
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Plan: {membershipInfo.planName || 'Open Gym'}</p>
-              <p className="text-sm">Only free training available</p>
+              <p className="text-sm">Nur freies Training verfügbar</p>
             </div>
           )}
           {!membershipInfo.type && (
-            <p className="text-sm text-muted-foreground">No active membership found</p>
+            <p className="text-sm text-muted-foreground">Keine aktive Mitgliedschaft gefunden</p>
+          )}
+          {membershipInfo.pendingPlanName && membershipInfo.pendingStartDate && (
+            <div className="mt-3 pt-3 border-t">
+              <p className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                Ab {new Date(membershipInfo.pendingStartDate).toLocaleDateString('de-DE')}: {membershipInfo.pendingPlanName}
+              </p>
+            </div>
           )}
         </div>
       </PopoverContent>
