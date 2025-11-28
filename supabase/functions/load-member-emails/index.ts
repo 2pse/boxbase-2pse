@@ -25,23 +25,22 @@ serve(async (req) => {
       );
     }
 
-    // Create Supabase clients
+    // Create Supabase admin client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
-    // Regular client for checking authentication
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: { Authorization: authHeader }
+    // Admin client for performing privileged operations
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
       }
     });
 
-    // Admin client for performing privileged operations
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Verify user is authenticated and has admin role
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Extract token and verify user
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    
     if (authError || !user) {
       console.error('Authentication failed:', authError);
       return new Response(
@@ -56,7 +55,7 @@ serve(async (req) => {
     console.log('User authenticated successfully:', user.id);
 
     // Check if user has admin role
-    const { data: roleData } = await supabase
+    const { data: roleData } = await supabaseAdmin
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
