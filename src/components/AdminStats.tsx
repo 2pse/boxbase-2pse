@@ -166,7 +166,11 @@ export const AdminStats = ({ onStatsLoad }: AdminStatsProps) => {
         .select('user_id')
 
       // Count memberships by plan name based on profiles, excluding admins/trainers
+      // Initialize all active plans with 0
       const membershipCounts: { [key: string]: number } = {}
+      allActivePlans?.forEach(plan => {
+        membershipCounts[plan.name] = 0
+      })
       
       allProfiles?.forEach(profile => {
         // Skip admin/trainer profiles
