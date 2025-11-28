@@ -135,7 +135,7 @@ export const YearlyTrainingHeatmap: React.FC<YearlyTrainingHeatmapProps> = ({
         </p>
       </CardHeader>
       <CardContent className="pt-0">
-        <ChartContainer config={chartConfig} className="min-h-[240px] w-full">
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full bg-muted/30 rounded-lg">
           <LineChart data={monthlyData} margin={{ left: -20, right: 20, top: 5, bottom: 5 }}>
             <XAxis 
               dataKey="month" 

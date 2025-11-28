@@ -3,13 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LogOut, Dumbbell, Target, Moon, Sun, RotateCcw, Eye, EyeOff, Trophy, ShoppingBag } from "lucide-react"
+import { LogOut, Dumbbell, Moon, Sun, RotateCcw, Eye, EyeOff, Trophy, ShoppingBag, ListChecks } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { supabase } from "@/integrations/supabase/client"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { AvatarUpload } from "@/components/AvatarUpload"
 import { useTheme } from "next-themes"
+import { MembershipBadge } from "@/components/MembershipBadge"
+import { loadMembershipPlanColors, getMembershipColor } from "@/lib/membershipColors"
 
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 import { getDisplayName } from "@/lib/nameUtils"
@@ -39,10 +41,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   const [accessCodeError, setAccessCodeError] = useState("")
   const [showAccessCode, setShowAccessCode] = useState(false)
   const [leaderboardVisible, setLeaderboardVisible] = useState(true)
+  const [planColors, setPlanColors] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
     loadProfile()
     checkDailyRefresh()
+    loadMembershipPlanColors().then(setPlanColors)
   }, [])
 
   const checkDailyRefresh = () => {
@@ -273,61 +277,78 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 overflow-auto">
-      <div className="max-w-2xl mx-auto p-3 md:p-4 pb-20 md:pb-24">
-        <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h1 className="text-xl md:text-3xl font-bold">Profile</h1>
+      <div className="max-w-2xl mx-auto p-4 pb-24">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Profile</h1>
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
         </div>
 
-        {/* Basic Data - always visible */}
-        <Card className="border-primary/20 mb-3 md:mb-4">
-          <CardHeader className="pb-3 md:pb-4">
+        {/* Basic Data Card */}
+        <Card className="border-primary/20 mb-4 bg-gray-50 dark:bg-gray-900">
+          <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg md:text-2xl">Basic Data</CardTitle>
+              <CardTitle className="text-xl font-bold">Basic Data</CardTitle>
               <Button
                 onClick={handleRefresh}
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0"
               >
-                <RotateCcw className="h-4 w-4 md:h-5 md:w-5" />
+                <RotateCcw className="h-4 w-4" />
               </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3 md:space-y-4">
-              <div className="flex flex-col items-center space-y-3 md:space-y-4 mb-4 md:mb-6">
+            <div className="space-y-4">
+              {/* Avatar Section */}
+              <div className="flex flex-col items-center space-y-4 mb-6">
                 <AvatarUpload 
                   userId={userId} 
                   currentAvatarUrl={avatarUrl}
                   showUploadButton={false}
                   onAvatarUpdate={(newUrl) => {
                     setAvatarUrl(newUrl)
-                    // Also reload the profile to get the latest data
                     loadProfile()
                   }}
                 />
                 <div className="text-center">
-                  <h3 className="text-base md:text-xl font-semibold text-foreground">{displayName || `${firstName} ${lastName}`.trim()}</h3>
-                  <p className="text-xs md:text-base text-muted-foreground">{membershipType}</p>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {displayName || `${firstName} ${lastName}`.trim()}
+                  </h3>
+                  {membershipType && (
+                    <div className="mt-1 flex justify-center">
+                      <MembershipBadge 
+                        type={membershipType}
+                        color={getMembershipColor(membershipType, planColors)}
+                        noShadow
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="nickname" className="text-sm md:text-lg text-foreground">Nickname (visible to others) *</Label>
+              {/* Nickname Input */}
+              <div className="space-y-2">
+                <Label htmlFor="nickname" className="text-sm font-medium">
+                  Nickname (visible to others)
+                </Label>
                 <Input
                   id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  placeholder="Your nickname (optional)"
-                  className="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-12 text-sm md:text-lg"
+                  placeholder="Your nickname"
+                  className="bg-white dark:bg-gray-800"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="accessCode" className="text-sm md:text-lg text-foreground">Access Code (at least 6 digits) *</Label>
+              {/* Access Code Input */}
+              <div className="space-y-2">
+                <Label htmlFor="accessCode" className="text-sm font-medium">
+                  Access Code (at least 6 digits) *
+                </Label>
                 <div className="relative">
                   <Input
                     id="accessCode"
@@ -338,7 +359,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     onChange={(e) => handleAccessCodeChange(e.target.value.replace(/\s/g, ''))}
                     placeholder="123456"
                     maxLength={12}
-                    className={`pr-10 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 h-9 md:h-12 text-sm md:text-lg ${accessCodeError ? "border-destructive" : ""}`}
+                    className={`pr-10 bg-white dark:bg-gray-800 ${accessCodeError ? "border-destructive" : ""}`}
                   />
                   <Button
                     type="button"
@@ -348,69 +369,80 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     onClick={() => setShowAccessCode(!showAccessCode)}
                   >
                     {showAccessCode ? (
-                      <EyeOff className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
                 {accessCodeError && (
-                  <p className="text-sm md:text-base text-destructive mt-1">{accessCodeError}</p>
+                  <p className="text-sm text-destructive mt-1">{accessCodeError}</p>
                 )}
-                <p className="text-xs md:text-base text-muted-foreground mt-1">
-                  Your personal access code for the app
-                </p>
               </div>
               
-              <Button onClick={saveProfile} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]">
+              {/* Save Button */}
+              <Button 
+                onClick={saveProfile} 
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
+              >
                 Save Profile
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Training Log - Jahresübersicht */}
+        {/* Training Log */}
         <YearlyTrainingHeatmap 
           userId={userId}
           primaryColor={primaryColor}
         />
 
-        {/* Navigation to Strength Values and Exercises */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToStrengthValues}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Dumbbell className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
-              <h3 className="font-semibold text-sm md:text-lg text-foreground">Strength Values</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">Manage 1RM</p>
+        {/* Navigation Tiles - 2 Column Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* Strength Values Tile */}
+          <div 
+            className="bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-105 rounded-2xl h-32 shadow-sm p-4 relative"
+            onClick={navigateToStrengthValues}
+          >
+            <Dumbbell className="absolute top-4 right-4 h-5 w-5 text-primary" />
+            <div className="text-center flex flex-col justify-center h-full">
+              <h3 className="text-lg font-semibold mb-1">Strength Values</h3>
+              <p className="text-xs text-muted-foreground">Manage 1RM values</p>
             </div>
           </div>
           
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02]" onClick={navigateToExercises}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Target className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
-              <h3 className="font-semibold text-sm md:text-lg text-foreground">Exercises</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">Preferences</p>
+          {/* Exercises Tile */}
+          <div 
+            className="bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-105 rounded-2xl h-32 shadow-sm p-4 relative"
+            onClick={navigateToExercises}
+          >
+            <ListChecks className="absolute top-4 right-4 h-5 w-5 text-primary" />
+            <div className="text-center flex flex-col justify-center h-full">
+              <h3 className="text-lg font-semibold mb-1">Exercises</h3>
+              <p className="text-xs text-muted-foreground">Preferences</p>
             </div>
           </div>
         </div>
 
-        {/* Shop - Wide Tile */}
-        <div 
-          className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] mb-3 md:mb-4" 
-          onClick={navigateToShop}
-        >
-          <div className="flex flex-col items-center justify-center text-center">
-            <ShoppingBag className="h-6 w-6 md:h-10 md:w-10 mb-2 text-primary" />
-            <h3 className="font-semibold text-sm md:text-lg text-foreground">Shop</h3>
-            <p className="text-xs md:text-sm text-muted-foreground">Products & Memberships</p>
+        {/* Shop - Full Width Tile */}
+        <div className="mb-4">
+          <div 
+            className="bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-150 dark:hover:bg-gray-700 transition-all hover:scale-105 rounded-2xl h-32 shadow-sm p-4 relative"
+            onClick={navigateToShop}
+          >
+            <ShoppingBag className="absolute top-4 right-4 h-5 w-5 text-primary" />
+            <div className="text-center flex flex-col justify-center h-full">
+              <h3 className="text-lg font-semibold mb-1">Shop</h3>
+              <p className="text-xs text-muted-foreground">Memberships & Products</p>
+            </div>
           </div>
         </div>
 
-        {/* Contact Tile */}
+        {/* Contact Card */}
         {(settings?.whatsapp_number || settings?.contact_email) && (
           <Card className="border-primary/20 mb-4">
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Contact</CardTitle>
+              <CardTitle className="text-xl">Contact</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -419,7 +451,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                     href={`https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3 bg-gray-200 dark:bg-gray-700 rounded-2xl hover:bg-gray-250 dark:hover:bg-gray-600 transition-all hover:scale-[1.02]"
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-2xl hover:bg-muted/50 transition-all hover:scale-[1.02]"
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
@@ -428,8 +460,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium text-sm md:text-lg text-foreground">WhatsApp</p>
-                        <p className="text-xs md:text-base text-muted-foreground">{settings.whatsapp_number}</p>
+                        <p className="font-medium text-foreground">WhatsApp</p>
+                        <p className="text-sm text-muted-foreground">{settings.whatsapp_number}</p>
                       </div>
                     </div>
                     <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -441,7 +473,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                 {settings?.contact_email && (
                   <a
                     href={`mailto:${settings.contact_email}`}
-                    className="flex items-center justify-between p-3 bg-gray-200 dark:bg-gray-700 rounded-2xl hover:bg-gray-250 dark:hover:bg-gray-600 transition-all hover:scale-[1.02]"
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-2xl hover:bg-muted/50 transition-all hover:scale-[1.02]"
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
@@ -450,8 +482,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium text-sm md:text-lg text-foreground">Email</p>
-                        <p className="text-xs md:text-base text-muted-foreground">{settings.contact_email}</p>
+                        <p className="font-medium text-foreground">Email</p>
+                        <p className="text-sm text-muted-foreground">{settings.contact_email}</p>
                       </div>
                     </div>
                     <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -464,10 +496,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </Card>
         )}
 
-        {/* Settings - moved to end */}
+        {/* Settings Card */}
         <Card className="border-primary/20 mb-4">
           <CardHeader>
-            <CardTitle className="text-xl md:text-2xl">Settings</CardTitle>
+            <CardTitle className="text-xl">Settings</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -475,11 +507,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {theme === 'dark' ? (
-                    <Moon className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
+                    <Moon className="h-4 w-4 text-foreground" />
                   ) : (
-                    <Sun className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
+                    <Sun className="h-4 w-4 text-foreground" />
                   )}
-                  <Label htmlFor="dark-mode" className="text-sm md:text-lg text-foreground">Dark Mode</Label>
+                  <Label htmlFor="dark-mode" className="text-foreground">Dark Mode</Label>
                 </div>
                 <Switch
                   id="dark-mode"
@@ -491,8 +523,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               {/* Leaderboard Visibility Toggle */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Trophy className="h-4 w-4 md:h-5 md:w-5 text-foreground" />
-                  <Label htmlFor="leaderboard-visible" className="text-sm md:text-lg text-foreground">Show in Leaderboard</Label>
+                  <Trophy className="h-4 w-4 text-foreground" />
+                  <Label htmlFor="leaderboard-visible" className="text-foreground">Show in Leaderboard</Label>
                 </div>
                 <Switch
                   id="leaderboard-visible"
@@ -504,14 +536,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           </CardContent>
         </Card>
 
-        {/* Logout Button - at the end of the page */}
+        {/* Logout Button */}
         <div className="mt-8 mb-8">
           <Button 
             onClick={handleLogout} 
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-[1.02]"
             size="lg"
           >
-            <LogOut className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+            <LogOut className="mr-2 h-4 w-4" />
             Log out
           </Button>
         </div>
