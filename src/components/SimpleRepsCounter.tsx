@@ -124,9 +124,9 @@ export const SimpleRepsCounter = () => {
       </div>
 
       {/* Main Counter */}
-      <div className="px-4 pb-24">
+      <div className="px-4 pb-40">
         <Card 
-          className="relative cursor-pointer active:scale-95 transition-transform border-2 mb-4"
+          className="relative cursor-pointer active:scale-95 transition-transform border-2"
           style={{ minHeight: '50vh' }}
           onClick={handleTap}
         >
@@ -141,8 +141,10 @@ export const SimpleRepsCounter = () => {
             </div>
           </div>
         </Card>
+      </div>
 
-        {/* Bottom Buttons */}
+      {/* Fixed Button Area - above navigation */}
+      <div className="fixed bottom-16 left-0 right-0 px-4 pb-2 bg-background z-45">
         <div className="grid grid-cols-3 gap-3">
           {/* Undo Button */}
           <Button 

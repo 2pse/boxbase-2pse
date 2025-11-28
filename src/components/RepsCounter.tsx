@@ -81,14 +81,11 @@ export const RepsCounter = () => {
           className="bg-muted/50 dark:bg-muted/30 p-6 cursor-pointer transition-all duration-300 hover:bg-muted dark:hover:bg-muted/50 rounded-2xl h-32 shadow-sm hover:scale-[1.02]"
           onClick={() => navigate('/reps-counter/simple')}
         >
-          <div className="flex items-center h-full">
-            <div className="flex-1">
-              <h3 className="text-xl font-bold">Simple</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Simple round counter with tap to increment
-              </p>
-            </div>
-            <div className="text-6xl font-bold text-primary/20">1</div>
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <h3 className="text-xl font-bold">Simple</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Simple round counter with tap to increment
+            </p>
           </div>
         </div>
 
@@ -97,14 +94,11 @@ export const RepsCounter = () => {
           className="bg-muted/50 dark:bg-muted/30 p-6 cursor-pointer transition-all duration-300 hover:bg-muted dark:hover:bg-muted/50 rounded-2xl h-32 shadow-sm hover:scale-[1.02]"
           onClick={() => navigate('/reps-counter/pro')}
         >
-          <div className="flex items-center h-full">
-            <div className="flex-1">
-              <h3 className="text-xl font-bold">Pro</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Multi-round tracker with custom rep goals
-              </p>
-            </div>
-            <div className="text-6xl font-bold text-primary/20">∞</div>
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <h3 className="text-xl font-bold">Pro</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Multi-round tracker with custom rep goals
+            </p>
           </div>
         </div>
       </div>
