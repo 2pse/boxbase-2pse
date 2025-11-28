@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Home, Calendar, Trophy, Dumbbell } from "lucide-react"
+import { ArrowLeft, Home, Calendar, Trophy, Timer } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { TrainingPathHeader } from "./TrainingPathHeader"
@@ -135,7 +135,7 @@ export const RepsCounter = () => {
             onClick={() => navigate('/pro?openWod=true')}
             className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 text-primary bg-primary/10"
           >
-            <Dumbbell className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+            <Timer className="h-5 w-5 md:h-[48px] md:w-[48px]" />
             <span className="text-xs md:text-sm font-medium">Workout</span>
           </Button>
           <Button
