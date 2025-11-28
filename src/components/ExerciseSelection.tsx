@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -110,6 +110,8 @@ type Exercise = typeof EXERCISES[number]
 export const ExerciseSelection = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isInitialLoad = useRef(true)
   
   const handleBack = () => {
     navigate('/pro?openProfile=true')
@@ -123,6 +125,30 @@ export const ExerciseSelection = () => {
   useEffect(() => {
     loadExercisePreferences()
   }, [])
+
+  // Auto-save when selectedExercises changes (with debounce)
+  useEffect(() => {
+    // Skip initial load
+    if (isInitialLoad.current) {
+      return
+    }
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    // Debounce save by 500ms
+    saveTimeoutRef.current = setTimeout(() => {
+      saveExercisePreferences(selectedExercises)
+    }, 500)
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [selectedExercises])
 
   const loadExercisePreferences = async () => {
     try {
@@ -144,12 +170,18 @@ export const ExerciseSelection = () => {
           setSelectedExercises(preferences)
         }
       }
+      
+      // Mark initial load as complete after setting state
+      setTimeout(() => {
+        isInitialLoad.current = false
+      }, 100)
     } catch (error) {
       console.error('Error loading exercise preferences:', error)
+      isInitialLoad.current = false
     }
   }
 
-  const saveExercisePreferences = async () => {
+  const saveExercisePreferences = async (exercises: string[]) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -157,16 +189,11 @@ export const ExerciseSelection = () => {
       const { error } = await supabase
         .from('profiles')
         .update({
-          preferred_exercises: selectedExercises
+          preferred_exercises: exercises
         })
         .eq('user_id', user.id)
 
       if (error) throw error
-
-      toast({
-        title: "Exercises saved",
-        description: "Your exercise preferences have been successfully saved."
-      })
     } catch (error) {
       console.error('Error saving exercise preferences:', error)
       toast({
@@ -218,7 +245,7 @@ export const ExerciseSelection = () => {
           <CardHeader className="pb-3 md:pb-6">
             <CardTitle className="text-lg md:text-xl">Preferred Exercises</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Green exercises will be preferred in your workouts. Click on an exercise to deactivate it.
+              Green exercises will be preferred in your workouts. Click on an exercise to toggle it. Changes are saved automatically.
             </p>
           </CardHeader>
           <CardContent className="space-y-4 md:space-y-6">
@@ -247,10 +274,6 @@ export const ExerciseSelection = () => {
             ))}
           </CardContent>
         </Card>
-
-        <Button onClick={saveExercisePreferences} className="w-full">
-          Save Exercise Preferences
-        </Button>
       </div>
     </div>
   )
