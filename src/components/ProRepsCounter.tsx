@@ -493,7 +493,7 @@ export const ProRepsCounter = () => {
             <span className="text-xs">Courses</span>
           </button>
           <button
-            onClick={() => navigate('/pro?openWod=true')}
+            onClick={() => navigate('/pro?tab=wod')}
             className="flex flex-col items-center gap-1 h-auto py-2 px-3 rounded-md transition-colors text-primary bg-primary/10"
           >
             <Dumbbell className="h-5 w-5" />

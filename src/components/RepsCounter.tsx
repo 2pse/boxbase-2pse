@@ -62,7 +62,7 @@ export const RepsCounter = () => {
 
       {/* Back Button */}
       <div className="px-4 pt-4 pb-2">
-        <Button variant="ghost" onClick={() => navigate('/pro?openWod=true')} size="sm">
+        <Button variant="ghost" onClick={() => navigate('/pro?tab=wod')} size="sm">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
@@ -121,7 +121,7 @@ export const RepsCounter = () => {
             <span className="text-xs md:text-sm font-medium">Courses</span>
           </button>
           <button
-            onClick={() => navigate('/pro?openWod=true')}
+            onClick={() => navigate('/pro?tab=wod')}
             className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 rounded-md transition-colors text-primary bg-primary/10"
           >
             <Weight className="h-5 w-5 md:h-[32px] md:w-[32px]" />
