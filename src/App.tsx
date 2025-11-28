@@ -18,6 +18,10 @@ import { ExerciseSelection } from "@/components/ExerciseSelection";
 import WorkoutManagement from "./pages/WorkoutManagement";
 import { WorkoutStart } from "@/components/WorkoutStart";
 import { AuthKeeper } from "@/components/AuthKeeper";
+import { RepsCounter } from "@/components/RepsCounter";
+import { SimpleRepsCounter } from "@/components/SimpleRepsCounter";
+import { ProRepsCounter } from "@/components/ProRepsCounter";
+import { CardioConverter } from "@/components/CardioConverter";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +52,10 @@ function App() {
                 <Route path="/pro/exercises" element={<ExerciseSelection />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/workout-timer/start" element={<WorkoutStart />} />
+                <Route path="/reps-counter" element={<RepsCounter />} />
+                <Route path="/reps-counter/simple" element={<SimpleRepsCounter />} />
+                <Route path="/reps-counter/pro" element={<ProRepsCounter />} />
+                <Route path="/cardio-converter" element={<CardioConverter />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/workouts" element={<WorkoutManagement />} />
                 <Route path="/shop" element={<Shop />} />

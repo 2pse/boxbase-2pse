@@ -11,7 +11,7 @@ import { PercentageCalculator } from "./PercentageCalculator"
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { User } from "@supabase/supabase-js"
-import { Plus, Dumbbell, ArrowLeft, Clock, Calculator } from "lucide-react"
+import { Plus, Dumbbell, ArrowLeft, Clock, Calculator, Hash, Activity } from "lucide-react"
 
 interface WorkoutGeneratorProps {
   user?: User | null
@@ -387,9 +387,33 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
                   <div className="text-center space-y-3 flex flex-col justify-center h-full">
                     <h3 className="text-xl md:text-3xl font-bold">Percentage Calculator</h3>
                     <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
-                      Calculate your<br />
-                      training weights
+                      Calculate your training weights
                     </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Tools Grid - 2 columns */}
+              <div className="grid grid-cols-2 gap-3 mt-4 md:mx-8 lg:mx-12">
+                {/* Rep Counter Button */}
+                <div 
+                  className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                  onClick={() => navigate('/reps-counter')}
+                >
+                  <Hash className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                  <div className="text-center flex flex-col justify-center h-full">
+                    <h3 className="text-lg font-semibold">Rep<br />Counter</h3>
+                  </div>
+                </div>
+
+                {/* Cardio Converter Button */}
+                <div 
+                  className="bg-muted/50 dark:bg-muted/30 cursor-pointer hover:bg-muted dark:hover:bg-muted/50 transition-all hover:scale-[1.02] rounded-2xl h-32 shadow-sm p-4 relative"
+                  onClick={() => navigate('/cardio-converter')}
+                >
+                  <Activity className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                  <div className="text-center flex flex-col justify-center h-full">
+                    <h3 className="text-lg font-semibold">Cardio<br />Converter</h3>
                   </div>
                 </div>
               </div>
