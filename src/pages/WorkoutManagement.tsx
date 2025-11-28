@@ -258,9 +258,9 @@ const WorkoutManagement: React.FC<WorkoutManagementProps> = ({ hideHeader = fals
               </DialogHeader>
               <div className="space-y-4">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="crossfit">Functional Fitness</TabsTrigger>
-                    <TabsTrigger value="bodybuilding">Bodybuilding</TabsTrigger>
+                  <TabsList className="inline-flex h-10 items-center justify-start rounded-none bg-transparent p-0 border-b w-full">
+                    <TabsTrigger value="crossfit" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">Functional Fitness</TabsTrigger>
+                    <TabsTrigger value="bodybuilding" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">Bodybuilding</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="crossfit" className="space-y-4">

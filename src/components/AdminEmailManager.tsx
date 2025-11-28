@@ -453,26 +453,32 @@ export const AdminEmailManager = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-2">
-        <Button
-          variant={activeTab === 'recipients' ? 'default' : 'outline'}
+      <div className="inline-flex h-10 items-center justify-start rounded-none bg-transparent p-0 border-b w-full">
+        <button
           onClick={() => setActiveTab('recipients')}
-          className="gap-2"
+          className={`inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium rounded-none border-b-2 transition-all gap-2 ${
+            activeTab === 'recipients' 
+              ? 'border-primary bg-transparent text-foreground' 
+              : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
         >
           <Users className="h-4 w-4" />
           Select Recipients
           {selectedMembers.length > 0 && (
             <Badge variant="secondary" className="ml-1">{selectedMembers.length}</Badge>
           )}
-        </Button>
-        <Button
-          variant={activeTab === 'compose' ? 'default' : 'outline'}
+        </button>
+        <button
           onClick={() => setActiveTab('compose')}
-          className="gap-2"
+          className={`inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium rounded-none border-b-2 transition-all gap-2 ${
+            activeTab === 'compose' 
+              ? 'border-primary bg-transparent text-foreground' 
+              : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
         >
           <Mail className="h-4 w-4" />
           Compose Email
-        </Button>
+        </button>
       </div>
 
       {/* Recipients Tab */}
