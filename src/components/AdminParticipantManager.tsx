@@ -19,6 +19,7 @@ interface Member {
   last_name?: string | null
   nickname?: string | null
   membership_type?: string | null
+  membership_color?: string | null
   email?: string
 }
 
@@ -116,6 +117,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
           membership_data,
           membership_plans_v2 (
             name,
+            color,
             booking_rules
           )
         `)
@@ -128,6 +130,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
         const userMemberships = membershipsV2Data?.filter(m => m.user_id === profile.user_id) || []
         const prioritizedMembership = getPriorizedMembership(userMemberships)
         const membershipTypeName = getMembershipTypeName(prioritizedMembership)
+        const membershipColor = prioritizedMembership?.membership_plans_v2?.color || null
 
         return {
           user_id: profile.user_id,
@@ -136,6 +139,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
           last_name: profile.last_name,
           nickname: profile.nickname,
           membership_type: membershipTypeName,
+          membership_color: membershipColor,
           email: `${getDisplayName(profile, 'admin')?.toLowerCase().replace(/\s+/g, '.')}@gym.com` || 'user@gym.com'
         }
       })
@@ -325,7 +329,7 @@ export const AdminParticipantManager: React.FC<AdminParticipantManagerProps> = (
                            <div className="flex-1">
                               <div className="flex items-center gap-3">
                                 <span className="font-medium">{getDisplayName(member, currentUserRole)}</span>
-                                <MembershipBadge type={member.membership_type as any} forceBlack />
+                                <MembershipBadge type={member.membership_type as any} color={member.membership_color || undefined} />
                               </div>
                            </div>
                             <Button
