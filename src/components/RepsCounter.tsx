@@ -109,35 +109,35 @@ export const RepsCounter = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 z-50">
-        <div className="flex justify-around max-w-md mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2 md:p-3 z-50 h-[72px] md:h-[110px]">
+        <div className="flex justify-around max-w-md md:max-w-2xl mx-auto h-full">
           <button
             onClick={() => navigate('/pro')}
-            className="flex flex-col items-center gap-1 h-auto py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
+            className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
           >
-            <Home className="h-5 w-5" />
-            <span className="text-xs">Overview</span>
+            <Home className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+            <span className="text-xs md:text-sm font-medium">Overview</span>
           </button>
           <button
             onClick={() => navigate('/pro')}
-            className="flex flex-col items-center gap-1 h-auto py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
+            className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
           >
-            <Calendar className="h-5 w-5" />
-            <span className="text-xs">Courses</span>
+            <Calendar className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+            <span className="text-xs md:text-sm font-medium">Courses</span>
           </button>
           <button
             onClick={() => navigate('/pro?openWod=true')}
-            className="flex flex-col items-center gap-1 h-auto py-2 px-3 rounded-md transition-colors text-primary bg-primary/10"
+            className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 rounded-md transition-colors text-primary bg-primary/10"
           >
-            <Dumbbell className="h-5 w-5" />
-            <span className="text-xs">Workout</span>
+            <Dumbbell className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+            <span className="text-xs md:text-sm font-medium">Workout</span>
           </button>
           <button
             onClick={() => navigate('/pro')}
-            className="flex flex-col items-center gap-1 h-auto py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
+            className="flex flex-col items-center gap-1 md:gap-2 h-full py-2 md:py-3 px-3 md:px-4 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
           >
-            <Trophy className="h-5 w-5" />
-            <span className="text-xs">Leaderboard</span>
+            <Trophy className="h-5 w-5 md:h-[48px] md:w-[48px]" />
+            <span className="text-xs md:text-sm font-medium">Leaderboard</span>
           </button>
         </div>
       </div>
