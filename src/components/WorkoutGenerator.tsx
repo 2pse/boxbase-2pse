@@ -345,7 +345,8 @@ export const WorkoutGenerator = ({ user, wodStep: externalStep, onStepChange, on
       )}
       
         <div className="text-center py-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Workout</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground mb-2">Workout</h1>
+          <p className="text-sm md:text-lg text-muted-foreground">Your workout tools</p>
         </div>
       <div className="py-8">
         <div className="space-y-8">
