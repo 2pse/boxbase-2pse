@@ -213,8 +213,8 @@ export const AdminEmailManager = () => {
     } catch (error) {
       console.error('Error loading profiles:', error)
       toast({
-        title: "Fehler",
-        description: "Fehler beim Laden der Mitglieder",
+        title: "Error",
+        description: "Failed to load members",
         variant: "destructive"
       })
     }
@@ -281,7 +281,7 @@ export const AdminEmailManager = () => {
   const getPreviewText = (text: string, profile: Profile) => {
     return text
       .replace(/\{\{first_name\}\}/g, profile.first_name || 'Max')
-      .replace(/\{\{last_name\}\}/g, profile.last_name || 'Mustermann')
+      .replace(/\{\{last_name\}\}/g, profile.last_name || 'Doe')
       .replace(/\{\{membership_type\}\}/g, profile.membership_type || 'Premium')
       .replace(/\{\{email_and_code\}\}/g, 
         `Email: ${profile.email || 'user@example.com'}\nAccess Code: ${profile.access_code || 'N/A'}`)
@@ -293,8 +293,8 @@ export const AdminEmailManager = () => {
       setSubject(template.subject)
       setBody(template.body)
       toast({
-        title: "Template geladen",
-        description: `"${template.title}" wurde geladen`
+        title: "Template loaded",
+        description: `"${template.title}" has been loaded`
       })
     }
   }
@@ -316,16 +316,16 @@ export const AdminEmailManager = () => {
       if (error) throw error
 
       toast({
-        title: "Erfolg",
-        description: "Template wurde gespeichert"
+        title: "Success",
+        description: "Template has been saved"
       })
 
       await loadTemplates()
     } catch (error) {
       console.error('Error saving template:', error)
       toast({
-        title: "Fehler",
-        description: "Template konnte nicht gespeichert werden",
+        title: "Error",
+        description: "Failed to save template",
         variant: "destructive"
       })
     }
@@ -337,7 +337,7 @@ export const AdminEmailManager = () => {
     const template = templates.find(t => t.id === selectedTemplateId)
     if (!template) return
 
-    if (!confirm(`Template "${template.title}" wirklich löschen?`)) return
+    if (!confirm(`Delete template "${template.title}"?`)) return
 
     try {
       const { error } = await supabase
@@ -348,8 +348,8 @@ export const AdminEmailManager = () => {
       if (error) throw error
 
       toast({
-        title: "Erfolg",
-        description: "Template wurde gelöscht"
+        title: "Success",
+        description: "Template has been deleted"
       })
 
       setSelectedTemplateId('')
@@ -357,8 +357,8 @@ export const AdminEmailManager = () => {
     } catch (error) {
       console.error('Error deleting template:', error)
       toast({
-        title: "Fehler",
-        description: "Template konnte nicht gelöscht werden",
+        title: "Error",
+        description: "Failed to delete template",
         variant: "destructive"
       })
     }
@@ -386,8 +386,8 @@ export const AdminEmailManager = () => {
       if (error) throw error
 
       toast({
-        title: "Emails gesendet",
-        description: `${selectedMembers.length} Email(s) wurden erfolgreich gesendet`
+        title: "Emails sent",
+        description: `${selectedMembers.length} email(s) have been sent successfully`
       })
 
       // Reset state
@@ -399,8 +399,8 @@ export const AdminEmailManager = () => {
     } catch (error) {
       console.error('Error sending emails:', error)
       toast({
-        title: "Fehler beim Senden",
-        description: "Die Emails konnten nicht gesendet werden",
+        title: "Send failed",
+        description: "Failed to send emails",
         variant: "destructive"
       })
     } finally {
@@ -423,7 +423,7 @@ export const AdminEmailManager = () => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Email Manager</h2>
-        <p className="text-muted-foreground">Personalisierte Emails an Mitglieder senden</p>
+        <p className="text-muted-foreground">Send personalized emails to members</p>
       </div>
 
       {/* Tab Navigation */}
@@ -434,7 +434,7 @@ export const AdminEmailManager = () => {
           className="gap-2"
         >
           <Users className="h-4 w-4" />
-          Empfänger auswählen
+          Select Recipients
           {selectedMembers.length > 0 && (
             <Badge variant="secondary" className="ml-1">{selectedMembers.length}</Badge>
           )}
@@ -445,7 +445,7 @@ export const AdminEmailManager = () => {
           className="gap-2"
         >
           <Mail className="h-4 w-4" />
-          Email verfassen
+          Compose Email
         </Button>
       </div>
 
@@ -455,7 +455,7 @@ export const AdminEmailManager = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Empfänger auswählen
+              Select Recipients
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -468,14 +468,14 @@ export const AdminEmailManager = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Alle</SelectItem>
-                    <SelectItem value="active">Aktiv</SelectItem>
-                    <SelectItem value="inactive">Inaktiv</SelectItem>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="flex-1">
-                <Label>Membership-Typen</Label>
+                <Label>Membership Types</Label>
                 <Select 
                   value={selectedMembershipTypes.length === membershipTypes.length ? 'all' : 'custom'}
                   onValueChange={(v) => {
@@ -485,10 +485,10 @@ export const AdminEmailManager = () => {
                   }}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Membership-Typen wählen" />
+                    <SelectValue placeholder="Select membership types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Alle Typen</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     {membershipTypes.map(type => (
                       <SelectItem key={type} value={type}>{type}</SelectItem>
                     ))}
@@ -496,13 +496,13 @@ export const AdminEmailManager = () => {
                 </Select>
               </div>
               <div className="flex-1">
-                <Label>Suche</Label>
+                <Label>Search</Label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Name oder Email..."
+                    placeholder="Name or email..."
                     className="pl-10"
                   />
                 </div>
@@ -535,13 +535,13 @@ export const AdminEmailManager = () => {
             <div className="flex items-center justify-between">
               <Button variant="outline" size="sm" onClick={handleSelectAll}>
                 {selectedMembers.length === filteredProfiles.length ? (
-                  <>Alle abwählen</>
+                  <>Deselect All</>
                 ) : (
-                  <>Alle auswählen ({filteredProfiles.length})</>
+                  <>Select All ({filteredProfiles.length})</>
                 )}
               </Button>
               <span className="text-sm text-muted-foreground">
-                {selectedMembers.length} von {filteredProfiles.length} ausgewählt
+                {selectedMembers.length} of {filteredProfiles.length} selected
               </span>
             </div>
 
@@ -583,7 +583,10 @@ export const AdminEmailManager = () => {
                         {profile.email}
                       </TableCell>
                       <TableCell>
-                        <MembershipBadge type={profile.membership_type || 'No Membership'} />
+                        <MembershipBadge 
+                          type={profile.membership_type || 'No Membership'} 
+                          color={planColors.get(profile.membership_type || '')}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -597,7 +600,7 @@ export const AdminEmailManager = () => {
                 onClick={() => setActiveTab('compose')}
                 disabled={selectedMembers.length === 0}
               >
-                Weiter zur Email
+                Continue to Email
                 <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
@@ -613,7 +616,7 @@ export const AdminEmailManager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Email verfassen
+                Compose Email
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -623,7 +626,7 @@ export const AdminEmailManager = () => {
                   <Label>Template</Label>
                   <Select value={selectedTemplateId} onValueChange={setSelectedTemplateId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Template auswählen..." />
+                      <SelectValue placeholder="Select template..." />
                     </SelectTrigger>
                     <SelectContent>
                       {templates.map(template => (
@@ -640,7 +643,7 @@ export const AdminEmailManager = () => {
                     size="icon"
                     onClick={handleLoadTemplate}
                     disabled={!selectedTemplateId}
-                    title="Template laden"
+                    title="Load template"
                   >
                     <FileText className="h-4 w-4" />
                   </Button>
@@ -649,7 +652,7 @@ export const AdminEmailManager = () => {
                     size="icon"
                     onClick={() => setSaveTemplateOpen(true)}
                     disabled={!subject || !body}
-                    title="Als Template speichern"
+                    title="Save as template"
                   >
                     <Save className="h-4 w-4" />
                   </Button>
@@ -658,7 +661,7 @@ export const AdminEmailManager = () => {
                     size="icon"
                     onClick={handleDeleteTemplate}
                     disabled={!selectedTemplateId}
-                    title="Template löschen"
+                    title="Delete template"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -667,24 +670,24 @@ export const AdminEmailManager = () => {
 
               {/* Subject */}
               <div>
-                <Label htmlFor="email-subject">Betreff</Label>
+                <Label htmlFor="email-subject">Subject</Label>
                 <Input
                   id="email-subject"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="Email Betreff..."
+                  placeholder="Email subject..."
                 />
               </div>
 
               {/* Variables */}
               <div>
-                <Label>Variablen einfügen</Label>
+                <Label>Insert Variables</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <Button variant="outline" size="sm" onClick={() => insertVariable('{{first_name}}')}>
-                    Vorname
+                    First Name
                   </Button>
                   <Button variant="outline" size="sm" onClick={() => insertVariable('{{last_name}}')}>
-                    Nachname
+                    Last Name
                   </Button>
                   <Button variant="outline" size="sm" onClick={() => insertVariable('{{membership_type}}')}>
                     Membership
@@ -697,12 +700,12 @@ export const AdminEmailManager = () => {
 
               {/* Body */}
               <div>
-                <Label htmlFor="email-body">Inhalt</Label>
+                <Label htmlFor="email-body">Content</Label>
                 <Textarea
                   id="email-body"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  placeholder="Email Inhalt..."
+                  placeholder="Email content..."
                   rows={12}
                   className="font-mono text-sm"
                 />
@@ -717,7 +720,7 @@ export const AdminEmailManager = () => {
                   className="flex-1"
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  Vorschau
+                  Preview
                 </Button>
                 <Button 
                   onClick={() => setShowConfirmDialog(true)}
@@ -725,7 +728,7 @@ export const AdminEmailManager = () => {
                   className="flex-1"
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  {sending ? 'Senden...' : `Senden (${selectedMembers.length})`}
+                  {sending ? 'Sending...' : `Send (${selectedMembers.length})`}
                 </Button>
               </div>
             </CardContent>
@@ -736,20 +739,20 @@ export const AdminEmailManager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Ausgewählte Empfänger ({selectedMembers.length})
+                Selected Recipients ({selectedMembers.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               {selectedMembers.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
                   <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Keine Empfänger ausgewählt</p>
+                  <p>No recipients selected</p>
                   <Button 
                     variant="outline" 
                     className="mt-4"
                     onClick={() => setActiveTab('recipients')}
                   >
-                    Empfänger auswählen
+                    Select Recipients
                   </Button>
                 </div>
               ) : (
@@ -758,7 +761,7 @@ export const AdminEmailManager = () => {
                     <div className="flex items-center gap-2 p-3 mb-4 bg-yellow-500/10 border border-yellow-500/20 rounded-md text-yellow-600 dark:text-yellow-400">
                       <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                       <span className="text-sm">
-                        Große Anzahl: Emails werden in Batches von 50 gesendet
+                        Large batch: Emails will be sent in batches of 50
                       </span>
                     </div>
                   )}
@@ -806,19 +809,19 @@ export const AdminEmailManager = () => {
       <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Email Vorschau</DialogTitle>
+            <DialogTitle>Email Preview</DialogTitle>
             <DialogDescription>
-              Vorschau für: {previewMember?.first_name} {previewMember?.last_name}
+              Preview for: {previewMember?.first_name} {previewMember?.last_name}
             </DialogDescription>
           </DialogHeader>
           {previewMember && (
             <div className="space-y-4">
               <div>
-                <Label className="text-muted-foreground">Betreff:</Label>
+                <Label className="text-muted-foreground">Subject:</Label>
                 <div className="font-medium">{getPreviewText(subject, previewMember)}</div>
               </div>
               <div>
-                <Label className="text-muted-foreground">Inhalt:</Label>
+                <Label className="text-muted-foreground">Content:</Label>
                 <div className="p-4 bg-muted rounded-md whitespace-pre-wrap font-mono text-sm">
                   {getPreviewText(body, previewMember)}
                 </div>
@@ -832,10 +835,10 @@ export const AdminEmailManager = () => {
                     disabled={previewMemberIndex === 0}
                   >
                     <ChevronLeft className="h-4 w-4 mr-1" />
-                    Vorherige
+                    Previous
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    {previewMemberIndex + 1} von {selectedMembers.length}
+                    {previewMemberIndex + 1} of {selectedMembers.length}
                   </span>
                   <Button
                     variant="outline"
@@ -843,7 +846,7 @@ export const AdminEmailManager = () => {
                     onClick={() => setPreviewMemberIndex(Math.min(selectedMembers.length - 1, previewMemberIndex + 1))}
                     disabled={previewMemberIndex === selectedMembers.length - 1}
                   >
-                    Nächste
+                    Next
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
                 </div>
@@ -857,18 +860,18 @@ export const AdminEmailManager = () => {
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Emails senden?</DialogTitle>
+            <DialogTitle>Send Emails?</DialogTitle>
             <DialogDescription>
-              Bist du sicher, dass du {selectedMembers.length} Email(s) senden möchtest?
+              Are you sure you want to send {selectedMembers.length} email(s)?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
-              Abbrechen
+              Cancel
             </Button>
             <Button onClick={sendEmails} disabled={sending}>
               <Check className="h-4 w-4 mr-2" />
-              {sending ? 'Senden...' : 'Ja, senden'}
+              {sending ? 'Sending...' : 'Yes, send'}
             </Button>
           </DialogFooter>
         </DialogContent>

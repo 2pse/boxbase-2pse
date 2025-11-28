@@ -31,7 +31,7 @@ export const SaveTemplateDialog = ({ open, onOpenChange, onSave }: SaveTemplateD
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Template speichern</DialogTitle>
+          <DialogTitle>Save Template</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
@@ -40,7 +40,7 @@ export const SaveTemplateDialog = ({ open, onOpenChange, onSave }: SaveTemplateD
               id="template-name"
               value={templateName}
               onChange={(e) => setTemplateName(e.target.value)}
-              placeholder="z.B. Willkommens-Email"
+              placeholder="e.g. Welcome Email"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault()
@@ -52,10 +52,10 @@ export const SaveTemplateDialog = ({ open, onOpenChange, onSave }: SaveTemplateD
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Abbrechen
+            Cancel
           </Button>
           <Button onClick={handleSave} disabled={!templateName.trim() || saving}>
-            {saving ? "Speichern..." : "Speichern"}
+            {saving ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>
