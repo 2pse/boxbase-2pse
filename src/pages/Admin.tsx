@@ -52,6 +52,7 @@ interface Member {
   last_login_at: string | null;
   authors?: boolean;
   current_membership_type?: string;
+  current_membership_color?: string;
   membership_end_date?: string | null;
   membership_auto_renewal?: boolean;
   membership_start_date?: string | null;
@@ -326,6 +327,7 @@ export default function Admin() {
             auto_renewal,
             membership_plans_v2(
               name,
+              color,
               booking_rules,
               payment_frequency,
               price_monthly
@@ -343,6 +345,7 @@ export default function Admin() {
         
         // Determine membership type using V2 system only (consistent with FinanceReport)
         let membershipType = 'No Membership'; // Default fallback
+        let membershipColor: string | undefined = undefined;
         let endDate = null;
         let autoRenewal = false;
         let startDate = null;
@@ -351,6 +354,7 @@ export default function Admin() {
           // Use shared prioritization logic from membershipUtils
           const selectedMembership = getPriorizedMembership(userMemberships);
           membershipType = getMembershipTypeName(selectedMembership, null);
+          membershipColor = selectedMembership.membership_plans_v2?.color || undefined;
           endDate = selectedMembership.end_date;
           autoRenewal = selectedMembership.auto_renewal;
           startDate = selectedMembership.start_date;
@@ -360,6 +364,7 @@ export default function Admin() {
           ...member,
           email: emailData[member.user_id] || '',
           current_membership_type: membershipType,
+          current_membership_color: membershipColor,
           membership_end_date: endDate,
           membership_auto_renewal: autoRenewal,
           membership_start_date: startDate
@@ -1319,7 +1324,7 @@ export default function Admin() {
                                 {member.access_code}
                               </div>
                               <div className="flex items-center gap-2 mb-2">
-                                <MembershipBadge type={member.current_membership_type as any || 'No Membership'} noShadow />
+                                <MembershipBadge type={member.current_membership_type as any || 'No Membership'} color={member.current_membership_color} noShadow />
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                   member.status === 'active' 
                                     ? 'bg-green-100 text-green-800' 
@@ -1394,7 +1399,7 @@ export default function Admin() {
                                </TableCell>
                                <TableCell className="font-mono hidden md:table-cell">{member.access_code}</TableCell>
                                <TableCell>
-                                 <MembershipBadge type={member.current_membership_type as any || 'No Membership'} noShadow />
+                                 <MembershipBadge type={member.current_membership_type as any || 'No Membership'} color={member.current_membership_color} noShadow />
                                </TableCell>
                                <TableCell>
                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
