@@ -5,6 +5,7 @@ import { User } from "@supabase/supabase-js"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
 import { timezone } from "@/lib/timezone"
 import { CourseInvitationBadge } from "./CourseInvitationBadge"
+import { startOfMonth, addMonths, format } from "date-fns"
 
 interface MonthlyProgressCircleProps {
   user: User
@@ -51,13 +52,19 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
       const currentYear = today.getFullYear()
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
       
+      // Safe date calculation for month boundaries
+      const firstDayOfMonth = startOfMonth(today)
+      const firstDayOfNextMonth = startOfMonth(addMonths(today, 1))
+      const firstDayStr = format(firstDayOfMonth, 'yyyy-MM-dd')
+      const nextMonthStr = format(firstDayOfNextMonth, 'yyyy-MM-dd')
+      
       // Load training sessions for the month
       const { data: sessions } = await supabase
         .from('training_sessions')
         .select('session_date, status')
         .eq('user_id', user.id)
-        .gte('session_date', `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)
-        .lt('session_date', `${currentYear}-${String(currentMonth + 2).padStart(2, '0')}-01`)
+        .gte('session_date', firstDayStr)
+        .lt('session_date', nextMonthStr)
 
       // Load course registrations for the month
       const { data: registrations } = await supabase
@@ -69,8 +76,8 @@ export const MonthlyProgressCircle: React.FC<MonthlyProgressCircleProps> = ({
         `)
         .eq('user_id', user.id)
         .eq('status', 'registered')
-        .gte('courses.course_date', `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)
-        .lt('courses.course_date', `${currentYear}-${String(currentMonth + 2).padStart(2, '0')}-01`)
+        .gte('courses.course_date', firstDayStr)
+        .lt('courses.course_date', nextMonthStr)
 
       // Create day data
       const dayData: DayData[] = []
