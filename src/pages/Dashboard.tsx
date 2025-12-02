@@ -34,7 +34,7 @@ import { useRealtimeSync } from "@/hooks/useRealtimeSync"
 
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { timezone } from "@/lib/timezone"
-import { format } from "date-fns"
+import { format, startOfMonth, addMonths } from "date-fns"
 import { PercentageCalculator } from "@/components/PercentageCalculator"
 import { getPriorizedMembership } from "@/lib/membershipUtils"
 import { UpcomingClassReservation } from "@/components/UpcomingClassReservation"
@@ -393,14 +393,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       })
     }
 
+    // Safe date calculation for month boundaries
+    const firstDayOfMonth = startOfMonth(today)
+    const firstDayOfNextMonth = startOfMonth(addMonths(today, 1))
+    const firstDayStr = format(firstDayOfMonth, 'yyyy-MM-dd')
+    const nextMonthStr = format(firstDayOfNextMonth, 'yyyy-MM-dd')
+
     try {
       // Load existing training sessions
       const { data: sessions, error } = await supabase
         .from('training_sessions')
         .select('id, session_date, session_type, status')
         .eq('user_id', user.id)
-        .gte('session_date', `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)
-        .lt('session_date', `${currentYear}-${String(currentMonth + 2).padStart(2, '0')}-01`)
+        .gte('session_date', firstDayStr)
+        .lt('session_date', nextMonthStr)
 
       if (error) {
         console.error('Error loading training sessions:', error)
@@ -417,8 +423,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
         `)
         .eq('user_id', user.id)
         .eq('status', 'registered')
-        .gte('courses.course_date', `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)
-        .lt('courses.course_date', `${currentYear}-${String(currentMonth + 2).padStart(2, '0')}-01`)
+        .gte('courses.course_date', firstDayStr)
+        .lt('courses.course_date', nextMonthStr)
 
       if (regError) {
         console.error('Error loading course registrations:', regError)
