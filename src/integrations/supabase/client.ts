@@ -5,12 +5,38 @@ import type { Database } from './types';
 const SUPABASE_URL = "https://tuktvbawwyffuqeorjix.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1a3R2YmF3d3lmZnVxZW9yaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg2NDk2MjMsImV4cCI6MjA3NDIyNTYyM30.7Y0mcnXhq6Y8jqok6AR9qbyeBIQrMcIhmiA9q2p0lkc";
 
+// Get sessionId from URL for namespace isolation (allows multiple iframes with separate sessions)
+const getSessionNamespace = (): string => {
+  if (typeof window === 'undefined') return '';
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get('sessionId');
+  return sessionId ? `${sessionId}_` : '';
+};
+
+// Create namespaced storage adapter for session isolation
+const createNamespacedStorage = (namespace: string) => ({
+  getItem: (key: string): string | null => {
+    return localStorage.getItem(`${namespace}${key}`);
+  },
+  setItem: (key: string, value: string): void => {
+    localStorage.setItem(`${namespace}${key}`, value);
+  },
+  removeItem: (key: string): void => {
+    localStorage.removeItem(`${namespace}${key}`);
+  }
+});
+
+const sessionNamespace = getSessionNamespace();
+const storage = sessionNamespace 
+  ? createNamespacedStorage(sessionNamespace) 
+  : localStorage;
+
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    storage: storage,
     persistSession: true,
     autoRefreshToken: true,
   }
