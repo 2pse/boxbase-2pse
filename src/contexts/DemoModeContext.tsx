@@ -58,17 +58,7 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
 
   return (
     <DemoModeContext.Provider value={{ isDemoMode }}>
-      {isDemoMode && (
-        <div 
-          className="fixed left-0 right-0 z-[100] bg-amber-500 text-amber-950 text-center py-1 text-sm font-medium"
-          style={{ top: bannerOffset }}
-        >
-          Demo Mode - Changes will not be saved
-        </div>
-      )}
-      <div style={{ paddingTop: isDemoMode ? totalTopPadding : 0 }}>
-        {children}
-      </div>
+      {children}
     </DemoModeContext.Provider>
   )
 }
