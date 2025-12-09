@@ -2,6 +2,7 @@ import { useState } from "react"
 import { QRCodeScanner } from "./QRCodeScanner"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
+import { useDemoGuard } from "@/hooks/useDemoGuard"
 
 interface OpenGymCheckinProps {
   open: boolean
@@ -15,8 +16,10 @@ export const OpenGymCheckin: React.FC<OpenGymCheckinProps> = ({
   onCheckinComplete
 }) => {
   const { toast } = useToast()
+  const { guardMutation } = useDemoGuard()
 
   const handleScanSuccess = async (result: string) => {
+    if (guardMutation()) return
     // QR code successfully scanned
     try {
       const { data: { user } } = await supabase.auth.getUser()

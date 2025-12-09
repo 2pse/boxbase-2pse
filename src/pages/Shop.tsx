@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { ShopProduct, MembershipPlanV2Extended } from "@/types/shop";
 import { Logo } from "@/components/Logo";
 import { UserPurchaseHistory } from "@/components/UserPurchaseHistory";
+import { useDemoGuard } from "@/hooks/useDemoGuard";
 
 const BookingTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -49,6 +50,7 @@ interface ProductWithImages extends ShopProduct {
 
 export default function Shop() {
   const navigate = useNavigate();
+  const { guardMutation } = useDemoGuard();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
@@ -139,6 +141,8 @@ export default function Shop() {
   };
 
   const handleMembershipCheckout = async (plan: MembershipPlanV2Extended) => {
+    if (guardMutation()) return;
+    
     if (!plan.stripe_price_id) {
       toast.error("This plan is not available for online purchase. Please contact us.");
       return;
@@ -194,6 +198,8 @@ export default function Shop() {
   };
 
   const handleProductCheckout = async (product: ShopProduct) => {
+    if (guardMutation()) return;
+    
     if (!product.stripe_price_id) {
       toast.error("This product is not available for online purchase.");
       return;
@@ -263,6 +269,7 @@ export default function Shop() {
   };
 
   const handleCancelMembership = async () => {
+    if (guardMutation()) return;
     setCancelLoading(true);
     
     const { data, error } = await supabase.functions.invoke("cancel-membership");

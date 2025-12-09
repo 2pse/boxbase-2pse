@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CheckCircle, Target, Plus, Trophy } from "lucide-react";
 import { getChallengeIcon } from "@/utils/challengeIcons";
+import { useDemoGuard } from "@/hooks/useDemoGuard";
 
 interface Challenge {
   id: string;
@@ -48,6 +49,7 @@ export default function ChallengeDetail({
   const [checkpoints, setCheckpoints] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [localProgress, setLocalProgress] = useState<ChallengeProgress | null>(progress);
+  const { guardMutation } = useDemoGuard();
 
   useEffect(() => {
     setLocalProgress(progress);
@@ -84,6 +86,7 @@ export default function ChallengeDetail({
   };
 
   const addCheckpoint = async () => {
+    if (guardMutation()) return;
     if (!challenge || !localProgress) return;
 
     setLoading(true);
@@ -159,6 +162,7 @@ export default function ChallengeDetail({
   };
 
   const initializeProgress = async () => {
+    if (guardMutation()) return;
     if (!challenge) return;
 
     try {
