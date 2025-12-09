@@ -18,6 +18,7 @@ import { useGymSettings } from "@/contexts/GymSettingsContext"
 import { getDisplayName } from "@/lib/nameUtils"
 import { Database } from "@/integrations/supabase/types"
 import { useRealtimeSync } from "@/hooks/useRealtimeSync"
+import { useDemoGuard } from "@/hooks/useDemoGuard"
 
 interface Course {
   id: string
@@ -58,6 +59,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'trainer' | 'member' | null>(null)
   const { settings } = useGymSettings()
+  const { guardMutation } = useDemoGuard()
 
   const primaryColor = settings?.primary_color || '#B81243'
 
@@ -288,6 +290,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   }
 
   const handleRegistration = async (courseId: string) => {
+    if (guardMutation()) return
     try {
       const course = courses.find(c => c.id === courseId)
       if (!course) return
@@ -511,6 +514,7 @@ export const CourseBooking = ({ user }: CourseBookingProps) => {
   }
 
   const handleCancellation = async (courseId: string, course?: Course) => {
+    if (guardMutation()) return
     const targetCourse = course || selectedCourse
     if (!targetCourse) return
 

@@ -35,8 +35,8 @@ import { ProductManager } from "@/components/ProductManager";
 import { AdminPurchaseHistory } from "@/components/AdminPurchaseHistory";
 import { AdminRiskRadar } from "@/components/AdminRiskRadar";
 
-
 import { useToast } from "@/hooks/use-toast";
+import { useDemoGuard } from "@/hooks/useDemoGuard";
 
 interface Member {
   id: string;
@@ -126,6 +126,7 @@ export default function Admin() {
   const membersPerPage = 10;
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { guardMutation } = useDemoGuard();
 
   // Load membership plans on component mount
   const loadMembershipPlans = async () => {
@@ -385,6 +386,7 @@ export default function Admin() {
 
   const handleCreateMember = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (guardMutation()) return;
     
     // Membership is now optional - members can purchase their own in the app
     if (!newMemberFirstName || !newMemberEmail || !newMemberCode) {

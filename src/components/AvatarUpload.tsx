@@ -6,6 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Camera, Upload, User, Edit, Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
+import { useDemoGuard } from "@/hooks/useDemoGuard"
 import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
@@ -32,6 +33,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const { toast } = useToast()
+  const { guardMutation } = useDemoGuard()
 
   const avatarSize = {
     sm: "w-8 h-8",
@@ -87,6 +89,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
   }, [])
 
   const uploadCroppedAvatar = async () => {
+    if (guardMutation()) return
     if (!imageRef.current || !completedCrop) return
 
     try {
@@ -226,6 +229,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
               variant="destructive"
               className="h-8 w-8 rounded-full p-0 shadow-lg"
               onClick={async () => {
+                if (guardMutation()) return
                 try {
                   // Delete from storage
                   const fileName = currentAvatarUrl.split('/').pop()

@@ -12,6 +12,7 @@ import { AvatarUpload } from "@/components/AvatarUpload"
 import { useTheme } from "next-themes"
 import { MembershipBadge } from "@/components/MembershipBadge"
 import { loadMembershipPlanColors, getMembershipColor } from "@/lib/membershipColors"
+import { useDemoGuard } from "@/hooks/useDemoGuard"
 
 import { useGymSettings } from "@/contexts/GymSettingsContext"
 import { getDisplayName } from "@/lib/nameUtils"
@@ -26,6 +27,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   const { toast } = useToast()
   const { theme, setTheme } = useTheme()
   const { settings } = useGymSettings()
+  const { guardMutation } = useDemoGuard()
   
   const primaryColor = settings?.primary_color || '#B81243'
   
@@ -119,6 +121,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   }
 
   const saveLeaderboardVisibility = async (visible: boolean) => {
+    if (guardMutation()) return
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -165,6 +168,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   }
 
   const saveProfile = async () => {
+    if (guardMutation()) return
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
