@@ -35,7 +35,7 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
     <DemoModeContext.Provider value={{ isDemoMode }}>
       {isDemoMode && (
         <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-amber-950 text-center py-1 text-sm font-medium">
-          🎮 Demo Mode - Changes will not be saved
+          Demo Mode - Changes will not be saved
         </div>
       )}
       <div className={isDemoMode ? 'pt-8' : ''}>

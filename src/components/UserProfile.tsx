@@ -216,6 +216,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   }
 
   const handleLogout = async () => {
+    // Block logout in demo mode
+    if (guardMutation('Demo Mode: Logout is disabled')) return
+    
     try {
       // Set logout flag to prevent AuthKeeper interference
       localStorage.setItem('logging_out', 'true')
