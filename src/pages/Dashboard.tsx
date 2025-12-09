@@ -25,6 +25,7 @@ import ChallengeCard from "@/components/ChallengeCard"
 import ChallengeDetail from "@/components/ChallengeDetail"
 import { CreditsCounter } from "@/components/CreditsCounter"
 import { FirstLoginDialog } from "@/components/FirstLoginDialog"
+import { useDemoMode } from "@/contexts/DemoModeContext"
 
 import { supabase } from "@/integrations/supabase/client"
 import { User } from "@supabase/supabase-js"
@@ -91,6 +92,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
   const { toast } = useToast()
   const { hasUnreadNews, markNewsAsRead } = useNewsNotification(user)
   const { settings } = useGymSettings()
+  const { isDemoMode } = useDemoMode()
   
   // Check if user is Open Gym (should not see courses)
   const isOpenGym = userRole === 'open_gym' || userMembershipType === 'open_gym_only'
@@ -332,8 +334,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, userRole }) => {
       
       console.log('Welcome dialog check:', profile)
       
-      // Show dialog if welcome dialog hasn't been shown yet
-      if (!profile?.welcome_dialog_shown) {
+      // Show dialog if welcome dialog hasn't been shown yet (skip in demo mode)
+      if (!profile?.welcome_dialog_shown && !isDemoMode) {
         // Wait 2 seconds before showing the dialog
         setTimeout(() => {
           setShowFirstLoginDialog(true)

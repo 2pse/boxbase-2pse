@@ -10,6 +10,7 @@ import { Upload, Image as ImageIcon, Palette, Settings, Save, X, User, Lock, Web
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { useGymSettings } from "@/contexts/GymSettingsContext"
+import { useDemoGuard } from "@/hooks/useDemoGuard"
 
 interface GymSettingsData {
   id: string
@@ -52,6 +53,7 @@ export const GymSettings = () => {
   
   const { toast } = useToast()
   const { refreshSettings } = useGymSettings()
+  const { isDemoMode, guardMutation } = useDemoGuard()
 
   useEffect(() => {
     loadSettings()
@@ -137,6 +139,7 @@ export const GymSettings = () => {
 
   const handleLogoUpload = async (file: File, type: 'light' | 'dark' | 'app') => {
     if (!settings) return
+    if (guardMutation('Demo Mode: Logo upload disabled')) return
 
     setUploadingLogo(type)
     try {
@@ -204,8 +207,9 @@ export const GymSettings = () => {
 
   const handleLogoRemove = async (type: 'light' | 'dark' | 'app') => {
     if (!settings) return
+    if (guardMutation('Demo Mode: Logo removal disabled')) return
 
-    const fieldName = type === 'light' ? 'logo_light_url' : 
+    const fieldName = type === 'light' ? 'logo_light_url' :
                      type === 'dark' ? 'logo_dark_url' : 'app_icon_url';
     
     const updatedSettings = {
@@ -226,6 +230,7 @@ export const GymSettings = () => {
 
   const handleSave = async () => {
     if (!settings) return
+    if (guardMutation('Demo Mode: Settings cannot be saved')) return
 
     setSaving(true)
     try {
@@ -281,6 +286,7 @@ export const GymSettings = () => {
 
   const handleUpdateAdminProfile = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (guardMutation('Demo Mode: Admin profile cannot be updated')) return
     
     if (!adminEmail && !adminPassword) {
       toast({
